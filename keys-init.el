@@ -13,3 +13,4 @@
 (define-key global-map "\C-cq" 'org-clock-cancel)
 (define-key global-map "\C-co" 'org-clock-out)
 (define-key global-map "\C-cx" 'org-clock-in-last)
+(define-key global-map "\C-cA" 'aph/org-agenda-display-smart-agenda)

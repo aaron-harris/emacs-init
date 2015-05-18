@@ -21,7 +21,6 @@
 (setq inhibit-startup-screen t) ; Disable the startup screen.
 (add-to-list 'initial-frame-alist '(fullscreen . maximized)) ; Start maximized.
 
-
 ;;; Settings for emacsclient usage
 ;;;===============================
 (server-start) ; Run Emacs in server mode.
@@ -36,13 +35,20 @@
 ;; The bootstrapping file should have set aph/init-path (the path to the
 ;; directory containing this file, and our other initialization files).
 (add-to-list 'load-path (expand-file-name aph/init-path))
+
+(load "fun-init.el")
+
+;; Org-Mode initialization is so complex, it uses its own directory, which we
+;; also have to add to the load path.
+(add-to-list 'load-path (expand-file-name (concat aph/init-path "/org")))
 (load "org-init.el")
+
 (load "cider-init.el")
 (load "auctex-init.el")
+(load "gnus-init.el")
 (load "keys-init.el")
 (load "modes-init.el")
-(load "wombat-flux-theme.el")
 
 ;;; Custom Theme Settings
 ;;;======================
-(load-theme 'wombat-flux t)
+(load "wombat-flux-theme.el")
