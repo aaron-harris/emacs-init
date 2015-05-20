@@ -3,11 +3,7 @@
 ;;;;============================================================================
 (require 'org)
 
-;; We have defined some custom functions useful for org-mode in another file:
-(load "org-fun-init.el")
-
-;;; Modules Enabled
-;;;================
+;; Enable Org-Mode modules:
 (setq org-modules
       '(org-docview
         org-habit
@@ -15,53 +11,79 @@
 
 ;;; General Settings
 ;;;=================
-(setq org-catch-invisible-edits 'smart) ; Try to avoid invisible edits.
-(setq org-log-into-drawer t) ; Use LOGBOOK drawers.
+(setq org-catch-invisible-edits 'smart)      ; Try to avoid invisible edits.
+(setq org-log-into-drawer t)                 ; Use LOGBOOK drawers.
 (setq org-track-ordered-property-with-tag t) ; Use a tag for ORDERED trees.
-(setq org-use-speed-commands t) ; Use speed commands.
+(setq org-use-speed-commands t)              ; Use speed commands.
 
 ;;; TODO Keywords
 ;;;==============
 (setq org-use-fast-todo-selection t)
 
 (setq org-todo-keywords
-      '(;; Tasks
-        (sequence "TODO(t)" "IN-PROGRESS(p!)" "WAITING(w@)" "APPT(a!)"
-                  "|" "DONE(d!)" "CANCELLED(c!)" "DEFERRED(>!)")
-        
-        ;; Projects
-        (sequence "START(1)" "OPEN(o!)"
-                  "|" "FINISHED(f!)" "SHELVED(s!)")
-
-        ;; Subtasks
-        (sequence "NEXT(n)" "FUTURE(F)"
-                  "|" "DONE(d!)")))
+      '((sequence "START(s)" "|" "CANCELLED(c!)")            ; General items
+        (sequence "TODO(t)" "WAITING(w@)" "|" "DONE(d!)")    ; Tasks
+        (sequence "OPEN(o)" "|" "DONE(d!)" "SHELVED(s!)")    ; Projects
+        (sequence "UNREAD(r)" "CONTINUE(-)" "REREAD(R)"
+                  "TAG(:)" "|" "FINISHED(f!)")               ; Text media
+        (sequence "UNWATCHED(w)" "CONTINUE(-)" "REWATCH(W)"
+                  "TAG(:)" "|" "FINISHED(f!)")               ; Video media
+        (sequence "UNAVAIL(u)" "BUY(b)" "|" "OWNED(O)")))    ; Media to obtain
 
 ;;; Tags
 ;;;=====
 
-;; Intended meaning of the tags:
-;;   home: Can only be done at home.
-;;   work: Shows up in work agenda.
-;;   errand: To be done outside home and work.
-;;   evening: Shows up in evening agenda.
-;;   winddown: Can be done during winddown.
-;;   weekend: Should only show up in weekend agenda.
-;;   computer: Requires only a computer.
-;;   meal: Can be done while eating.
-;;   listening: Audio tasks (can be done while working).
+;; Intended meaning of the tags, and which agenda views they show up in.  The at
+;; sign indicates that there is a particular agenda view the tag is directed
+;; towards.
+;;   home: Can only be done at home. (morning, evening, weekend)
+;;   work: Shows up in work agenda. (work)
+;;   all: Shows up in all agendas.
+;;   evening: Shows up in evening agenda. (evening)
+;;   weekend: Shows up in weekend agenda. (weekend)
+;;   computer: Shows up in computer sub-agendas. (computer)
+;;   meal: Can be done while eating. (meal)
+;;   review: Shows up in review agenda. (review)
+;;   listening: Audio tasks. (listening)
+;;   anki: Involves working with Anki.
+;;   text: Tags text media.
+;;   video: Tags video media.
+;;   audio: Tags audio media.
+(setq org-tag-alist
+      '(("home"      . ?h)
+        ("work"      . ?w)
+        ("all"       . ?*)
+        (:newline    . nil)
+        ("evening"   . ?e)
+        ("weekend"   . ?s)
+        ("computer"  . ?c)
+        (:newline    . nil)
+        ("review"    . ?r)
+        ("meal"      . ?m)
+        ("listening" . ?l)
+        (:newline    . nil)
+        ("anki"      . ?k)
+        (:newline    . nil)
+        ("text"      . ?t)
+        ("video"     . ?v)
+        ("audio"     . ?a)))
 
-;; Defining this here (or using customization) doesn't seem to be working at the
-;; moment, so all org mode files should include these lines until things get
-;; resolved.
-;;    #+TAGS: { work(w) home(h) errand(e) }
-;;    #+TAGS: evening(v) winddown(d) weekend(s)
-;;    #+TAGS: computer(c) meal(m) listening(l) review(r)
-(setq org-tag-alist nil)
-(setq org-tag-persistent-alist nil)
+;; The function org-set-regexps-and-options-for-tags, which sets a buffer-local
+;; version of org-tag-alist, seems to screw up :newline entries, replacing
+;; (:newline) with ("\n"), which ends up defining a tag with a newline character
+;; as its name. This is my crude attempt to fix it (which will probably make it
+;; impossible to create buffer-local tags with the #+TAGS directive).
+;;
+;; TODO: Replace this advice with a more precisely-directed version that will
+;;       still allow buffer-local tags.
+(unless (advice-member-p #'aph/org-reset-tag-alist
+                         'org-set-regexps-and-options-for-tags)
+  (advice-add 'org-set-regexps-and-options-for-tags :after
+              '(lambda () (kill-local-variable 'org-tag-alist))
+              '((name . aph/org-reset-tag-alist))))
 
-;;; Priority
-;;;=========
+;;; Priorities
+;;;===========
 (setq org-highest-priority ?A)
 (setq org-lowest-priority ?E)
 (setq org-default-priority ?C)
@@ -69,9 +91,9 @@
 ;;; Properties and Column View
 ;;;===========================
 (setq org-global-properties
-      '(("Effort_ALL" . "0:05 0:10 0:15 0:20 0:30 1:00 2:00 4:00 8:00 0")))
+      '(("Effort_ALL" . "0:05 0:10 0:15 0:30 1:00 2:00 3:00 4:00 8:00 0")))
 (setq org-columns-default-format
-      "%50ITEM(Task) %TODO %2PRIORITY(^) %10TAGS(Tags) %6Effort{:} %CLOCKSUM")
+      "%50ITEM(Task) %TODO %2PRIORITY(^) %20TAGS(Tags) %6Effort{:} %CLOCKSUM")
 
 ;;; Capture, Refile, and Archive
 ;;;=============================
@@ -101,26 +123,26 @@
         "~/org/media.org"))
 
 ;; General agenda settings:
-(setq org-agenda-block-separator (make-string 80 ?=)) ; Block agenda separator.
-(setq org-agenda-remove-tags t) ; Do not show tags in the agenda.
-(setq org-agenda-span 'day) ; Default to day view.
-(setq org-agenda-timegrid-use-ampm t) ; Use AM/PM in the agenda time grid.
-(setq org-extend-today-until 4) ; The day starts at 4 AM.
-(setq org-habit-graph-column 50) ; The column to show the habit graph at.
-(setq org-agenda-window-setup 'current-window) ; Show agenda in current window.
+(setq org-agenda-block-separator (make-string 80 ?=))
+(setq org-agenda-remove-tags t)
+(setq org-agenda-span 'day)
+(setq org-agenda-timegrid-use-ampm t)
+(setq org-extend-today-until 4)
+(setq org-habit-graph-column 50)
+(setq org-agenda-window-setup 'current-window)
 
 ;; Settings for timestamps, scheduled items, and deadlines:
 (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
 (setq org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-todo-ignore-with-date 'all)
 (setq org-agenda-todo-ignore-scheduled 'all)
+(setq org-agenda-todo-ignore-timestamp 'all)
 (setq org-agenda-tags-todo-honor-ignore-options t)
 
-
-;; Defining stuck projects:
+;; We designate a project as stuck if it is OPEN and does not have a subtask
+;; marked TODO.
 (setq org-stuck-projects
-      '("/OPEN|BLOCKED"          ; Projects are OPEN or BLOCKED.
-        ("NEXT" "IN-PROGRESS"))) ; Projects are not stuck if they have a NEXT
-                                 ; subtask or a task in progress.
+      '("/OPEN" ("TODO")))
 
 ;; We want to display our custom agenda automatically on startup.
 (add-hook 'after-init-hook
@@ -128,6 +150,6 @@
             (aph/org-agenda-display-smart-agenda)
             (delete-other-windows)))
 
-;; Loading Org submodules.
+;; Loading custom agenda commands and capture templates.
 (load "org-agenda-init.el")
 (load "org-capture-init.el")
