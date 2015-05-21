@@ -8,4 +8,4 @@ its arguments.
 
 Intended for use as a comparator in a sorting mechanism. When used in such a
 way, the results will be shuffled (sorted randomly)."
-  (truncate (* 2 (- (random* 2) 0.5))))
+  (truncate (* 2 (- (random 2) 0.5))))
