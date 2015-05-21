@@ -1,16 +1,19 @@
 ;;;; The Emacs init file of Aaron Harris.
-;;;; GLOBAL KEYBINDINGS
+;;;; KEYBINDING SETUP
 ;;;;============================================================================
 
+;;; Global Keybindings
+;;;===================
+
 ;; Miscellaneous Keybindings
-(define-key global-map (kbd "C-+") 'flash-crosshairs)
+(global-set-key (kbd "C-+") 'flash-crosshairs)
 
 ;; Org Mode Keybindings
-(define-key global-map "\C-cl" 'org-store-link)   ; As recommended
-(define-key global-map "\C-ca" 'org-agenda)       ; As recommended
-(define-key global-map "\C-cc" 'org-capture)      ; As recommended
-(define-key global-map "\C-cj" 'org-clock-goto)
-(define-key global-map "\C-cq" 'org-clock-cancel)
-(define-key global-map "\C-co" 'org-clock-out)
-(define-key global-map "\C-cx" 'org-clock-in-last)
-(define-key global-map "\C-cA" 'aph/org-agenda-display-smart-agenda)
+(global-set-key (kbd "C-c a") 'org-agenda)     ; As recommended
+(global-set-key (kbd "C-c A") 'aph/org-agenda-display-smart-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)    ; As recommended
+(global-set-key (kbd "C-c l") 'org-store-link) ; As recommended
+(global-set-key (kbd "C-c j") 'org-clock-goto)
+(global-set-key (kbd "C-c o") 'org-clock-out)
+(global-set-key (kbd "C-c q") 'org-clock-cancel)
+(global-set-key (kbd "C-c x") 'org-clock-in-last)

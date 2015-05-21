@@ -2,6 +2,8 @@
 ;;;; GNUS CONFIGURATION
 ;;;;============================================================================
 
+;;; THIS FILE IS STILL VERY MUCH UNDER CONSTRUCTION!
+
 (require 'gnus)
 
 (setq nnrss-directory "~/news/rss/")

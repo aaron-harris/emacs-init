@@ -2,7 +2,11 @@
 ;;;; CUSTOM FUNCTIONS
 ;;;;============================================================================
 
-(defun aph/random-comparator (x y)
+(defun aph/add-hook-to-all (hooks function)
+  "Adds FUNCTION to each element of the list HOOKS."
+  (mapcar (lambda (hook) (add-hook hook function)) hooks))
+
+(defun aph/random-comparator (&optional args)
   "Randomly returns +1 with probability 1/2 and -1 with probability 1/2. Ignores
 its arguments.
 
