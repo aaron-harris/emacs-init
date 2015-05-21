@@ -135,7 +135,7 @@ not include keyword criteria using the ‘/’ suffix."
 ;;;=======================
 (setq org-agenda-custom-commands
       `(("1" "Work Agenda"
-         (,(aph/org-agenda-block-tagged-agenda "Work Agenda" "work|all")
+         (,(aph/org-agenda-block-tagged-agenda "Work Agenda" "work")
           ,(aph/org-agenda-block-tagged-habits "Habits:" "work")
           (tags
            "+work+LEVEL=1"
@@ -144,13 +144,13 @@ not include keyword criteria using the ‘/’ suffix."
           ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 8)))
 
         ("2" "Evening Agenda"
-         (,(aph/org-agenda-block-tagged-agenda "Evening Agenda" "evening|all")
+         (,(aph/org-agenda-block-tagged-agenda "Evening Agenda" "evening")
           ,(aph/org-agenda-block-tagged-habits "Habits:" "evening")
           ,(aph/org-agenda-block-match-tasks "Evening Tasks:" "+evening")
           ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 8)))
         
         ("3" "Weekend Agenda"
-         (,(aph/org-agenda-block-tagged-agenda "Weekend Agenda" "weekend|all")
+         (,(aph/org-agenda-block-tagged-agenda "Weekend Agenda" "weekend")
           ,(aph/org-agenda-block-tagged-habits "Habits:" "weekend")
           ,(aph/org-agenda-block-match-tasks "Weekend Tasks:" "+weekend")
           ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 8)))
