@@ -1,6 +1,27 @@
 ;;;; The Emacs init file of Aaron Harris.
-;;;; CLOJURE CONFIGURATION
+;;;; LISP CONFIGURATION
 ;;;;============================================================================
+
+;; Defining a list of all modes in which Lisp editing occurs:
+(setq aph/lisp-mode-hooks
+      '(cider-repl-mode-hook
+        clojure-mode-hook
+        emacs-lisp-mode-hook
+        eval-expression-minibuffer-setup-hook
+        ielm-mode-hook
+        lisp-interaction-mode-hook
+        lisp-mode-hook))
+
+;; Enabling Paredit and Rainbow Delimiters modes for all Lisps:
+(aph/add-hook-to-all aph/lisp-mode-hooks #'enable-paredit-mode)
+(aph/add-hook-to-all aph/lisp-mode-hooks #'rainbow-delimiters-mode)
+
+;;; Clojure-Specific Configuration
+;;;===============================
+
+;; Enable subword mode in Clojure buffers:
+(add-hook 'clojure-mode-hook               #'subword-mode)
+(add-hook 'cider-repl-mode-hook            #'subword-mode)
 
 ;; Don't switch automatically to the REPL on connection.
 (setq cider-repl-pop-to-buffer-on-connect nil)
@@ -23,10 +44,10 @@
   (aset buffer-display-table ?\^M []))
 
 ;; Enabling the above-mentioned fix:
-(add-hook 'cider-repl-mode-hook 'remove-dos-eol)
-(add-hook 'cider-macroexpansion-mode-hook 'remove-dos-eol)
-(add-hook 'cider-test-report-mode-hook 'remove-dos-eol)
+(add-hook 'cider-repl-mode-hook            #'remove-dos-eol)
+(add-hook 'cider-macroexpansion-mode-hook  #'remove-dos-eol)
+(add-hook 'cider-test-report-mode-hook     #'remove-dos-eol)
 
-;; Log nrepl messages (usually disabled).
+;; Log nrepl messages (uncomment to diagnose REPL problems).
 ;(setq nrepl-log-messages t)
 
