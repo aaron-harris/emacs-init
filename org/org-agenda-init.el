@@ -2,6 +2,13 @@
 ;;;; ORG-MODE CUSTOM AGENDA COMMANDS
 ;;;;============================================================================
 
+;;; Pre-Load Default Settings
+;;;==========================
+;;; For some reason, these variables are not declared before this point, and it
+;;; screws up our block-defining functions. Declaring them here makes things
+;;; work, but it's rather a kludge.
+(setq org-agenda-max-entries nil)
+
 ;;; Skip Functions
 ;;;===============
 ;;; Here are some custom functions to be used with org-agenda-skip-function.
@@ -48,52 +55,26 @@ those headlines not tagged with TAG (including by inheritance)."
         nil
       (1- next-headline))))
 
-;; Variables used to control aph/org-agenda-display-smart-agenda, below.
-(setq aph/workday-start 10) ; 10:00 am
-(setq aph/workday-end 18)   ;  6:00 pm
-
-(defun aph/org-agenda-display-smart-agenda ()
-  "Selects an Org-mode agenda to display, based on the current time and day of the week.
-
-On Saturdays and Sundays, displays the weekend agenda. On
-weekdays, displays the review agenda if the workday (as defined
-by the variables aph/workday-start and aph/workday-end) hasn't
-started yet, the work agenda if it's in progress, and the evening
-agenda if it's already ended."
-  (interactive)
-  (let* ((day            (nth 6 (decode-time)))
-         (hour           (nth 2 (decode-time))))
-    (if (< 0 day 6)
-        (cond
-         ((< hour aph/workday-start)  (org-agenda nil "r"))
-         ((>= hour aph/workday-end)   (org-agenda nil "2"))
-         (t                           (org-agenda nil "1")))
-      (org-agenda nil "3"))))
-
 ;;; Block Definitions
 ;;;==================
 ;;; For ease of reuse, we define some functions to create custom agenda blocks.
 
-;; This is a top-level agenda block, that collects all timestamped items with a
-;; specified tag, or the :all: tag, but skips habits.
 (defun aph/org-agenda-block-tagged-agenda (header tag &optional only)
   "Return a list form defining an agenda block with header HEADER
 that includes only items tagged with :all: or TAG, but excludes
-habits. If ONLY is non-nil, also exclude :all:-tagged items."
-  (let ((skip-clause (if only
-                         `(aph/org-agenda-skip-without-tag ,tag)
-                       `(and (aph/org-agenda-skip-without-tag ,tag)
-                             (aph/org-agenda-skip-without-tag "all")))))
-       
-       `(agenda
-         ""
-         ((org-agenda-overriding-header ,header)
-          (org-agenda-ndays 1)
-          (org-agenda-sorting-strategy '(time-up category-up))
-          (org-habit-show-habits nil)
-          (org-agenda-skip-function ',skip-clause)))))
+habits. If ONLY is non-nil, also exclude :all:-tagged items."       
+  `(agenda
+    ""
+    ((org-agenda-overriding-header ,header)
+     (org-agenda-ndays 1)
+     (org-agenda-sorting-strategy '(time-up category-up))
+     (org-habit-show-habits nil)
+     (org-agenda-skip-function
+      ',(if only
+            `(aph/org-agenda-skip-without-tag ,tag)
+          `(and (aph/org-agenda-skip-without-tag ,tag)
+                (aph/org-agenda-skip-without-tag "all")))))))
 
-;; This block collects all habits with a specified tag, or the :all: tag.
 (defun aph/org-agenda-block-tagged-habits (header tag)
   "Return a list form defining an agenda block with header HEADER
 that includes only habits tagged with :all: or TAG."
@@ -106,8 +87,6 @@ that includes only habits tagged with :all: or TAG."
                 (aph/org-agenda-skip-without-tag "all"))
            (org-agenda-skip-entry-if 'notregexp ":STYLE:.*habit"))))))
 
-;; This block collects all tasks (not projects) that match the specified
-;; criteria.
 (defun aph/org-agenda-block-match-tasks (header match &optional limit random)
   "Return a list form defining a todo-type agenda block with
 header HEADER that includes only tasks that match the
@@ -122,21 +101,16 @@ are also included.
 
 Note that, since we are selecting only tasks, MATCH should not
 include keyword criteria using the ‘/’ suffix."
-  (let ((limit (or limit org-agenda-max-entries))
+  `(tags-todo
+    ,(concat match "/TODO|TAG|START")
+    ((org-agenda-overriding-header ,header)
+     (org-agenda-skip-function
+      '(org-agenda-skip-subtree-if 'todo '("START")))
+     ,@(if limit `((org-agenda-max-entries ,limit)))
+     ,@(if random
+           '((org-agenda-cmp-user-defined 'aph/random-comparator)
+             (org-agenda-sorting-strategy '(user-defined-up)))))))
 
-        (random-clauses
-         (if random
-             '((org-agenda-cmp-user-defined 'aph/random-comparator)
-               (org-agenda-sorting-strategy '(user-defined-up))))))
-    `(tags-todo
-      ,(concat match "/TODO|TAG|START")
-      ((org-agenda-overriding-header ,header)
-       (org-agenda-max-entries ,limit)
-       (org-agenda-skip-function
-        '(org-agenda-skip-subtree-if 'todo '("START")))
-       ,@random-clauses))))
-
-;; This block collects all unopened projects that match the specified criteria.
 (defun aph/org-agenda-block-new-projects (header match &optional limit random)
   "Return a list form defining a todo-type agenda block with
 header HEADER that includes only unopened projects that match the
@@ -149,17 +123,13 @@ randomly.
 Unopened projects are items tagged with the ‘START’
 keyword. Since we are selecting only such projects, MATCH should
 not include keyword criteria using the ‘/’ suffix."
-  (let ((limit (or limit org-agenda-max-entries))
-
-        (random-clauses
-         (if random
-             '((org-agenda-cmp-user-defined 'aph/random-comparator)
-               (org-agenda-sorting-strategy '(user-defined-up))))))
-    `(tags-todo
-      ,(concat match "/START")
-      ((org-agenda-overriding-header ,header)
-       (org-agenda-max-entries ,limit)
-       ,@random-clauses))))
+  `(tags-todo
+    ,(concat match "/START")
+    ((org-agenda-overriding-header ,header)
+     ,@(if limit `((org-agenda-max-entries ,limit)))
+     ,@(if random
+           '((org-agenda-cmp-user-defined 'aph/random-comparator)
+             (org-agenda-sorting-strategy '(user-defined-up)))))))
 
 ;;; Custom Agenda Commands
 ;;;=======================
@@ -176,13 +146,13 @@ not include keyword criteria using the ‘/’ suffix."
         ("2" "Evening Agenda"
          (,(aph/org-agenda-block-tagged-agenda "Evening Agenda" "evening|all")
           ,(aph/org-agenda-block-tagged-habits "Habits:" "evening")
-          ,(aph/org-agenda-block-tagged-tasks "Evening Tasks:" "evening")
+          ,(aph/org-agenda-block-match-tasks "Evening Tasks:" "+evening")
           ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 8)))
         
         ("3" "Weekend Agenda"
          (,(aph/org-agenda-block-tagged-agenda "Weekend Agenda" "weekend|all")
           ,(aph/org-agenda-block-tagged-habits "Habits:" "weekend")
-          ,(aph/org-agenda-block-tagged-tasks "Weekend Tasks:" "weekend")
+          ,(aph/org-agenda-block-match-tasks "Weekend Tasks:" "+weekend")
           ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 8)))
 
         ("r" "Review"
@@ -230,3 +200,25 @@ not include keyword criteria using the ‘/’ suffix."
            "+meal+video/UNWATCHED|CONTINUE|REWATCH"
            ((org-agenda-overriding-header "Things to Watch")))
           ,(aph/org-agenda-block-match-tasks "Things to Do" "meal")))))
+
+;; Variables used to control aph/org-agenda-display-smart-agenda, below.
+(setq aph/workday-start 10) ; 10:00 am
+(setq aph/workday-end 18)   ;  6:00 pm
+
+(defun aph/org-agenda-display-smart-agenda ()
+  "Selects an Org-mode agenda to display, based on the current time and day of the week.
+
+On Saturdays and Sundays, displays the weekend agenda. On
+weekdays, displays the review agenda if the workday (as defined
+by the variables aph/workday-start and aph/workday-end) hasn't
+started yet, the work agenda if it's in progress, and the evening
+agenda if it's already ended."
+  (interactive)
+  (let ((day            (nth 6 (decode-time)))
+        (hour           (nth 2 (decode-time))))
+    (if (< 0 day 6)
+        (cond
+         ((< hour aph/workday-start)  (org-agenda nil "r"))
+         ((>= hour aph/workday-end)   (org-agenda nil "2"))
+         (t                           (org-agenda nil "1")))
+      (org-agenda nil "3"))))

@@ -144,12 +144,12 @@
 (setq org-stuck-projects
       '("/OPEN" ("TODO")))
 
+;; Loading custom agenda commands and capture templates.
+(load "org-agenda-init.el")
+(load "org-capture-init.el")
+
 ;; We want to display our custom agenda automatically on startup.
 (add-hook 'after-init-hook
           (lambda ()
             (aph/org-agenda-display-smart-agenda)
             (delete-other-windows)))
-
-;; Loading custom agenda commands and capture templates.
-(load "org-agenda-init.el")
-(load "org-capture-init.el")
