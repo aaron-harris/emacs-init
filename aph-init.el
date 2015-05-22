@@ -51,4 +51,11 @@
 
 ;;; Custom Theme Settings
 ;;;======================
-(load "wombat-flux-theme.el")
+(setq custom-safe-themes t)             ; Treat all themes as safe.
+(load-theme 'zenburn)
+
+;; This was my old theme, a version of Wombat that I modified to be more
+;; compatible with f.lux:
+
+;; (load "wombat-flux-theme.el")
+

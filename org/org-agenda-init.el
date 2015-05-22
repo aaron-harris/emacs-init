@@ -120,11 +120,12 @@ If LIMIT is non-nil, the block will only show that many
 projects. If RANDOM is non-nil, the projects will be ordered
 randomly.
 
-Unopened projects are items tagged with the ‘START’
-keyword. Since we are selecting only such projects, MATCH should
-not include keyword criteria using the ‘/’ suffix."
+Unopened projects are items tagged with the ‘START’ keyword or
+the ‘SHELVED’ keyword . Since we are selecting only such
+projects, MATCH should not include keyword criteria using the ‘/’
+suffix."
   `(tags-todo
-    ,(concat match "/START")
+    ,(concat match "/START|SHELVED")
     ((org-agenda-overriding-header ,header)
      ,@(if limit `((org-agenda-max-entries ,limit)))
      ,@(if random
@@ -189,7 +190,7 @@ not include keyword criteria using the ‘/’ suffix."
                                               "+computer-anki" 5 :random)
           ,(aph/org-agenda-block-new-projects "Five Random Anki Projects"
                                               "+anki" 5 :random)
-          ,(aph/org-agenda-block-new-projects "Other Projects" "-computer")))
+          ,(aph/org-agenda-block-new-projects "Other Projects" "-computer-anki")))
 
         ("z" "Meal"
          (,(aph/org-agenda-block-tagged-agenda "Meal Agenda" "meal" :only)
