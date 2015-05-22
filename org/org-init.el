@@ -23,7 +23,7 @@
 (setq org-todo-keywords
       '((sequence "START(s)" "|" "CANCELLED(c!)")            ; General items
         (sequence "TODO(t)" "WAITING(w@)" "|" "DONE(d!)")    ; Tasks
-        (sequence "OPEN(o)" "|" "DONE(d!)" "SHELVED(s!)")    ; Projects
+        (sequence "OPEN(o)" "SHELVED(S!)" "|" "DONE(d!)")    ; Projects
         (sequence "UNREAD(r)" "CONTINUE(-)" "REREAD(R)"
                   "TAG(:)" "|" "FINISHED(f!)")               ; Text media
         (sequence "UNWATCHED(w)" "CONTINUE(-)" "REWATCH(W)"

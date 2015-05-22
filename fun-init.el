@@ -6,7 +6,7 @@
   "Adds FUNCTION to each element of the list HOOKS."
   (mapcar (lambda (hook) (add-hook hook function)) hooks))
 
-(defun aph/random-comparator (&optional args)
+(defun aph/random-comparator (&rest args)
   "Randomly returns +1 with probability 1/2 and -1 with probability 1/2. Ignores
 its arguments.
 
