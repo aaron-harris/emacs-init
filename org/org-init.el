@@ -135,6 +135,14 @@
 (setq org-habit-graph-column 50)
 (setq org-agenda-window-setup 'current-window)
 
+;; Format string for agenda items
+(setq org-agenda-prefix-format
+      '((agenda   . " %i %-13:c%?-12t% s")
+        (timeline . "  % s")
+        (todo     . " %i %-13:c")
+        (tags     . " %i %-13:c")
+        (search   . " %i %-13:c")))
+
 ;; Settings for timestamps, scheduled items, and deadlines:
 (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
 (setq org-agenda-skip-scheduled-if-done t)
