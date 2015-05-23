@@ -42,8 +42,8 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized)) ; Start maximized.
 
 ;; Auto-fill mode
-(setq-default fill-column 80)             ; Set default auto-fill width.
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(add-hook 'text-mode-hook 'turn-on-auto-fill) ; Use auto-fill in all text modes.
+(setq-default fill-column 80)                 ; Set default auto-fill width.
 
 ;; Location settings
 (setq calendar-longitude -93.2)
