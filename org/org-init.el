@@ -11,10 +11,14 @@
 
 ;;; General Settings
 ;;;=================
-(setq org-catch-invisible-edits 'smart)      ; Try to avoid invisible edits.
-(setq org-log-into-drawer t)                 ; Use LOGBOOK drawers.
-(setq org-track-ordered-property-with-tag t) ; Use a tag for ORDERED trees.
-(setq org-use-speed-commands t)              ; Use speed commands.
+(setq org-catch-invisible-edits 'smart)        ; Try to avoid invisible edits.
+(setq org-log-into-drawer t)                   ; Use LOGBOOK drawers.
+(setq org-track-ordered-property-with-tag t)   ; Use a tag for ORDERED trees.
+(setq org-use-speed-commands t)                ; Use speed commands.
+
+;; Setting autofill width.
+(add-to-list 'aph/fill-column-by-mode-alist '(org-mode . 76))
+(add-hook 'org-mode-hook #'aph/fill-set-column-by-mode)
 
 ;;; TODO Keywords
 ;;;==============
