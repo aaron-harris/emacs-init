@@ -12,6 +12,7 @@
 ;;; General Settings
 ;;;=================
 (setq org-catch-invisible-edits 'smart)        ; Try to avoid invisible edits.
+(setq org-enforce-todo-dependencies t)         ; Make ORDERED tasks matter.
 (setq org-log-into-drawer t)                   ; Use LOGBOOK drawers.
 (setq org-track-ordered-property-with-tag t)   ; Use a tag for ORDERED trees.
 (setq org-use-speed-commands t)                ; Use speed commands.
