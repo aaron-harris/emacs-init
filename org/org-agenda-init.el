@@ -203,7 +203,8 @@ suffix."
           ,(aph/org-agenda-block-new-projects "Five Random Anki Projects"
                                               "+anki" 5 :random)
           ,(aph/org-agenda-block-new-projects "Other Projects"
-                                              "-computer-anki")))
+                                              "-computer-anki"))
+         ((org-agenda-dim-blocked-tasks nil)))
 
         ("z" "Meal"
          (,(aph/org-agenda-block-tagged-agenda "Meal Agenda" "meal" :only)
