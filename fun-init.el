@@ -14,9 +14,9 @@
 (defun aph/fill-set-column-by-mode ()
   "Set fill-column to the value corresponding to the current mode
 in aph/fill-column-by-mode-alist. If the current mode does not
-appear in that list, reset fill-column to the default."
+appear in that list, do nothing."
   (let ((val (cdr (assq major-mode aph/fill-column-by-mode-alist))))
-    (if val (set-fill-column val))))
+    (if val (setq fill-column val))))
 
 (defun aph/random-comparator (&rest args)
   "Randomly returns +1 with probability 1/2 and -1 with probability 1/2. Ignores

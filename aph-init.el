@@ -31,19 +31,25 @@
 (load "gnus-init.el")                   ; Gnus setup.
 (load "keys-init.el")                   ; Setting keybindings.
 
+;;; Global Modes
+;;;=============
+(smartparens-global-mode t)             ; Enable smartparens...
+(require 'smartparens-config)           ; ... and its default configuration.
+(winner-mode 1)                         ; Enable window config undo/redo.
+
+;;; Auto-fill mode
+;;;===============
+(add-hook 'text-mode-hook 'turn-on-auto-fill) ; Use auto-fill in all text modes.
+(setq-default fill-column 80)                 ; Set default auto-fill width.
+
 ;;; Miscellaneous Settings
 ;;;=======================
 (prefer-coding-system 'utf-8-unix)        ; Use Unix-style line endings.
 (setq-default cursor-type 'box)           ; Use box-style cursor.
 (column-number-mode 1)                    ; Show col number in mode line.
-(winner-mode 1)                           ; Enable window config undo/redo.
 (setq ring-bell-function (lambda () nil)) ; Disable the bell.
 (setq inhibit-startup-screen t)           ; Disable the startup screen.
 (add-to-list 'initial-frame-alist '(fullscreen . maximized)) ; Start maximized.
-
-;; Auto-fill mode
-(add-hook 'text-mode-hook 'turn-on-auto-fill) ; Use auto-fill in all text modes.
-(setq-default fill-column 80)                 ; Set default auto-fill width.
 
 ;; Location settings
 (setq calendar-longitude -93.2)
