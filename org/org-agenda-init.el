@@ -216,8 +216,15 @@ suffix."
           ,(aph/org-agenda-block-match-tasks "Things to Do" "meal")))))
 
 ;; Variables used to control aph/org-agenda-display-smart-agenda, below.
-(setq aph/workday-start 10) ; 10:00 am
-(setq aph/workday-end 18)   ;  6:00 pm
+(defvar aph/workday-start 10
+  "The start of the workday (in hours, according to a 24-hour
+clock). Used by the function aph/org-agenda-display-smart-agenda
+to display the correct agenda.")
+
+(defvar aph/workday-end 18
+  "The end of the workday (in hours, according to a 24-hour
+clock). Used by the function aph/org-agenda-display-smart-agenda
+to display the correct agenda.")
 
 (defun aph/org-agenda-display-smart-agenda ()
   "Selects an Org-mode agenda to display, based on the current time and day of the week.

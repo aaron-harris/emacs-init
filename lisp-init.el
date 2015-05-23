@@ -2,15 +2,17 @@
 ;;;; LISP CONFIGURATION
 ;;;;============================================================================
 
-;; Defining a list of all modes in which Lisp editing occurs:
-(setq aph/lisp-mode-hooks
-      '(cider-repl-mode-hook
-        clojure-mode-hook
-        emacs-lisp-mode-hook
-        eval-expression-minibuffer-setup-hook
-        ielm-mode-hook
-        lisp-interaction-mode-hook
-        lisp-mode-hook))
+(defvar aph/lisp-mode-hooks
+  '(cider-repl-mode-hook
+    clojure-mode-hook
+    emacs-lisp-mode-hook
+    eval-expression-minibuffer-setup-hook
+    ielm-mode-hook
+    lisp-interaction-mode-hook
+    lisp-mode-hook)
+  "A list of mode hooks for all modes in which Lisp editing
+occurs. Can be used with aph/add-hook-to-all to easily add a hook
+to all such modes.")
 
 ;; Enabling Paredit and Rainbow Delimiters modes for all Lisps:
 (aph/add-hook-to-all aph/lisp-mode-hooks #'enable-paredit-mode)
