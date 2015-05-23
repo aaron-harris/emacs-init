@@ -167,18 +167,30 @@ suffix."
              '(aph/org-agenda-skip-tag "review"))))
           ,(aph/org-agenda-block-tagged-agenda
             "Scheduled for Review" "review" :only)
+          (agenda
+           ""
+           ((org-agenda-overriding-header "Missed Agenda Items")
+            (org-agenda-ndays 1)
+            (org-agenda-skip-function
+             '(or (aph/org-agenda-skip-tag "all")
+                  (aph/org-agenda-skip-tag "work")
+                  (aph/org-agenda-skip-tag "evening")
+                  (aph/org-agenda-skip-tag "weekend")))))
+          ,(aph/org-agenda-block-match-tasks
+            "Missed Tasks"
+            "-work-computer-weekend-review-unfiled")
           (tags
            "LEVEL=2"
-           ((org-agenda-overriding-header "To Be Filed:")
+           ((org-agenda-overriding-header "To Be Filed")
             (org-agenda-files '("~/org/capture.org"))))
           (stuck
            ""
-           ((org-agenda-overriding-header "Stuck Projects:")
+           ((org-agenda-overriding-header "Stuck Projects")
             (org-agenda-max-entries 6)
             (org-agenda-sorting-strategy '(category-up))))
           (tags-todo
            "/WAITING"
-           ((org-agenda-overriding-header "Stuck Tasks:")))
+           ((org-agenda-overriding-header "Stuck Tasks")))
           ,(aph/org-agenda-block-match-tasks "Tasks Without Effort"
                                              "Effort<>{0}/TODO|START" 8)))
 
@@ -190,7 +202,8 @@ suffix."
                                               "+computer-anki" 5 :random)
           ,(aph/org-agenda-block-new-projects "Five Random Anki Projects"
                                               "+anki" 5 :random)
-          ,(aph/org-agenda-block-new-projects "Other Projects" "-computer-anki")))
+          ,(aph/org-agenda-block-new-projects "Other Projects"
+                                              "-computer-anki")))
 
         ("z" "Meal"
          (,(aph/org-agenda-block-tagged-agenda "Meal Agenda" "meal" :only)
