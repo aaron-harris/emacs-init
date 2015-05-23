@@ -21,7 +21,7 @@
 ;; directory containing this file, and our other initialization files).
 (add-to-list 'load-path (expand-file-name aph/init-path))
 
-(load "fun-init.el")                    ; General-use functions.
+(load "fun-init.el")                    ; General-use functions and variables.
 
 (add-to-list 'load-path (expand-file-name (concat aph/init-path "/org")))
 (load "org-init.el")                    ; Org-Mode bootstrapper.
