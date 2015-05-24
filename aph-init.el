@@ -15,22 +15,6 @@
 (server-start)                          ; Run Emacs in server mode.
 (setq server-window 'pop-to-buffer)     ; Client buffers open in other window.
 
-;;; Init Submodules
-;;;================
-;; The bootstrapping file should have set aph/init-path (the path to the
-;; directory containing this file, and our other initialization files).
-(add-to-list 'load-path (expand-file-name aph/init-path))
-
-(load "fun-init.el")                    ; General-use functions and variables.
-
-(add-to-list 'load-path (expand-file-name (concat aph/init-path "/org")))
-(load "org-init.el")                    ; Org-Mode bootstrapper.
-
-(load "lisp-init.el")                   ; Working with lisp code.
-(load "latex-init.el")                  ; Working in LaTeX.
-(load "gnus-init.el")                   ; Gnus setup.
-(load "keys-init.el")                   ; Setting keybindings.
-
 ;;; Global Modes
 ;;;=============
 (smartparens-global-mode t)             ; Enable smartparens...
@@ -54,6 +38,22 @@
 ;; Location settings
 (setq calendar-longitude -93.2)
 (setq calendar-latitude 45.0)
+
+;;; Init Submodules
+;;;================
+;; The bootstrapping file should have set aph/init-path (the path to the
+;; directory containing this file, and our other initialization files).
+(add-to-list 'load-path (expand-file-name aph/init-path))
+
+(load "fun-init.el")                    ; General-use functions and variables.
+
+(add-to-list 'load-path (expand-file-name (concat aph/init-path "/org")))
+(load "org-init.el")                    ; Org-Mode bootstrapper.
+
+(load "lisp-init.el")                   ; Working with lisp code.
+(load "latex-init.el")                  ; Working in LaTeX.
+(load "gnus-init.el")                   ; Gnus setup.
+(load "keys-init.el")                   ; Setting keybindings.
 
 ;;; Custom Theme Settings
 ;;;======================

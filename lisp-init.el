@@ -14,7 +14,8 @@
 occurs. Can be used with aph/add-hook-to-all to easily add a hook
 to all such modes.")
 
-;; Enabling Rainbow Delimiters mode for all Lisps:
+;; Enabling strict Smartparens and Rainbow Delimiters for all Lisps:
+(aph/add-hook-to-all aph/lisp-mode-hooks #'smartparens-strict-mode)
 (aph/add-hook-to-all aph/lisp-mode-hooks #'rainbow-delimiters-mode)
 
 ;;; Clojure-Specific Configuration
