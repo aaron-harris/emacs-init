@@ -2,9 +2,24 @@
 ;;;; CUSTOM FUNCTIONS
 ;;;;============================================================================
 
+;; TODO: Replace mapcar with dolist here.
 (defun aph/add-hook-to-all (hooks function)
-  "Adds FUNCTION to each element of the list HOOKS."
+  "Add FUNCTION to each element of the list HOOKS."
   (mapcar (lambda (hook) (add-hook hook function)) hooks))
+
+(defun aph/define-keys (keymap binding-list)
+  "For each pair (KEY . DEF) in BINDING-LIST, define the key
+sequence KEY as DEF in KEYMAP.
+
+See define-key for more information. Unlike define-key, we also
+accept for KEY any lisp code that evaluates to a valid key
+sequence (e.g., a quoted call to kbd). Likewise, KEYMAP may
+either be an actual keymap or code that evaluates to a
+keymap. This facilitates the use of list literals."
+  (if (keymapp keymap)
+      (dolist (binding binding-list)
+        (define-key keymap (eval (car binding)) (eval (cdr binding))))
+    (aph/define-keys (eval keymap) binding-list)))
 
 (defvar aph/fill-column-by-mode-alist '()
   "An alist mapping modes to the desired values of fill-column
@@ -19,8 +34,8 @@ appear in that list, do nothing."
     (if val (setq fill-column val))))
 
 (defun aph/random-comparator (&rest args)
-  "Randomly returns +1 with probability 1/2 and -1 with probability 1/2. Ignores
-its arguments.
+  "Randomly return +1 with probability 1/2 and -1 with probability 1/2. Ignore
+any arguments.
 
 Intended for use as a comparator in a sorting mechanism. When used in such a
 way, the results will be shuffled (sorted randomly)."
