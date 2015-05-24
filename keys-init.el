@@ -17,3 +17,7 @@
 (global-set-key (kbd "C-c o") 'org-clock-out)
 (global-set-key (kbd "C-c q") 'org-clock-cancel)
 (global-set-key (kbd "C-c x") 'org-clock-in-last)
+
+;;; Mode-Specific Keybindings
+;;;==========================
+(sp-use-smartparens-bindings)           ; Use default smartparens keybindings.
