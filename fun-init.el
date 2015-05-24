@@ -2,10 +2,10 @@
 ;;;; CUSTOM FUNCTIONS
 ;;;;============================================================================
 
-;; TODO: Replace mapcar with dolist here.
 (defun aph/add-hook-to-all (hooks function)
   "Add FUNCTION to each element of the list HOOKS."
-  (mapcar (lambda (hook) (add-hook hook function)) hooks))
+  (dolist (hook hooks)
+    (add-hook hook function)))
 
 (defun aph/define-keys (keymap binding-list)
   "For each pair (KEY . DEF) in BINDING-LIST, define the key
