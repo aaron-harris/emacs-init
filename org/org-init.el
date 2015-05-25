@@ -21,6 +21,9 @@
 (add-to-list 'aph/fill-column-by-mode-alist '(org-mode . 76))
 (add-hook 'org-mode-hook #'aph/fill-set-column-by-mode)
 
+;; Have smartparens handle strings better:
+(add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
+
 ;;; TODO Keywords
 ;;;==============
 (setq org-use-fast-todo-selection t)
