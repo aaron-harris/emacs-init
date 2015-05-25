@@ -23,8 +23,9 @@
   "Returns nil if headline containing point is tagged with TAG, and the
 position of the next headline in current buffer otherwise.
 
-Intended for use with org-agenda-skip-function, where this will skip exactly
-those headlines tagged with TAG (including by inheritance)."
+Intended for use with `org-agenda-skip-function', where this will
+skip exactly those headlines tagged with TAG (including by
+inheritance)."
   (let ((next-headline
          (save-excursion (or (outline-next-heading)
                                   (point-max))))
@@ -41,8 +42,9 @@ those headlines tagged with TAG (including by inheritance)."
   "Returns nil if headline containing point is not tagged with TAG, and the
 position of the next headline in current buffer otherwise.
 
-Intended for use with org-agenda-skip-function, where this will skip exactly
-those headlines not tagged with TAG (including by inheritance)."
+Intended for use with `org-agenda-skip-function', where this will
+skip exactly those headlines not tagged with TAG (including by
+inheritance)."
   (let ((next-headline
          (save-excursion (or (outline-next-heading)
                              (point-max))))

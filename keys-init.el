@@ -7,6 +7,7 @@
 
 ;; Miscellaneous Keybindings
 (global-set-key (kbd "C-+") #'flash-crosshairs)
+(global-set-key (kbd "M-o") #'other-window)
 
 ;; Org Mode Keybindings
 (global-set-key (kbd "C-c a") #'org-agenda)     ; As recommended
@@ -18,11 +19,13 @@
 (global-set-key (kbd "C-c q") #'org-clock-cancel)
 (global-set-key (kbd "C-c x") #'org-clock-in-last)
 
-;;; Smartparens Mode Keybindings
-;;;=============================
+;;; Mode-Specific Keybindings
+;;;==========================
+;; Eww
+(define-key eww-mode-map (kbd "S-<tab>") #'shr-previous-link)
 
 ;; Smartparens
-(aph/define-keys 'smartparens-mode-map
+(aph/define-keys smartparens-mode-map
                  (append
                   ;; Movement Commands
                   '(((kbd "C-S-a") . #'sp-beginning-of-sexp)

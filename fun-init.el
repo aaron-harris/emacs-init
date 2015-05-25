@@ -11,25 +11,21 @@
   "For each pair (KEY . DEF) in BINDING-LIST, define the key
 sequence KEY as DEF in KEYMAP.
 
-See define-key for more information. Unlike define-key, we also
-accept for KEY any lisp code that evaluates to a valid key
-sequence (e.g., a quoted call to kbd). Likewise, KEYMAP may
-either be an actual keymap or code that evaluates to a
-keymap. This facilitates the use of list literals."
-  (if (keymapp keymap)
-      (dolist (binding binding-list)
-        (define-key keymap (eval (car binding)) (eval (cdr binding))))
-    (aph/define-keys (eval keymap) binding-list)))
+See `define-key' for more information. Unlike `define-key', we
+also accept for KEY any lisp code that evaluates to a valid key
+sequence (e.g., a quoted call to `kbd')."
+  (dolist (binding binding-list)
+    (define-key keymap (eval (car binding)) (eval (cdr binding)))))
 
 (defvar aph/fill-column-by-mode-alist '()
-  "An alist mapping modes to the desired values of fill-column
-  within those modes. Used by aph/fill-set-column-by-mode to set
-  fill-column appropriately, usually within a mode hook.")
+  "An alist mapping modes to the desired values of `fill-column'
+  within those modes. Used by `aph/fill-set-column-by-mode' to
+  set `fill-column' appropriately, usually within a mode hook.")
 
 (defun aph/fill-set-column-by-mode ()
-  "Set fill-column to the value corresponding to the current mode
-in aph/fill-column-by-mode-alist. If the current mode does not
-appear in that list, do nothing."
+  "Set `fill-column' to the value corresponding to the current
+mode in `aph/fill-column-by-mode-alist.' If the current mode does
+not appear in that list, do nothing."
   (let ((val (cdr (assq major-mode aph/fill-column-by-mode-alist))))
     (if val (setq fill-column val))))
 

@@ -8,8 +8,8 @@
 ;; Use Emacs to view PDF output.
 (defun aph/LaTeX-use-emacs-as-viewer ()
   "Register Emacs as a PDF viewer in the variables
-TeX-view-program-selection and TeX-view-program-list. Intended
-for use with LaTeX-mode-hook."
+`TeX-view-program-selection' and `TeX-view-program-list'. Intended
+for use with `LaTeX-mode-hook'."
   (add-to-list 'TeX-view-program-selection
                '(output-pdf "Emacs"))
   (add-to-list 'TeX-view-program-list
