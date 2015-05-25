@@ -15,11 +15,26 @@
 (server-start)                          ; Run Emacs in server mode.
 (setq server-window 'pop-to-buffer)     ; Client buffers open in other window.
 
+;;; Disabling Window Chrome
+;;;========================
+(menu-bar-mode -1)
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
 ;;; Global Modes
 ;;;=============
-(smartparens-global-mode t)             ; Enable smartparens...
-(require 'smartparens-config)           ; ... and its default configuration.
-(winner-mode 1)                         ; Enable window config undo/redo.
+;; Ido Mode (these is from better-defaults.el)
+(ido-mode 1)
+(setq ido-enable-flex-matching t)
+
+;; Smartparens (and default configuration)
+(smartparens-global-mode 1)
+(require 'smartparens-config)
+
+;; Other modes
+(column-number-mode t)                  ; Show col number in mode line.
+(show-paren-mode 1)                     ; Highlight matching parens.
+(winner-mode 1)                         ; Window config undo and redo.
 
 ;;; Auto-fill mode
 ;;;===============
@@ -29,15 +44,34 @@
 ;;; Miscellaneous Settings
 ;;;=======================
 (prefer-coding-system 'utf-8-unix)        ; Use Unix-style line endings.
+(setq-default indent-tabs-mode nil)       ; Don't use hard tabs.
 (setq-default cursor-type 'box)           ; Use box-style cursor.
-(column-number-mode 1)                    ; Show col number in mode line.
 (setq ring-bell-function (lambda () nil)) ; Disable the bell.
-(setq inhibit-startup-screen t)           ; Disable the startup screen.
-(add-to-list 'initial-frame-alist '(fullscreen . maximized)) ; Start maximized.
+(setq apropos-do-all t)                   ; More thorough apropos searches.
 
-;; Location settings
+;; Calendar settings
 (setq calendar-longitude -93.2)
 (setq calendar-latitude 45.0)
+
+;; Clipboard settings (copied verbatim from better-defaults.el)
+(setq x-select-enable-clipboard t)
+(setq x-select-enable-primary t)
+(setq save-interprogram-paste-before-kill t)
+
+;; Saved place and backup settings
+(require 'saveplace)
+(setq-default save-place t)
+(setq save-place-file (concat user-emacs-directory "places"))
+(setq backup-directory-alist
+      `(("." . ,(concat user-emacs-directory "backups"))))
+
+;; Startup Settings
+(setq inhibit-startup-screen t)         ; Disable the splash screen.
+(add-to-list 'initial-frame-alist '(fullscreen . maximized)) ; Start maximized.
+
+;; Uniquify settings
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
 
 ;;; Init Submodules
 ;;;================
