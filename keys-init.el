@@ -6,8 +6,10 @@
 ;;;===================
 
 ;; Miscellaneous Keybindings
-(global-set-key (kbd "C-+") #'flash-crosshairs)
-(global-set-key (kbd "M-o") #'other-window)
+(global-set-key (kbd "C-+")     #'flash-crosshairs)
+(global-set-key (kbd "M-/")     #'hippie-expand)
+(global-set-key (kbd "C-x C-b") #'ibuffer)
+(global-set-key (kbd "M-o")     #'other-window)
 
 ;; Org Mode Keybindings
 (global-set-key (kbd "C-c a") #'org-agenda)     ; As recommended
@@ -22,6 +24,7 @@
 ;;; Mode-Specific Keybindings
 ;;;==========================
 ;; Eww
+(require 'eww)
 (define-key eww-mode-map (kbd "S-<tab>") #'shr-previous-link)
 
 ;; Smartparens
