@@ -18,6 +18,9 @@ to all such modes.")
 (aph/add-hook-to-all aph/lisp-mode-hooks #'smartparens-strict-mode)
 (aph/add-hook-to-all aph/lisp-mode-hooks #'rainbow-delimiters-mode)
 
+;; Have smartparens handle strings better:
+(add-to-list 'sp-navigate-consider-stringlike-sexp 'lisp-mode)
+
 ;;; Clojure-Specific Configuration
 ;;;===============================
 
