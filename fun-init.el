@@ -30,9 +30,10 @@ not appear in that list, do nothing."
     (if val (setq fill-column val))))
 
 (defun aph/random-comparator (&rest args)
-  "Randomly return +1 with probability 1/2 and -1 with probability 1/2. Ignore
-any arguments.
+  "Randomly return +1 with probability 1/2 and -1 with
+probability 1/2. Ignore any ARGS.
 
-Intended for use as a comparator in a sorting mechanism. When used in such a
-way, the results will be shuffled (sorted randomly)."
+Intended for use as a comparator in a sorting mechanism. When
+used in such a way, the results will be shuffled (sorted
+randomly)."
   (truncate (* 2 (- (random 2) 0.5))))

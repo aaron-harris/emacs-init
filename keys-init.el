@@ -10,6 +10,7 @@
 (global-set-key (kbd "M-/")     #'hippie-expand)
 (global-set-key (kbd "C-x C-b") #'ibuffer)
 (global-set-key (kbd "M-o")     #'other-window)
+(global-set-key (kbd "C-:")     #'pp-eval-expression)
 
 ;; Org Mode Keybindings
 (global-set-key (kbd "C-c a") #'org-agenda)     ; As recommended
@@ -27,6 +28,11 @@
 (require 'eww)
 (define-key eww-mode-map (kbd "S-<tab>") #'shr-previous-link)
 
+;; Lisps
+(require 'clojure-mode)
+(define-key clojure-mode-map    (kbd "M-q") #'sp-indent-defun)
+(define-key emacs-lisp-mode-map (kbd "M-q") #'sp-indent-defun)
+
 ;; Smartparens
 (aph/define-keys smartparens-mode-map
                  (append
@@ -35,9 +41,7 @@
                     ((kbd "C-S-e") . #'sp-end-of-sexp)
                     ((kbd "C-M-b") . #'sp-backward-sexp)
                     ((kbd "C-M-f") . #'sp-forward-sexp)
-                    ((kbd "C-M-p") . #'sp-previous-sexp)
-                    ((kbd "C-M-n") . #'sp-next-sexp)
-                    ((kbd "C-M-u") . #'sp-up-sexp)
+                    ((kbd "C-M-u") . #'sp-backward-up-sexp)
                     ((kbd "C-M-d") . #'sp-down-sexp)
                     ((kbd "M-B")   . #'sp-backward-symbol)
                     ((kbd "M-F")   . #'sp-forward-symbol))
@@ -49,13 +53,13 @@
                     ((kbd "C-<right>")   . #'sp-forward-slurp-sexp)
                     ((kbd "C-S-<left>")  . #'sp-backward-slurp-sexp)
                     ((kbd "C-S-<right>") . #'sp-backward-barf-sexp))
-
                   ;; Kill and Copy Commands
                   '(((kbd "C-M-k")           . #'sp-kill-sexp)
                     ((kbd "C-M-w")           . #'sp-copy-sexp)
                     ((kbd "C-S-<backspace>") . #'sp-splice-sexp-killing-around))
-
                   ;; Unwrap and Splice Commands
                   '(((kbd "C-<delete>")    . #'sp-unwrap-sexp)
                     ((kbd "C-<backspace>") . #'sp-backward-unwrap-sexp)
-                    ((kbd "M-D")           . #'sp-splice-sexp))))
+                    ((kbd "M-D")           . #'sp-splice-sexp))
+                  ;; Reconfiguration Commands
+                  '(((kbd "C-M-t") . #'sp-transpose-sexp))))

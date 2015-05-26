@@ -20,6 +20,12 @@ to all such modes.")
 
 ;; Have smartparens handle strings better:
 (add-to-list 'sp-navigate-consider-stringlike-sexp 'lisp-mode)
+(add-to-list 'sp-navigate-consider-stringlike-sexp 'clojure-mode)
+
+;; Smartparens isn't treating the minibuffer during M-: as a lisp mode, so we
+;; need to disable the single-quote pair there.
+(sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
+;(sp-pair "'" nil :actions nil :when '(aph/in-minibuffer-eval-p))
 
 ;;; Clojure-Specific Configuration
 ;;;===============================
