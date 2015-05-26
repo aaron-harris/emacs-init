@@ -28,8 +28,8 @@
 (setq ido-enable-flex-matching t)
 
 ;; Smartparens (and default configuration)
-(smartparens-global-mode 1)
 (require 'smartparens-config)
+(smartparens-global-mode 1)
 
 ;; Other modes
 (column-number-mode t)                  ; Show col number in mode line.
