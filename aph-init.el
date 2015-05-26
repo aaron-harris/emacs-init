@@ -46,7 +46,7 @@
 (prefer-coding-system 'utf-8-unix)        ; Use Unix-style line endings.
 (setq-default indent-tabs-mode nil)       ; Don't use hard tabs.
 (setq-default cursor-type 'box)           ; Use box-style cursor.
-(setq ring-bell-function (lambda () nil)) ; Disable the bell.
+(setq ring-bell-function #'ignore)        ; Disable the bell.
 (setq apropos-do-all t)                   ; More thorough apropos searches.
 
 ;; Calendar settings
