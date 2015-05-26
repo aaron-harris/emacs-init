@@ -2,13 +2,6 @@
 ;;;; ORG-MODE CUSTOM AGENDA COMMANDS
 ;;;;============================================================================
 
-;;; Pre-Load Default Settings
-;;;==========================
-;;; For some reason, these variables are not declared before this point, and it
-;;; screws up our block-defining functions. Declaring them here makes things
-;;; work, but it's rather a kludge.
-(setq org-agenda-max-entries nil)
-
 ;;; Skip Functions
 ;;;===============
 ;;; Here are some custom functions to be used with org-agenda-skip-function.
@@ -71,6 +64,7 @@ habits. If ONLY is non-nil, also exclude :all:-tagged items."
      (org-agenda-ndays 1)
      (org-agenda-sorting-strategy '(time-up category-up))
      (org-habit-show-habits nil)
+     (org-agenda-use-time-grid nil)
      (org-agenda-skip-function
       ',(if only
             `(aph/org-agenda-skip-without-tag ,tag)
