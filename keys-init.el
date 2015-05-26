@@ -62,4 +62,6 @@
                     ((kbd "C-<backspace>") . #'sp-backward-unwrap-sexp)
                     ((kbd "M-D")           . #'sp-splice-sexp))
                   ;; Reconfiguration Commands
-                  '(((kbd "C-M-t") . #'sp-transpose-sexp))))
+                  '(((kbd "C-M-t") . #'sp-transpose-sexp))
+                  ;; Other Commands
+                  '(((kbd "C-x n f") . #'sp-narrow-to-sexp))))
