@@ -6,6 +6,7 @@
 ;;;===================
 
 ;; Miscellaneous Keybindings
+(global-set-key (kbd "C-x M-l") #'find-library)
 (global-set-key (kbd "C-+")     #'flash-crosshairs)
 (global-set-key (kbd "M-/")     #'hippie-expand)
 (global-set-key (kbd "C-x C-b") #'ibuffer)
@@ -32,6 +33,8 @@
 (require 'clojure-mode)
 (define-key clojure-mode-map    (kbd "M-q") #'sp-indent-defun)
 (define-key emacs-lisp-mode-map (kbd "M-q") #'sp-indent-defun)
+(define-key clojure-mode-map    (kbd ")")   #'sp-up-sexp)
+(define-key emacs-lisp-mode-map (kbd ")")   #'sp-up-sexp)
 
 ;; Smartparens
 (aph/define-keys smartparens-mode-map
@@ -62,6 +65,7 @@
                     ((kbd "C-<backspace>") . #'sp-backward-unwrap-sexp)
                     ((kbd "M-D")           . #'sp-splice-sexp))
                   ;; Reconfiguration Commands
-                  '(((kbd "C-M-t") . #'sp-transpose-sexp))
+                  '(((kbd "C-M-t") . #'sp-transpose-sexp)
+                    ((kbd "M-)")   . #'sp-up-sexp))
                   ;; Other Commands
-                  '(((kbd "C-x n f") . #'sp-narrow-to-sexp))))
+                  '(((kbd "C-x n x") . #'sp-narrow-to-sexp))))

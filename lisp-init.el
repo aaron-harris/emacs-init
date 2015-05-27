@@ -25,7 +25,6 @@ to all such modes.")
 ;; Smartparens isn't treating the minibuffer during M-: as a lisp mode, so we
 ;; need to disable the single-quote pair there.
 (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
-;(sp-pair "'" nil :actions nil :when '(aph/in-minibuffer-eval-p))
 
 ;;; Clojure-Specific Configuration
 ;;;===============================
