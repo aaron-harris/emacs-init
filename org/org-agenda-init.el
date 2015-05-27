@@ -158,6 +158,7 @@ suffix."
            ((org-agenda-overriding-header "Org-Mode Review")
             (org-agenda-ndays 1)
             (org-agenda-sorting-strategy '(time-up category-up))
+            (org-agenda-use-time-grid nil)
             (org-habit-show-habits nil)
             (org-agenda-skip-function
              '(aph/org-agenda-skip-tag "review"))))
@@ -171,6 +172,7 @@ suffix."
              '(or (aph/org-agenda-skip-tag "all")
                   (aph/org-agenda-skip-tag "work")
                   (aph/org-agenda-skip-tag "evening")
+                  (aph/org-agenda-skip-tag "review")
                   (aph/org-agenda-skip-tag "weekend")))))
           ,(aph/org-agenda-block-match-tasks
             "Missed Tasks"
