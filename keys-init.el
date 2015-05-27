@@ -29,13 +29,6 @@
 (require 'eww)
 (define-key eww-mode-map (kbd "S-<tab>") #'shr-previous-link)
 
-;; Lisps
-(require 'clojure-mode)
-(define-key clojure-mode-map    (kbd "M-q") #'sp-indent-defun)
-(define-key emacs-lisp-mode-map (kbd "M-q") #'sp-indent-defun)
-(define-key clojure-mode-map    (kbd ")")   #'sp-up-sexp)
-(define-key emacs-lisp-mode-map (kbd ")")   #'sp-up-sexp)
-
 ;; Smartparens
 (aph/define-keys smartparens-mode-map
                  (append
@@ -50,7 +43,7 @@
                     ((kbd "M-F")   . #'sp-forward-symbol))
                   ;; Selection Commands
                   '(((kbd "C-]")   . #'sp-select-next-thing-exchange)
-                    ((kbd "C-M-]") . #'sp-select-next-thing-exchange))
+                    ((kbd "C-M-]") . #'sp-select-previous-thing))
                   ;; Barf and Slurp Commands
                   '(((kbd "C-<left>")    . #'sp-forward-barf-sexp)
                     ((kbd "C-<right>")   . #'sp-forward-slurp-sexp)
@@ -69,3 +62,7 @@
                     ((kbd "M-)")   . #'sp-up-sexp))
                   ;; Other Commands
                   '(((kbd "C-x n x") . #'sp-narrow-to-sexp))))
+
+(aph/define-keys smartparens-strict-mode-map
+                 '(((kbd "M-q") . #'sp-indent-defun)
+                   ((kbd ")")   . #'sp-up-sexp)))

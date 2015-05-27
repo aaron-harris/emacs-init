@@ -138,19 +138,19 @@ suffix."
            "+work+LEVEL=1"
            ((org-agenda-overriding-header "Work Notes:")))
           ,(aph/org-agenda-block-match-tasks "Work Tasks:" "+work")
-          ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 8)))
+          ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 12)))
 
         ("2" "Evening Agenda"
          (,(aph/org-agenda-block-tagged-agenda "Evening Agenda" "evening")
           ,(aph/org-agenda-block-tagged-habits "Habits:" "evening")
           ,(aph/org-agenda-block-match-tasks "Evening Tasks:" "+evening")
-          ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 8)))
+          ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 12)))
         
         ("3" "Weekend Agenda"
          (,(aph/org-agenda-block-tagged-agenda "Weekend Agenda" "weekend")
           ,(aph/org-agenda-block-tagged-habits "Habits:" "weekend")
           ,(aph/org-agenda-block-match-tasks "Weekend Tasks:" "+weekend")
-          ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 8)))
+          ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 12)))
 
         ("r" "Review"
          ((agenda
