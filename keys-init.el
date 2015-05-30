@@ -13,6 +13,7 @@
 (global-set-key (kbd "M-o")     #'other-window)
 (global-set-key (kbd "C-:")     #'pp-eval-expression)
 (global-set-key (kbd "C-c n")   #'aph/theme-night-toggle)
+(global-set-key (kbd "C-S-o")   #'join-line)
 
 ;; Org Mode Keybindings
 (global-set-key (kbd "C-c a") #'org-agenda)     ; As recommended
