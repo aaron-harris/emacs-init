@@ -79,15 +79,15 @@
 ;; directory containing this file, and our other initialization files).
 (add-to-list 'load-path (expand-file-name aph/init-path))
 
-(load "fun-init.el")                    ; General-use functions and variables.
+(load "fun-init" nil :nomsg)            ; General-use functions and variables.
 
 (add-to-list 'load-path (expand-file-name (concat aph/init-path "/org")))
-(load "org-init.el")                    ; Org-Mode bootstrapper.
+(load "org-init" nil :nomsg)            ; Org-Mode bootstrapper.
 
-(load "lisp-init.el")                   ; Working with lisp code.
-(load "latex-init.el")                  ; Working in LaTeX.
-(load "gnus-init.el")                   ; Gnus setup.
-(load "keys-init.el")                   ; Setting keybindings.
+(load "lisp-init" nil :nomsg)           ; Working with lisp code.
+(load "latex-init" nil :nomsg)          ; Working in LaTeX.
+(load "gnus-init" nil :nomsg)           ; Gnus setup.
+(load "keys-init" nil :nomsg)           ; Setting keybindings.
 
 ;;; Custom Theme Settings
 ;;;======================
