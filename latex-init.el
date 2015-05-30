@@ -19,3 +19,6 @@ for use with `LaTeX-mode-hook'."
 
 ;; Update the PDF automatically on changes.
 (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+
+;; Increase resolution for PDF images.
+(setq doc-view-resolution 200)

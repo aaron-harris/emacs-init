@@ -12,6 +12,7 @@
 (global-set-key (kbd "C-x C-b") #'ibuffer)
 (global-set-key (kbd "M-o")     #'other-window)
 (global-set-key (kbd "C-:")     #'pp-eval-expression)
+(global-set-key (kbd "C-c n")   #'aph/theme-night-toggle)
 
 ;; Org Mode Keybindings
 (global-set-key (kbd "C-c a") #'org-agenda)     ; As recommended
@@ -33,9 +34,7 @@
 (aph/define-keys smartparens-mode-map
                  (append
                   ;; Movement Commands
-                  '(((kbd "C-S-a") . #'sp-beginning-of-sexp)
-                    ((kbd "C-S-e") . #'sp-end-of-sexp)
-                    ((kbd "C-M-b") . #'sp-backward-sexp)
+                  '(((kbd "C-M-b") . #'sp-backward-sexp)
                     ((kbd "C-M-f") . #'sp-forward-sexp)
                     ((kbd "C-M-u") . #'sp-backward-up-sexp)
                     ((kbd "C-M-d") . #'sp-down-sexp)
@@ -61,7 +60,7 @@
                   '(((kbd "C-M-t") . #'sp-transpose-sexp)
                     ((kbd "M-)")   . #'sp-up-sexp))
                   ;; Other Commands
-                  '(((kbd "C-x n x") . #'sp-narrow-to-sexp))))
+                  '(((kbd "C-x n )") . #'sp-narrow-to-sexp))))
 
 (aph/define-keys smartparens-strict-mode-map
                  '(((kbd "M-q") . #'sp-indent-defun)
