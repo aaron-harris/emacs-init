@@ -37,3 +37,21 @@ Intended for use as a comparator in a sorting mechanism. When
 used in such a way, the results will be shuffled (sorted
 randomly)."
   (truncate (* 2 (- (random 2) 0.5))))
+
+(defvar aph/theme-day 'zenburn
+  "The theme to use during the day.")
+
+(defvar aph/theme-night 'hc-zenburn
+  "The theme to use during the night.")
+
+(defun aph/theme-night-toggle ()
+  "Toggles between the themes `aph/theme-day' and
+`aph/theme-night'. If neither of these themes is currently
+active, loads aph/theme-night."
+  (interactive)
+  (if (custom-theme-enabled-p aph/theme-night)
+      (progn
+        (disable-theme aph/theme-night)
+        (load-theme aph/theme-day :noconfirm))
+    (disable-theme aph/theme-day)
+    (load-theme aph/theme-night :noconfirm)))

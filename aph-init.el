@@ -91,11 +91,9 @@
 
 ;;; Custom Theme Settings
 ;;;======================
-(setq custom-safe-themes t)             ; Treat all themes as safe.
-(load-theme 'zenburn)
+(load-theme aph/theme-day)
 
 ;; This was my old theme, a version of Wombat that I modified to be more
 ;; compatible with f.lux:
 
 ;; (load "wombat-flux-theme.el")
-
