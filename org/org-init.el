@@ -161,8 +161,8 @@
       '("/OPEN" ("TODO")))
 
 ;; Loading custom agenda commands and capture templates.
-(load "org-agenda-init.el")
-(load "org-capture-init.el")
+(load "org-agenda-init" nil :nomsg)
+(load "org-capture-init" nil :nomsg)
 
 ;; We want to display our custom agenda automatically on startup.
 (add-hook 'after-init-hook
