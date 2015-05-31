@@ -10,6 +10,8 @@
                          ("melpa" . "http://melpa.org/packages/")))
 (package-initialize)
 
+(require 'dash)                         ; Our init files use stuff from dash.
+
 ;;; Emacs Client Settings
 ;;;======================
 (server-start)                          ; Run Emacs in server mode.
