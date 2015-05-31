@@ -10,7 +10,9 @@
                          ("melpa" . "http://melpa.org/packages/")))
 (package-initialize)
 
-(require 'dash)                         ; Our init files use stuff from dash.
+;; Requiring library packages:
+(require 'cl-lib)
+(require 'dash)
 
 ;;; Emacs Client Settings
 ;;;======================

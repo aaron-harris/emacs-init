@@ -33,8 +33,44 @@ the logbook drawer."
            props "")
           "\n:END:"))
 
+;; This function needs to be a cl-defun because we need to distinguish between
+;; the case where new-nodes is omitted and the case where it is supplied as nil.
+;;
+;; Most of this function's structure was taken from a Stackexchange answer by
+;; user erikstokes.
+(cl-defun aph/org-capture-choose-target
+    (&optional (prompt "Capture at")
+               (new-nodes org-refile-allow-creating-parent-nodes))
+  "Prompt for a location in an Org-Mode file, then jump there.
+
+This function is intended for use with the `function' option for
+capture templates. If PROMPT is not supplied, it defaults to
+\"Capture at\".
+
+The optional parameter NEW-NODES will override the variable
+`org-refile-allow-creating-parent-nodes' for the duration of this
+command. If it is omitted, the default value of the variable will
+be used."
+  (let* ((target (save-excursion (org-refile-get-location
+                                  "Capture at"
+                                  (not :default-buffer)
+                                  new-nodes
+                                  :include-current-subtree)))
+         (file (nth 1 target))
+         (pos (nth 3 target)))
+    (find-file file)
+    (goto-char pos)
+    (org-end-of-subtree)
+    (org-return)))
+
 (setq org-capture-templates
-      `(("n" "Note" entry
+      `(("p" "Plain" plain
+         (function aph/org-capture-choose-target)
+         "%i%?"
+         :empty-lines 1
+         :kill-buffer)
+
+        ("n" "Note" entry
          (file+headline org-default-notes-file "Notes")
          ,(aph/org-capture-add-logbook "* %?")
          :kill-buffer)
@@ -56,7 +92,7 @@ the logbook drawer."
 
         ("t" "Task" entry
          (file+headline org-default-notes-file "Tasks")
-         ,(-> "* TODO %^{Effort}p%?"
+         ,(-> "* START %^{Effort}p%?"
               aph/org-capture-add-logbook
               aph/org-capture-add-properties)
          :kill-buffer)
@@ -66,17 +102,7 @@ the logbook drawer."
          ,(->  "* TODO %^{Effort}p%?%A."
                aph/org-capture-add-logbook
                aph/org-capture-add-properties)
-         :kill-buffer)
-
-        ("p" "Project" entry
-         (file+headline org-default-notes-file "Projects")
-         ,(aph/org-capture-add-logbook "* START %?")
-         :kill-buffer)
-
-        ("P" "Project (with Link)" entry
-         (file+headline org-default-notes-file "Projects")
-         ,(aph/org-capture-add-logbook "* START %?%A.")
-         :kill-buffer)
+         :kill-buffer) 
 
         ("g" "Grocery List Item" item
          (file+headline "~/org/shopping.org" "Grocery List")
@@ -89,7 +115,7 @@ the logbook drawer."
          "[ ] %?"
          :unnarrowed
          :kill-buffer)
-        
+
         ("w" "Password" table-line
          (file "~/org/passwords.org")
          ,(concat "| %^{Service} "
