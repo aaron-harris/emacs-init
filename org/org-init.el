@@ -16,6 +16,9 @@
 (setq org-log-into-drawer t)                   ; Use LOGBOOK drawers.
 (setq org-track-ordered-property-with-tag t)   ; Use a tag for ORDERED trees.
 (setq org-use-speed-commands t)                ; Use speed commands.
+(setq org-M-RET-may-split-line nil)
+(setq org-blank-before-new-entry
+      '((heading . nil) (plain-list-item . nil)))
 
 ;; Setting autofill width.
 (add-to-list 'aph/fill-column-by-mode-alist '(org-mode . 76))
@@ -109,6 +112,7 @@
 (setq org-default-notes-file (concat org-directory "/capture.org"))
 (setq org-archive-location "archive/%s_archive::")
 (setq org-refile-targets '((org-agenda-files :maxlevel . 5)))
+(setq org-refile-allow-creating-parent-nodes 'confirm)
 
 ;; Miscellaneous settings:
 (setq org-refile-use-outline-path 'file)
