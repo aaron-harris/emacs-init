@@ -75,19 +75,14 @@ be used."
          ,(aph/org-capture-add-logbook "* %?")
          :kill-buffer)
 
-        ("N" "Link" entry
+        ("l" "Link" entry
+         (file+headline org-default-notes-file "Notes")
+         ,(aph/org-capture-add-logbook "* %^L%?")
+         :kill-buffer)
+
+        ("L" "Link to here" entry
          (file+headline org-default-notes-file "Notes")
          ,(aph/org-capture-add-logbook "* %A%?")
-         :kill-buffer)
-
-        ("q" "Clip" entry
-         (file+headline org-default-notes-file "Notes")
-         ,(aph/org-capture-add-logbook "* %A%?\n  %i")
-         :kill-buffer)
-
-        ("Q" "Clip (with Link)" entry
-         (file+headline org-default-notes-file "Notes")
-         ,(aph/org-capture-add-logbook "* %A%?\n  %i")
          :kill-buffer)
 
         ("t" "Task" entry
@@ -95,22 +90,15 @@ be used."
          ,(-> "* START %^{Effort}p%?"
               aph/org-capture-add-logbook
               aph/org-capture-add-properties)
-         :kill-buffer)
-
-        ("T" "Task (with Link)" entry
-         (file+headline org-default-notes-file "Tasks")
-         ,(->  "* TODO %^{Effort}p%?%A."
-               aph/org-capture-add-logbook
-               aph/org-capture-add-properties)
          :kill-buffer) 
 
-        ("g" "Grocery List Item" item
+        ("g" "Grocery list item" item
          (file+headline "~/org/shopping.org" "Grocery List")
          "[ ] %?"
          :unnarrowed
          :kill-buffer)
 
-        ("s" "Shopping List Item" item
+        ("s" "Shopping list item" item
          (file+headline "~/org/shopping.org" "Shopping List")
          "[ ] %?"
          :unnarrowed
@@ -129,6 +117,9 @@ be used."
         ("c" "Comic Book" entry
          (file+headline "~/org/media.org" "Unfiled Comics")
          ,(aph/org-capture-add-properties
-           "* UNREAD %^L%?%^{Issue_No}p%^{Writer}p"
-           '(("Published" . "%^{PUBLISHED}u"))) 
+           "* UNREAD [[%^{Link to comic|%x}][%\\2 #%\\3]]%?"
+           '(("Series"    . "%^{Series}")
+             ("Issue_No"  . "%^{Issue_No}")
+             ("Writer"    . "%^{Writer}")
+             ("Published" . "%^{PUBLISHED}u")))
          :kill-buffer)))
