@@ -6,6 +6,7 @@
 ;;;===================
 
 ;; Miscellaneous Keybindings
+(global-set-key (kbd "C-c M-c") #'cider-connect)
 (global-set-key (kbd "C-x M-l") #'find-library)
 (global-set-key (kbd "C-+")     #'flash-crosshairs)
 (global-set-key (kbd "M-/")     #'hippie-expand)
