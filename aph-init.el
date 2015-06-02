@@ -95,7 +95,7 @@
 
 ;;; Custom Theme Settings
 ;;;======================
-(load-theme aph/theme-day)
+(load-theme aph/theme-day :noconfirm)
 
 ;; This was my old theme, a version of Wombat that I modified to be more
 ;; compatible with f.lux:
