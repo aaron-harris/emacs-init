@@ -64,13 +64,7 @@ be used."
     (org-return)))
 
 (setq org-capture-templates
-      `(("p" "Plain" plain
-         (function aph/org-capture-choose-target)
-         "%i%?"
-         :empty-lines 1
-         :kill-buffer)
-
-        ("n" "Note" entry
+      `(("n" "Note" entry
          (file+headline org-default-notes-file "Notes")
          ,(aph/org-capture-add-logbook "* %?")
          :kill-buffer)
@@ -90,7 +84,13 @@ be used."
          ,(-> "* START %^{Effort}p%?"
               aph/org-capture-add-logbook
               aph/org-capture-add-properties)
-         :kill-buffer) 
+         :kill-buffer)
+
+        ("p" "Plain text" plain
+         (function aph/org-capture-choose-target)
+         "%i%?"
+         :empty-lines 1
+         :kill-buffer)
 
         ("g" "Grocery list item" item
          (file+headline "~/org/shopping.org" "Grocery List")
@@ -119,7 +119,15 @@ be used."
          ,(aph/org-capture-add-properties
            "* UNREAD [[%^{Link to comic|%x}][%\\2 #%\\3]]%?"
            '(("Series"    . "%^{Series}")
-             ("Issue_No"  . "%^{Issue_No}")
+             ("Issue_No"  . "%^{Issue number}")
              ("Writer"    . "%^{Writer}")
-             ("Published" . "%^{PUBLISHED}u")))
-         :kill-buffer)))
+             ("Published" . "%^{Date published}u")))
+         :kill-buffer)
+
+        ("m" "Music to Buy" entry
+         (file+headline "~/org/media.org" "Unfiled Music")
+         ,(aph/org-capture-add-properties
+           "* BUY %\\1 - %\\2%?"
+           '(("Artist" . "%^{Artist}")
+             ("Album"  . "%^{Album}")
+             ("Genre"  . "%^{Genre}"))))))
