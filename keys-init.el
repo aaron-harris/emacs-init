@@ -11,7 +11,7 @@
 (global-set-key (kbd "C-+")     #'flash-crosshairs)
 (global-set-key (kbd "M-/")     #'hippie-expand)
 (global-set-key (kbd "C-x C-b") #'ibuffer)
-(global-set-key (kbd "M-o")     #'other-window)
+(global-set-key (kbd "C-<tab>") #'other-window)
 (global-set-key (kbd "C-:")     #'pp-eval-expression)
 (global-set-key (kbd "C-c n")   #'aph/theme-night-toggle)
 (global-set-key (kbd "C-S-o")   #'join-line)
