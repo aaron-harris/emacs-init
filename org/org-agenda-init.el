@@ -168,6 +168,7 @@ suffix."
            ""
            ((org-agenda-overriding-header "Missed Agenda Items")
             (org-agenda-ndays 1)
+            (org-agenda-use-time-grid nil)
             (org-agenda-skip-function
              '(or (aph/org-agenda-skip-tag "all")
                   (aph/org-agenda-skip-tag "work")
