@@ -45,6 +45,12 @@
 (add-hook 'text-mode-hook 'turn-on-auto-fill) ; Use auto-fill in all text modes.
 (setq-default fill-column 80)                 ; Set default auto-fill width.
 
+;;; Scroll Settings
+;;;================
+(setq scroll-margin 1 
+      scroll-conservatively 1000
+      scroll-preserve-screen-position :always)
+
 ;;; Miscellaneous Settings
 ;;;=======================
 (prefer-coding-system 'utf-8-unix)        ; Use Unix-style line endings.
@@ -52,6 +58,7 @@
 (setq-default cursor-type 'box)           ; Use box-style cursor.
 (setq ring-bell-function #'ignore)        ; Disable the bell.
 (setq apropos-do-all t)                   ; More thorough apropos searches.
+(setq-default indicate-buffer-boundaries 'right) ; Show buffer start/end.
 
 ;; Calendar settings
 (setq calendar-longitude -93.2)
