@@ -7,14 +7,13 @@
   (dolist (hook hooks)
     (add-hook hook function)))
 
-(defun aph/define-keys (keymap binding-list)
-  "For each pair (KEY . DEF) in BINDING-LIST, define the key
-sequence KEY as DEF in KEYMAP.
+(defun aph/define-keys (keymap bind-list)
+  "For each (KEY . DEF) in BIND-LIST, bind KEY to DEF in KEYMAP.
 
 See `define-key' for more information. Unlike `define-key', we
 also accept for KEY any lisp code that evaluates to a valid key
 sequence (e.g., a quoted call to `kbd')."
-  (dolist (binding binding-list)
+  (dolist (binding bind-list)
     (define-key keymap (eval (car binding)) (eval (cdr binding)))))
 
 (defvar aph/fill-column-by-mode-alist '()
@@ -23,14 +22,17 @@ sequence (e.g., a quoted call to `kbd')."
   set `fill-column' appropriately, usually within a mode hook.")
 
 (defun aph/fill-set-column-by-mode ()
-  "Set `fill-column' to the value corresponding to the current
-mode in `aph/fill-column-by-mode-alist.' If the current mode does
-not appear in that list, do nothing."
+  "Set `fill-column' according to current major mode.
+
+Pull the appropriate value from `aph/fill-column-by-mode-alist.'
+If the current mode does not appear in that list, do nothing."
   (let ((val (cdr (assq major-mode aph/fill-column-by-mode-alist))))
     (if val (setq fill-column val))))
 
 (defun aph/random-comparator (&rest args)
-  "Randomly return +1 with probability 1/2 and -1 with
+  "Randomly return +1 or -1.
+
+Randomly return +1 with probability 1/2 and -1 with
 probability 1/2. Ignore any ARGS.
 
 Intended for use as a comparator in a sorting mechanism. When
@@ -45,9 +47,9 @@ randomly)."
   "The theme to use during the night.")
 
 (defun aph/theme-night-toggle ()
-  "Toggles between the themes `aph/theme-day' and
-`aph/theme-night'. If neither of these themes is currently
-active, loads aph/theme-night."
+  "Toggle between themes `aph/theme-day' and `aph/theme-night'.
+
+If neither of these themes is currently active, load `aph/theme-night'." 
   (interactive)
   (if (custom-theme-enabled-p aph/theme-night)
       (progn
