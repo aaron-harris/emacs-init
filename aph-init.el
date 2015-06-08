@@ -10,7 +10,7 @@
                          ("melpa" . "http://melpa.org/packages/")))
 (package-initialize)
 
-;; Requiring library packages:
+;; Elisp library packages:
 (require 'cl-lib)
 (require 'dash)
 
@@ -27,7 +27,7 @@
 
 ;;; Global Modes
 ;;;=============
-;; Ido Mode (these is from better-defaults.el)
+;; Ido Mode (this is from better-defaults.el)
 (ido-mode 1)
 (setq ido-enable-flex-matching t)
 
@@ -90,15 +90,15 @@
 ;; directory containing this file, and our other initialization files).
 (add-to-list 'load-path (expand-file-name aph/init-path))
 
-(load "fun-init" nil :nomsg)            ; General-use functions and variables.
+(load "fun-init"   (not :noerr) :nomsg) ; General-use functions and variables.
 
 (add-to-list 'load-path (expand-file-name (concat aph/init-path "/org")))
-(load "org-init" nil :nomsg)            ; Org-Mode bootstrapper.
+(load "org-init"   (not :noerr) :nomsg) ; Org-Mode bootstrapper.
 
-(load "lisp-init" nil :nomsg)           ; Working with lisp code.
-(load "latex-init" nil :nomsg)          ; Working in LaTeX.
-(load "gnus-init" nil :nomsg)           ; Gnus setup.
-(load "keys-init" nil :nomsg)           ; Setting keybindings.
+(load "lisp-init"  (not :noerr) :nomsg) ; Working with lisp code.
+(load "latex-init" (not :noerr) :nomsg) ; Working in LaTeX.
+(load "gnus-init"  (not :noerr) :nomsg) ; Gnus setup.
+(load "keys-init"  (not :noerr) :nomsg) ; Setting keybindings.
 
 ;;; Custom Theme Settings
 ;;;======================
