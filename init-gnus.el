@@ -2,9 +2,7 @@
 ;;;; GNUS CONFIGURATION
 ;;;;============================================================================
 
-;;; THIS FILE IS STILL VERY MUCH UNDER CONSTRUCTION!
-
-(require 'gnus)
+;;; THIS FILE IS STILL VERY MUCH UNDER CONSTRUCTION! 
 
 (setq nnrss-directory "~/news/rss/")
 (setq gnus-select-method '(nnnil ""))
@@ -12,10 +10,11 @@
 
 ;; Open links within RSS entries in Eww.
 ;; Retain original binding at M-<RET>.
-(eval-after-load "gnus"
+(eval-after-load 'gnus
   (progn
     #'(define-key gnus-article-mode-map
         (kbd "<RET>") 'eww-browse-url)
     #'(define-key gnus-article-mode-map
         (kbd "M-<RET>") 'shr-browse-url)))
 
+(provide 'init-gnus)

@@ -2,6 +2,9 @@
 ;;;; ORG-MODE CUSTOM AGENDA COMMANDS
 ;;;;============================================================================
 
+(require 'aph-functions)                ; For aph/random-comparator
+
+
 ;;; Skip Functions
 ;;;===============
 ;;; Here are some custom functions to be used with org-agenda-skip-function.
@@ -50,6 +53,7 @@ inheritance)."
         nil
       (1- next-headline))))
 
+
 ;;; Block Definitions
 ;;;==================
 ;;; For ease of reuse, we define some functions to create custom agenda blocks.
@@ -128,6 +132,7 @@ suffix."
            '((org-agenda-cmp-user-defined 'aph/random-comparator)
              (org-agenda-sorting-strategy '(user-defined-up)))))))
 
+
 ;;; Custom Agenda Commands
 ;;;=======================
 (setq org-agenda-custom-commands
@@ -135,7 +140,7 @@ suffix."
          (,(aph/org-agenda-block-tagged-agenda "Work Agenda" "work")
           ,(aph/org-agenda-block-tagged-habits "Habits:" "work")
           (tags
-           "+work+LEVEL=1"
+           "+work+LEVEL=1+TODO=\"\""
            ((org-agenda-overriding-header "Work Notes:")))
           ,(aph/org-agenda-block-match-tasks "Work Tasks:" "+work")
           ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 12)))
@@ -181,7 +186,7 @@ suffix."
           (tags
            "LEVEL=2"
            ((org-agenda-overriding-header "To Be Filed")
-            (org-agenda-files '("~/org/capture.org"))))
+            (org-agenda-files `(,(concat org-directory "/capture.org")))))
           (stuck
            ""
            ((org-agenda-overriding-header "Stuck Projects")
@@ -197,10 +202,12 @@ suffix."
          ((tags-todo
            "/OPEN"
            ((org-agenda-overriding-header "Open Projects")))
-          ,(aph/org-agenda-block-new-projects "Five Random Computer Projects"
-                                              "+computer-anki" 5 :random)
+          ,(aph/org-agenda-block-new-projects "Five Random Emacs Projects"
+                                              "+emacs-anki" 5 :random) 
           ,(aph/org-agenda-block-new-projects "Five Random Anki Projects"
                                               "+anki" 5 :random)
+          ,(aph/org-agenda-block-new-projects "Five Random Computer Projects"
+                                              "+computer-emacs-anki" 5 :random)
           ,(aph/org-agenda-block-new-projects "Other Projects"
                                               "-computer-anki"))
          ((org-agenda-dim-blocked-tasks nil)))
@@ -215,6 +222,10 @@ suffix."
            ((org-agenda-overriding-header "Things to Watch")))
           ,(aph/org-agenda-block-match-tasks "Things to Do" "meal")))))
 
+
+;;; Smart Agenda
+;;;=============
+
 ;; Variables used to control aph/org-agenda-display-smart-agenda, below.
 (defvar aph/workday-start 10
   "The start of the workday (in hours, according to a 24-hour
@@ -227,7 +238,7 @@ clock). Used by the function aph/org-agenda-display-smart-agenda
 to display the correct agenda.")
 
 (defun aph/org-agenda-display-smart-agenda ()
-  "Selects an Org-mode agenda to display, based on the current time and day of the week.
+  "Display an Org-Mode agenda based on current day and time.
 
 On Saturdays and Sundays, displays the weekend agenda. On
 weekdays, displays the review agenda if the workday (as defined
@@ -243,3 +254,5 @@ agenda if it's already ended."
          ((>= hour aph/workday-end)   (org-agenda nil "2"))
          (t                           (org-agenda nil "1")))
       (org-agenda nil "3"))))
+
+(provide 'init-org-agenda)

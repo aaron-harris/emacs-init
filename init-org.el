@@ -1,14 +1,25 @@
 ;;;; The Emacs init file of Aaron Harris.
 ;;;; ORG-MODE CONFIGURATION
 ;;;;============================================================================
-(require 'org)
 
+;; According to the Org-Mode documentation, some variables need to be
+;; set before Org itself is properly loaded. Thus we only require
+;; 'org-install here, and we require 'org at the end of the file, once
+;; all our configuration is done.
+(require 'org-install)
+
+
+;;; Basic Setup
+;;;============
 ;; Enable Org-Mode modules:
 (setq org-modules
       '(org-docview
         org-habit
         org-info))
 
+(setq org-directory "~/sync/org")
+
+
 ;;; General Settings
 ;;;=================
 (setq org-catch-invisible-edits 'smart)        ; Try to avoid invisible edits.
@@ -16,17 +27,11 @@
 (setq org-log-into-drawer t)                   ; Use LOGBOOK drawers.
 (setq org-track-ordered-property-with-tag t)   ; Use a tag for ORDERED trees.
 (setq org-use-speed-commands t)                ; Use speed commands.
-(setq org-M-RET-may-split-line nil)
-(setq org-blank-before-new-entry
+(setq org-M-RET-may-split-line nil)            ; Better heading insertion.
+(setq org-blank-before-new-entry               ; No extraneous blank lines.
       '((heading . nil) (plain-list-item . nil)))
 
-;; Setting autofill width.
-(add-to-list 'aph/fill-column-by-mode-alist '(org-mode . 76))
-(add-hook 'org-mode-hook #'aph/fill-set-column-by-mode)
-
-;; Have smartparens handle strings better:
-(add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
-
+
 ;;; TODO Keywords
 ;;;==============
 (setq org-use-fast-todo-selection t)
@@ -41,12 +46,11 @@
                   "TAG(:)" "|" "FINISHED(f!)")               ; Video media
         (sequence "UNAVAIL(u)" "BUY(b)" "|" "OWNED(O)")))    ; Media to obtain
 
+
 ;;; Tags
 ;;;=====
 
-;; Intended meaning of the tags, and which agenda views they show up in.  The at
-;; sign indicates that there is a particular agenda view the tag is directed
-;; towards.
+;; Intended meaning of the tags, and which agenda views they show up in: 
 ;;   home: Can only be done at home. (morning, evening, weekend)
 ;;   work: Shows up in work agenda. (work)
 ;;   all: Shows up in all agendas.
@@ -56,6 +60,7 @@
 ;;   meal: Can be done while eating. (meal)
 ;;   review: Shows up in review agenda. (review)
 ;;   listening: Audio tasks. (listening)
+;;   emacs: Involves tweaking Emacs configuration.
 ;;   anki: Involves working with Anki.
 ;;   text: Tags text media.
 ;;   video: Tags video media.
@@ -72,33 +77,39 @@
         ("review"    . ?r)
         ("meal"      . ?m)
         ("listening" . ?l)
-        (:newline    . nil)
+        (:newline    . nil) 
         ("anki"      . ?k)
+        ("emacs"     . ?x)
         (:newline    . nil)
         ("text"      . ?t)
         ("video"     . ?v)
         ("audio"     . ?a)))
 
-;; The function org-set-regexps-and-options-for-tags, which sets a buffer-local
-;; version of org-tag-alist, seems to screw up :newline entries, replacing
-;; (:newline) with ("\n"), which ends up defining a tag with a newline character
-;; as its name. This is my crude attempt to fix it (which will probably make it
-;; impossible to create buffer-local tags with the #+TAGS directive).
-;;
 ;; TODO: Replace this advice with a more precisely-directed version that will
 ;;       still allow buffer-local tags.
-(unless (advice-member-p #'aph/org-reset-tag-alist
-                         'org-set-regexps-and-options-for-tags)
-  (advice-add 'org-set-regexps-and-options-for-tags :after
-              '(lambda () (kill-local-variable 'org-tag-alist))
-              '((name . aph/org-reset-tag-alist))))
+(defun aph/org-reset-tag-alist ()
+  "Advice to block spurious :newline tags when using `org-tag-alist'.
 
+The function `org-set-regexps-and-options-for-tags', which sets a
+buffer-local version of `org-tag-alist', seems to screw
+up :newline entries, replacing (:newline) with (\"\n\"), which
+ends up defining a tag with a newline character as its name. This
+is a crude attempt to fix it (which will probably make it
+impossible to create buffer-local tags with the #+TAGS
+directive)."
+  (kill-local-variable 'org-tag-alist))
+
+(advice-add #'org-set-regexps-and-options-for-tags :after
+            #'aph/org-reset-tag-alist)
+
+
 ;;; Priorities
 ;;;===========
 (setq org-highest-priority ?A)
 (setq org-lowest-priority ?E)
 (setq org-default-priority ?C)
 
+
 ;;; Properties and Column View
 ;;;===========================
 (setq org-global-properties
@@ -106,6 +117,7 @@
 (setq org-columns-default-format
       "%50ITEM(Task) %TODO %2PRIORITY(^) %20TAGS(Tags) %6Effort{:} %CLOCKSUM")
 
+
 ;;; Capture, Refile, and Archive
 ;;;=============================
 ;; Default locations and targets:
@@ -117,22 +129,41 @@
 ;; Miscellaneous settings:
 (setq org-refile-use-outline-path 'file)
 
+;; Load capture templates:
+(require 'init-org-capture)
+
+
+;;; Links
+;;;======
+
+(defun aph/org-eww-store-link ()
+      "Store the current eww url as an Org-Mode link."
+      (when (eq major-mode 'eww-mode)
+        (org-store-link-props
+         :type         "http"
+         :link         (eww-current-url)
+         :description  (plist-get eww-data :title))))
+
+(add-hook 'org-store-link-functions #'aph/org-eww-store-link)
+
+
 ;;; Agenda
 ;;;=======
 ;; Agenda files:
 (setq org-agenda-files
-      '("~/org/capture.org"
-        "~/org/personal.org"
-        "~/org/home.org"
-        "~/org/computer.org"
-        "~/org/emacs.org"
-        "~/org/languages.org"
-        "~/org/math.org"
-        "~/org/programming.org"
-        "~/org/shopping.org"
-        "~/org/social.org"
-        "~/org/work.org"
-        "~/org/media.org"))
+      (mapcar (apply-partially #'concat org-directory "/")
+              '("capture.org"
+                "personal.org"
+                "home.org"
+                "computer.org"
+                "emacs.org"
+                "languages.org"
+                "math.org"
+                "programming.org"
+                "shopping.org"
+                "social.org"
+                "work.org"
+                "media.org")))
 
 ;; General agenda settings:
 (setq org-agenda-block-separator (make-string 80 ?=))
@@ -164,12 +195,26 @@
 (setq org-stuck-projects
       '("/OPEN" ("TODO")))
 
-;; Loading custom agenda commands and capture templates.
-(load "org-agenda-init" nil :nomsg)
-(load "org-capture-init" nil :nomsg)
+;; Loading custom agenda commands.
+(require 'init-org-agenda)
 
 ;; We want to display our custom agenda automatically on startup.
 (add-hook 'after-init-hook
           (lambda ()
             (aph/org-agenda-display-smart-agenda)
             (delete-other-windows)))
+
+
+;;; Mobile
+;;;=======
+(require 'org-mobile)
+
+(setq org-mobile-directory "~/sync/mobile")
+(setq org-mobile-inbox-for-pull (concat org-directory "/capture.org"))
+
+(if (eq aph/machine 'mpc)
+    (setq org-mobile-checksum-binary
+          "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe"))
+
+(require 'org)
+(provide 'init-org) 

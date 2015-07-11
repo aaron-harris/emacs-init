@@ -2,6 +2,12 @@
 ;;;; ORG-MODE CUSTOM CAPTURE TEMPLATES
 ;;;;============================================================================
 
+(require 'org-install)
+(require 'dash)                         ; For ->
+
+
+;;; Template-Builder Functions
+;;;===========================
 (defun aph/org-capture-add-logbook (template)
   "Append a logbook drawer to the capture TEMPLATE.
 
@@ -38,6 +44,7 @@ the logbook drawer."
 ;;
 ;; Most of this function's structure was taken from a Stackexchange answer by
 ;; user erikstokes.
+(require 'cl-lib)
 (cl-defun aph/org-capture-choose-target
     (&optional (prompt "Capture at")
                (new-nodes org-refile-allow-creating-parent-nodes))
@@ -63,6 +70,9 @@ be used."
     (org-end-of-subtree)
     (org-return)))
 
+
+;;; Capture Template Definitions
+;;;=============================
 (setq org-capture-templates
       `(("n" "Note" entry
          (file+headline org-default-notes-file "Notes")
@@ -93,19 +103,19 @@ be used."
          :kill-buffer)
 
         ("g" "Grocery list item" item
-         (file+headline "~/org/shopping.org" "Grocery List")
+         (file+headline ,(concat org-directory "/shopping.org") "Grocery List")
          "[ ] %?"
          :unnarrowed
          :kill-buffer)
 
         ("s" "Shopping list item" item
-         (file+headline "~/org/shopping.org" "Shopping List")
+         (file+headline ,(concat org-directory "/shopping.org") "Shopping List")
          "[ ] %?"
          :unnarrowed
          :kill-buffer)
 
         ("w" "Password" table-line
-         (file "~/org/passwords.org")
+         (file ,(concat org-directory "/passwords.org"))
          ,(concat "| %^{Service} "
                   "| %^{Username|meerwolf@gmail.com} "
                   "| %^{Length} "
@@ -115,7 +125,7 @@ be used."
          :kill-buffer)
 
         ("c" "Comic Book" entry
-         (file+headline "~/org/media.org" "Unfiled Comics")
+         (file+headline ,(concat org-directory "/media.org") "Unfiled Comics")
          ,(aph/org-capture-add-properties
            "* UNREAD [[%^{Link to comic|%x}][%\\2 #%\\3]]%?"
            '(("Series"    . "%^{Series}")
@@ -125,9 +135,11 @@ be used."
          :kill-buffer)
 
         ("m" "Music to Buy" entry
-         (file+headline "~/org/media.org" "Unfiled Music")
+         (file+headline ,(concat org-directory "/media.org") "Unfiled Music")
          ,(aph/org-capture-add-properties
            "* BUY %\\1 - %\\2%?"
            '(("Artist" . "%^{Artist}")
              ("Album"  . "%^{Album}")
              ("Genre"  . "%^{Genre}"))))))
+
+(provide 'init-org-capture)
