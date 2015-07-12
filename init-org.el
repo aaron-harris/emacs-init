@@ -135,7 +135,6 @@ directive)."
 
 ;;; Links
 ;;;======
-
 (defun aph/org-eww-store-link ()
       "Store the current eww url as an Org-Mode link."
       (when (eq major-mode 'eww-mode)
@@ -202,9 +201,7 @@ directive)."
 (add-hook 'after-init-hook
           (lambda ()
             (aph/org-agenda-display-smart-agenda)
-            (delete-other-windows)))
-
-
+            (delete-other-windows)))
 ;;; Mobile
 ;;;=======
 (require 'org-mobile)
@@ -216,5 +213,5 @@ directive)."
     (setq org-mobile-checksum-binary
           "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe"))
 
-(require 'org)
+(require 'org)           ; Finish loading Org-Mode.
 (provide 'init-org) 

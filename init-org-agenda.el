@@ -7,7 +7,7 @@
 
 ;;; Skip Functions
 ;;;===============
-;;; Here are some custom functions to be used with org-agenda-skip-function.
+;;; Here are some custom functions to be used with `org-agenda-skip-function'.
 ;;; The initial structure was taken from a stackexchange question, written by
 ;;; user Jonathan Leech-Pepin.
 
@@ -16,7 +16,9 @@
 ;;       this is sorted out, all agenda files should have their default
 ;;       visibility setting set to CONTENTS or higher.
 (defun aph/org-agenda-skip-tag (tag)
-  "Returns nil if headline containing point is tagged with TAG, and the
+  "Skip current headline if it is tagged with TAG.
+
+Return nil if headline containing point is tagged with TAG, and the
 position of the next headline in current buffer otherwise.
 
 Intended for use with `org-agenda-skip-function', where this will
@@ -35,7 +37,9 @@ inheritance)."
       nil)))
 
 (defun aph/org-agenda-skip-without-tag (tag)
-  "Returns nil if headline containing point is not tagged with TAG, and the
+  "Skip current headline unless it is tagged with TAG.
+
+Return nil if headline containing point is not tagged with TAG, and the
 position of the next headline in current buffer otherwise.
 
 Intended for use with `org-agenda-skip-function', where this will
@@ -59,9 +63,11 @@ inheritance)."
 ;;; For ease of reuse, we define some functions to create custom agenda blocks.
 
 (defun aph/org-agenda-block-tagged-agenda (header tag &optional only)
-  "Return a list form defining an agenda block with header HEADER
-that includes only items tagged with :all: or TAG, but excludes
-habits. If ONLY is non-nil, also exclude :all:-tagged items."       
+  "Return an agenda block for items tagged with TAG.
+
+The returned block (a list form) has header HEADER and includes
+only items tagged with :all: or TAG, but excludes habits. If ONLY
+is non-nil, it also excludes :all:-tagged items."
   `(agenda
     ""
     ((org-agenda-overriding-header ,header)
@@ -76,8 +82,11 @@ habits. If ONLY is non-nil, also exclude :all:-tagged items."
                 (aph/org-agenda-skip-without-tag "all")))))))
 
 (defun aph/org-agenda-block-tagged-habits (header tag)
-  "Return a list form defining an agenda block with header HEADER
-that includes only habits tagged with :all: or TAG."
+  "Return an agenda block for habits tagged with TAG.
+
+The returned block (a list form) has header HEADER and includes
+only habits tagged with :all: or TAG. If ONLY is non-nil, it also
+excludes :all:-tagged items."
   `(agenda
     ""
     ((org-agenda-overriding-header ,header)
@@ -88,8 +97,10 @@ that includes only habits tagged with :all: or TAG."
            (org-agenda-skip-entry-if 'notregexp ":STYLE:.*habit"))))))
 
 (defun aph/org-agenda-block-match-tasks (header match &optional limit random)
-  "Return a list form defining a todo-type agenda block with
-header HEADER that includes only tasks that match the
+  "Return an agenda block for tasks matching MATCH.
+
+The returned block (a list form) defines a todo-type agenda block
+that has header HEADER and includes only tasks that match the
 match-string MATCH. If LIMIT is non-nil, the block will only show
 that many tasks. If RANDOM is non-nil, the tasks will be ordered
 randomly.
@@ -112,16 +123,18 @@ include keyword criteria using the ‘/’ suffix."
              (org-agenda-sorting-strategy '(user-defined-up)))))))
 
 (defun aph/org-agenda-block-new-projects (header match &optional limit random)
-  "Return a list form defining a todo-type agenda block with
-header HEADER that includes only unopened projects that match the
-match-string MATCH.
+  "Return an agenda block for unopened projects matching MATCH.
+
+The returned block (a list form) defines a todo-type agenda block
+with header HEADER that includes only unopened projects that
+match the match-string MATCH.
 
 If LIMIT is non-nil, the block will only show that many
 projects. If RANDOM is non-nil, the projects will be ordered
 randomly.
 
 Unopened projects are items tagged with the ‘START’ keyword or
-the ‘SHELVED’ keyword . Since we are selecting only such
+the ‘SHELVED’ keyword. Since we are selecting only such
 projects, MATCH should not include keyword criteria using the ‘/’
 suffix."
   `(tags-todo

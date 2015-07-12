@@ -84,7 +84,7 @@ successful (or unnecessary) and nil if not."
 (aph/require-softly 'init-theme)
 (aph/require-softly 'init-keys)
 
-;; Remember to sort out aph-geog.el
+;; Remember to sort out aph-geog.el. Need to do this at work.
 
 (message "Initialization complete!")
 (message "-----------------------------------")
