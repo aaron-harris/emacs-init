@@ -4,7 +4,8 @@
 
 
 ;;; Basic Settings
-;;; Use master files.
+;;;===============
+;; Use master files.
 (setq-default TeX-master nil)
 
 
@@ -38,8 +39,7 @@
   "Register Emacs as a PDF viewer.
 
 Sets up the variables `TeX-view-program-selection' and
-`TeX-view-program-list'.  Intended for use in
-`LaTeX-mode-hook'."
+`TeX-view-program-list'. Intended for use in `LaTeX-mode-hook'."
   (add-to-list 'TeX-view-program-selection
                '(output-pdf "Emacs"))
   (add-to-list 'TeX-view-program-list

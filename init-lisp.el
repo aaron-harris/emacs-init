@@ -14,8 +14,8 @@
     lisp-interaction-mode-hook
     lisp-mode-hook)
   "A list of hooks for modes in which Lisp editing occurs.
-
-Can be used with `aph/add-hook-to-all' to easily add a hook to all such modes.")
+Can be used with `aph/add-hook-to-all' to easily add a hook to
+all such modes.")
 
 
 ;;; Using Specific Lisps

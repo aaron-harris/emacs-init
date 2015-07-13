@@ -2,6 +2,8 @@
 ;;;; KEYBINDING SETUP
 ;;;;============================================================================
 
+(require 'aph-functions)                ; For `aph/kill-active-buffer'
+
 
 ;;; Keybinding Functions
 ;;;=====================
