@@ -190,9 +190,9 @@ directive)."
 (setq org-agenda-tags-todo-honor-ignore-options t)
 
 ;; We designate a project as stuck if it is OPEN and does not have a subtask
-;; marked TODO.
+;; marked TODO or UNREAD.
 (setq org-stuck-projects
-      '("/OPEN" ("TODO")))
+      '("/OPEN" ("TODO" "UNREAD")))
 
 ;; Loading custom agenda commands.
 (require 'init-org-agenda)
