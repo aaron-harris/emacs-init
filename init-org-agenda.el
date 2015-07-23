@@ -85,8 +85,7 @@ is non-nil, it also excludes :all:-tagged items."
   "Return an agenda block for habits tagged with TAG.
 
 The returned block (a list form) has header HEADER and includes
-only habits tagged with :all: or TAG. If ONLY is non-nil, it also
-excludes :all:-tagged items."
+only habits tagged with :all: or TAG."
   `(agenda
     ""
     ((org-agenda-overriding-header ,header)

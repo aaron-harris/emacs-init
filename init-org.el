@@ -1,12 +1,6 @@
 ;;;; The Emacs init file of Aaron Harris.
 ;;;; ORG-MODE CONFIGURATION
-;;;;============================================================================
-
-;; According to the Org-Mode documentation, some variables need to be
-;; set before Org itself is properly loaded. Thus we only require
-;; 'org-install here, and we require 'org at the end of the file, once
-;; all our configuration is done.
-(require 'org-install)
+;;;;============================================================================ 
 
 
 ;;; Basic Setup
@@ -214,4 +208,4 @@ directive)."
           "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe"))
 
 (require 'org)           ; Finish loading Org-Mode.
-(provide 'init-org) 
+(provide 'init-org)
