@@ -4,6 +4,9 @@
 
 (require 'org)
 
+(require 'dash)                         ; for `->>', `-find-index'
+(require 'aph-functions)                ; for `aph/reductions'
+
 
 ;;; Heading Structure
 ;;;==================
@@ -34,9 +37,9 @@ If N is zero, call `org-back-to-heading' and return point.
 
 If N is negative, goto the (-N)th child from the end (so
 (aph/org-goto-nth-child -1) moves to the last child)."
-  (cond ((= n 0) (progn (org-back-to-heading)
+  (cond ((zerop n) (progn (org-back-to-heading)
                         (point))) 
-        ((< n 0) (aph/org-goto-nth-child
+        ((< n 0)   (aph/org-goto-nth-child
                   (+ (aph/org-count-children) (1+ n)))) 
         ((> n 0)
          (let ((target (catch 'fail
@@ -55,7 +58,7 @@ If N is negative, goto the (-N)th child from the end (so
 (defun aph/org-get-property-of-children
     (pom prop &optional inherit literal-nil)
   "Return list of PROP values for all children of heading at POM.
-See `org-entry-get' for more information."
+See `org-entry-get' for use of optional parameters."
   (save-excursion
     (goto-char pom)
     (unless (org-goto-first-child) '())
@@ -64,10 +67,21 @@ See `org-entry-get' for more information."
         (push (org-entry-get (point) prop inherit literal-nil) acc))
       (nreverse acc))))
 
+(require 'dash)                         ; for `->>'
+(defun aph/org-sum-property-of-children
+    (pom prop &optional inherit)
+  "Return sum of PROP values for all children of heading at POM.
+
+If INHERIT is non-nil, use inherited values for PROP. Ignore
+non-numeric values."
+  (->> (aph/org-get-property-of-children pom prop inherit)
+       (mapcar #'string-to-number)
+       (apply #'+)))
+
 
 ;;; Spinners
 ;;;=========
-(defun aph/org-spin ()
+(defun aph/org-spin-basic ()
   "Move point to a random child of heading at point.
 Return point."
   (interactive)
@@ -75,5 +89,26 @@ Return point."
       (message "Point not on heading.")
     (let ((die-size  (aph/org-count-children)))
       (aph/org-goto-nth-child (1+ (random die-size))))))
+
+(defun aph/org-spin-weighted (weight-prop)
+  "As `aph/org-spin-basic', weighted by property WEIGHT-PROP.
+
+The parameter WEIGHT-PROP should be the name of a property. Non-negative
+numeric values for that property are treated as weights for the
+spin. Non-numeric and negative values are treated as zero."
+  (if (org-before-first-heading-p)
+      (message "Point not on heading.")
+    (org-back-to-heading))
+  (let* ((weight-list
+          (->> (aph/org-get-property-of-children (point) weight-prop)
+               (mapcar #'string-to-number)
+               (mapcar (lambda (x) (if (< x 0) 0 x)))))
+         
+         (threshold-list  (aph/reductions #'+ weight-list)) 
+         (roll            (random (apply #'+ weight-list)))) 
+    (->> threshold-list
+         (-find-index (apply-partially #'< roll))
+         1+
+         aph/org-goto-nth-child)))
 
 (provide 'aph-functions-org)
