@@ -36,17 +36,17 @@ randomly)."
         "As `-reduce', but accepts all sequences, not just lists."
         (if (listp seq)
             (-reduce fn seq)
-          (-reduce fn (append seq nil))))))
+          (-reduce fn (append seq nil))))
 
-(defun aph/reductions (fn seq)
-  "As `aph/reduce', but returns intermediate results.
+      (defun aph/reductions (fn seq)
+        "As `aph/reduce', but returns intermediate results.
 These results are returned as a list."
-  (->> seq
-       (aph/reduce (lambda (acc val)
-                     (let ((acc (if (listp acc) acc (list acc)))) 
-                       (cons (funcall fn (car acc) val) acc))))
-       (reverse)))
+        (->> seq
+             (aph/reduce (lambda (acc val)
+                           (let ((acc (if (listp acc) acc (list acc)))) 
+                             (cons (funcall fn (car acc) val) acc))))
+             (reverse))))
 
-(message "Function `aph/reduce' not defined: `dash' is not loaded.")
+  (message "Function `aph/reduce' not defined: `dash' is not loaded."))
 
-(provide 'aph-functions)
+(provide 'aph-functions) 
