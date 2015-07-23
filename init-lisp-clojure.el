@@ -6,6 +6,11 @@
 (add-hook 'clojure-mode-hook    #'subword-mode)
 (add-hook 'cider-repl-mode-hook #'subword-mode)
 
+;; Enable eldoc mode in Clojure buffers:
+(require 'cider-eldoc)
+(add-hook 'clojure-mode-hook #'eldoc-mode)
+(add-hook 'cider-mode-hook   #'eldoc-mode)
+
 ;; Don't switch automatically to the REPL on connection.
 (setq cider-repl-pop-to-buffer-on-connect nil)
 
@@ -33,5 +38,9 @@
 
 ;; Log nrepl messages (uncomment to diagnose REPL problems).
 ;;(setq nrepl-log-messages t)
+
+;; Replace the `' pair with `` in Clojure mode. 
+(sp-local-pair 'clojure-mode "`" "`"
+               :when '(sp-in-string-p sp-in-comment-p))
 
 (provide 'init-lisp-clojure)
