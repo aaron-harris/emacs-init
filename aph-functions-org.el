@@ -90,16 +90,27 @@ Return point."
     (let ((die-size  (aph/org-count-children)))
       (aph/org-goto-nth-child (1+ (random die-size))))))
 
-(defun aph/org-spin-weighted (weight-prop)
+(defvar aph/org-spin-weight-property
+  "Weight"
+  "The default property to be used for `aph/org-spin-weight'.")
+
+(defun aph/org-spin-weighted (&optional weight-prop)
   "As `aph/org-spin-basic', weighted by property WEIGHT-PROP.
 
-The parameter WEIGHT-PROP should be the name of a property. Non-negative
-numeric values for that property are treated as weights for the
-spin. Non-numeric and negative values are treated as zero."
+The parameter WEIGHT-PROP should be the name of a property.
+Non-negative numeric values for that property are treated as
+weights for the spin. Non-numeric and negative values are treated
+as zero.
+
+When called interactively or if WEIGHT-PROP is
+omitted,`aph/org-spin-weight-property' is used."
+  (interactive)
   (if (org-before-first-heading-p)
       (message "Point not on heading.")
     (org-back-to-heading))
-  (let* ((weight-list
+  (let* ((weight-prop  (or weight-prop aph/org-spin-weight-property))
+
+         (weight-list
           (->> (aph/org-get-property-of-children (point) weight-prop)
                (mapcar #'string-to-number)
                (mapcar (lambda (x) (if (< x 0) 0 x)))))
