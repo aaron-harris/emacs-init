@@ -3,6 +3,7 @@
 ;;;;============================================================================
 
 (require 'aph-functions)                ; For `aph/kill-active-buffer'
+(require 'aph-functions-org)            ; For spinner commands.
 
 
 ;;; Keybinding Functions
@@ -44,6 +45,9 @@ If the binding succeeds, return COMMAND. Otherwise return nil."
 
 ;;; Global Keybindings
 ;;;=================== 
+;; Removing Unnecessary Bindings
+(global-unset-key (kbd "C-z"))          ; I don't need minimization on a key.
+
 ;; Miscellaneous Keybindings 
 (aph/global-set-key-safely (kbd "C-c M-c") #'cider-connect) 
 (aph/global-set-key-safely (kbd "C-x M-l") #'find-library)
@@ -75,6 +79,12 @@ If the binding succeeds, return COMMAND. Otherwise return nil."
 ;; Eww
 (eval-after-load 'eww
   '(define-key eww-mode-map (kbd "S-<tab>") #'shr-previous-link))
+
+;; Org Mode
+(eval-after-load 'org
+  '(progn
+    (define-key org-mode-map (kbd "C-z s")   #'aph/org-spin-basic)
+    (define-key org-mode-map (kbd "C-z C-s") #'aph/org-spin-weighted)))
 
 ;; Smartparens
 (eval-after-load 'smartparens
