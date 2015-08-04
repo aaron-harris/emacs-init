@@ -64,6 +64,10 @@
 (setq inhibit-startup-screen t)         ; Disable the splash screen.
 (add-to-list 'initial-frame-alist '(fullscreen . maximized)) ; Start maximized.
 
+;; Tooltip Settings
+(tooltip-mode -1)
+(setq tooltip-use-echo-area t)
+
 ;; Uniquify settings
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
