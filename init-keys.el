@@ -49,16 +49,17 @@ If the binding succeeds, return COMMAND. Otherwise return nil."
 (global-unset-key (kbd "C-z"))          ; I don't need minimization on a key.
 
 ;; Miscellaneous Keybindings 
-(aph/global-set-key-safely (kbd "C-c M-c") #'cider-connect) 
-(aph/global-set-key-safely (kbd "C-x M-l") #'find-library)
-(aph/global-set-key-safely (kbd "C-+")     #'flash-crosshairs)
-(aph/global-set-key-safely (kbd "M-/")     #'hippie-expand) ; TODO - Change to remap
-(aph/global-set-key-safely (kbd "C-x C-b") #'ibuffer) ; TODO - Change to remap
-(aph/global-set-key-safely (kbd "C-S-o")   #'join-line)
-(aph/global-set-key-safely (kbd "C-x k")   #'aph/kill-active-buffer) ; TODO - Change to remap
-(aph/global-set-key-safely (kbd "<C-tab>") #'other-window)
-(aph/global-set-key-safely (kbd "C-:")     #'pp-eval-expression)
-(aph/global-set-key-safely (kbd "C-c n")   #'aph/theme-night-toggle)
+(aph/global-set-key-safely (kbd "C-c M-c")    #'cider-connect) 
+(aph/global-set-key-safely (kbd "C-x M-l")    #'find-library)
+(aph/global-set-key-safely (kbd "C-+")        #'flash-crosshairs)
+(aph/global-set-key-safely (kbd "M-/")        #'hippie-expand) ; TODO - Change to remap
+(aph/global-set-key-safely (kbd "C-x C-b")    #'ibuffer) ; TODO - Change to remap
+(aph/global-set-key-safely (kbd "C-S-o")      #'join-line)
+(aph/global-set-key-safely (kbd "C-x k")      #'aph/kill-active-buffer) ; TODO - Change to remap
+(aph/global-set-key-safely (kbd "<C-tab>")    #'other-window)
+(aph/global-set-key-safely (kbd "<C-S-tab>")  #'aph/other-window-backwards)
+(aph/global-set-key-safely (kbd "C-:")        #'pp-eval-expression)
+(aph/global-set-key-safely (kbd "C-c n")      #'aph/theme-night-toggle)
 
 ;; Recommended global Org-Mode keybindings
 (aph/global-set-key-safely (kbd "C-c a") #'org-agenda)
@@ -76,6 +77,12 @@ If the binding succeeds, return COMMAND. Otherwise return nil."
 
 ;;; Mode-Specific Keybindings
 ;;;==========================
+(eval-after-load 'ielm
+  '(progn
+     (define-key ielm-map (kbd "C-c M-w") #'aph/ielm-copy-last-output)
+     (define-key ielm-map (kbd "C-c C-t")
+       #'aph/eval-expression-toggle-clean-output)))
+
 ;; Eww
 (eval-after-load 'eww
   '(define-key eww-mode-map (kbd "S-<tab>") #'shr-previous-link))
@@ -83,8 +90,8 @@ If the binding succeeds, return COMMAND. Otherwise return nil."
 ;; Org Mode
 (eval-after-load 'org
   '(progn
-    (define-key org-mode-map (kbd "C-z s")   #'aph/org-spin-basic)
-    (define-key org-mode-map (kbd "C-z C-s") #'aph/org-spin-weighted)))
+     (define-key org-mode-map (kbd "C-z s")   #'aph/org-spin-basic)
+     (define-key org-mode-map (kbd "C-z C-s") #'aph/org-spin-weighted)))
 
 ;; Smartparens
 (eval-after-load 'smartparens
