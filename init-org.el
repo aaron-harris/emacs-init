@@ -166,6 +166,7 @@ directive)."
 (setq org-extend-today-until 4)
 (setq org-habit-graph-column 50)
 (setq org-agenda-window-setup 'current-window)
+(setq org-agenda-sticky t)
 
 ;; Format string for agenda items
 (setq org-agenda-prefix-format
@@ -178,6 +179,7 @@ directive)."
 ;; Settings for timestamps, scheduled items, and deadlines:
 (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
 (setq org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-skip-timestamp-if-done t)
 (setq org-agenda-todo-ignore-with-date 'all)
 (setq org-agenda-todo-ignore-scheduled 'all)
 (setq org-agenda-todo-ignore-timestamp 'all)
