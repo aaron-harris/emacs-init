@@ -29,4 +29,7 @@ all such modes.")
 (aph/add-hook-to-all aph/lisp-mode-hooks #'smartparens-strict-mode :safely)
 (aph/add-hook-to-all aph/lisp-mode-hooks #'rainbow-delimiters-mode :safely)
 
+(require 'init-color-identifiers)
+(aph/add-hook-to-all aph/lisp-mode-hooks #'color-identifiers-mode  :safely)
+
 (provide 'init-lisp)
