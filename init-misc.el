@@ -22,7 +22,10 @@
 ;; Ido Mode (this is from better-defaults.el) 
 (setq ido-enable-flex-matching t)
 (ido-mode 1)
-(ido-everywhere 1) 
+(ido-everywhere 1)
+
+;; Visible Mark Mode
+(require 'init-visible-mark)
 
 ;; Other modes
 (column-number-mode t)                  ; Show col number in mode line.
