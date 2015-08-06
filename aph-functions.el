@@ -5,6 +5,19 @@
 
 ;;; Commands
 ;;;=========
+(defun aph/delete-frame-or-exit (&optional arg)
+  "Delete this frame. With only one frame, exit Emacs.
+
+When there is more than one visible frame, run `delete-frame'.
+Otherwise, exit Emacs with `save-buffers-kill-terminal'.
+
+Any prefix ARG is passed to `save-buffers-kill-terminal' in the
+single-frame case and ignored otherwise."
+  (interactive "P")
+  (if (> (length (visible-frame-list)) 1)
+      (delete-frame)
+    (save-buffers-kill-terminal arg)))
+
 (defun aph/kill-active-buffer (&optional choose)
   "Kill the active buffer.
 
