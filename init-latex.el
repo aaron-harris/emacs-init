@@ -16,6 +16,11 @@
 (setq TeX-parse-self t) 
 
 
+;;; Outline Settings
+;;;=================
+(add-hook 'LaTeX-mode-hook #'outline-minor-mode)
+
+
 ;;; Preview Settings
 ;;;=================
 (setq preview-image-type 'dvipng)
@@ -25,7 +30,7 @@
 
 ;;; RefTeX Setup
 ;;;============= 
-(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(add-hook 'LaTeX-mode-hook #'turn-on-reftex)
 (setq reftex-plug-into-auctex t)
 
 
@@ -45,6 +50,6 @@ Sets up the variables `TeX-view-program-selection' and
   (add-to-list 'TeX-view-program-list
                '("Emacs" "emacsclient -n %o")))
 
-(add-hook 'LaTeX-mode-hook 'aph/LaTeX-use-emacs-as-viewer) 
+(add-hook 'LaTeX-mode-hook #'aph/LaTeX-use-emacs-as-viewer)
 
 (provide 'init-latex)
