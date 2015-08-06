@@ -44,18 +44,23 @@ If the binding succeeds, return COMMAND. Otherwise return nil."
 
 
 ;;; Global Keybindings
-;;;=================== 
+;;;===================
+;; TODO - Replace some of these keybindings with remaps.
+
 ;; Removing Unnecessary Bindings
 (global-unset-key (kbd "C-z"))          ; I don't need minimization on a key.
 
+;; Improved Keybindings
+(aph/global-set-key-safely (kbd "C-x C-c") #'aph/delete-frame-or-exit)
+(aph/global-set-key-safely (kbd "C-x k")   #'aph/kill-active-buffer) ; remap
+
 ;; Miscellaneous Keybindings 
-(aph/global-set-key-safely (kbd "C-c M-c")    #'cider-connect) 
+(aph/global-set-key-safely (kbd "C-c M-c")    #'cider-connect)
 (aph/global-set-key-safely (kbd "C-x M-l")    #'find-library)
 (aph/global-set-key-safely (kbd "C-+")        #'flash-crosshairs)
-(aph/global-set-key-safely (kbd "M-/")        #'hippie-expand) ; TODO - Change to remap
-(aph/global-set-key-safely (kbd "C-x C-b")    #'ibuffer) ; TODO - Change to remap
+(aph/global-set-key-safely (kbd "M-/")        #'hippie-expand) ; remap
+(aph/global-set-key-safely (kbd "C-x C-b")    #'ibuffer) ; remap
 (aph/global-set-key-safely (kbd "C-S-o")      #'join-line)
-(aph/global-set-key-safely (kbd "C-x k")      #'aph/kill-active-buffer) ; TODO - Change to remap
 (aph/global-set-key-safely (kbd "<C-tab>")    #'other-window)
 (aph/global-set-key-safely (kbd "<C-S-tab>")  #'aph/other-window-backwards)
 (aph/global-set-key-safely (kbd "C-:")        #'pp-eval-expression)
