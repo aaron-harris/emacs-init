@@ -24,13 +24,14 @@
                       :weight 'bold)
   (set-face-attribute 'font-lock-variable-name-face nil
                       :weight 'bold)
-  (set-face-attribute 'font-lock-constant-face nil
+  (set-face-attribute 'font-lock-constant-face nil 
                       :weight 'bold
                       :slant 'italic)
   (set-face-attribute 'font-lock-builtin-face nil
                       :foreground nil
                       :slant 'italic)
   (set-face-attribute 'font-lock-type-face nil
+                      :foreground nil
                       :underline t))
 
 (add-hook 'color-identifiers-mode-hook #'aph/font-lock-decolorize)
