@@ -55,8 +55,8 @@ If the binding succeeds, return COMMAND. Otherwise return nil."
 ;; Improved Keybindings
 (aph/global-set-key-safely (kbd "C-x C-c") #'aph/delete-frame-or-exit)
 (aph/global-set-key-safely (kbd "C-x k")   #'aph/kill-active-buffer) ; remap
-(aph/global-set-key-safely (kbd "M-n")     #'aph/scroll-up-by-line)
-(aph/global-set-key-safely (kbd "M-p")     #'aph/scroll-down-by-line)
+(aph/global-set-key-safely (kbd "<down>")  #'aph/scroll-up-by-line)
+(aph/global-set-key-safely (kbd "<up>")    #'aph/scroll-down-by-line)
 
 ;; Miscellaneous Keybindings 
 (aph/global-set-key-safely (kbd "C-c M-c")    #'cider-connect)

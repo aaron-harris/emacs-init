@@ -26,6 +26,10 @@
 (ido-mode 1)
 (ido-everywhere 1)
 
+;; Smartscan Mode
+(when (fboundp 'smartscan-mode)
+  (global-smartscan-mode 1))            ; Search for matching symbols.
+
 ;; Visible Mark Mode
 (require 'init-visible-mark)
 
