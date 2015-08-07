@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 ;;;; The Emacs init files of Aaron Harris:
 ;;;; THEME CONFIGURATION
 ;;;;============================================================================

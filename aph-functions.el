@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 ;;;; The Emacs init file of Aaron Harris.
 ;;;; CUSTOM FUNCTIONS
 ;;;;============================================================================ 
@@ -91,6 +93,19 @@ one line downward."
 
 ;;; Utility Functions
 ;;;==================
+;; Taken from the Yoo Box article
+;; "Emacs Lisp lexical binding gotchas and related best practices" 
+(defmacro aph/lexical-scope-p (var)
+  "Returns t if VAR can be lexically bound, and nil otherwise.
+
+Specially, this will return nil when called in dynamic scope, and
+it will return nil if var has been declared as a special
+variable (e.g., with `defvar').  All other cases should return
+t."
+  `(let ((,var nil)
+         (f (let ((,var t)) (lambda () ,var))))
+     (funcall f)))
+
 (defun aph/random-comparator (&rest args)
   "Randomly return +1 or -1.
 
@@ -125,21 +140,10 @@ comparison is unbiased (the difference is taken to be 0.5)."
            (roll    (cl-random 1.0)))
       (if (< roll bias) +1 -1))))
 
-;; TODO: Refactor this dependency.
-(require 'dash)
-(defun aph/reduce (fn seq)
-  "As `-reduce', but accept all sequences, not just lists."
-  (if (listp seq)
-      (-reduce fn seq)
-    (-reduce fn (append seq nil))))
+
+;;; Sublibraries
+;;;=============
+(aph/require-softly 'aph-functions-dash)
 
-(defun aph/reductions (fn seq)
-  "As `aph/reduce', but return intermediate results.
-These results are returned as a list."
-  (->> seq
-       (aph/reduce (lambda (acc val)
-                     (let ((acc (if (listp acc) acc (list acc))))
-                       (cons (funcall fn (car acc) val) acc))))
-       (reverse)))
 
 (provide 'aph-functions) 

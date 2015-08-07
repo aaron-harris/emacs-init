@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 ;;;; The Emacs init file of Aaron Harris.
 ;;;; CLOJURE CONFIGURATION
 ;;;;============================================================================
