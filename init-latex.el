@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 ;;;; The Emacs inits file of Aaron Harris.
 ;;;; LATEX CONFIGURATION
 ;;;;============================================================================
