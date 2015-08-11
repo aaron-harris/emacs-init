@@ -141,6 +141,19 @@ comparison is unbiased (the difference is taken to be 0.5)."
       (if (< roll bias) +1 -1))))
 
 
+;;; Hook Functions
+;;;===============
+;; These are functions which wouldn't generally be substantive enough
+;; to deserve names, except that we want to use them in a hook.
+(defun aph/truncate-lines-on ()
+  "Cause current buffer to truncate long lines."
+  (toggle-truncate-lines 1))
+
+(defun aph/truncate-lines-off ()
+  "Cause current buffer to fold long lines."
+  (toggle-truncate-lines -1))
+
+
 ;;; Sublibraries
 ;;;=============
 (aph/require-softly 'aph-functions-dash)
