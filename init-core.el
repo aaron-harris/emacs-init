@@ -73,6 +73,7 @@ successful (or unnecessary) and nil if not."
 
 ;; Major Features
 (aph/require-softly 'init-gnus)
+(aph/require-softly 'init-ido)
 (aph/require-softly 'init-org)
 (aph/require-softly 'init-smartparens)
 

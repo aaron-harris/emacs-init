@@ -20,12 +20,7 @@
 
 
 ;;; Global Modes
-;;;============= 
-;; Ido Mode (this is from better-defaults.el) 
-(setq ido-enable-flex-matching t)
-(ido-mode 1)
-(ido-everywhere 1)
-
+;;;=============
 ;; Smartscan Mode
 (when (fboundp 'smartscan-mode)
   (global-smartscan-mode 1))            ; Search for matching symbols.
