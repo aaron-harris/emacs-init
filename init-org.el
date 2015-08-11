@@ -27,6 +27,8 @@
 (setq org-blank-before-new-entry               ; No extraneous blank lines.
       '((heading . nil) (plain-list-item . nil)))
 
+(add-hook 'org-mode-hook #'aph/truncate-lines-off)
+
 
 ;;; TODO Keywords
 ;;;==============
