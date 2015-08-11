@@ -82,6 +82,18 @@ non-numeric values."
        (apply #'+)))
 
 
+;;; Refile
+;;;=======
+(defun aph/org-goto-last-refile ()
+  "Goto last Org-mode item refiled.
+
+This has the same effect as supplying a C-u C-u prefix argument
+to `org-agenda-refile'.  It is intended for use globally, where a
+keybinding for that function is not appropriate."
+  (interactive)
+  (org-agenda-refile '(16)))
+
+
 ;;; Spinners
 ;;;=========
 (defun aph/org-spin-basic ()

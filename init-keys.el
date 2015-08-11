@@ -82,6 +82,7 @@ If the binding succeeds, return COMMAND. Otherwise return nil."
 (aph/global-set-key-safely (kbd "C-c o") #'org-clock-out)
 (aph/global-set-key-safely (kbd "C-c q") #'org-clock-cancel)
 (aph/global-set-key-safely (kbd "C-c x") #'org-clock-in-last)
+(aph/global-set-key-safely (kbd "C-c w") #'aph/org-goto-last-refile)
 
 
 ;;; Mode-Specific Keybindings
