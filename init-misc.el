@@ -31,7 +31,7 @@
   (global-smartscan-mode 1))            ; Search for matching symbols.
 
 ;; Visible Mark Mode
-(require 'init-visible-mark)
+(aph/require-softly 'init-visible-mark)
 
 ;; Other modes
 (column-number-mode t)                  ; Show col number in mode line.
