@@ -21,4 +21,8 @@
 ;; need to disable the single-quote pair there.
 (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
 
+;; Use `` instead of `' in Clojure mode.
+(sp-local-pair 'clojure-mode "`" "`"
+               :when '(sp-in-string-p sp-in-comment-p))
+
 (provide 'init-smartparens)

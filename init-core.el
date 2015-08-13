@@ -17,62 +17,29 @@
   "A symbol denoting the specific PC being used.")
 
 
+;;; Disabling Window Chrome
+;;;========================
+;; Placing this close to the beginning of initialization should
+;; prevent chrome from being drawn at all, rather than drawing it then
+;; removing it.
+(menu-bar-mode -1)
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+
 ;;; Path Management
 ;;;================
 (add-to-list 'load-path (expand-file-name aph/init-path))
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 
-;;; Initialization Functions
-;;;=========================
-;; These are functions which are used directly by these initialization files.
-(defun aph/add-hook-safely (hook function &optional append local)
-  "As `add-hook', but check if FUNCTION is defined first.
-
-If FUNCTION is defined, proceed to add it to HOOK. If it isn't,
-print a message to that effect and do nothing.
-
-The return value is HOOK if it was added and nil otherwise."
-  (if (fboundp function)
-      (add-hook hook function append local)
-    (message "Cannot add #'%s to %s: Function not defined"
-             function hook)
-    nil)) 
-
-(defun aph/add-hook-to-all (hooks function &optional safely)
-  "Add FUNCTION to each hook in the list HOOKS, with `add-hook'.
-
-If the optional parameter SAFELY is supplied, use
-`aph/add-hook-safely' instead of `add-hook'."
-  (dolist (hook hooks)
-    (if safely
-        (aph/add-hook-safely hook function)
-      (add-hook hook function))))
-
-(defun aph/require-softly (feature &optional filename)
-  "As `require', but instead of an error just print a message.
-
-If there is an error, its message will be included in the message
-printed.
-
-Like `require', the return value will be FEATURE if the load was
-successful (or unnecessary) and nil if not."
-  (condition-case err
-      (require feature filename) 
-    (error (message (concat "Error loading %s"
-                            (if filename " (%s): \"" ": \"")
-                            (error-message-string err)
-                            "\"")
-                    feature filename)
-           nil)))
-
-
 ;;; Loading Submodules
 ;;;===================
+(require 'aph-require)                  ; For `aph/require-softly', etc.
 (aph/require-softly 'init-package)
 
 ;; Major Features
-(aph/require-softly 'init-gnus)
+(aph/require-only-for-machine 'peregrine 'init-gnus)
 (aph/require-softly 'init-ido)
 (aph/require-softly 'init-org)
 (aph/require-softly 'init-smartparens)
@@ -83,9 +50,10 @@ successful (or unnecessary) and nil if not."
 (aph/require-softly 'init-lisp)
 
 ;; Other
-(aph/require-softly 'init-misc) 
-(aph/require-softly 'init-theme)
+(aph/require-softly 'init-misc)
+(aph/require-softly 'temp)
 (aph/require-softly 'init-keys)
+(aph/require-softly 'init-startup)
 
 ;; Remember to sort out aph-geog.el. Need to do this at work.
 

@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
 ;;;; The Emacs init files of Aaron Harris:
-;;;; THEME CONFIGURATION
+;;;; THEME FUNCTIONS
 ;;;;============================================================================
 
 (defvar aph/theme-day 'zenburn
@@ -20,9 +20,6 @@ If neither of these themes is currently active, load `aph/theme-night'."
         (disable-theme aph/theme-night)
         (load-theme aph/theme-day :noconfirm))
     (disable-theme aph/theme-day)
-    (load-theme aph/theme-night :noconfirm))) 
+    (load-theme aph/theme-night :noconfirm)))
 
-;; On startup, load the day theme.
-(load-theme aph/theme-day :noconfirm)
-
-(provide 'init-theme) 
+(provide 'aph-theme)

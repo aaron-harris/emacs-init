@@ -5,65 +5,12 @@
 ;;;;============================================================================
 
 (require 'aph-functions)                ; For aph/random-comparator
-
-
-;;; Skip Functions
-;;;===============
-;;; Here are some custom functions to be used with `org-agenda-skip-function'.
-;;; The initial structure was taken from a stackexchange question, written by
-;;; user Jonathan Leech-Pepin.
-
-;; TODO: These functions are still a little quirky. Specifically, they only seem
-;;       to work properly when the headline they're called on is visible. Until
-;;       this is sorted out, all agenda files should have their default
-;;       visibility setting set to CONTENTS or higher.
-(defun aph/org-agenda-skip-tag (tag)
-  "Skip current headline if it is tagged with TAG.
-
-Return nil if headline containing point is tagged with TAG, and the
-position of the next headline in current buffer otherwise.
-
-Intended for use with `org-agenda-skip-function', where this will
-skip exactly those headlines tagged with TAG (including by
-inheritance)."
-  (let ((next-headline
-         (save-excursion (or (outline-next-heading)
-                                  (point-max))))
-        
-        (current-headline
-         (or (and (org-at-heading-p) (point))
-             (save-excursion (org-back-to-heading)))))
-    
-    (if (member tag (org-get-tags-at current-headline))
-        (1- next-headline)
-      nil)))
-
-(defun aph/org-agenda-skip-without-tag (tag)
-  "Skip current headline unless it is tagged with TAG.
-
-Return nil if headline containing point is not tagged with TAG, and the
-position of the next headline in current buffer otherwise.
-
-Intended for use with `org-agenda-skip-function', where this will
-skip exactly those headlines not tagged with TAG (including by
-inheritance)."
-  (let ((next-headline
-         (save-excursion (or (outline-next-heading)
-                             (point-max))))
-        
-        (current-headline
-         (or (and (org-at-heading-p) (point))
-             (save-excursion (org-back-to-heading)))))
-    
-    (if (member tag (org-get-tags-at current-headline))
-        nil
-      (1- next-headline))))
+(require 'aph-org)
 
 
 ;;; Block Definitions
 ;;;==================
 ;;; For ease of reuse, we define some functions to create custom agenda blocks.
-
 (defun aph/org-agenda-block-tagged-agenda (header tag &optional only)
   "Return an agenda block for items tagged with TAG.
 

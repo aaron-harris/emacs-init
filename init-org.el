@@ -4,6 +4,8 @@
 ;;;; ORG-MODE CONFIGURATION
 ;;;;============================================================================ 
 
+(require 'aph-hooks)  ; For `aph/add-hook-safely', and some hook code.
+
 
 ;;; Basic Setup
 ;;;============
@@ -27,7 +29,7 @@
 (setq org-blank-before-new-entry               ; No extraneous blank lines.
       '((heading . nil) (plain-list-item . nil)))
 
-(add-hook 'org-mode-hook #'aph/truncate-lines-off)
+(aph/add-hook-safely 'org-mode-hook #'aph/truncate-lines-off)
 
 
 ;;; TODO Keywords
@@ -141,26 +143,14 @@ directive)."
          :link         (eww-current-url)
          :description  (plist-get eww-data :title))))
 
-(add-hook 'org-store-link-functions #'aph/org-eww-store-link)
+(aph/add-hook-safely 'org-store-link-functions #'aph/org-eww-store-link)
 
 
 ;;; Agenda
 ;;;=======
-;; Agenda files:
-(setq org-agenda-files
-      (mapcar (apply-partially #'concat org-directory "/")
-              '("capture.org"
-                "personal.org"
-                "home.org"
-                "computer.org"
-                "emacs.org"
-                "languages.org"
-                "math.org"
-                "programming.org"
-                "shopping.org"
-                "social.org"
-                "work.org"
-                "media.org")))
+;; All Org-mode files in the Org directory should be indexed for the
+;; agenda.
+(setq org-agenda-files (list org-directory))
 
 ;; General agenda settings:
 (setq org-agenda-block-separator (make-string 80 ?=))
@@ -197,11 +187,6 @@ directive)."
 ;; Loading custom agenda commands.
 (require 'init-org-agenda)
 
-;; We want to display our custom agenda automatically on startup.
-(add-hook 'after-init-hook
-          (lambda ()
-            (aph/org-agenda-display-smart-agenda)
-            (delete-other-windows)))
 ;;; Mobile
 ;;;=======
 (require 'org-mobile)
@@ -209,9 +194,9 @@ directive)."
 (setq org-mobile-directory "~/sync/mobile")
 (setq org-mobile-inbox-for-pull (concat org-directory "/capture.org"))
 
-(if (eq aph/machine 'mpc)
-    (setq org-mobile-checksum-binary
-          "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe"))
+(when (eq aph/machine 'mpc)
+  (setq org-mobile-checksum-binary
+        "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe"))
 
 (require 'org)           ; Finish loading Org-Mode.
 (provide 'init-org)

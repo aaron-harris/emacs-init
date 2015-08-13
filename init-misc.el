@@ -12,13 +12,6 @@
 (setq server-window 'pop-to-buffer)     ; Client buffers open in other window.
 
 
-;;; Disabling Window Chrome
-;;;======================== 
-(menu-bar-mode -1)
-(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-
-
 ;;; Global Modes
 ;;;=============
 ;; Smartscan Mode
@@ -28,7 +21,7 @@
 ;; Visible Mark Mode
 (aph/require-softly 'init-visible-mark)
 
-;; Other modes
+;; Built-in modes
 (column-number-mode t)                  ; Show col number in mode line.
 (show-paren-mode 1)                     ; Highlight matching parens.
 (winner-mode 1)                         ; Window config undo and redo. 
@@ -63,10 +56,6 @@
 (setq scroll-margin 1 
       scroll-conservatively 1000
       scroll-preserve-screen-position :always)
-
-;; Startup Settings
-(setq inhibit-startup-screen t)         ; Disable the splash screen.
-(add-to-list 'initial-frame-alist '(fullscreen . maximized)) ; Start maximized.
 
 ;; Tooltip Settings
 (tooltip-mode -1)
