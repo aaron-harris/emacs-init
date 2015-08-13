@@ -27,6 +27,8 @@
 
 (require 'visible-mark)
 (global-visible-mark-mode 1)
+
+;; Show 2 marks, with different faces.
 (setq visible-mark-max 2)
 (setq visible-mark-faces '(aph/visible-mark-top
                            aph/visible-mark-other))

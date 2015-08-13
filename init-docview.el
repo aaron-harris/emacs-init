@@ -7,7 +7,6 @@
 
 ;;; Program Setup
 ;;;==============
-
 ;; On mpc, Ghostview has a different name.
 (when (eq aph/machine 'mpc)
   (setq doc-view-ghostscript-program "mgs.exe"))

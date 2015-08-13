@@ -7,22 +7,22 @@
 
 ;;; Output Format Control
 ;;;======================
-;; This function was taken from a stackexchange answer by user Harald Hanche-Olsen.
-;; I have subsequently reformatted it to match my code style.
+;; This function was taken from a stackexchange answer by user Harald
+;; Hanche-Olsen.  I have subsequently reformatted it to match my code
+;; style.
 (defvar aph/eval-expression-clean-output nil
-  "If non-nil evaluating elisp will not return extra info.
+  "If non-nil, evaluating elisp will not return extra info.
 
 Normally, evaluating elisp (e.g., via `eval-expression' or
 `ielm') will format its output with extraneous data, such as:
   (+ 1 1)
-  ;=> 2 (#o2, #x2, ?\\C-b)
-
-This is controlled by the function
+  ;=> 2 (#o2, #x2, ?\\C-b) 
+This output is produced by the function
 `eval-expression-print-format'.
 
 When this variable is non-nil, all output from
 `eval-expression-print-format' is silenced (so the previous
-example would just return \"2\".")
+example would just return 2.")
 
 (defun aph/eval-expression-toggle-clean-output ()
   "Toggle the variable `aph/eval-expression-clean-output'."
