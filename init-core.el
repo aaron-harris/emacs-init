@@ -50,8 +50,7 @@
 (aph/require-softly 'init-lisp)
 
 ;; Other
-(aph/require-softly 'init-misc)
-(aph/require-softly 'temp)
+(aph/require-softly 'init-misc) 
 (aph/require-softly 'init-keys)
 (aph/require-softly 'init-startup)
 
