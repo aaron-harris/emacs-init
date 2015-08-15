@@ -31,9 +31,12 @@
   ;; Buffer, Frame, and Window Control 
   ((kbd "C-x C-b")   #'ibuffer                    :rebind)
   ((kbd "C-x k")     #'aph/kill-active-buffer     :rebind)
+  ((kbd "C-c q")     #'aph/quit-help-windows)
   ((kbd "<C-tab>")   #'other-window)
   ((kbd "<C-S-tab>") #'aph/other-window-backwards)
-  ((kbd "C-x C-c")   #'aph/delete-frame-or-exit   :rebind) 
+  ((kbd "C-x C-c")   #'aph/delete-frame-or-exit   :rebind)
+  ;; Application Control
+  ((kbd "C-c C-o")   #'browse-url)
   ;; Display Commands
   ((kbd "C-+")       #'flash-crosshairs)
   ((kbd "C-c n")     #'aph/theme-night-toggle))
