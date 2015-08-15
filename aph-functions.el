@@ -35,6 +35,26 @@ standard `kill-buffer')."
   (interactive "p")
   (other-window (- count) all-frames))
 
+(defvar aph/help-window-names
+  '("*Help*" "*Apropos*" "*Completions*")
+  "Names of buffers that `aph/quit-help-windows' should quit.")
+
+(defun aph/quit-help-windows (&optional kill frame)
+  "Quit all windows with help-like buffers.
+
+Calls `quit-windows-on' for every buffer named in
+`aph/help-windows-name'.  The optional parameters KILL and FRAME
+are just as in `quit-windows-on', except FRAME defaults to t (so
+that only windows on the selected frame are considered).
+
+Note that a nil value for FRAME cannot be distinguished from an
+omitted parameter and will be ignored; use some other value if
+you want to quit windows on all frames."
+  (interactive)
+  (let ((frame (or frame t)))
+    (dolist (buffer aph/help-window-names)
+      (quit-windows-on buffer kill frame))))
+
 (defun aph/ielm-get-last-output (&optional arg)
   "Return the last output produced by `ielm'.
 
