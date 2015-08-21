@@ -133,7 +133,8 @@
 
 ;;; Machine-Specific Keybindings
 ;;;=============================
-(when (eq aph/machine 'mpc) 
-  (aph/global-set-key-safely (kbd "C-x C-y") #'aph/yank-access-inline))
+(when (eq aph/machine 'mpc)
+  (aph/global-set-key-safely (kbd "C-x C-y") #'aph/yank-access-inline)
+  (aph/global-set-key-safely (kbd "C-c = p") #'aph/sum-parens-in-region))
 
 (provide 'init-keys)
