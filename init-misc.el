@@ -43,7 +43,10 @@
 ;; Clipboard settings (copied verbatim from better-defaults.el)
 (setq x-select-enable-clipboard t
       x-select-enable-primary t
-      save-interprogram-paste-before-kill t) 
+      save-interprogram-paste-before-kill t)
+
+;; Completion settings
+(setq completion-auto-help 'lazy)
 
 ;; Saved place and backup settings
 (require 'saveplace)
