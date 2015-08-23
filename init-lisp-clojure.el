@@ -48,4 +48,11 @@
 (add-hook 'cider-macroexpansion-mode-hook  #'aph/remove-dos-eol)
 (add-hook 'cider-test-report-mode-hook     #'aph/remove-dos-eol)
 
+
+;;; Other Settings
+;;;===============
+;; Register help-type buffers for `aph/quit-help-windows'.
+(eval-after-load 'aph-functions
+  '(add-to-list 'aph/help-window-names "*cider-doc*"))
+
 (provide 'init-lisp-clojure)
