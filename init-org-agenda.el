@@ -102,20 +102,28 @@ suffix."
           (tags
            "+work+LEVEL=1+TODO=\"\""
            ((org-agenda-overriding-header "Work Notes:")))
-          ,(aph/org-agenda-block-match-tasks "Work Tasks:" "+work")
-          ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 12)))
+          ,(aph/org-agenda-block-match-tasks "Work Tasks:" "+work")))
 
         ("2" "Evening Agenda"
          (,(aph/org-agenda-block-tagged-agenda "Evening Agenda" "evening")
           ,(aph/org-agenda-block-tagged-habits "Habits:" "evening")
-          ,(aph/org-agenda-block-match-tasks "Evening Tasks:" "+evening")
-          ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 12)))
+          ,(aph/org-agenda-block-match-tasks "Evening Tasks:" "+evening")))
         
         ("3" "Weekend Agenda"
          (,(aph/org-agenda-block-tagged-agenda "Weekend Agenda" "weekend")
           ,(aph/org-agenda-block-tagged-habits "Habits:" "weekend")
-          ,(aph/org-agenda-block-match-tasks "Weekend Tasks:" "+weekend")
-          ,(aph/org-agenda-block-match-tasks "Computer Tasks:" "+computer" 12)))
+          ,(aph/org-agenda-block-match-tasks "Weekend Tasks:" "+weekend")))
+
+        ("c" "Computer Agenda" 
+         (,(aph/org-agenda-block-tagged-habits "Habits:" "computer")
+          ,(aph/org-agenda-block-match-tasks "Open Computer Tasks:"
+                                             "+computer" 12)
+          ,(aph/org-agenda-block-new-projects "Five Random Emacs Projects"
+                                              "+emacs-anki" 5 :random) 
+          ,(aph/org-agenda-block-new-projects "Five Random Anki Projects"
+                                              "+anki" 5 :random)
+          ,(aph/org-agenda-block-new-projects "Five Random Other Projects"
+                                              "+computer-emacs-anki" 5 :random)))
 
         ("r" "Review"
          ((agenda
@@ -129,6 +137,9 @@ suffix."
              '(aph/org-agenda-skip-tag "review"))))
           ,(aph/org-agenda-block-tagged-agenda
             "Scheduled for Review" "review" :only)
+          (tags-todo
+           "/OPEN"
+           ((org-agenda-overriding-header "Current Projects")))
           (agenda
            ""
            ((org-agenda-overriding-header "Missed Agenda Items")
@@ -156,18 +167,15 @@ suffix."
            "/WAITING"
            ((org-agenda-overriding-header "Stuck Tasks")))
           ,(aph/org-agenda-block-match-tasks "Tasks Without Effort"
-                                             "Effort<>{0}/TODO|START" 8)))
+                                             "Effort<>{0}/TODO|START" 8))
+         ((org-agenda-dim-blocked-tasks nil)))
 
         ("p" "Projects"
          ((tags-todo
            "/OPEN"
            ((org-agenda-overriding-header "Open Projects")))
-          ,(aph/org-agenda-block-new-projects "Five Random Emacs Projects"
-                                              "+emacs-anki" 5 :random) 
-          ,(aph/org-agenda-block-new-projects "Five Random Anki Projects"
-                                              "+anki" 5 :random)
-          ,(aph/org-agenda-block-new-projects "Five Random Computer Projects"
-                                              "+computer-emacs-anki" 5 :random)
+          ,(aph/org-agenda-block-new-projects "Computer Projects"
+                                              "+computer-emacs-anki" 12)
           ,(aph/org-agenda-block-new-projects "Other Projects"
                                               "-computer-anki"))
          ((org-agenda-dim-blocked-tasks nil)))
