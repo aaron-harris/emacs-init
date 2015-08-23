@@ -54,4 +54,11 @@ Sets up the variables `TeX-view-program-selection' and
 
 (add-hook 'LaTeX-mode-hook #'aph/LaTeX-use-emacs-as-viewer)
 
+
+;;; Other Settings
+;;;===============
+;; Register help-type buffers for `aph/quit-help-windows'.
+(eval-after-load 'aph-functions
+  '(add-to-list 'aph/help-window-names "*TeX Help*"))
+
 (provide 'init-latex)
