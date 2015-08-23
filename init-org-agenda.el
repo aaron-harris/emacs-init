@@ -15,8 +15,8 @@
   "Return an agenda block for items tagged with TAG.
 
 The returned block (a list form) has header HEADER and includes
-only items tagged with :all: or TAG, but excludes habits. If ONLY
-is non-nil, it also excludes :all:-tagged items."
+only items tagged with :all: or TAG, but excludes habits.  If
+ONLY is non-nil, it also excludes :all:-tagged items."
   `(agenda
     ""
     ((org-agenda-overriding-header ,header)
@@ -50,12 +50,12 @@ only habits tagged with :all: or TAG."
 The returned block (a list form) defines a todo-type agenda block
 that has header HEADER and includes only tasks that match the
 match-string MATCH. If LIMIT is non-nil, the block will only show
-that many tasks. If RANDOM is non-nil, the tasks will be ordered
+that many tasks.  If RANDOM is non-nil, the tasks will be ordered
 randomly.
 
 Tasks are generally items tagged with the ‘TODO’ keyword that are
 not subtasks of an unopened project (an item with the ‘START’
-keyword). Other tags that denote specialty tasks (e.g., ‘TAG’)
+keyword).  Other tags that denote specialty tasks (e.g., ‘TAG’)
 are also included.
 
 Note that, since we are selecting only tasks, MATCH should not
@@ -77,12 +77,11 @@ The returned block (a list form) defines a todo-type agenda block
 with header HEADER that includes only unopened projects that
 match the match-string MATCH.
 
-If LIMIT is non-nil, the block will only show that many
-projects. If RANDOM is non-nil, the projects will be ordered
-randomly.
+If LIMIT is non-nil, the block will only show that many projects.
+If RANDOM is non-nil, the projects will be ordered randomly.
 
 Unopened projects are items tagged with the ‘START’ keyword or
-the ‘SHELVED’ keyword. Since we are selecting only such
+the ‘SHELVED’ keyword.  Since we are selecting only such
 projects, MATCH should not include keyword criteria using the ‘/’
 suffix."
   `(tags-todo
@@ -187,25 +186,27 @@ suffix."
 ;;; Smart Agenda
 ;;;=============
 
-;; Variables used to control aph/org-agenda-display-smart-agenda, below.
+;; Variables used to control `aph/org-agenda-display-smart-agenda', below.
 (defvar aph/workday-start 10
   "The start of the workday (in hours, according to a 24-hour
-clock). Used by the function aph/org-agenda-display-smart-agenda
-to display the correct agenda.")
+clock).  Used by the function
+`aph/org-agenda-display-smart-agenda' to display the correct
+agenda.")
 
 (defvar aph/workday-end 18
   "The end of the workday (in hours, according to a 24-hour
-clock). Used by the function aph/org-agenda-display-smart-agenda
-to display the correct agenda.")
+clock).  Used by the function
+`aph/org-agenda-display-smart-agenda' to display the correct
+agenda.")
 
 (defun aph/org-agenda-display-smart-agenda ()
   "Display an Org-Mode agenda based on current day and time.
 
-On Saturdays and Sundays, displays the weekend agenda. On
+On Saturdays and Sundays, displays the weekend agenda.  On
 weekdays, displays the review agenda if the workday (as defined
-by the variables aph/workday-start and aph/workday-end) hasn't
-started yet, the work agenda if it's in progress, and the evening
-agenda if it's already ended."
+by the variables `aph/workday-start' and `aph/workday-end')
+hasn't started yet, the work agenda if it's in progress, and the
+evening agenda if it's already ended."
   (interactive)
   (let ((day            (nth 6 (decode-time)))
         (hour           (nth 2 (decode-time))))
