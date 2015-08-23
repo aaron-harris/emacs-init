@@ -22,24 +22,26 @@
 
 (aph/global-set-keys-safely
   ;; Scrolling Commands
-  ((kbd "<down>")    #'aph/scroll-up-by-line      :rebind)
-  ((kbd "<up>")      #'aph/scroll-down-by-line    :rebind) 
+  ((kbd "<down>")        #'aph/scroll-up-by-line      :rebind)
+  ((kbd "<up>")          #'aph/scroll-down-by-line    :rebind) 
   ;; Editing Commands
-  ((kbd "C-S-o")     #'join-line) 
+  ((kbd "C-S-o")         #'join-line) 
   ;; Completion Commands
-  ((kbd "M-/")       #'hippie-expand              :rebind)
+  ((kbd "M-/")           #'hippie-expand              :rebind)
   ;; Buffer, Frame, and Window Control 
-  ((kbd "C-x C-b")   #'ibuffer                    :rebind)
-  ((kbd "C-x k")     #'aph/kill-active-buffer     :rebind)
-  ((kbd "C-c q")     #'aph/quit-help-windows)
-  ((kbd "<C-tab>")   #'other-window)
-  ((kbd "<C-S-tab>") #'aph/other-window-backwards)
-  ((kbd "C-x C-c")   #'aph/delete-frame-or-exit   :rebind)
+  ((kbd "C-x C-b")       #'ibuffer                    :rebind)
+  ((kbd "C-x k")         #'aph/kill-active-buffer     :rebind)
+  ((kbd "C-c q")         #'aph/quit-help-windows)
+  ((kbd "<C-tab>")       #'other-window)
+  ((kbd "<C-S-tab>")     #'aph/other-window-backwards)
+  ((kbd "C-x C-c")       #'aph/delete-frame-or-exit   :rebind)
   ;; Application Control
-  ((kbd "C-c C-o")   #'browse-url)
+  ((kbd "C-c C-o")       #'browse-url)
   ;; Display Commands
-  ((kbd "C-+")       #'flash-crosshairs)
-  ((kbd "C-c n")     #'aph/theme-night-toggle))
+  ((kbd "C-+")           #'flash-crosshairs)
+  ((kbd "C-c n")         #'aph/theme-night-toggle)
+  ;; Keybinding Control
+  ((kbd "C-<kp-enter>")  #'aph/kp-enter-newline-toggle))
 
 
 ;;; Smartparens Keybindings
