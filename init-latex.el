@@ -61,4 +61,10 @@ Sets up the variables `TeX-view-program-selection' and
 (eval-after-load 'aph-functions
   '(add-to-list 'aph/help-window-names "*TeX Help*"))
 
+;; Set `fill-column' to 75 in LaTeX buffers.
+(defun aph/LaTeX-mode-hook ()
+  "Apply my settings for `LaTeX-mode'."
+  (setq fill-column 75))
+(add-hook 'LaTeX-mode-hook #'aph/LaTeX-mode-hook)
+
 (provide 'init-latex)
