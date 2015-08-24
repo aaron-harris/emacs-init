@@ -25,7 +25,8 @@
   ((kbd "<down>")        #'aph/scroll-up-by-line      :rebind)
   ((kbd "<up>")          #'aph/scroll-down-by-line    :rebind) 
   ;; Editing Commands
-  ((kbd "C-S-o")         #'join-line) 
+  ((kbd "C-o")           #'aph/open-line              :rebind) 
+  ((kbd "C-S-o")         #'join-line)
   ;; Completion Commands
   ((kbd "M-/")           #'hippie-expand              :rebind)
   ;; Buffer, Frame, and Window Control 
