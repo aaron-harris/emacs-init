@@ -31,7 +31,8 @@ If the binding succeeds, return COMMAND.  Otherwise return nil."
                  command (key-description key))
         (throw 'esc nil))
       (unless (or nomsg-on-rebind
-                  (not old-binding)
+                  (not old-binding)     ; No previous binding
+                  (numberp old-binding) ; New binding on existing prefix
                   (eq old-binding command))
         (message "Warning: Binding #'%s to %s overwrites existing binding #'%s"
                  command (key-description key) old-binding))
