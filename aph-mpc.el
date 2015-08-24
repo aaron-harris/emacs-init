@@ -32,7 +32,8 @@ See `aph/sum-parens' to get similar functionality from elisp."
   (interactive "r")
   (let ((start (if (use-region-p) start (point-min)))
         (end   (if (use-region-p) end   (point-max))))
-    (message "Sum of parenthesized numbers: %d"
+    (message "Sum of parenthesized numbers in %s: %d"
+             (if (use-region-p) "region" "buffer")
              (aph/sum-parens (buffer-substring start end)))))
 
 (defun aph/yank-access-inline ()
