@@ -34,7 +34,8 @@
 (setq-default cursor-type 'box)         ; Use box-style cursor.
 (setq ring-bell-function #'ignore)      ; Disable the bell.
 (setq apropos-do-all t)                 ; More thorough apropos searches.
-(setq-default indicate-buffer-boundaries 'right) ; Show buffer start/end. 
+(setq-default indicate-buffer-boundaries 'right) ; Show buffer start/end.
+(setq resize-mini-windows t)            ; Allow minibuffer to shrink.
 
 ;; Calendar settings
 (setq calendar-longitude -93.2
