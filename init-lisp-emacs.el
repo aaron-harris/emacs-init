@@ -5,6 +5,28 @@
 ;;;;============================================================================
 
 
+;;; Mode-Bundling Setup
+;;;====================
+(defvar aph/emacs-lisp-mode-hooks
+  '(emacs-lisp-mode-hook
+    eval-expression-minibuffer-setup-hook
+    ielm-mode-hook
+    lisp-interaction-mode-hook)
+  "A list of hooks for modes in which Emacs Lisp editing occurs.
+Can be used with `aph/add-hook-to-all' to easily add a hook to
+all such modes.")
+
+;; Add all of these to the general list of Lisp modes, too.
+(nconc aph/lisp-mode-hooks aph/emacs-lisp-mode-hooks)
+
+
+;;; Syntax Highlighting
+;;;====================
+;; Turn on additional syntax highlighting for various packages.
+(eval-after-load 'dash        #'dash-enable-font-lock)
+(eval-after-load 'aph-require #'aph/require-enable-font-lock)
+
+
 ;;; Output Format Control
 ;;;======================
 ;; This function was taken from a stackexchange answer by user Harald
