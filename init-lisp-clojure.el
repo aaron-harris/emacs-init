@@ -5,6 +5,19 @@
 ;;;;============================================================================
 
 
+;;; Mode-Bundling Setup
+;;;====================
+(defvar aph/clojure-mode-hooks
+  '(clojure-mode-hook
+    cider-repl-mode-hook) 
+  "A list of hooks for modes in which Clojure editing occurs.
+Can be used with `aph/add-hook-to-all' to easily add a hook to
+all such modes.")
+
+;; Add these to the general list of Lisp modes, too.
+(nconc aph/lisp-mode-hooks aph/clojure-mode-hooks)
+
+
 ;;; Basic Setup
 ;;;============
 ;; Don't switch automatically to the REPL on connection.
@@ -21,14 +34,11 @@
 
 ;;; Minor Modes
 ;;;============
-;; Enable subword mode in Clojure buffers:
-(add-hook 'clojure-mode-hook    #'subword-mode)
-(add-hook 'cider-repl-mode-hook #'subword-mode)
+(aph/add-hook-to-all aph/clojure-mode-hooks #'subword-mode :safely)
 
 ;; Enable eldoc mode in Clojure buffers:
 (aph/require-softly 'cider-eldoc)
-(aph/add-hook-safely 'clojure-mode-hook #'eldoc-mode)
-(aph/add-hook-safely 'cider-mode-hook   #'eldoc-mode)
+(aph/add-hook-to-all aph/clojure-mode-hooks #'eldoc-mode :safely)
 
 
 ;;; Windows Compatibility

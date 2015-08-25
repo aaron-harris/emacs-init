@@ -6,15 +6,11 @@
 
 
 ;;; Mode-Bundling Setup
-;;;==================== 
-(defvar aph/lisp-mode-hooks
-  '(cider-repl-mode-hook
-    clojure-mode-hook
-    emacs-lisp-mode-hook
-    eval-expression-minibuffer-setup-hook
-    ielm-mode-hook
-    lisp-interaction-mode-hook
-    lisp-mode-hook)
+;;;====================
+;; We just need to define singleton modes here.  Languages with more
+;; than one mode will do their own mode bundling and add those modes
+;; to this list later.
+(defvar aph/lisp-mode-hooks '(lisp-mode-hook)
   "A list of hooks for modes in which Lisp editing occurs.
 Can be used with `aph/add-hook-to-all' to easily add a hook to
 all such modes.")
