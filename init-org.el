@@ -37,53 +37,49 @@
 (setq org-use-fast-todo-selection t)
 
 (setq org-todo-keywords
-      '((sequence "START(s)" "|" "CANCELLED(c!)")            ; General items
-        (sequence "TODO(t)" "WAITING(;@)" "|" "DONE(d!)")    ; Tasks
-        (sequence "OPEN(o)" "SHELVED(S!)" "|" "DONE(d!)")    ; Projects
-        (sequence "UNREAD(r)" "CONTINUE(-)" "REREAD(R)"
-                  "TAG(:)" "|" "FINISHED(f!)")               ; Text media
-        (sequence "UNWATCHED(w)" "CONTINUE(-)" "REWATCH(W)"
-                  "TAG(:)" "|" "FINISHED(f!)")               ; Video media
-        (sequence "UNAVAIL(u)" "BUY(b)" "|" "OWNED(O)")))    ; Media to obtain
+      '((sequence "START(s)" "|" "CANCELLED(c!)")         ; General items
+        (sequence "TODO(t)" "WAITING(;@)" "|" "DONE(d!)") ; Tasks
+        (sequence "OPEN(o)" "SHELVED(S!)" "|" "DONE(d!)") ; Projects
+        (sequence "CONSUME(z)" "CONTINUE(-)" "AGAIN(r)"
+                  "|" "FINISHED(f!)")                     ; Media items
+        (sequence "UNAVAIL(u)" "BUY(b)" "|" "OWNED(O)"))) ; Media to obtain
 
 
 ;;; Tags
 ;;;=====
 
-;; Intended meaning of the tags, and which agenda views they show up in: 
-;;   home: Can only be done at home. (morning, evening, weekend)
+;; Intended meaning of the tags, and which agenda views reference them:
+;;   home: Can only be done at home.
 ;;   work: Shows up in work agenda. (work)
-;;   all: Shows up in all agendas.
+;;   all: Shows up in all agendas. (all)
 ;;   evening: Shows up in evening agenda. (evening)
 ;;   weekend: Shows up in weekend agenda. (weekend)
-;;   computer: Shows up in computer sub-agendas. (computer)
+;;   computer: Shows up in computer agenda. (computer, projects)
 ;;   meal: Can be done while eating. (meal)
 ;;   review: Shows up in review agenda. (review)
-;;   listening: Audio tasks. (listening)
-;;   emacs: Involves tweaking Emacs configuration.
-;;   anki: Involves working with Anki.
-;;   text: Tags text media.
-;;   video: Tags video media.
-;;   audio: Tags audio media.
+;;   listening: Audio tasks.
+;;   emacs: Involves tweaking Emacs configuration. (computer)
+;;   anki: Involves working with Anki. (computer)
+;;   leisure: Done for fun. (meal, leisure)
+;;   education: Done for personal enrichment. (meal)
 (setq org-tag-alist
       '(("home"      . ?h)
         ("work"      . ?w)
         ("all"       . ?*)
         (:newline    . nil)
-        ("evening"   . ?e)
+        ("evening"   . ?v)
         ("weekend"   . ?s)
         ("computer"  . ?c)
         (:newline    . nil)
         ("review"    . ?r)
         ("meal"      . ?m)
-        ("listening" . ?l)
-        (:newline    . nil) 
-        ("anki"      . ?k)
-        ("emacs"     . ?x)
+        ("listening" . ?L)
         (:newline    . nil)
-        ("text"      . ?t)
-        ("video"     . ?v)
-        ("audio"     . ?a)))
+        ("knowledge" . ?k)
+        ("leisure"   . ?l)
+        (:newline    . nil) 
+        ("anki"      . ?a)
+        ("emacs"     . ?x))) 
 
 ;; TODO: Replace this advice with a more precisely-directed version that will
 ;;       still allow buffer-local tags.

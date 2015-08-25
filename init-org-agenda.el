@@ -30,19 +30,49 @@ ONLY is non-nil, it also excludes :all:-tagged items."
           `(and (aph/org-agenda-skip-without-tag ,tag)
                 (aph/org-agenda-skip-without-tag "all")))))))
 
-(defun aph/org-agenda-block-tagged-habits (header tag)
+(defun aph/org-agenda-block-tagged-habits (header tag &optional only)
   "Return an agenda block for habits tagged with TAG.
 
 The returned block (a list form) has header HEADER and includes
-only habits tagged with :all: or TAG."
+only habits tagged with :all: or TAG.  If ONLY is non-nil, it
+also excludes :all:-tagged items."
   `(agenda
     ""
     ((org-agenda-overriding-header ,header)
      (org-agenda-entry-types '(:scheduled))
-     (org-agenda-skip-function
+     (org-agenda-skip-function 
       '(or (and (aph/org-agenda-skip-without-tag ,tag)
-                (aph/org-agenda-skip-without-tag "all"))
+                ,@(unless only `((aph/org-agenda-skip-without-tag "all"))))
            (org-agenda-skip-entry-if 'notregexp ":STYLE:.*habit"))))))
+
+(defun aph/org-agenda-block-match
+    (header match kwds &optional unopened limit random)
+  "Return an agenda block for items matching MATCH and KWDS.
+
+The returned block (a list form) defines a todo-type agenda block
+that has header HEADER and includes only items from open projects
+that match the match-string MATCH (which should not include
+keyword criteria using the ‘/’ suffix) and have a keyword in
+KWDS (a list of strings).
+
+If UNOPENED is non-nil, the block will include all items, not
+just those from open projects.  If LIMIT is non-nil, the block
+will only show that many tasks.  If RANDOM is non-nil, the tasks
+will be ordered randomly.
+
+This function is intended to be used in other, more specialized
+functions.  This is why we take MATCH and KWDS as two distinct
+parameters."
+  `(tags-todo
+    ,(concat match "/" (mapconcat #'identity kwds "|"))
+    ((org-agenda-overriding-header ,header)
+     ,@(when (not unopened)
+         '((org-agenda-skip-function
+            '(org-agenda-skip-subtree-if 'todo '("START")))))
+     ,@(when limit `((org-agenda-max-entries ,limit)))
+     ,@(when random
+         '((org-agenda-cmp-user-defined 'aph/random-comparator)
+           (org-agenda-sorting-strategy '(user-defined-up)))))))
 
 (defun aph/org-agenda-block-match-tasks (header match &optional limit random)
   "Return an agenda block for tasks matching MATCH.
@@ -53,22 +83,38 @@ match-string MATCH. If LIMIT is non-nil, the block will only show
 that many tasks.  If RANDOM is non-nil, the tasks will be ordered
 randomly.
 
-Tasks are generally items tagged with the ‘TODO’ keyword that are
-not subtasks of an unopened project (an item with the ‘START’
-keyword).  Other tags that denote specialty tasks (e.g., ‘TAG’)
-are also included.
+Tasks are generally items tagged with the ‘TODO’ keyword or the
+‘START’ keyword that are not subtasks of an unopened project (an
+item with the ‘START’ keyword).
 
 Note that, since we are selecting only tasks, MATCH should not
 include keyword criteria using the ‘/’ suffix."
-  `(tags-todo
-    ,(concat match "/TODO|TAG|START")
-    ((org-agenda-overriding-header ,header)
-     (org-agenda-skip-function
-      '(org-agenda-skip-subtree-if 'todo '("START")))
-     ,@(if limit `((org-agenda-max-entries ,limit)))
-     ,@(if random
-           '((org-agenda-cmp-user-defined 'aph/random-comparator)
-             (org-agenda-sorting-strategy '(user-defined-up)))))))
+  (aph/org-agenda-block-match header match
+                              '("TODO" "START")
+                              (not :unopened) limit random))
+
+(defun aph/org-agenda-block-match-media (header match &optional limit random)
+  "Return an agenda block for tasks and media matching MATCH.
+
+The returned block (a list form) defines a todo-type agenda block
+that has header HEADER and includes only tasks and media items
+that match the match-string MATCH. If LIMIT is non-nil, the block
+will only show that many tasks.  If RANDOM is non-nil, the tasks
+will be ordered randomly.
+
+Tasks are generally items tagged with the ‘TODO’ keyword or the
+‘START’ keyword that are not subtasks of an unopened project (an
+item with the ‘START’ keyword).  Media items use the keywords
+‘CONSUME’, ‘CONTINUE’, and ‘AGAIN’ keywords, and we again exclude
+media items contained in unopened projects.
+
+Note that, since we are selecting only items with specific todo
+keywords, MATCH should not include keyword criteria using the ‘/’
+suffix."
+  (aph/org-agenda-block-match header match
+                              '("TODO" "START"
+                                "CONSUME" "CONTINUE" "AGAIN")
+                              (not :unopened) limit random))
 
 (defun aph/org-agenda-block-new-projects (header match &optional limit random)
   "Return an agenda block for unopened projects matching MATCH.
@@ -84,13 +130,9 @@ Unopened projects are items tagged with the ‘START’ keyword or
 the ‘SHELVED’ keyword.  Since we are selecting only such
 projects, MATCH should not include keyword criteria using the ‘/’
 suffix."
-  `(tags-todo
-    ,(concat match "/START|SHELVED")
-    ((org-agenda-overriding-header ,header)
-     ,@(if limit `((org-agenda-max-entries ,limit)))
-     ,@(if random
-           '((org-agenda-cmp-user-defined 'aph/random-comparator)
-             (org-agenda-sorting-strategy '(user-defined-up)))))))
+  (aph/org-agenda-block-match header match
+                              '("START" "SHELVED")
+                              :unopened limit random))
 
 
 ;;; Custom Agenda Commands
@@ -150,10 +192,12 @@ suffix."
                   (aph/org-agenda-skip-tag "work")
                   (aph/org-agenda-skip-tag "evening")
                   (aph/org-agenda-skip-tag "review")
-                  (aph/org-agenda-skip-tag "weekend")))))
+                  (aph/org-agenda-skip-tag "weekend")
+                  (aph/org-agenda-skip-tag "computer")
+                  (aph/org-agenda-skip-tag "leisure")))))
           ,(aph/org-agenda-block-match-tasks
             "Missed Tasks"
-            "-work-computer-weekend-review-unfiled")
+            "-work-computer-weekend-review-unfiled-leisure")
           (tags
            "LEVEL=2"
            ((org-agenda-overriding-header "To Be Filed")
@@ -167,7 +211,7 @@ suffix."
            "/WAITING"
            ((org-agenda-overriding-header "Stuck Tasks")))
           ,(aph/org-agenda-block-match-tasks "Tasks Without Effort"
-                                             "Effort<>{0}/TODO|START" 8))
+                                             "Effort<>{0}-leisure" 8))
          ((org-agenda-dim-blocked-tasks nil)))
 
         ("p" "Projects"
@@ -175,20 +219,33 @@ suffix."
            "/OPEN"
            ((org-agenda-overriding-header "Open Projects")))
           ,(aph/org-agenda-block-new-projects "Computer Projects"
-                                              "+computer-emacs-anki" 12)
+                                              "+computer" 12 :random)
           ,(aph/org-agenda-block-new-projects "Other Projects"
                                               "-computer-anki"))
          ((org-agenda-dim-blocked-tasks nil)))
 
-        ("z" "Meal"
-         (,(aph/org-agenda-block-tagged-agenda "Meal Agenda" "meal" :only)
-          (tags-todo
-           "+meal+text/UNREAD|CONTINUE|REREAD"
-           ((org-agenda-overriding-header "Things to Read")))
-          (tags-todo
-           "+meal+video/UNWATCHED|CONTINUE|REWATCH"
-           ((org-agenda-overriding-header "Things to Watch")))
-          ,(aph/org-agenda-block-match-tasks "Things to Do" "meal")))))
+        ("z" . "Meal Activities")
+        ("zk" "Knowledge"
+         (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Knowledge"
+                                               "meal" :only)
+          ,(aph/org-agenda-block-tagged-habits "Habits:"
+                                               "meal+knowledge" :only)
+          ,(aph/org-agenda-block-match-media "Knowledge Media:"
+                                             "meal+knowledge")))
+        ("zl" "Leisure"
+         (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Leisure"
+                                               "meal" :only)
+          ,(aph/org-agenda-block-tagged-habits "Habits:"
+                                               "meal+leisure" :only)
+          ,(aph/org-agenda-block-match-media "Leisure Media:"
+                                             "meal+leisure")))
+        ("zo" "Other"
+         (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Other"
+                                               "meal" :only)
+          ,(aph/org-agenda-block-tagged-habits "Habits:"
+                                               "meal-knowledge-leisure" :only)
+          ,(aph/org-agenda-block-match-media "Other Media:"
+                                             "meal-knowledge-leisure")))))
 
 
 ;;; Smart Agenda
