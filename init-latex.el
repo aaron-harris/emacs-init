@@ -30,6 +30,18 @@
 (setq preview-auto-cache-preamble t)
 
 
+;;; Math Mode Settings
+;;;===================
+(add-hook 'LaTeX-mode-hook #'LaTeX-math-mode)
+
+(defun aph/LaTeX-math-prime ()
+  "Insert '^{\\prime}'.  For use in `LaTeX-math-list'."
+  (interactive)
+  (insert "^{\\prime}"))
+
+(setq LaTeX-math-list '(("'" aph/LaTeX-math-prime)))
+
+
 ;;; RefTeX Setup
 ;;;============= 
 (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
