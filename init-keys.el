@@ -19,6 +19,7 @@
 ;;;====================
 ;; Removing Unnecessary Bindings
 (global-unset-key (kbd "C-z"))          ; I don't need minimization on a key.
+(global-unset-key (kbd "M-="))          ; Freeing this for use as a prefix.
 
 (aph/global-set-keys-safely
   ;; Scrolling Commands
@@ -37,7 +38,8 @@
   ((kbd "<C-S-tab>")     #'aph/other-window-backwards)
   ((kbd "C-x C-c")       #'aph/delete-frame-or-exit   :rebind)
   ;; Information
-  ((kbd "M-=")           #'count-words                :rebind)
+  ((kbd "M-= w")         #'count-words)
+  ((kbd "M-= p")         #'aph/sum-parens-in-region) 
   ;; Application Control
   ((kbd "C-c C-o")       #'browse-url)
   ;; Display Commands
@@ -139,7 +141,6 @@
 ;;; Machine-Specific Keybindings
 ;;;=============================
 (when (eq aph/machine 'mpc)
-  (aph/global-set-key-safely (kbd "C-x C-y") #'aph/yank-access-inline)
-  (aph/global-set-key-safely (kbd "C-c = p") #'aph/sum-parens-in-region))
+  (aph/global-set-key-safely (kbd "C-x C-y") #'aph/yank-access-inline))
 
 (provide 'init-keys)

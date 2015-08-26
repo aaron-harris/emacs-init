@@ -10,32 +10,8 @@
 (require 'dash)                         ; For -->
 
 
-;;; Utility Functions
-;;; =================
-(defun aph/sum-parens (string)
-  "Sum all parenthesized numbers in STRING."
-  ;; The regexp command here removes everything except the numbers to sum.
-  (->> (replace-regexp-in-string "[^()]*(\\([0-9]*\\))" "\\1 " string)
-       split-string
-       (mapcar #'string-to-int)
-       (apply #'+)))
-
-
 ;;; Commands
 ;;;=========
-(defun aph/sum-parens-in-region (start end)
-  "Sum all parenthesized numbers in region and echo the result.
-If the region is not active, sum all parenthesized numbers in
-active buffer.
-
-See `aph/sum-parens' to get similar functionality from elisp."
-  (interactive "r")
-  (let ((start (if (use-region-p) start (point-min)))
-        (end   (if (use-region-p) end   (point-max))))
-    (message "Sum of parenthesized numbers in %s: %d"
-             (if (use-region-p) "region" "buffer")
-             (aph/sum-parens (buffer-substring start end)))))
-
 (defun aph/yank-access-inline ()
   "Yank the most recent kill, cleaning up MS Access formatting.
 
