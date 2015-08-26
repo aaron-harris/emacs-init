@@ -38,7 +38,7 @@ successful (or unnecessary) and nil if not."
 ;;   This follows the font lock pattern for `require'.
 (add-to-list
  'aph/require--font-lock
- '("(aph/require-softly\\s-+'\\(\\_<.+?\\_>\\)" 1 font-lock-constant-face))
+ '("\(aph/require-softly\\s-+'\\(\\_<.+?\\_>\\)" 1 font-lock-constant-face))
 
 
 ;;; Machine-Specific Require
