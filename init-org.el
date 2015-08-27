@@ -183,6 +183,19 @@ directive)."
 ;; Loading custom agenda commands.
 (require 'init-org-agenda)
 
+
+;;; Markup
+;;;=======
+;; Remove strike-through markup, and change code markup to use ` as a
+;; delimiter rather than ~.
+(setq org-emphasis-alist
+      '(("*"  bold)
+        ("/"  italic)
+        ("_"  underline)
+        ("="  org-verbatim verbatim)
+        ("`"  org-code verbatim)))
+
+
 ;;; Mobile
 ;;;=======
 (require 'org-mobile)
