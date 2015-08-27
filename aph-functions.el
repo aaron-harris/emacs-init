@@ -188,6 +188,11 @@ See `aph/sum-parens' to get similar functionality from elisp."
 
 ;;; Utility Functions
 ;;;==================
+(require 'cl-lib)                       ; For `cl-delete'
+(defun aph/assoc-delete-all (key alist)
+  "As `assq-delete-all', but use `equal' rather than `eq'."
+  (cl-delete key alist :test #'equal :key #'car))
+
 ;; Taken from the Yoo Box article
 ;; "Emacs Lisp lexical binding gotchas and related best practices" 
 (defmacro aph/lexical-scope-p (var)
