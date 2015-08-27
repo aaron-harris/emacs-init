@@ -200,6 +200,16 @@ keybinding for that function is not appropriate."
   (org-agenda-refile '(16)))
 
 
+;;; Agenda
+;;;=======
+(defun aph/org-agenda ()
+  "As `org-agenda', and automatically refresh sticky agendas."
+  (interactive)
+  (when (equal (call-interactively #'org-agenda)
+               "Sticky Agenda buffer, use `r' to refresh")
+    (org-agenda-redo)))
+
+
 ;;; Agenda: Skip Functions
 ;;;=======================
 ;;; These are functions to be used with `org-agenda-skip-function'.

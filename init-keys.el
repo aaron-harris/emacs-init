@@ -90,7 +90,7 @@
 ;;;=====================
 (aph/global-set-keys-safely
   ;; Agenda Commands
-  ((kbd "C-c a")   #'org-agenda)
+  ((kbd "C-c a")   #'aph/org-agenda)
   ((kbd "<f1>")    #'aph/org-agenda-display-smart-agenda :rebind)
   ;; Capture and Refile Commands
   ((kbd "C-c c")   #'org-capture) 
