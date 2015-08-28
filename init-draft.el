@@ -8,3 +8,14 @@
 ;; automatically loaded on initialization.
 
 
+
+;;; `hippie-unexpand'
+;;;==================
+(define-key read-expression-map [(tab)] 'hippie-expand)
+
+(defun hippie-unexpand ()
+  (interactive)
+  (hippie-expand -1))
+
+(define-key read-expression-map [(shift tab)] 'hippie-unexpand)
+

@@ -30,4 +30,26 @@ all such modes.")
 (require 'init-color-identifiers)
 (aph/add-hook-to-all aph/lisp-mode-hooks #'color-identifiers-mode  :safely)
 
+
+;;; Completion
+;;;===========
+;; The `hippie-expand' methods `try-expand-list' and `try-expand-line'
+;; are usually not what I want when editing a Lisp, so let's try those
+;; last.
+(defun aph/hippie-expand-config-lisp ()
+  "Configure `hippie-expand-try-functions-list' for Lisps."
+  (setq hippie-expand-try-functions-list
+        '(try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-all-abbrevs
+          try-expand-dabbrev
+          try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-from-kill
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol
+          try-expand-list
+          try-expand-line
+          try-expand-line-all-buffers)))
+(aph/add-hook-to-all aph/lisp-mode-hooks #'aph/hippie-expand-config-lisp)
+
 (provide 'init-lisp)

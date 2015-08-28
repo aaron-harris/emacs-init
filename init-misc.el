@@ -21,6 +21,11 @@
 ;; Visible Mark Mode
 (aph/require-softly 'init-visible-mark)
 
+;; Smart Tab Mode
+(aph/require-softly 'smart-tab)
+(global-smart-tab-mode 1)
+(setq smart-tab-using-hippie-expand t)
+
 ;; Built-in modes
 (column-number-mode t)                  ; Show col number in mode line.
 (show-paren-mode 1)                     ; Highlight matching parens.
