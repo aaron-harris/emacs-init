@@ -98,4 +98,12 @@ See `aph/eval-expression-clean-output' for more information."
   (dir-locals-set-directory-class "~/.emacs.d/elpa" 'emacs)) 
 (advice-add #'package-install :around #'aph/package-install-writability)
 
+
+;;; Completion
+;;;===========
+;; Make `smart-tab' use `hippie-expand' in elisp buffers.
+(eval-after-load 'smart-tab
+  '(setq smart-tab-completion-functions-alist
+      (assq-delete-all 'emacs-lisp-mode smart-tab-completion-functions-alist)))
+
 (provide 'init-lisp-emacs)
