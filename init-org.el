@@ -195,6 +195,29 @@ directive)."
         ("="  org-verbatim verbatim)
         ("`"  org-code verbatim)))
 
+;; We also need to make `org-element-text-markup-successor' (which is
+;; a function involved in paragraph filling) aware of the change, by
+;; way of the following advice:
+(defun aph/org-element-text-markup-successor-advice (oldfn)
+  "Advice to enable custom markup delimiters.
+
+This is advice for `org-element-text-markup-successor' to make it
+aware of my changes to `org-emphasis-alist'." 
+  (condition-case err
+      (funcall oldfn)
+    (error
+     (let ((delim
+            (->> (cadr err)
+                 (replace-regexp-in-string "[^0-9]" "")
+                 string-to-number
+                 char-after)))
+       (if (= delim ?`)
+           (cons 'code (match-beginning 2))
+         (signal (car err) (cdr err)))))))
+(advice-add 'org-element-text-markup-successor :around
+            #'aph/org-element-text-markup-successor-advice)
+
+
 
 ;;; Mobile
 ;;;=======
