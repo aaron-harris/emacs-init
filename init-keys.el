@@ -39,7 +39,9 @@
   ((kbd "C-x C-c")       #'aph/delete-frame-or-exit   :rebind)
   ;; Information
   ((kbd "M-= w")         #'count-words)
-  ((kbd "M-= p")         #'aph/sum-parens-in-region) 
+  ((kbd "M-= p")         #'aph/sum-parens-in-region)
+  ;; Data Manipulation Commands
+  ((kbd "C-c $ d")       #'delete-duplicate-lines)
   ;; Application Control
   ((kbd "C-c C-o")       #'browse-url)
   ;; Display Commands
