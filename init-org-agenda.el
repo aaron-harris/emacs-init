@@ -164,6 +164,8 @@ suffix."
                                               "+emacs-anki" 5 :random) 
           ,(aph/org-agenda-block-new-projects "Five Random Anki Projects"
                                               "+anki" 5 :random)
+          ,(aph/org-agenda-block-new-projects "Five Random AutoHotkey Projects"
+                                              "+ahk" 5 :random)
           ,(aph/org-agenda-block-new-projects "Five Random Other Projects"
                                               "+computer-emacs-anki" 5 :random)))
 
@@ -193,7 +195,7 @@ suffix."
           ,(aph/org-agenda-block-tagged-habits "Habits:"
                                                "meal-knowledge-leisure" :only)
           ,(aph/org-agenda-block-match-media "Other Media:"
-                                             "meal-knowledge-leisure")))))
+                                             "meal-knowledge-leisure")))
         
         ("r" "Review"
          ((agenda
@@ -250,7 +252,7 @@ suffix."
                                               "+computer" 12 :random)
           ,(aph/org-agenda-block-new-projects "Other Projects"
                                               "-computer-anki"))
-         ((org-agenda-dim-blocked-tasks nil)))
+         ((org-agenda-dim-blocked-tasks nil)))))
 
 
 ;;; Smart Agenda
