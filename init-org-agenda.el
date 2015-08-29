@@ -167,6 +167,34 @@ suffix."
           ,(aph/org-agenda-block-new-projects "Five Random Other Projects"
                                               "+computer-emacs-anki" 5 :random)))
 
+        ("l" "Leisure Agenda"
+         (,(aph/org-agenda-block-tagged-habits "Habits:" "leisure")
+          ,(aph/org-agenda-block-match-tasks "Leisure Activities:"
+                                             "+leisure" 12 :random)))
+        
+        ("z" . "Meal Activities")
+        ("zk" "Knowledge"
+         (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Knowledge"
+                                               "meal" :only)
+          ,(aph/org-agenda-block-tagged-habits "Habits:"
+                                               "meal+knowledge" :only)
+          ,(aph/org-agenda-block-match-media "Knowledge Media:"
+                                             "meal+knowledge")))
+        ("zl" "Leisure"
+         (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Leisure"
+                                               "meal" :only)
+          ,(aph/org-agenda-block-tagged-habits "Habits:"
+                                               "meal+leisure" :only)
+          ,(aph/org-agenda-block-match-media "Leisure Media:"
+                                             "meal+leisure")))
+        ("zo" "Other"
+         (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Other"
+                                               "meal" :only)
+          ,(aph/org-agenda-block-tagged-habits "Habits:"
+                                               "meal-knowledge-leisure" :only)
+          ,(aph/org-agenda-block-match-media "Other Media:"
+                                             "meal-knowledge-leisure")))))
+        
         ("r" "Review"
          ((agenda
            ""
@@ -223,29 +251,6 @@ suffix."
           ,(aph/org-agenda-block-new-projects "Other Projects"
                                               "-computer-anki"))
          ((org-agenda-dim-blocked-tasks nil)))
-
-        ("z" . "Meal Activities")
-        ("zk" "Knowledge"
-         (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Knowledge"
-                                               "meal" :only)
-          ,(aph/org-agenda-block-tagged-habits "Habits:"
-                                               "meal+knowledge" :only)
-          ,(aph/org-agenda-block-match-media "Knowledge Media:"
-                                             "meal+knowledge")))
-        ("zl" "Leisure"
-         (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Leisure"
-                                               "meal" :only)
-          ,(aph/org-agenda-block-tagged-habits "Habits:"
-                                               "meal+leisure" :only)
-          ,(aph/org-agenda-block-match-media "Leisure Media:"
-                                             "meal+leisure")))
-        ("zo" "Other"
-         (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Other"
-                                               "meal" :only)
-          ,(aph/org-agenda-block-tagged-habits "Habits:"
-                                               "meal-knowledge-leisure" :only)
-          ,(aph/org-agenda-block-match-media "Other Media:"
-                                             "meal-knowledge-leisure")))))
 
 
 ;;; Smart Agenda
