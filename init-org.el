@@ -78,8 +78,9 @@
         ("knowledge" . ?k)
         ("leisure"   . ?l)
         (:newline    . nil) 
-        ("anki"      . ?a)
-        ("emacs"     . ?x))) 
+        ("emacs"     . ?x)
+        ("anki"      . ?i)
+        ("ahk"       . ?a))) 
 
 ;; TODO: Replace this advice with a more precisely-directed version that will
 ;;       still allow buffer-local tags.
