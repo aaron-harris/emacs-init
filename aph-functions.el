@@ -18,6 +18,17 @@
 
 ;;; Commands
 ;;;=========
+(defun aph/apropos-function (pattern &optional commands-only var-predicate)
+  "As `apropos-command', but show all functions by default.
+The behavior of a prefix argument is inverted, so supplying a
+prefix argument will show only commands (and override a non-nil
+value for `apropos-do-all')"
+  (interactive (list (apropos-read-pattern
+		      (if current-prefix-arg
+			  "command" "command or function"))
+		     current-prefix-arg))
+  (apropos-command pattern (not commands-only) var-predicate))
+
 (defun aph/delete-frame-or-exit (&optional arg)
   "Delete this frame. With only one frame, exit Emacs.
 

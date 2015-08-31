@@ -20,6 +20,7 @@
 ;; Removing Unnecessary Bindings
 (global-unset-key (kbd "C-z"))          ; I don't need minimization on a key.
 (global-unset-key (kbd "M-="))          ; Freeing this for use as a prefix.
+(global-unset-key (kbd "C-h a"))          ; Freeing this for use as a prefix.
 
 (aph/global-set-keys-safely
   ;; Scrolling Commands
@@ -48,7 +49,17 @@
   ((kbd "C-+")           #'flash-crosshairs)
   ((kbd "C-c n")         #'aph/theme-night-toggle)
   ;; Keybinding Control
-  ((kbd "C-<kp-enter>")  #'aph/kp-enter-newline-toggle))
+  ((kbd "C-<kp-enter>")  #'aph/kp-enter-newline-toggle)
+  ;; Apropos Commands
+  ((kbd "C-h a a")       #'apropos)
+  ((kbd "C-h a c")       #'apropos-command)
+  ((kbd "C-h a f")       #'aph/apropos-function)
+  ((kbd "C-h a v")       #'apropos-variable)
+  ((kbd "C-h a <space>") #'apropos-value)
+  ((kbd "C-h a d")       #'apropos-documentation)
+  ((kbd "C-h a l")       #'apropos-library)
+  ((kbd "C-h a i")       #'info-apropos)
+  ((kbd "C-h a t")       #'tags-apropos))
 
 
 ;;; Smartparens Keybindings
@@ -130,6 +141,10 @@
 
 ;; Clojure and Cider
 (aph/global-set-key-safely (kbd "C-c M-c") #'cider-connect)
+(eval-after-load 'cider 
+  '(aph/define-keys-safely clojure-mode-map
+     ((kbd "C-h A a"     #'cider-apropos))
+     ((kbd "C-h A d"     #'cider-apropos-documentation))))
 
 
 ;;; Other Keybindings
