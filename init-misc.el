@@ -22,9 +22,9 @@
 (aph/require-softly 'init-visible-mark)
 
 ;; Smart Tab Mode
-(aph/require-softly 'smart-tab)
-(global-smart-tab-mode 1)
-(setq smart-tab-using-hippie-expand t)
+(when (aph/require-softly 'smart-tab)
+  (global-smart-tab-mode 1)
+  (setq smart-tab-using-hippie-expand t))
 
 ;; Built-in modes
 (column-number-mode t)                  ; Show col number in mode line.
