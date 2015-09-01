@@ -152,7 +152,7 @@
 ;; Eww
 
 (eval-after-load 'eww
-  '(aph/define-key-safely eww-mode-map (kbd "S-<tab") #'shr-previous-link))
+  '(aph/define-key-safely eww-mode-map (kbd "S-<tab>") #'shr-previous-link))
 
 
 ;;; Machine-Specific Keybindings
