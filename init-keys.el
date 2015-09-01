@@ -143,8 +143,8 @@
 (aph/global-set-key-safely (kbd "C-c M-c") #'cider-connect)
 (eval-after-load 'cider 
   '(aph/define-keys-safely clojure-mode-map
-     ((kbd "C-h A a"     #'cider-apropos))
-     ((kbd "C-h A d"     #'cider-apropos-documentation))))
+     ((kbd "C-h A a") #'cider-apropos)
+     ((kbd "C-h A d") #'cider-apropos-documentation)))
 
 
 ;;; Other Keybindings
