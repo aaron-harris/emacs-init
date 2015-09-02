@@ -22,6 +22,14 @@
 
 ;;; Theme Settings
 ;;;===============
+(defvar aph/theme-hashes 
+  '((aph . "416ef2f2057400db7cab91aeacb583b4b539c549f4713260282a903d79344312"))
+  "An alist mapping theme names to their hashes.")
+
+;; Treat 'aph theme as safe.
+(add-to-list 'custom-safe-themes (cdr (assq 'aph aph/theme-hashes)))
+
+;; Then load it.
 (when (aph/require-softly 'aph-theme)
   (load-theme 'aph :noconfirm))
 
