@@ -10,6 +10,7 @@
 ;; Load custom command definitions.
 (aph/require-softly 'aph-functions)
 (aph/require-softly 'aph-org)
+(aph/require-softly 'aph-shell)
 (aph/require-softly 'aph-theme)
 (when (eq aph/machine 'mpc)
   (aph/require-softly 'aph-mpc))
@@ -150,9 +151,14 @@
 ;;; Other Keybindings
 ;;;==================
 ;; Eww
-
 (eval-after-load 'eww
   '(aph/define-key-safely eww-mode-map (kbd "S-<tab>") #'shr-previous-link))
+
+;; Mercurial
+(aph/global-set-keys-safely
+ ((kbd "C-c h s") #'aph/hg-status)
+ ((kbd "C-c h l") #'aph/hg-log)
+ ((kbd "C-c h c") #'aph/hg-commit))
 
 
 ;;; Machine-Specific Keybindings
