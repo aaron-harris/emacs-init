@@ -52,26 +52,3 @@ Otherwise, return nil to return control to
 ;; To clean up WIP code:
 (advice-remove #'org-switch-to-buffer-other-window 
                #'aph/org-switch-to-buffer-in-capture-frame)
-
-
-;;; Region Highlighting
-;;;====================
-;; I'm moving to a version where I create my own theme extending
-;; zenburn.  This code will be here in the interim.
-(defvar aph/theme-day 'zenburn
-  "The theme to use during the day.")
-
-(defvar aph/theme-night 'hc-zenburn
-  "The theme to use during the night.")
-
-(defun aph/theme-night-toggle ()
-  "Toggle between themes `aph/theme-day' and `aph/theme-night'.
-
-If neither of these themes is currently active, load `aph/theme-night'." 
-  (interactive)
-  (if (custom-theme-enabled-p aph/theme-night)
-      (progn
-        (disable-theme aph/theme-night)
-        (load-theme aph/theme-day :noconfirm))
-    (disable-theme aph/theme-day)
-    (load-theme aph/theme-night :noconfirm)))

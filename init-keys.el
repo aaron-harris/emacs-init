@@ -47,7 +47,7 @@
   ((kbd "C-c C-o")       #'browse-url)
   ;; Display Commands
   ((kbd "C-+")           #'flash-crosshairs)
-  ((kbd "C-c n")         #'aph/theme-night-toggle)
+  ((kbd "C-c n")         #'aph/theme-cycle)
   ;; Keybinding Control
   ((kbd "C-<kp-enter>")  #'aph/kp-enter-newline-toggle)
   ;; Apropos Commands
