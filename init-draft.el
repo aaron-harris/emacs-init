@@ -56,12 +56,14 @@ Otherwise, return nil to return control to
 
 ;;; Region Highlighting
 ;;;====================
-;; This is the appropriate line to add, but we need to refactor our
-;; theme code a bit before we have a good place to put it.
-(set-face-attribute 'region nil :background "#666")
+;; I'm moving to a version where I create my own theme extending
+;; zenburn.  This code will be here in the interim.
+(defvar aph/theme-day 'zenburn
+  "The theme to use during the day.")
 
-;; This is a local redefinition of the theme toggler that handles the
-;; addition until we can refactor and make this permanent.
+(defvar aph/theme-night 'hc-zenburn
+  "The theme to use during the night.")
+
 (defun aph/theme-night-toggle ()
   "Toggle between themes `aph/theme-day' and `aph/theme-night'.
 
@@ -72,5 +74,4 @@ If neither of these themes is currently active, load `aph/theme-night'."
         (disable-theme aph/theme-night)
         (load-theme aph/theme-day :noconfirm))
     (disable-theme aph/theme-day)
-    (load-theme aph/theme-night :noconfirm))
-  (set-face-attribute 'region nil :background "#666"))
+    (load-theme aph/theme-night :noconfirm)))
