@@ -1,25 +1,16 @@
 ;;; -*- lexical-binding: t -*-
 
 ;;;; The Emacs init files of Aaron Harris:
-;;;; THEME FUNCTIONS
+;;;; CUSTOM THEME
 ;;;;============================================================================
 
-(defvar aph/theme-day 'zenburn
-  "The theme to use during the day.")
+(deftheme aph "Personal theme of Aaron Harris")
 
-(defvar aph/theme-night 'hc-zenburn
-  "The theme to use during the night.")
+;; We're extending the zenburn theme, so start by loading that.
+(load-theme 'zenburn :noconfirm)
 
-(defun aph/theme-night-toggle ()
-  "Toggle between themes `aph/theme-day' and `aph/theme-night'.
+;;; Personal modifications
+;;;=======================
+(custom-theme-set-faces 'aph '(region ((t (:inverse-video t)))))
 
-If neither of these themes is currently active, load `aph/theme-night'." 
-  (interactive)
-  (if (custom-theme-enabled-p aph/theme-night)
-      (progn
-        (disable-theme aph/theme-night)
-        (load-theme aph/theme-day :noconfirm))
-    (disable-theme aph/theme-day)
-    (load-theme aph/theme-night :noconfirm)))
-
-(provide 'aph-theme)
+(provide-theme 'aph)

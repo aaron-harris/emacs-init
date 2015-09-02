@@ -22,9 +22,7 @@
 
 ;;; Theme Settings
 ;;;===============
-;; Set the default day theme.  This is after machine-specific settings
-;; so specific machines can override `aph/theme-day'.
 (when (aph/require-softly 'aph-theme)
-  (load-theme aph/theme-day :noconfirm))
+  (load-theme 'aph :noconfirm))
 
 (provide 'init-startup)
