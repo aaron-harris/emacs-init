@@ -77,7 +77,7 @@
         ("mb" "Novel" entry
          (file+headline ,(concat org-directory "/media.org") "Unfiled Novels")
          ,(aph/org-capture-add-properties
-           "* UNREAD %\\2%?"
+           "* CONSUME %\\2%?"
            '(("Author"    . "%^{Author}")
              ("Title"     . "%^{Title}")
              ("Series"    . "%^{Series}")
@@ -86,7 +86,7 @@
         ("mc" "Comic book" entry
          (file+headline ,(concat org-directory "/media.org") "Unfiled Comics")
          ,(aph/org-capture-add-properties
-           "* UNREAD [[%^{Link to comic|%x}][%\\2 #%\\3]]%?"
+           "* CONSUME [[%^{Link to comic|%x}][%\\2 #%\\3]]%?"
            '(("Series"    . "%^{Series}")
              ("Issue_No"  . "%^{Issue number}")
              ("Writer"    . "%^{Writer}")
@@ -95,14 +95,14 @@
         ("mt" "Television series" entry
          (file+headline ,(concat org-directory "/media.org") "Unfiled Television")
          ,(aph/org-capture-add-properties
-           "* UNWATCHED %\\1: Season \\2%?"
+           "* CONSUME %\\1: Season \\2%?"
            '(("Series"    . "%^{Series}")
              ("Season_No" . "%^{Season number}")))
          :kill-buffer)
         ("mn" "Movie (Netflix)" entry
          (file+headline ,(concat org-directory "/media.org") "Unfiled Television")
          ,(aph/org-capture-add-properties
-           "* UNWATCHED %\\1%?"
+           "* CONSUME %\\1%?"
            '(("Title"     . "%^{Title}")
              ("Series"    . "%^{Series}")
              ("Series_No" . "%^{Number in series}")))
@@ -116,11 +116,7 @@
              ("Genre"  . "%^{Genre}")))) 
         ("ml" "Internet link" entry
          (file+headline ,(concat org-directory "/media.org") "Internet")
-         "* UNREAD %^L%?"
-         :kill-buffer)
-        ("ms" "Stone links" entry
-         (file+headline ,(concat org-directory "/media.org") "Internet")
-         "* Stone Links %u\n  * UNREAD %^L%?"
+         "* CONSUME %^L%?"
          :kill-buffer)))
 
 (provide 'init-org-capture)
