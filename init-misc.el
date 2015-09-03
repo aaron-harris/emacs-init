@@ -77,6 +77,8 @@
 ;;; Enabling Commands
 ;;;==================
 ;; These enable commands which are by default disabled.
-(put 'narrow-to-page 'disabled nil) 
+(put 'downcase-region 'disabled nil)
+(put 'narrow-to-page  'disabled nil)
+(put 'upcase-region   'disabled nil)
 
 (provide 'init-misc)
