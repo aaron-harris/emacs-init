@@ -51,8 +51,10 @@
   ((kbd "M-! M-!")       #'shell-command)
   ((kbd "M-! M-&")       #'async-shell-command)
   ((kbd "M-! r")         #'shell-command-on-region)
-  ;; Display Commands
-  ((kbd "C-+")           #'flash-crosshairs)
+  ;; Highlighting Commands
+  ((kbd "C-c h l")       #'hl-line-mode)
+  ;((kbd "C-c h x")       #'flash-crosshairs)
+  ;; Theme Commands 
   ((kbd "C-c n")         #'aph/theme-cycle)
   ;; Keybinding Control
   ((kbd "C-<kp-enter>")  #'aph/kp-enter-newline-toggle)
