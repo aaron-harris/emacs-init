@@ -21,7 +21,8 @@
 ;; Removing Unnecessary Bindings
 (global-unset-key (kbd "C-z"))          ; I don't need minimization on a key.
 (global-unset-key (kbd "M-="))          ; Freeing this for use as a prefix.
-(global-unset-key (kbd "C-h a"))          ; Freeing this for use as a prefix.
+(global-unset-key (kbd "C-h a"))        ; Freeing this for use as a prefix.
+(global-unset-key (kbd "M-!"))          ; Freeing this for use as a prefix.
 
 (aph/global-set-keys-safely
   ;; Scrolling Commands
@@ -46,6 +47,10 @@
   ((kbd "C-c $ d")       #'delete-duplicate-lines)
   ;; Application Control
   ((kbd "C-c C-o")       #'browse-url)
+  ;; Shell Commands
+  ((kbd "M-! M-!")       #'shell-command)
+  ((kbd "M-! M-&")       #'async-shell-command)
+  ((kbd "M-! r")         #'shell-command-on-region)
   ;; Display Commands
   ((kbd "C-+")           #'flash-crosshairs)
   ((kbd "C-c n")         #'aph/theme-cycle)
@@ -156,9 +161,9 @@
 
 ;; Mercurial
 (aph/global-set-keys-safely
- ((kbd "C-c h s") #'aph/hg-status)
- ((kbd "C-c h l") #'aph/hg-log)
- ((kbd "C-c h c") #'aph/hg-commit))
+ ((kbd "M-! h s") #'aph/hg-status)
+ ((kbd "M-! h l") #'aph/hg-log)
+ ((kbd "M-! h c") #'aph/hg-commit))
 
 
 ;;; Machine-Specific Keybindings
