@@ -44,7 +44,6 @@ necessary.
 Otherwise, return nil to return control to
 `org-switch-to-buffer-other-window'."
   (when aph/org-capture-in-popout-frame 
-    
     (apply #'switch-to-buffer-other-frame args)))
 
 (advice-add #'org-switch-to-buffer-other-window
@@ -103,3 +102,16 @@ If ALIST does not contain the key 'named-frame, use the name of BUFFER."
 ;; - The CAPTURE-... buffer is also not showing up in the frame.
 ;; - The capture frame sticks around after the capture process is
 ;;   complete.
+
+(advice-add #'org-switch-to-buffer-other-window
+            :override
+            #'pop-to-buffer)
+
+;; Progress!  All buffers now appear in their proper places, and we
+;; just need to resolve extraneous changes to the background window
+;; configuration.
+
+;; WIP Cleanup
+(setq display-buffer-alist)
+(advice-remove #'org-switch-to-buffer-other-window
+               #'pop-to-buffer)
