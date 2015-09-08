@@ -22,38 +22,6 @@
 
 ;;; Make capture occur in new frame
 ;;;==================================
-(defvar aph/org-capture-in-popout-frame t
-  "If non-nil, `org-capture' does its work in a new frame.")
-
-;; What we need to do:
-;; - Make `org-capture-select-template' use a pop-up frame,
-;;   and then keep it around.
-;; --> `org-capture-select-template' delegates to
-;;     `org-switch-to-buffer-other-window', so that's what we need to
-;;     advise.
-;; - Probably need to fix the value stored as :return-to-wconf.
-;; - Make `org-capture-fill-template' reuse the same capture frame.
-
-(defun aph/org-switch-to-buffer-in-capture-frame (&rest args)
-  "Advice to support `aph/org-capture-in-popout-frame'.
-When this variable is non-nil, override the usual behavior of
-`org-switch-to-buffer-other-window' and open the buffer described
-by ARGS in a frame named \"Capture\", creating such a frame if
-necessary.
-
-Otherwise, return nil to return control to
-`org-switch-to-buffer-other-window'."
-  (when aph/org-capture-in-popout-frame 
-    (apply #'switch-to-buffer-other-frame args)))
-
-(advice-add #'org-switch-to-buffer-other-window
-            :before-until
-            #'aph/org-switch-to-buffer-in-capture-frame)
-
-;; To clean up WIP code:
-(advice-remove #'org-switch-to-buffer-other-window 
-               #'aph/org-switch-to-buffer-in-capture-frame)
-
 ;; A new approach: This stackexhange thread discusses use of
 ;; `display-buffer-alist':
 ;; http://emacs.stackexchange.com/questions/2194/how-do-i-force-a-specific-buffer-to-open-in-a-new-window
@@ -111,7 +79,24 @@ If ALIST does not contain the key 'named-frame, use the name of BUFFER."
 ;; just need to resolve extraneous changes to the background window
 ;; configuration.
 
-;; WIP Cleanup
-(setq display-buffer-alist)
-(advice-remove #'org-switch-to-buffer-other-window
-               #'pop-to-buffer)
+(defun aph/org-capture-in-popout-frame (&optional goto keys)
+  "As `org-capture', but do all work in a new frame."
+  (interactive "P")
+  (let ((override  '("\\*Org Select\\*\\|\\*Capture\\*\\|CAPTURE-.*"
+                     aph/display-buffer-in-named-frame
+                     (named-frame . "Capture"))))
+    ;; This makes all relevant buffers open in a specific capture frame.
+    (add-to-list 'display-buffer-alist override)
+    ;; This makes Org-mode obey `display-buffer-alist'.
+    (advice-add #'org-switch-to-buffer-other-window :override #'pop-to-buffer)
+    ;; This stops Org-mode from messing with our window configuration.
+    (advice-add #'delete-other-windows              :override #'ignore) 
+    (org-capture goto keys)
+    (setq display-buffer-alist (delete override display-buffer-alist))
+    (advice-remove #'org-switch-to-buffer-other-window  #'pop-to-buffer)
+    (advice-remove #'delete-other-windows               #'ignore)))
+
+;; Almost done.  Now we just need to make finalizing or aborting
+;; capture delete the Capture frame.
+
+;; Also, maybe we should consider writing a "temporary advice" macro?
