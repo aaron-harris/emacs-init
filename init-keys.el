@@ -114,7 +114,7 @@
   ((kbd "C-c a")   #'aph/org-agenda)
   ((kbd "<f1>")    #'aph/org-agenda-display-smart-agenda :rebind)
   ;; Capture and Refile Commands
-  ((kbd "C-c c")   #'org-capture) 
+  ((kbd "C-c c")   #'aph/org-capture-in-popout-frame)
   ;; Link Commands
   ((kbd "C-c l")   #'org-store-link))
 (eval-after-load 'org

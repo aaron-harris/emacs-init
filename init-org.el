@@ -126,6 +126,10 @@ directive)."
 ;; Miscellaneous settings:
 (setq org-refile-use-outline-path 'file)
 
+;; Support for `aph/org-capture-in-popout-frame':
+(add-hook 'org-capture-after-finalize-hook
+          #'aph/org-capture-delete-capture-frame)
+
 ;; Load capture templates:
 (require 'init-org-capture)
 
