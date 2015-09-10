@@ -48,6 +48,7 @@
 (aph/require-softly 'init-docview)
 (aph/require-softly 'init-latex)
 (aph/require-softly 'init-lisp)
+(aph/require-softly 'init-ahk)
 
 ;; Other
 (aph/require-softly 'init-misc) 
