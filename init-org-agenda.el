@@ -68,7 +68,7 @@ parameters."
     ((org-agenda-overriding-header ,header)
      ,@(when (not unopened)
          '((org-agenda-skip-function
-            '(org-agenda-skip-subtree-if 'todo '("START")))))
+            '(org-agenda-skip-subtree-if 'todo '("START" "SHELVED")))))
      ,@(when limit `((org-agenda-max-entries ,limit)))
      ,@(when random
          '((org-agenda-cmp-user-defined 'aph/random-comparator)
@@ -85,12 +85,12 @@ randomly.
 
 Tasks are generally items tagged with the ‘TODO’ keyword or the
 ‘START’ keyword that are not subtasks of an unopened project (an
-item with the ‘START’ keyword).
+item with either the ‘START’ keyword or the ‘SHELVED’ keyword).
 
 Note that, since we are selecting only tasks, MATCH should not
 include keyword criteria using the ‘/’ suffix."
   (aph/org-agenda-block-match header match
-                              '("TODO" "START")
+                              '("TODO" "START" "SHELVED")
                               (not :unopened) limit random))
 
 (defun aph/org-agenda-block-match-media (header match &optional limit random)
@@ -104,15 +104,16 @@ will be ordered randomly.
 
 Tasks are generally items tagged with the ‘TODO’ keyword or the
 ‘START’ keyword that are not subtasks of an unopened project (an
-item with the ‘START’ keyword).  Media items use the keywords
-‘CONSUME’, ‘CONTINUE’, and ‘AGAIN’ keywords, and we again exclude
-media items contained in unopened projects.
+item with either the ‘START’ keyword or the ‘SHELVED’ keyword).
+Media items use the keywords ‘CONSUME’, ‘CONTINUE’, and ‘AGAIN’
+keywords, and we again exclude media items contained in unopened
+projects.
 
 Note that, since we are selecting only items with specific todo
 keywords, MATCH should not include keyword criteria using the ‘/’
 suffix."
   (aph/org-agenda-block-match header match
-                              '("TODO" "START"
+                              '("TODO" "START" "SHELVED"
                                 "CONSUME" "CONTINUE" "AGAIN")
                               (not :unopened) limit random))
 
