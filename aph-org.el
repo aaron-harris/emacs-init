@@ -199,21 +199,24 @@ to `org-capture-after-finalize-hook'."
   (interactive "P")
   (require 'aph-functions) ; For `aph/with-advice'
   (require 'aph-framewin)  ; For `aph/display-buffer-in-named-frame'
-  (let ((override  '("\\*Org Select\\*\\|\\*Capture\\*\\|CAPTURE-.*"
-                     aph/display-buffer-in-named-frame
-                     (named-frame . "Capture"))))
-    ;; Force all relevant buffers to open in a specific capture frame.
-    (add-to-list 'display-buffer-alist override)
-    (aph/with-advice 
-        (;; Make Org-mode respect `display-buffer-alist'.
-         (#'org-switch-to-buffer-other-window :override #'pop-to-buffer)
-         ;; And stop Org-mode from messing with our window configuration.
-         (#'delete-other-windows              :override #'ignore)) 
-     (unwind-protect (condition-case err
-                         (org-capture goto keys)
-                       (error (aph/org-capture-delete-capture-frame)
-                              (signal (car err) (cdr err))))
-       (setq display-buffer-alist (delete override display-buffer-alist))))))
+  (if goto
+      (org-capture goto keys)
+    (let ((override  '("\\*Org Select\\*\\|\\*Capture\\*\\|CAPTURE-.*"
+                       aph/display-buffer-in-named-frame
+                       (named-frame . "Capture"))))
+      ;; Force all relevant buffers to open in a specific capture frame.
+      (add-to-list 'display-buffer-alist override)
+      (aph/with-advice 
+          (;; Make Org-mode respect `display-buffer-alist'.
+           (#'org-switch-to-buffer-other-window :override #'pop-to-buffer)
+           ;; And stop Org-mode from messing with our window configuration.
+           (#'delete-other-windows :override #'ignore))
+        (unwind-protect (condition-case err
+                            (org-capture goto keys)
+                          (error (aph/org-capture-delete-capture-frame)
+                                 (signal (car err) (cdr err))))
+          (setq display-buffer-alist
+                (delete override display-buffer-alist)))))))
 
 (defun aph/org-capture-delete-capture-frame ()
   "Delete a frame named \"Capture\".
