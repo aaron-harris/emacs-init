@@ -16,6 +16,16 @@
   (aph/require-softly 'aph-mpc))
 
 
+;;; Modifier Key Setup
+;;;===================
+;; Use Windows keys for super.
+(setq w32-pass-lwindow-to-system nil)
+(setq w32-lwindow-modifier 'super)
+
+(setq w32-pass-rwindow-to-system nil)
+(setq w32-rwindow-modifier 'super)
+
+
 ;;; General Keybindings
 ;;;====================
 ;; Removing Unnecessary Bindings
