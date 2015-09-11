@@ -35,26 +35,28 @@
 (global-unset-key (kbd "M-!"))          ; Freeing this for use as a prefix.
 
 (aph/global-set-keys-safely
-  ;; Scrolling Commands
+  ;; Scrolling
   ((kbd "<down>")        #'aph/scroll-up-by-line      :rebind)
   ((kbd "<up>")          #'aph/scroll-down-by-line    :rebind) 
-  ;; Editing Commands
-  ((kbd "C-o")           #'aph/open-line              :rebind) 
+  ;; Basic Editing
+  ((kbd "C-o")           #'aph/open-line              :rebind)
   ((kbd "C-S-o")         #'join-line)
-  ;; Completion Commands
+  ;; Completion
   ((kbd "M-/")           #'hippie-expand              :rebind)
-  ;; Buffer, Frame, and Window Control 
+  ;; Window Movement
+  ((kbd "s-[")           #'other-window               :rebind)
+  ((kbd "s-]")           #'aph/other-window-backwards)
+  ;; Buffer Control
   ((kbd "C-x C-b")       #'ibuffer                    :rebind)
   ((kbd "C-x k")         #'aph/kill-active-buffer     :rebind)
+  ;; Window and Frame Control
   ((kbd "C-c q")         #'aph/quit-help-windows)
-  ((kbd "<C-tab>")       #'other-window)
-  ((kbd "<C-S-tab>")     #'aph/other-window-backwards)
   ((kbd "C-x C-c")       #'aph/delete-frame-or-exit   :rebind)
-  ;; Information
+  ;; Information about Buffer
   ((kbd "M-= w")         #'count-words)
   ((kbd "M-= p")         #'aph/sum-parens-in-region)
-  ;; Data Manipulation Commands
-  ((kbd "C-c $ d")       #'delete-duplicate-lines)
+  ;; Buffer/Region Manipulation 
+  ((kbd "s-<apps> d")    #'delete-duplicate-lines)
   ;; Application Control
   ((kbd "C-c C-o")       #'browse-url)
   ;; Shell Commands
@@ -65,7 +67,7 @@
   ((kbd "C-c h l")       #'hl-line-mode)
   ;((kbd "C-c h x")       #'flash-crosshairs)
   ;; Theme Commands 
-  ((kbd "C-c n")         #'aph/theme-cycle)
+  ((kbd "s-n")           #'aph/theme-cycle)
   ;; Keybinding Control
   ((kbd "C-<kp-enter>")  #'aph/kp-enter-newline-toggle)
   ;; Apropos Commands
