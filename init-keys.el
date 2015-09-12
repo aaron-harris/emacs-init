@@ -36,50 +36,52 @@
 
 (aph/global-set-keys-safely
   ;; Scrolling
-  ((kbd "<down>")        #'aph/scroll-up-by-line      :rebind)
-  ((kbd "<up>")          #'aph/scroll-down-by-line    :rebind) 
+  ((kbd "<down>")         #'aph/scroll-up-by-line      :rebind)
+  ((kbd "<up>")           #'aph/scroll-down-by-line    :rebind)
   ;; Basic Editing
-  ((kbd "C-o")           #'aph/open-line              :rebind)
-  ((kbd "C-S-o")         #'join-line)
+  ([remap open-line]      #'aph/open-line)
+  ((kbd "C-S-o")          #'join-line)
+  ;; Kill and Copy
+  ((kbd "C-x M-k")        #'append-next-kill) ; Moving for `sp-copy-sexp'
   ;; Completion
-  ((kbd "M-/")           #'hippie-expand              :rebind)
+  ([remap dabbrev-expand] #'hippie-expand) 
   ;; Window Movement
-  ((kbd "s-[")           #'other-window               :rebind)
-  ((kbd "s-]")           #'aph/other-window-backwards)
+  ((kbd "s-[")            #'other-window)
+  ((kbd "s-]")            #'aph/other-window-backwards)
   ;; Buffer Control
-  ((kbd "C-x C-b")       #'ibuffer                    :rebind)
-  ((kbd "C-x k")         #'aph/kill-active-buffer     :rebind)
+  ([remap list-buffers]   #'ibuffer) 
+  ((kbd "C-x k")          #'aph/kill-active-buffer     :rebind)
   ;; Window and Frame Control
-  ((kbd "C-c q")         #'aph/quit-help-windows)
-  ((kbd "C-x C-c")       #'aph/delete-frame-or-exit   :rebind)
+  ((kbd "C-c q")          #'aph/quit-help-windows)
+  ((kbd "C-x C-c")        #'aph/delete-frame-or-exit   :rebind)
   ;; Information about Buffer
-  ((kbd "M-= w")         #'count-words)
-  ((kbd "M-= p")         #'aph/sum-parens-in-region)
+  ((kbd "M-= w")          #'count-words)
+  ((kbd "M-= p")          #'aph/sum-parens-in-region)
   ;; Buffer/Region Manipulation 
-  ((kbd "s-<apps> d")    #'delete-duplicate-lines)
+  ((kbd "s-<apps> d")     #'delete-duplicate-lines)
   ;; Application Control
-  ((kbd "C-c C-o")       #'browse-url)
+  ((kbd "C-c C-o")        #'browse-url)
   ;; Shell Commands
-  ((kbd "M-! M-!")       #'shell-command)
-  ((kbd "M-! M-&")       #'async-shell-command)
-  ((kbd "M-! r")         #'shell-command-on-region)
-  ;; Highlighting Commands
-  ((kbd "C-c h l")       #'hl-line-mode)
+  ((kbd "M-! M-!")        #'shell-command)
+  ((kbd "M-! M-&")        #'async-shell-command)
+  ((kbd "M-! r")          #'shell-command-on-region)
+  ;; Highlighting
+  ((kbd "C-c h l")        #'hl-line-mode)
   ;((kbd "C-c h x")       #'flash-crosshairs)
-  ;; Theme Commands 
-  ((kbd "s-n")           #'aph/theme-cycle)
+  ;; Themes
+  ((kbd "s-n")            #'aph/theme-cycle)
   ;; Keybinding Control
-  ((kbd "C-<kp-enter>")  #'aph/kp-enter-newline-toggle)
-  ;; Apropos Commands
-  ((kbd "C-h a a")       #'apropos)
-  ((kbd "C-h a c")       #'apropos-command)
-  ((kbd "C-h a f")       #'aph/apropos-function)
-  ((kbd "C-h a v")       #'apropos-variable)
-  ((kbd "C-h a <space>") #'apropos-value)
-  ((kbd "C-h a d")       #'apropos-documentation)
-  ((kbd "C-h a l")       #'apropos-library)
-  ((kbd "C-h a i")       #'info-apropos)
-  ((kbd "C-h a t")       #'tags-apropos))
+  ((kbd "C-<kp-enter>")   #'aph/kp-enter-newline-toggle)
+  ;; Apropos
+  ((kbd "C-h a a")        #'apropos)
+  ((kbd "C-h a c")        #'apropos-command)
+  ((kbd "C-h a f")        #'aph/apropos-function)
+  ((kbd "C-h a v")        #'apropos-variable)
+  ((kbd "C-h a <space>")  #'apropos-value)
+  ((kbd "C-h a d")        #'apropos-documentation)
+  ((kbd "C-h a l")        #'apropos-library)
+  ((kbd "C-h a i")        #'info-apropos)
+  ((kbd "C-h a t")        #'tags-apropos))
 
 
 ;;; Smartparens Keybindings
@@ -87,36 +89,38 @@
 (eval-after-load 'smartparens
   '(progn
      (aph/define-keys-safely smartparens-mode-map
-       ;; Movement Commands
-       ((kbd "C-M-b")           #'sp-backward-sexp)
-       ((kbd "C-M-f")           #'sp-forward-sexp)
-       ((kbd "C-M-u")           #'sp-backward-up-sexp)
-       ((kbd "C-M-d")           #'sp-down-sexp)
-       ((kbd "M-B")             #'sp-backward-symbol)
-       ((kbd "M-F")             #'sp-forward-symbol)
-       ;; Selection Commands
-       ((kbd "C-]")             #'sp-select-next-thing-exchange)
-       ((kbd "C-M-]")           #'sp-select-previous-thing)
-       ;; Barf and Slurp Commands
-       ((kbd "C-<left>")        #'sp-forward-barf-sexp)
-       ((kbd "C-<right>")       #'sp-forward-slurp-sexp)
-       ((kbd "C-S-<left>")      #'sp-backward-slurp-sexp)
-       ((kbd "C-S-<right>")     #'sp-backward-barf-sexp)
-       ;; Kill and Copy Commands
-       ((kbd "C-M-k")           #'sp-kill-sexp)
-       ((kbd "C-M-w")           #'sp-copy-sexp)
-       ((kbd "C-S-<backspace>") #'sp-splice-sexp-killing-around)
-       ;; Unwrap and Splice Commands
-       ((kbd "C-<delete>")      #'sp-unwrap-sexp)
-       ((kbd "C-<backspace>")   #'sp-backward-unwrap-sexp)
-       ((kbd "M-D")             #'sp-splice-sexp)
-       ;; Reconfiguration Commands
-       ((kbd "C-M-t")           #'sp-transpose-sexp)
-       ((kbd "M-)")             #'sp-up-sexp)
-       ;; Other Commands
-       ((kbd "C-x n (")         #'sp-narrow-to-sexp)) 
+       ;; Movement
+       ([remap backward-sexp]    #'sp-backward-sexp)
+       ([remap forward-sexp]     #'sp-forward-sexp)
+       ([remap backward-up-list] #'sp-backward-up-sexp)
+       ([remap down-list]        #'sp-down-sexp)
+       ([remap forward-list]     #'sp-next-sexp)
+       ([remap backward-list]    #'sp-previous-sexp)
+       ((kbd "M-B")              #'sp-backward-symbol)
+       ((kbd "M-F")              #'sp-forward-symbol)
+       ;; Selection
+       ([remap mark-sexp]        #'sp-select-next-thing-exchange)
+       ;; Barf and Slurp
+       ((kbd "C-<left>")         #'sp-forward-barf-sexp)
+       ((kbd "C-<right>")        #'sp-forward-slurp-sexp)
+       ((kbd "C-S-<left>")       #'sp-backward-slurp-sexp)
+       ((kbd "C-S-<right>")      #'sp-backward-barf-sexp)
+       ;; Kill and Copy
+       ([remap kill-sexp]        #'sp-kill-sexp)
+       ((kbd "C-M-w")            #'sp-copy-sexp)
+       ((kbd "C-S-<backspace>")  #'sp-splice-sexp-killing-around)
+       ;; Editing
+       ([remap transpose-sexps]  #'sp-transpose-sexp) 
+       ;; Unwrap and Splice
+       ((kbd "C-<delete>")       #'sp-unwrap-sexp)
+       ((kbd "C-<backspace>")    #'sp-backward-unwrap-sexp)
+       ((kbd "M-D")              #'sp-splice-sexp)
+       ;; Indentation
+       ((kbd "M-)")              #'sp-up-sexp)
+       ;; Narrowing
+       ((kbd "C-x n (")          #'sp-narrow-to-sexp))
      (aph/define-keys-safely smartparens-strict-mode-map
-       ((kbd ")")               #'sp-up-sexp))))
+       ((kbd ")")                #'sp-up-sexp))))
 
 
 ;;; Org Mode Keybindings
