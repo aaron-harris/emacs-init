@@ -5,6 +5,7 @@
 ;;;;============================================================================
 
 ;;; This file contains functions extending the `require' functionality.
+
 
 ;;; Font Lock Setup
 ;;;================
@@ -28,11 +29,9 @@ Like `require', the return value will be FEATURE if the load was
 successful (or unnecessary) and nil if not."
   (condition-case err
       (require feature filename) 
-    (error (message (concat "Error loading %s"
-                            (if filename " (%s): \"" ": \"")
-                            (error-message-string err)
-                            "\"")
-                    feature filename)
+    (error (message "Error loading %s: \"%s\""
+                    (if filename (format "%s (%s)" feature filename) feature)
+                    (error-message-string err))
            nil)))
 ;; Font lock: Highlight FEATURE, if a symbol, in `font-lock-constant-face'.
 ;;   This follows the font lock pattern for `require'.
