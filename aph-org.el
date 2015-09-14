@@ -4,10 +4,8 @@
 ;;;; CUSTOM FUNCTIONS - ORG MODE
 ;;;;============================================================================
 
-(require 'cl-lib)                   ; for `cl-defun'
-(require 'dash)                     ; for `->>', `-find-index'
-(require 'aph-functions)            ; for `aph/reductions',
-                                    ;  `aph/weighted-comparator-maker'
+(require 'aph-functions)                ; For `aph/with-advice'
+;; Some functions in this file also require the 'dash library at runtime.
 
 
 ;;; Heading Structure
@@ -75,6 +73,7 @@ See `org-entry-get' for use of optional parameters."
 
 If INHERIT is non-nil, use inherited values for PROP. Ignore
 non-numeric values."
+  (require 'dash)
   (->> (aph/org-get-property-of-children pom prop inherit)
        (mapcar #'string-to-number)
        (apply #'+)))
@@ -82,6 +81,8 @@ non-numeric values."
 
 ;;; Spinners
 ;;;=========
+
+;;;###autoload
 (defun aph/org-spin-basic ()
   "Move point to a random child of heading at point.
 Return point."
@@ -95,6 +96,7 @@ Return point."
   "Weight"
   "The default property to be used for `aph/org-spin-weight'.")
 
+;;;###autoload
 (defun aph/org-spin-weighted (&optional weight-prop)
   "As `aph/org-spin-basic', weighted by property WEIGHT-PROP.
 
@@ -106,6 +108,8 @@ as zero.
 When called interactively or if WEIGHT-PROP is
 omitted,`aph/org-spin-weight-property' is used."
   (interactive)
+  (require 'aph-functions) ; For `aph/reductions'
+  (require 'dash)          ; For `->>', `-find-index'
   (if (org-before-first-heading-p)
       (message "Point not on heading.")
     (org-back-to-heading))
@@ -124,72 +128,10 @@ omitted,`aph/org-spin-weight-property' is used."
          aph/org-goto-nth-child)))
 
 
-;;; Capture Templates
-;;;==================
-(defun aph/org-capture-add-logbook (template)
-  "Append a logbook drawer to the capture TEMPLATE.
-
-The logbook drawer will contain a 'Captured' timestamp using the
-capture escape '%U'."
-  (concat template
-          "\n:LOGBOOK:\n- Captured"
-          (make-string 29 ? )           ; A string of 29 spaces.
-          "%U\n:END:"))
-
-(defun aph/org-capture-add-properties (template &optional props)
-  "Append a property drawer containing PROPS to the capture TEMPLATE.
-
-PROPS is an alist associating property names (strings) to their
-desired values (also strings, which will typically include
-template escapes like '%^').
-
-If PROPS is omitted, the property drawer will be
-empty. Explicitly including an empty drawer can be useful in the
-situation where TEMPLATE already includes a logbook drawer;
-otherwise, when properties are added to the entry during capture,
-the resulting property drawer may be indented differently than
-the logbook drawer."
-  (concat template
-          "\n:PROPERTIES:"
-          (mapconcat
-           (lambda (x)
-             (concat "\n:" (car x) ": " (cdr x)))
-           props "")
-          "\n:END:"))
-
-;; This function needs to be a cl-defun because we need to distinguish between
-;; the case where new-nodes is omitted and the case where it is supplied as nil.
-;;
-;; Most of this function's structure was taken from a Stackexchange answer by
-;; user erikstokes.
-(cl-defun aph/org-capture-choose-target
-    (&optional (prompt "Capture at")
-               (new-nodes org-refile-allow-creating-parent-nodes))
-  "Prompt for a location in an Org-Mode file, then jump there.
-
-This function is intended for use with the 'function option for
-capture templates. If PROMPT is not supplied, it defaults to
-\"Capture at\".
-
-The optional parameter NEW-NODES will override the variable
-`org-refile-allow-creating-parent-nodes' for the duration of this
-command. If it is omitted, the default value of the variable will
-be used."
-  (let* ((target (save-excursion (org-refile-get-location
-                                  prompt
-                                  (not :default-buffer)
-                                  new-nodes
-                                  :include-current-subtree)))
-         (file (nth 1 target))
-         (pos (nth 3 target)))
-    (find-file file)
-    (goto-char pos)
-    (org-end-of-subtree)
-    (org-return)))
-
-
 ;;; Capture in New Frame
 ;;;=====================
+
+;;;###autoload
 (defun aph/org-capture-in-popout-frame (&optional goto keys)
   "As `org-capture', but do all work in a new frame.
 
@@ -197,7 +139,6 @@ This function by itself doesn't clean up the frame following
 capture.  To do that, add `aph/org-capture-delete-capture-frame'
 to `org-capture-after-finalize-hook'."
   (interactive "P")
-  (require 'aph-functions) ; For `aph/with-advice'
   (require 'aph-framewin)  ; For `aph/display-buffer-in-named-frame'
   (if goto
       (org-capture goto keys)
@@ -218,6 +159,7 @@ to `org-capture-after-finalize-hook'."
           (setq display-buffer-alist
                 (delete override display-buffer-alist)))))))
 
+;;;###autoload
 (defun aph/org-capture-delete-capture-frame ()
   "Delete a frame named \"Capture\".
 For use in `org-capture-after-finalize-hook' to clean up after
@@ -229,6 +171,8 @@ For use in `org-capture-after-finalize-hook' to clean up after
 
 ;;; Refile
 ;;;=======
+
+;;;###autoload
 (defun aph/org-goto-last-refile ()
   "Goto last Org-mode item refiled.
 
@@ -241,6 +185,8 @@ keybinding for that function is not appropriate."
 
 ;;; Agenda
 ;;;=======
+
+;;;###autoload
 (defun aph/org-agenda ()
   "As `org-agenda', and automatically refresh sticky agendas."
   (interactive)
@@ -249,106 +195,16 @@ keybinding for that function is not appropriate."
     (org-agenda-redo)))
 
 
-;;; Agenda: Skip Functions
-;;;=======================
-;;; These are functions to be used with `org-agenda-skip-function'.
-;;; The initial structure was taken from a stackexchange question, written by
-;;; user Jonathan Leech-Pepin.
+;;; Links
+;;;======
 
-;; TODO: These functions are still a little quirky. Specifically, they only seem
-;;       to work properly when the headline they're called on is visible. Until
-;;       this is sorted out, all agenda files should have their default
-;;       visibility setting set to CONTENTS or higher.
-(defun aph/org-agenda-skip-tag (tag)
-  "Skip current headline if it is tagged with TAG.
-
-Return nil if headline containing point is tagged with TAG, and the
-position of the next headline in current buffer otherwise.
-
-Intended for use with `org-agenda-skip-function', where this will
-skip exactly those headlines tagged with TAG (including by
-inheritance)."
-  (let ((next-headline
-         (save-excursion (or (outline-next-heading)
-                                  (point-max))))
-        
-        (current-headline
-         (or (and (org-at-heading-p) (point))
-             (save-excursion (org-back-to-heading)))))
-    
-    (if (member tag (org-get-tags-at current-headline))
-        (1- next-headline)
-      nil)))
-
-(defun aph/org-agenda-skip-without-tag (tag)
-  "Skip current headline unless it is tagged with TAG.
-
-Return nil if headline containing point is not tagged with TAG, and the
-position of the next headline in current buffer otherwise.
-
-Intended for use with `org-agenda-skip-function', where this will
-skip exactly those headlines not tagged with TAG (including by
-inheritance)."
-  (let ((next-headline
-         (save-excursion (or (outline-next-heading)
-                             (point-max))))
-        
-        (current-headline
-         (or (and (org-at-heading-p) (point))
-             (save-excursion (org-back-to-heading)))))
-    
-    (if (member tag (org-get-tags-at current-headline))
-        nil
-      (1- next-headline))))
-
-
-;;; Agenda: Comparators
-;;;====================
-(defun aph/org-comparator-rating-to-weight-default (rating)
-  "The default for `aph/org-comparator-rating-weight-function'.
-
-This transformation is linear, mapping \[0,5\] onto
-\[-0.125,0.125\]. Since larger values are typically interpreted
-as better, use a descending sort to sort better values to the
-top."
-  (/ (- rating 2.5) 20.0))
-
-(defvar aph/org-comparator-rating-to-weight
-  #'aph/org-comparator-rating-to-weight-default
-  "A function transforming a 0-5 rating to a coinflip bias.
-
-Used with `aph/weighted-comparator-maker' in
-`aph/org-rating-comparator'.
-
-This function should take in a number in the range
-\\[0,5] (representing a subjective \"5-star\" rating) and rescale
-that number for use as a coinflip bias, as described in
-`aph/weighted-comparator-maker'.")
-
-(defvar aph/org-rating-property
-  "Rating"
-  "The name of the Org mode property used to store ratings.
-Used in `aph/org-rating-comparator'.")
-
-(defun aph/org-rating-comparator (x y &optional rating-prop)
-  "Randomly return +1 or -1, biased by ratings of arguments.
-Intended for use in a user-defined sorting strategy in an
-Org-mode agenda (see `org-agenda-cmp-user-defined').
-
-The arguments X and Y are Org-mode agenda entries, and the bias
-on the coinflip is determined by the application of the function
-in `aph/org-comparator-rating-to-weight' to the values X and Y
-have for the property RATING-PROP (which is given by
-`aph/org-rating-property' when omitted).
-
-See `aph/weighted-comparator-maker' for more information."
-  (let* ((rating-prop (or rating-prop aph/org-rating-property)) 
-         (bias-fn
-          (lambda (item)
-            (--> (get-text-property 1 'org-marker item)
-                 (org-entry-get it aph/org-rating-property)
-                 (string-to-number it)
-                 (funcall aph/org-comparator-rating-to-weight it)))))
-    (funcall (aph/weighted-comparator-maker bias-fn) x y)))
+;;;###autoload
+(defun aph/org-eww-store-link ()
+      "Store the current eww url as an Org-Mode link."
+      (when (eq major-mode 'eww-mode)
+        (org-store-link-props
+         :type         "http"
+         :link         (eww-current-url)
+         :description  (plist-get eww-data :title))))
 
 (provide 'aph-org)

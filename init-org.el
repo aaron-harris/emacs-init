@@ -127,8 +127,8 @@ directive)."
 (setq org-refile-use-outline-path 'file)
 
 ;; Support for `aph/org-capture-in-popout-frame':
-(add-hook 'org-capture-after-finalize-hook
-          #'aph/org-capture-delete-capture-frame)
+(aph/add-hook-safely 'org-capture-after-finalize-hook
+                     #'aph/org-capture-delete-capture-frame)
 
 ;; Load capture templates:
 (require 'init-org-capture)
@@ -136,14 +136,6 @@ directive)."
 
 ;;; Links
 ;;;======
-(defun aph/org-eww-store-link ()
-      "Store the current eww url as an Org-Mode link."
-      (when (eq major-mode 'eww-mode)
-        (org-store-link-props
-         :type         "http"
-         :link         (eww-current-url)
-         :description  (plist-get eww-data :title))))
-
 (aph/add-hook-safely 'org-store-link-functions #'aph/org-eww-store-link)
 
 

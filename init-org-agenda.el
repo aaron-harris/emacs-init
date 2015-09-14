@@ -4,8 +4,8 @@
 ;;;; ORG-MODE CUSTOM AGENDA COMMANDS
 ;;;;============================================================================
 
-(require 'aph-functions)                ; For aph/random-comparator
-(require 'aph-org)
+(require 'aph-comparators)                ; For `aph/random-comparator'
+(require 'aph-org-agenda)                 ; Skip functions and comparators
 
 
 ;;; Block Definitions
