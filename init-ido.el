@@ -31,7 +31,7 @@
 ;; Adding some extensions to ignore entirely, mostly side-effects of
 ;; LaTeX compilation.
 (nconc completion-ignored-extensions
-       '(".tex.swp" "_.log" ".prv/" "_.tex" ".rip")) 
+       '(".tex.swp" "_.log" ".prv/" "_.tex" ".rip"))
 
 
 ;;; Enabling Ido
@@ -40,5 +40,3 @@
 (ido-everywhere 1)
 
 (provide 'init-ido)
-
-
