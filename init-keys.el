@@ -44,12 +44,12 @@
   ;; Kill and Copy
   ((kbd "C-x M-k")        #'append-next-kill) ; Moving for `sp-copy-sexp'
   ;; Completion
-  ([remap dabbrev-expand] #'hippie-expand) 
+  ([remap dabbrev-expand] #'hippie-expand)
   ;; Window Movement
   ((kbd "s-[")            #'other-window)
   ((kbd "s-]")            #'aph/other-window-backwards)
   ;; Buffer Control
-  ([remap list-buffers]   #'ibuffer) 
+  ([remap list-buffers]   #'ibuffer)
   ((kbd "C-x k")          #'aph/kill-active-buffer     :rebind)
   ;; Window and Frame Control
   ((kbd "C-c q")          #'aph/quit-help-windows)
@@ -57,7 +57,7 @@
   ;; Information about Buffer
   ((kbd "M-= w")          #'count-words)
   ((kbd "M-= p")          #'aph/sum-parens-in-region)
-  ;; Buffer/Region Manipulation 
+  ;; Buffer/Region Manipulation
   ((kbd "s-<apps> d")     #'delete-duplicate-lines)
   ;; Application Control
   ((kbd "C-c C-o")        #'browse-url)
@@ -110,7 +110,7 @@
        ((kbd "C-M-w")            #'sp-copy-sexp)
        ((kbd "C-S-<backspace>")  #'sp-splice-sexp-killing-around)
        ;; Editing
-       ([remap transpose-sexps]  #'sp-transpose-sexp) 
+       ([remap transpose-sexps]  #'sp-transpose-sexp)
        ;; Unwrap and Splice
        ((kbd "C-<delete>")       #'sp-unwrap-sexp)
        ((kbd "C-<backspace>")    #'sp-backward-unwrap-sexp)
@@ -136,16 +136,16 @@
 (eval-after-load 'org
   '(progn
      (aph/global-set-keys-safely
-       ;; Capture and Refile Commands 
-       ((kbd "C-c w")   #'aph/org-goto-last-refile) 
-       ;; Clocking Commands 
+       ;; Capture and Refile Commands
+       ((kbd "C-c w")   #'aph/org-goto-last-refile)
+       ;; Clocking Commands
        ((kbd "C-c t j") #'org-clock-goto)
        ((kbd "C-c t o") #'org-clock-out)
        ((kbd "C-c t x") #'org-clock-cancel)
        ((kbd "C-c t r") #'org-clock-in-last))
      (aph/define-keys-safely org-mode-map
        ;; Clocking Commands
-       ((kbd "C-c t i") #'org-clock-in) 
+       ((kbd "C-c t i") #'org-clock-in)
        ;; Spinner Commands
        ((kbd "C-z s")   #'aph/org-spin-basic)
        ((kbd "C-z C-s") #'aph/org-spin-weighted))))
@@ -165,7 +165,7 @@
 
 ;; Clojure and Cider
 (aph/global-set-key-safely (kbd "C-c M-c") #'cider-connect)
-(eval-after-load 'cider 
+(eval-after-load 'cider
   '(aph/define-keys-safely clojure-mode-map
      ((kbd "C-h A a") #'cider-apropos)
      ((kbd "C-h A d") #'cider-apropos-documentation)))
