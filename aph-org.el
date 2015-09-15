@@ -4,8 +4,8 @@
 ;;;; CUSTOM FUNCTIONS - ORG MODE
 ;;;;============================================================================
 
-(require 'aph-functions)                ; For `aph/with-advice'
-;; Some functions in this file also require the 'dash library at runtime.
+(require 'aph-lib)                ; For `aph/with-advice'
+(require 'dash)                   ; For `->>'
 
 
 ;;; Heading Structure
@@ -72,8 +72,7 @@ See `org-entry-get' for use of optional parameters."
   "Return sum of PROP values for all children of heading at POM.
 
 If INHERIT is non-nil, use inherited values for PROP. Ignore
-non-numeric values."
-  (require 'dash)
+non-numeric values." 
   (->> (aph/org-get-property-of-children pom prop inherit)
        (mapcar #'string-to-number)
        (apply #'+)))
@@ -108,8 +107,7 @@ as zero.
 When called interactively or if WEIGHT-PROP is
 omitted,`aph/org-spin-weight-property' is used."
   (interactive)
-  (require 'aph-functions) ; For `aph/reductions'
-  (require 'dash)          ; For `->>', `-find-index'
+  (require 'aph-lib)                    ; For `aph/reductions'
   (if (org-before-first-heading-p)
       (message "Point not on heading.")
     (org-back-to-heading))
