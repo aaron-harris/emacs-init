@@ -125,6 +125,38 @@ uncleared outputs).
 
 ;;;***
 
+;;;### (autoloads nil "aph-mpc" "aph-mpc.el" (22008 32806 532682
+;;;;;;  400000))
+;;; Generated autoloads from aph-mpc.el
+
+(autoload 'aph/yank-access-inline "aph-mpc" "\
+Yank the most recent kill, cleaning up MS Access formatting.
+
+Specifically, collapse all whitespace in the most recent kill to
+spaces, remove the first word of the kill entirely, then
+yank. Also push the result back onto the kill ring (not replacing
+the original).
+
+This function is designed to clean up text copied as a rectangle
+from a Microsoft Access datasheet. In these circumstances, the
+cell contents are delimited by newlines and the field name is
+inserted at the top, which can make doing calculations on the
+data awkward.
+
+\(fn)" t nil)
+
+(autoload 'cde "aph-mpc" "\
+Count the numbers in RANGES.
+
+Here, RANGES may either be a comma-separated string of hyphenated
+ranges, e.g. \"1-5,7,8-15\", or a list encoding the same
+information, e.g., '((1 5) 7 (8 15)). For both of the examples above,
+cde will return 14.
+
+\(fn RANGES)" nil nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-org" "aph-org.el" (22008 25643 751950
 ;;;;;;  0))
 ;;; Generated autoloads from aph-org.el
@@ -185,15 +217,51 @@ Store the current eww url as an Org-Mode link.
 
 ;;;***
 
+;;;### (autoloads nil "aph-shell" "aph-shell.el" (22008 32355 370444
+;;;;;;  300000))
+;;; Generated autoloads from aph-shell.el
+
+(autoload 'aph/hg-commit "aph-shell" "\
+Run the shell command \"hg commit\" asynchronously.
+With a prefix argument, prompt for additional flags.
+
+\(fn &optional FLAGS)" t nil)
+
+(autoload 'aph/hg-log "aph-shell" "\
+Run the shell command \"hg log\".
+If an argument N is provided, instead run \"hg log -l N\".
+
+\(fn &optional N)" t nil)
+
+(autoload 'aph/hg-status "aph-shell" "\
+Run the shell command \"hg status\".
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "aph-theme" "aph-theme.el" (22008 32818 732466
+;;;;;;  200000))
+;;; Generated autoloads from aph-theme.el
+
+(autoload 'aph/theme-cycle "aph-theme" "\
+Cycle between the themes in `aph/theme-list'.
+If none of these themes is currently active, instead load the
+first element of `aph/theme-list'.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil nil ("aph-comparators.el" "aph-framewin.el"
-;;;;;;  "aph-hooks.el" "aph-keys.el" "aph-lib.el" "aph-mpc.el" "aph-org-agenda.el"
-;;;;;;  "aph-require.el" "aph-shell.el" "aph-theme.el" "init-ahk.el"
-;;;;;;  "init-color-identifiers.el" "init-core.el" "init-docview.el"
-;;;;;;  "init-draft.el" "init-gnus.el" "init-ido.el" "init-keys.el"
-;;;;;;  "init-latex.el" "init-lisp-clojure.el" "init-lisp-emacs.el"
-;;;;;;  "init-lisp.el" "init-misc.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "init-package.el" "init-smartparens.el" "init-startup.el"
-;;;;;;  "init-visible-mark.el") (22008 25899 313624 400000))
+;;;;;;  "aph-hooks.el" "aph-keys.el" "aph-lib.el" "aph-org-agenda.el"
+;;;;;;  "aph-require.el" "init-ahk.el" "init-color-identifiers.el"
+;;;;;;  "init-core.el" "init-docview.el" "init-draft.el" "init-gnus.el"
+;;;;;;  "init-ido.el" "init-keys.el" "init-latex.el" "init-lisp-clojure.el"
+;;;;;;  "init-lisp-emacs.el" "init-lisp.el" "init-misc.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-smartparens.el"
+;;;;;;  "init-startup.el" "init-visible-mark.el") (22008 32836 707819
+;;;;;;  200000))
 
 ;;;***
 

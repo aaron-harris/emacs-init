@@ -29,6 +29,7 @@ regardless of the value of `custom-safe-themes'.")
 (dolist (thm (cdr aph/theme-list))
         (load-theme thm :noconfirm :noenable))
 
+;;;###autoload
 (defun aph/theme-cycle ()
   "Cycle between the themes in `aph/theme-list'.
 If none of these themes is currently active, instead load the

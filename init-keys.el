@@ -7,14 +7,6 @@
 (require 'aph-require)                  ; For `aph/require-softly'
 (require 'aph-keys)                     ; For `aph/define-keys-safely', etc.
 
-;; Load custom command definitions.
-(aph/require-softly 'aph-lib)
-(aph/require-softly 'aph-org)
-(aph/require-softly 'aph-shell)
-(aph/require-softly 'aph-theme)
-(when (eq aph/machine 'mpc)
-  (aph/require-softly 'aph-mpc))
-
 
 ;;; Modifier Key Setup
 ;;;===================
