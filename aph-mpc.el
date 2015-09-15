@@ -12,6 +12,8 @@
 
 ;;; Commands
 ;;;=========
+
+;;;###autoload
 (defun aph/yank-access-inline ()
   "Yank the most recent kill, cleaning up MS Access formatting.
 
@@ -61,6 +63,7 @@ As `cde', but RANGES must be in string form."
                       (mapcar #'string-to-int))))
        (cde--list)))
 
+;;;###autoload
 (defun cde (ranges)
   "Count the numbers in RANGES.
 

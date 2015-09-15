@@ -7,6 +7,8 @@
 
 ;;; Mercurial Commands
 ;;;===================
+
+;;;###autoload
 (defun aph/hg-commit (&optional flags)
   "Run the shell command \"hg commit\" asynchronously.
 With a prefix argument, prompt for additional flags."
@@ -16,12 +18,14 @@ With a prefix argument, prompt for additional flags."
            "")))
   (async-shell-command (format  "hg commit %s" flags)))
 
+;;;###autoload
 (defun aph/hg-log (&optional n)
   "Run the shell command \"hg log\".
 If an argument N is provided, instead run \"hg log -l N\"."
   (interactive "p")
   (shell-command (concat "hg log" (if n (format " -l %d" n) ""))))
 
+;;;###autoload
 (defun aph/hg-status ()
   "Run the shell command \"hg status\"."
   (interactive)
