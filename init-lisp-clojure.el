@@ -65,7 +65,7 @@ all such modes.")
 ;;; Other Settings
 ;;;===============
 ;; Register help-type buffers for `aph/quit-help-windows'.
-(eval-after-load 'aph-functions
+(eval-after-load 'aph-commands
   '(add-to-list 'aph/help-window-names "*cider-doc*"))
 
 (provide 'init-lisp-clojure)

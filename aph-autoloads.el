@@ -3,6 +3,109 @@
 ;;; Code:
 
 
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22008 25892
+;;;;;;  729621 0))
+;;; Generated autoloads from aph-commands.el
+
+(autoload 'aph/apropos-function "aph-commands" "\
+As `apropos-command', but show all functions by default.
+The behavior of a prefix argument is inverted, so supplying a
+prefix argument will show only commands (and override a non-nil
+value for `apropos-do-all')
+
+\(fn PATTERN &optional COMMANDS-ONLY VAR-PREDICATE)" t nil)
+
+(autoload 'aph/delete-frame-or-exit "aph-commands" "\
+Delete this frame. With only one frame, exit Emacs.
+
+When there is more than one visible frame, run `delete-frame'.
+Otherwise, exit Emacs with `save-buffers-kill-terminal'.
+
+Any prefix ARG is passed to `save-buffers-kill-terminal' in the
+single-frame case and ignored otherwise.
+
+\(fn &optional ARG)" t nil)
+
+(autoload 'aph/kill-active-buffer "aph-commands" "\
+Kill the active buffer.
+
+With a prefix argument, choose the buffer to kill (as the
+standard `kill-buffer').
+
+\(fn &optional CHOOSE)" t nil)
+
+(autoload 'aph/kp-enter-newline-toggle "aph-commands" "\
+Toggle whether <kp-enter> should act like C-n instead of enter.
+Accomplish this by updating the entry for <kp-enter> in
+`function-key-map'.  If this entry is something other than these
+two keys, restore it to the default mapping (enter, i.e. C-m).
+
+When called interactively, or when the optional parameter is
+supplied, supply feedback messages.  Always print a message when
+the entry being overridden is unexpected.
+
+For convenience, return the new mapping.
+
+\(fn &optional VERBOSE)" t nil)
+
+(autoload 'aph/newline "aph-commands" "\
+As `newline', with support for negative argument.
+An argument of -N calls `join-line' N times.
+
+\(fn N)" t nil)
+
+(autoload 'aph/open-line "aph-commands" "\
+As `open-line', with support for negative argument.
+An argument of -N calls `join-line' with an argument N times.
+
+\(fn N)" t nil)
+
+(autoload 'aph/other-window-backwards "aph-commands" "\
+As `other-window' but reversed.
+
+\(fn COUNT &optional ALL-FRAMES)" t nil)
+
+(autoload 'aph/scroll-down-by-line "aph-commands" "\
+As `scroll-down-command', but ARG defaults to 1.
+
+Also, a negative prefix argument is treated as -1, scrolling only
+one line upward.
+
+\(fn &optional ARG)" t nil)
+
+(autoload 'aph/scroll-up-by-line "aph-commands" "\
+As `scroll-up-command', but ARG defaults to 1.
+
+Also, a negative prefix argument is treated as -1, scrolling only
+one line downward.
+
+\(fn &optional ARG)" t nil)
+
+(autoload 'aph/quit-help-windows "aph-commands" "\
+Quit all windows with help-like buffers.
+
+Call `quit-windows-on' for every buffer named in
+`aph/help-windows-name'.  The optional parameters KILL and FRAME
+are just as in `quit-windows-on', except FRAME defaults to t (so
+that only windows on the selected frame are considered).
+
+Note that a nil value for FRAME cannot be distinguished from an
+omitted parameter and will be ignored; use some other value if
+you want to quit windows on all frames.
+
+\(fn &optional KILL FRAME)" t nil)
+
+(autoload 'aph/sum-parens-in-region "aph-commands" "\
+Sum all parenthesized numbers in region and echo the result.
+If the region is not active, sum all parenthesized numbers in
+active buffer.
+
+See `aph/sum-parens' to get similar functionality from elisp.
+
+\(fn START END)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-ielm" "aph-ielm.el" (22008 19541 730390
 ;;;;;;  800000))
 ;;; Generated autoloads from aph-ielm.el
@@ -22,8 +125,8 @@ uncleared outputs).
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22007 15106 798839
-;;;;;;  500000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22008 25643 751950
+;;;;;;  0))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-spin-basic "aph-org" "\
@@ -83,15 +186,14 @@ Store the current eww url as an Org-Mode link.
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-comparators.el" "aph-framewin.el"
-;;;;;;  "aph-functions-dash.el" "aph-functions.el" "aph-hooks.el"
-;;;;;;  "aph-keys.el" "aph-mpc.el" "aph-org-agenda.el" "aph-require.el"
-;;;;;;  "aph-shell.el" "aph-theme.el" "init-ahk.el" "init-color-identifiers.el"
-;;;;;;  "init-core.el" "init-docview.el" "init-draft.el" "init-gnus.el"
-;;;;;;  "init-ido.el" "init-keys.el" "init-latex.el" "init-lisp-clojure.el"
-;;;;;;  "init-lisp-emacs.el" "init-lisp.el" "init-misc.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-smartparens.el"
-;;;;;;  "init-startup.el" "init-visible-mark.el") (22008 19580 188725
-;;;;;;  100000))
+;;;;;;  "aph-hooks.el" "aph-keys.el" "aph-lib.el" "aph-mpc.el" "aph-org-agenda.el"
+;;;;;;  "aph-require.el" "aph-shell.el" "aph-theme.el" "init-ahk.el"
+;;;;;;  "init-color-identifiers.el" "init-core.el" "init-docview.el"
+;;;;;;  "init-draft.el" "init-gnus.el" "init-ido.el" "init-keys.el"
+;;;;;;  "init-latex.el" "init-lisp-clojure.el" "init-lisp-emacs.el"
+;;;;;;  "init-lisp.el" "init-misc.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "init-package.el" "init-smartparens.el" "init-startup.el"
+;;;;;;  "init-visible-mark.el") (22008 25899 313624 400000))
 
 ;;;***
 

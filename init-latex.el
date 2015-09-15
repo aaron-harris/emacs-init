@@ -70,7 +70,7 @@ Sets up the variables `TeX-view-program-selection' and
 ;;; Other Settings
 ;;;===============
 ;; Register help-type buffers for `aph/quit-help-windows'.
-(eval-after-load 'aph-functions
+(eval-after-load 'aph-commands
   '(add-to-list 'aph/help-window-names "*TeX Help*"))
 
 ;; Set `fill-column' to 75 in LaTeX buffers.
