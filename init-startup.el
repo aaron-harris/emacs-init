@@ -4,6 +4,9 @@
 ;;;; STARTUP SCREEN CONFIGURATION
 ;;;;============================================================================ 
 
+(require 'aph-require)                  ; For `aph/require-softly'
+(require 'aph-hooks)                    ; For `aph/add-hook-safely'
+
 
 ;;; Universal Startup Settings
 ;;;===========================

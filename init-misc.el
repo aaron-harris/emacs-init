@@ -4,6 +4,8 @@
 ;;;; MISCELLANEOUS SETTINGS
 ;;;;============================================================================
 
+(require 'aph-require)                  ; For `aph/require-softly'
+
 
 ;;; Emacs Client Settings
 ;;;======================

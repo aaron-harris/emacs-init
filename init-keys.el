@@ -4,8 +4,8 @@
 ;;;; KEYBINDING SETUP
 ;;;;============================================================================
 
-;; Load custom keybinding functions.
-(require 'aph-keys)
+(require 'aph-require)                  ; For `aph/require-softly'
+(require 'aph-keys)                     ; For `aph/define-keys-safely', etc.
 
 ;; Load custom command definitions.
 (aph/require-softly 'aph-functions)

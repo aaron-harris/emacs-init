@@ -4,6 +4,8 @@
 ;;;; ELISP CONFIGURATION
 ;;;;============================================================================
 
+(require 'aph-require)                   ; For `aph/require-softly'
+
 
 ;;; Mode-Bundling Setup
 ;;;====================
