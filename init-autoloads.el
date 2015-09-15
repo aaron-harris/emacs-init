@@ -3,6 +3,25 @@
 ;;; Code:
 
 
+;;;### (autoloads nil "aph-ielm" "aph-ielm.el" (22008 19541 730390
+;;;;;;  800000))
+;;; Generated autoloads from aph-ielm.el
+
+(autoload 'aph/ielm-copy-last-output "aph-ielm" "\
+Copy the last output produced by `ielm' to the kill ring.
+
+With argument N > 0, instead copy the Nth last output.
+With argument N < 0, copy the Nth output since last clear.
+With argument N = 0, do nothing.
+
+Return the newly copied string, or nil if nothing was
+copied (e.g., if the argument is greater than the number of
+uncleared outputs).
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-org" "aph-org.el" (22007 15106 798839
 ;;;;;;  500000))
 ;;; Generated autoloads from aph-org.el
@@ -71,8 +90,8 @@ Store the current eww url as an Org-Mode link.
 ;;;;;;  "init-ido.el" "init-keys.el" "init-latex.el" "init-lisp-clojure.el"
 ;;;;;;  "init-lisp-emacs.el" "init-lisp.el" "init-misc.el" "init-org-agenda.el"
 ;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-smartparens.el"
-;;;;;;  "init-startup.el" "init-visible-mark.el") (22007 15197 859788
-;;;;;;  700000))
+;;;;;;  "init-startup.el" "init-visible-mark.el") (22008 19580 188725
+;;;;;;  100000))
 
 ;;;***
 
