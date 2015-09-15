@@ -4,6 +4,9 @@
 ;;;; CLOJURE CONFIGURATION
 ;;;;============================================================================
 
+(require 'aph-require)                   ; For `aph/require-softly'
+(require 'aph-hooks)                     ; For `aph/add-hook-to-all'
+
 
 ;;; Mode-Bundling Setup
 ;;;====================
