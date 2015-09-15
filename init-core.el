@@ -36,7 +36,7 @@
 ;;; Loading Submodules
 ;;;===================
 (require 'aph-require)                  ; For `aph/require-softly', etc.
-(require 'init-autoloads)
+(aph/require-softly 'aph-autoloads)
 (aph/require-softly 'init-package)
 
 ;; Major Features
