@@ -42,6 +42,7 @@
 (setq ring-bell-function #'ignore)      ; Disable the bell.
 (setq-default indicate-buffer-boundaries 'right) ; Show buffer start/end.
 (setq resize-mini-windows t)            ; Allow minibuffer to shrink.
+(setq shift-select-mode nil)            ; Disable shift selection.
 
 ;; Calendar settings
 (setq calendar-longitude -93.2
