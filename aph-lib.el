@@ -37,6 +37,10 @@ event of an error or nonlocal exit."
   (require 'cl-lib)                       ; For `cl-delete'
   (cl-delete key alist :test #'equal :key #'car))
 
+(defun aph/canary (&rest args)
+  "Print a message containing ARGS."
+  (message "Canary called with args %s" args))
+
 ;; Taken from the Yoo Box article
 ;; "Emacs Lisp lexical binding gotchas and related best practices" 
 (defmacro aph/lexical-scope-p (var)
