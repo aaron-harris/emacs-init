@@ -5,6 +5,7 @@
 ;;;;============================================================================ 
 
 (require 'aph-hooks)  ; For `aph/add-hook-safely', and some hook code.
+(require 'aph-lib)    ; For `aph/with-advice'
 
 
 ;;; Basic Setup
@@ -21,6 +22,7 @@
 ;;; General Settings
 ;;;=================
 (setq org-catch-invisible-edits 'smart)        ; Try to avoid invisible edits.
+(setq org-cycle-emulate-tab 'exc-hl-bol)       ; Only cycle trees at BOL.
 (setq org-enforce-todo-dependencies t)         ; Make ORDERED tasks matter.
 (setq org-log-into-drawer t)                   ; Use LOGBOOK drawers.
 (setq org-track-ordered-property-with-tag t)   ; Use a tag for ORDERED trees.
@@ -214,6 +216,27 @@ aware of my changes to `org-emphasis-alist'."
 (advice-add 'org-element-text-markup-successor :around
             #'aph/org-element-text-markup-successor-advice)
 
+
+;;; Smart Tab Compatibility
+;;;========================
+(eval-after-load 'smart-tab
+  '(progn
+     (defun aph/org-cycle-smart-tab-advice (fn &optional arg)
+       "Advice to make `org-cycle' use `smart-tab'.
+
+With this advice :around `org-cycle', that function will use
+`smart-tab' as its fallback action instead of just indenting.
+All other behavior of `org-cycle' remains unchanged."
+       (aph/with-advice
+           ;; Make `org-cycle' use `smart-tab' as fallback action.
+           ((#'global-key-binding :before-until
+                                  (lambda (keys &optional accept-default)
+                                    (when (equal keys "\t")
+                                      #'smart-tab)))
+            ;; Prevent `smart-tab' from using `org-cycle' as its fallback.
+            (#'smart-tab-default :override #'indent-for-tab-command))
+         (apply fn arg)))
+     (advice-add #'org-cycle :around #'aph/org-cycle-smart-tab-advice)))
 
 
 ;;; Mobile
