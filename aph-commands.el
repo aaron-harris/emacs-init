@@ -145,7 +145,11 @@ one line downward."
 ;;;==================
 
 (defvar aph/help-window-names
-  '("*Help*" "*Apropos*" "*Completions*" "*disabled command*"
+  '("*Help*"
+    "*Apropos*"
+    "*Messages*"
+    "*Completions*"
+    "*disabled command*"
     "*Command History*")
   "Names of buffers that `aph/quit-help-windows' should quit.")
 
