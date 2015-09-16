@@ -169,6 +169,10 @@
 (eval-after-load 'eww
   '(aph/define-key-safely eww-mode-map (kbd "S-<tab>") #'shr-previous-link))
 
+;; Info
+(aph/global-set-keys-safely
+  ((kbd "C-h i") #'aph/info-mode-or-clone-buffer :rebind))
+
 ;; Mercurial
 (aph/global-set-keys-safely
  ((kbd "M-! h s") #'aph/hg-status)
