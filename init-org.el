@@ -91,7 +91,7 @@
 
 The function `org-set-regexps-and-options-for-tags', which sets a
 buffer-local version of `org-tag-alist', seems to screw
-up :newline entries, replacing (:newline) with (\"\n\"), which
+up :newline entries, replacing (:newline) with (\"\\n\"), which
 ends up defining a tag with a newline character as its name. This
 is a crude attempt to fix it (which will probably make it
 impossible to create buffer-local tags with the #+TAGS
