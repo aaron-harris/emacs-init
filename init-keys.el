@@ -38,8 +38,8 @@
   ;; Completion
   ([remap dabbrev-expand] #'hippie-expand)
   ;; Window Movement
-  ((kbd "s-[")            #'other-window)
-  ((kbd "s-]")            #'aph/other-window-backwards)
+  ((kbd "s-]")            #'other-window)
+  ((kbd "s-[")            #'aph/other-window-backwards)
   ;; Buffer Control
   ([remap list-buffers]   #'ibuffer)
   ((kbd "C-x k")          #'aph/kill-active-buffer     :rebind)
