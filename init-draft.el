@@ -21,16 +21,23 @@
 
 
 ;;; Sliding door commands
-(defun aph/slide-buffer-forward ()
-  "Slide active buffer to next window.
-Display this buffer in the next window forward (in the same
-ordering as `other-window') that is not dedicated to its current
-buffer, and display in this window the previous buffer displayed
+(defun aph/get-nth-window-with-predicate
+    (n predicate &optional minibuf all-frames default)
+  "As `get-window-with-predicate', but return the Nth success."
+  ;; TODO: Write this function.
+  )
+
+(defun aph/slide-buffer-forward (&optional count)
+  "Slide active buffer to another window.
+
+Display this buffer N windows forward (in the same ordering as
+`other-window'), skipping windows dedicated to their current
+buffers, and display in this window the previous buffer displayed
 here (using `switch-to-prev-buffer')."
-  (interactive)
+  (interactive "p")
   (let ((buf  (current-buffer))
-        (win  (get-window-with-predicate
-               (lambda (win) (not (window-dedicated-p win))))))
-    (when win
+        (win  (aph/get-nth-window-with-predicate
+               n (lambda (win) (not (window-dedicated-p win))))))
+    (when win 
       (set-window-buffer win buf)
       (switch-to-prev-buffer))))
