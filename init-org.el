@@ -169,6 +169,7 @@ directive)."
 (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
 (setq org-agenda-skip-scheduled-if-done t)
 (setq org-agenda-skip-timestamp-if-done t)
+(setq org-agenda-skip-deadline-if-done t)
 (setq org-agenda-todo-ignore-with-date 'all)
 (setq org-agenda-todo-ignore-scheduled 'all)
 (setq org-agenda-todo-ignore-timestamp 'all)
