@@ -9,4 +9,10 @@
 ;;;==========
 (when (aph/require-softly 'smart-tab)
   (global-smart-tab-mode 1)
-  (setq smart-tab-using-hippie-expand t))
+
+  ;; Always use `hippie-expand'.  In situations where we want to use a
+  ;; mode-specific completion function, I'd rather configure
+  ;; `hippie-expand' to use it and let `smart-tab' just call
+  ;; `hippie-expand' in all cases.
+  (setq smart-tab-using-hippie-expand t)
+  (setq smart-tab-completion-functions-alist nil))
