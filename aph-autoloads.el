@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22008 25892
-;;;;;;  729621 0))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22011 16828
+;;;;;;  223440 900000))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -19,12 +19,23 @@ value for `apropos-do-all')
 Delete this frame. With only one frame, exit Emacs.
 
 When there is more than one visible frame, run `delete-frame'.
-Otherwise, exit Emacs with `save-buffers-kill-terminal'.
+Otherwise, exit Emacs with `save-buffers-kill-terminal' after
+confirming this with user.
 
-Any prefix ARG is passed to `save-buffers-kill-terminal' in the
-single-frame case and ignored otherwise.
+If a prefix ARG is supplied, ignore it in the multiple-frame
+case.  Otherwise, bypass confirmation and pass the argument to
+`save-buffers-kill-terminal'.
 
 \(fn &optional ARG)" t nil)
+
+(autoload 'aph/info-mode-or-clone-buffer "aph-commands" "\
+Enter info mode or clone info buffer.
+
+In an info buffer when no prefix argument has been supplied,
+clone the buffer (as `clone-buffer').  Otherwise, enter info
+mode (as `info').
+
+\(fn PREFIX)" t nil)
 
 (autoload 'aph/kill-active-buffer "aph-commands" "\
 Kill the active buffer.
@@ -103,6 +114,80 @@ active buffer.
 See `aph/sum-parens' to get similar functionality from elisp.
 
 \(fn START END)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "aph-framewin" "aph-framewin.el" (22019 26110
+;;;;;;  836891 700000))
+;;; Generated autoloads from aph-framewin.el
+
+(autoload 'aph/slide-buffer-forward "aph-framewin" "\
+Slide active buffer to another window.
+
+Display this buffer COUNT windows forward (in the same ordering
+as `other-window'), skipping windows dedicated to their current
+buffers, and display in this window the previous buffer displayed
+here (using `switch-to-prev-buffer').
+
+If the optional parameter RIDE is supplied, \"ride\" the buffer,
+making its new window the selected one.
+
+As a special case, if COUNT is zero, treat COUNT as 1 and RIDE as
+t.  This allows the RIDE parameter to be used interactively.
+
+\(fn &optional COUNT RIDE)" t nil)
+
+(autoload 'aph/slide-buffer-backward "aph-framewin" "\
+As `aph/slide-buffer-forward' with direction reversed.
+
+\(fn &optional COUNT RIDE)" t nil)
+
+(autoload 'aph/swap-buffer-forward "aph-framewin" "\
+Swap active buffer with that in another window.
+
+Display this buffer COUNT forward (in the same ordering as
+`other-window'), skipping windows dedicated to their current
+buffers, and display in this window the buffer that was displayed
+there.
+
+If the optional parameter RIDE is supplied, \"ride\" the buffer,
+making its new window the selected one.
+
+As a special case, if COUNT is zero, treat COUNT as 1 and RIDE as
+t.  This allows the RIDE parameter to be used interactively.
+
+\(fn &optional COUNT RIDE)" t nil)
+
+(autoload 'aph/swap-buffer-backward "aph-framewin" "\
+As `aph/swap-buffer-forward' with direction reversed.
+
+\(fn &optional COUNT RIDE)" t nil)
+
+(autoload 'aph/swap-buffer-forward-and-ride "aph-framewin" "\
+As `aph/swap-buffer-forward' but always ride.
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'aph/swap-buffer-backward-and-ride "aph-framewin" "\
+As `aph/swap-buffer-backward' but always ride.
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'aph/pull-buffer-backward "aph-framewin" "\
+Pull buffer from another window.
+
+Display in this buffer the one currently displayed in the window
+COUNT windows forward (in the same ordering as `other-window'),
+skipping windows dedicated to their current buffers.  Display in
+the window previously occupied by this buffer the previous buffer
+displayed in that window (using `switch-to-prev-buffer').
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'aph/pull-buffer-forward "aph-framewin" "\
+As `aph/pull-buffer-backward' with direction reversed.
+
+\(fn &optional COUNT)" t nil)
 
 ;;;***
 
@@ -253,15 +338,14 @@ first element of `aph/theme-list'.
 
 ;;;***
 
-;;;### (autoloads nil nil ("aph-comparators.el" "aph-framewin.el"
-;;;;;;  "aph-hooks.el" "aph-keys.el" "aph-lib.el" "aph-org-agenda.el"
-;;;;;;  "aph-require.el" "init-ahk.el" "init-color-identifiers.el"
-;;;;;;  "init-core.el" "init-docview.el" "init-draft.el" "init-gnus.el"
-;;;;;;  "init-ido.el" "init-keys.el" "init-latex.el" "init-lisp-clojure.el"
-;;;;;;  "init-lisp-emacs.el" "init-lisp.el" "init-misc.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-smartparens.el"
-;;;;;;  "init-startup.el" "init-visible-mark.el") (22008 32836 707819
-;;;;;;  200000))
+;;;### (autoloads nil nil ("aph-comparators.el" "aph-hooks.el" "aph-keys.el"
+;;;;;;  "aph-lib.el" "aph-org-agenda.el" "aph-require.el" "init-ahk.el"
+;;;;;;  "init-color-identifiers.el" "init-core.el" "init-docview.el"
+;;;;;;  "init-draft.el" "init-gnus.el" "init-ido.el" "init-keys.el"
+;;;;;;  "init-latex.el" "init-lisp-clojure.el" "init-lisp-emacs.el"
+;;;;;;  "init-lisp.el" "init-misc.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "init-package.el" "init-smartparens.el" "init-startup.el"
+;;;;;;  "init-visible-mark.el") (22019 26342 786817 800000))
 
 ;;;***
 

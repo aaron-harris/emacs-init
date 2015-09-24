@@ -37,10 +37,14 @@
   ((kbd "C-x M-k")        #'append-next-kill) ; Moving for `sp-copy-sexp'
   ;; Completion
   ([remap dabbrev-expand] #'hippie-expand)
-  ;; Window Movement
+  ;; Cyclic Window Control
   ((kbd "s-]")            #'other-window)
   ((kbd "s-[")            #'aph/other-window-backwards)
-  ;; Buffer Control
+  ((kbd "s-{")            #'aph/pull-buffer-backward)
+  ((kbd "s-}")            #'aph/slide-buffer-forward)
+  ((kbd "s-\\")           #'aph/swap-buffer-forward-and-ride)
+  ((kbd "s-|")            #'aph/swap-buffer-forward)
+  ;; General Buffer Control
   ([remap list-buffers]   #'ibuffer)
   ((kbd "C-x k")          #'aph/kill-active-buffer     :rebind)
   ;; Window and Frame Control
