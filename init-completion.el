@@ -16,3 +16,14 @@
   ;; `hippie-expand' in all cases.
   (setq smart-tab-using-hippie-expand t)
   (setq smart-tab-completion-functions-alist nil))
+
+
+;;; Company Mode
+;;;=============
+;; In certain modes, we want to use `company-mode' instead of
+;; `smart-tab'.  We still want to use tab completion and not idle
+;; completion.
+(with-eval-after-load 'company
+  (setq company-idle-delay nil))
+
+(provide 'init-completion)

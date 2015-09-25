@@ -33,6 +33,9 @@ all such modes.")
 (require 'init-color-identifiers)
 (aph/add-hook-to-all aph/lisp-mode-hooks #'color-identifiers-mode  :safely)
 
+(when (package-installed-p 'company)
+  (aph/add-hook-to-all aph/lisp-mode-hooks #'company-mode :safely))
+
 
 ;;; Completion
 ;;;===========

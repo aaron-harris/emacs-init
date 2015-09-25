@@ -82,41 +82,40 @@
 
 ;;; Smartparens Keybindings
 ;;;========================
-(eval-after-load 'smartparens
-  '(progn
-     (aph/define-keys-safely smartparens-mode-map
-       ;; Movement
-       ([remap backward-sexp]    #'sp-backward-sexp)
-       ([remap forward-sexp]     #'sp-forward-sexp)
-       ([remap backward-up-list] #'sp-backward-up-sexp)
-       ([remap down-list]        #'sp-down-sexp)
-       ([remap forward-list]     #'sp-next-sexp)
-       ([remap backward-list]    #'sp-previous-sexp)
-       ((kbd "M-B")              #'sp-backward-symbol)
-       ((kbd "M-F")              #'sp-forward-symbol)
-       ;; Selection
-       ([remap mark-sexp]        #'sp-select-next-thing-exchange)
-       ;; Barf and Slurp
-       ((kbd "C-<left>")         #'sp-forward-barf-sexp)
-       ((kbd "C-<right>")        #'sp-forward-slurp-sexp)
-       ((kbd "C-S-<left>")       #'sp-backward-slurp-sexp)
-       ((kbd "C-S-<right>")      #'sp-backward-barf-sexp)
-       ;; Kill and Copy
-       ([remap kill-sexp]        #'sp-kill-sexp)
-       ((kbd "C-M-w")            #'sp-copy-sexp)
-       ((kbd "C-S-<backspace>")  #'sp-splice-sexp-killing-around)
-       ;; Editing
-       ([remap transpose-sexps]  #'sp-transpose-sexp)
-       ;; Unwrap and Splice
-       ((kbd "C-<delete>")       #'sp-unwrap-sexp)
-       ((kbd "C-<backspace>")    #'sp-backward-unwrap-sexp)
-       ((kbd "M-D")              #'sp-splice-sexp)
-       ;; Indentation
-       ((kbd "M-)")              #'sp-up-sexp)
-       ;; Narrowing
-       ((kbd "C-x n (")          #'sp-narrow-to-sexp))
-     (aph/define-keys-safely smartparens-strict-mode-map
-       ((kbd ")")                #'sp-up-sexp))))
+(with-eval-after-load 'smartparens 
+  (aph/define-keys-safely smartparens-mode-map
+    ;; Movement
+    ([remap backward-sexp]    #'sp-backward-sexp)
+    ([remap forward-sexp]     #'sp-forward-sexp)
+    ([remap backward-up-list] #'sp-backward-up-sexp)
+    ([remap down-list]        #'sp-down-sexp)
+    ([remap forward-list]     #'sp-next-sexp)
+    ([remap backward-list]    #'sp-previous-sexp)
+    ((kbd "M-B")              #'sp-backward-symbol)
+    ((kbd "M-F")              #'sp-forward-symbol)
+    ;; Selection
+    ([remap mark-sexp]        #'sp-select-next-thing-exchange)
+    ;; Barf and Slurp
+    ((kbd "C-<left>")         #'sp-forward-barf-sexp)
+    ((kbd "C-<right>")        #'sp-forward-slurp-sexp)
+    ((kbd "C-S-<left>")       #'sp-backward-slurp-sexp)
+    ((kbd "C-S-<right>")      #'sp-backward-barf-sexp)
+    ;; Kill and Copy
+    ([remap kill-sexp]        #'sp-kill-sexp)
+    ((kbd "C-M-w")            #'sp-copy-sexp)
+    ((kbd "C-S-<backspace>")  #'sp-splice-sexp-killing-around)
+    ;; Editing
+    ([remap transpose-sexps]  #'sp-transpose-sexp)
+    ;; Unwrap and Splice
+    ((kbd "C-<delete>")       #'sp-unwrap-sexp)
+    ((kbd "C-<backspace>")    #'sp-backward-unwrap-sexp)
+    ((kbd "M-D")              #'sp-splice-sexp)
+    ;; Indentation
+    ((kbd "M-)")              #'sp-up-sexp)
+    ;; Narrowing
+    ((kbd "C-x n (")          #'sp-narrow-to-sexp))
+  (aph/define-keys-safely smartparens-strict-mode-map
+    ((kbd ")")                #'sp-up-sexp)))
 
 
 ;;; Org Mode Keybindings
@@ -129,22 +128,21 @@
   ((kbd "C-c c")   #'aph/org-capture-in-popout-frame)
   ;; Link Commands
   ((kbd "C-c l")   #'org-store-link))
-(eval-after-load 'org
-  '(progn
-     (aph/global-set-keys-safely
-       ;; Capture and Refile Commands
-       ((kbd "C-c w")   #'aph/org-goto-last-refile)
-       ;; Clocking Commands
-       ((kbd "C-c t j") #'org-clock-goto)
-       ((kbd "C-c t o") #'org-clock-out)
-       ((kbd "C-c t x") #'org-clock-cancel)
-       ((kbd "C-c t r") #'org-clock-in-last))
-     (aph/define-keys-safely org-mode-map
-       ;; Clocking Commands
-       ((kbd "C-c t i") #'org-clock-in)
-       ;; Spinner Commands
-       ((kbd "C-z s")   #'aph/org-spin-basic)
-       ((kbd "C-z C-s") #'aph/org-spin-weighted))))
+(with-eval-after-load 'org 
+  (aph/global-set-keys-safely
+    ;; Capture and Refile Commands
+    ((kbd "C-c w")   #'aph/org-goto-last-refile)
+    ;; Clocking Commands
+    ((kbd "C-c t j") #'org-clock-goto)
+    ((kbd "C-c t o") #'org-clock-out)
+    ((kbd "C-c t x") #'org-clock-cancel)
+    ((kbd "C-c t r") #'org-clock-in-last))
+  (aph/define-keys-safely org-mode-map
+    ;; Clocking Commands
+    ((kbd "C-c t i") #'org-clock-in)
+    ;; Spinner Commands
+    ((kbd "C-z s")   #'aph/org-spin-basic)
+    ((kbd "C-z C-s") #'aph/org-spin-weighted)))
 
 
 ;;; Programming Keybindings
@@ -154,21 +152,28 @@
   ((kbd "C-x M-l") #'find-library)
   ((kbd "C-:")     #'pp-eval-expression))
 
-(eval-after-load 'ielm
-  '(aph/define-keys-safely ielm-map
-     ((kbd "C-c M-w") #'aph/ielm-copy-last-output)
-     ((kbd "C-c C-t") #'aph/eval-expression-toggle-clean-output)))
+(with-eval-after-load 'ielm
+  (aph/define-keys-safely ielm-map
+    ((kbd "C-c M-w") #'aph/ielm-copy-last-output)
+    ((kbd "C-c C-t") #'aph/eval-expression-toggle-clean-output)))
 
 ;; Clojure and Cider
 (aph/global-set-key-safely (kbd "C-c M-c") #'cider-connect)
-(eval-after-load 'cider
-  '(aph/define-keys-safely clojure-mode-map
-     ((kbd "C-h A a") #'cider-apropos)
-     ((kbd "C-h A d") #'cider-apropos-documentation)))
+(with-eval-after-load 'cider
+  (aph/define-keys-safely clojure-mode-map
+    ((kbd "C-h A a") #'cider-apropos)
+    ((kbd "C-h A d") #'cider-apropos-documentation)))
 
 
 ;;; Other Keybindings
 ;;;==================
+;; Company Mode
+(with-eval-after-load 'company
+  (aph/define-keys-safely company-mode-map
+    ((kbd "<tab>") #'company-indent-or-complete-common))
+  (aph/define-keys-safely company-active-map
+    ((kbd "<tab>") #'company-complete-common-or-cycle :rebind)))
+
 ;; Eww
 (eval-after-load 'eww
   '(aph/define-key-safely eww-mode-map (kbd "S-<tab>") #'shr-previous-link))
