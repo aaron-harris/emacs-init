@@ -10,6 +10,32 @@
 ;; Some functions in this file require the 'aph-comparators library at runtime.
 
 
+;;; Information Extraction
+;;;=======================
+;; Functions in this section extract useful information from agenda
+;; entries.  Such entries are passed to custom comparator functions,
+;; among other uses.
+(defun aph/org-get-property (entry prop &optional numeric default)
+  "Return the value of PROP in ENTRY.
+
+Here PROP is a string denoting an Org-mode property name
+and ENTRY is an Org-mode agenda entry.
+
+If the optional parameter NUMERIC is non-nil, return the value as
+a number.
+
+Normally, if ENTRY does not have a value for PROP, return nil.
+If the optional parameter DEFAULT is supplied, instead return
+that value."
+  (let ((raw-val
+         (-> (get-text-property 1 'org-marker entry)
+             (org-entry-get prop))))
+    (cond
+     ((null raw-val)  (or default nil))
+     (numeric         (string-to-number raw-val))
+     (t                raw-val))))
+
+
 ;;; Skip Functions
 ;;;===============
 ;;; These are functions to be used with `org-agenda-skip-function'.
@@ -65,6 +91,72 @@ inheritance)."
 
 ;;; Comparators
 ;;;============
+(defun aph/org-compare-strings (str1 str2 &optional ignore-case)
+  "As `compare-strings' but return +1, -1, or nil.
+
+Compare strings X and Y.  If X is less than Y (in the sensse of
+`compare-strings'), return -1.  If Y is less than X, return +1.
+If the strings are equal, return nil.
+
+Unlike `compare-strings' substrings cannot be compared.
+
+This function is intended for use with
+`org-agenda-cmp-user-defined', but cannot be used directly, since
+it takes strings and not agenda entries."
+  (let ((compare (compare-strings str1 nil nil str2 nil nil ignore-case)))
+    (cond
+     ((eq t compare) nil)
+     ((> compare 0)  +1)
+     ((< compare 0)  -1))))
+
+(defun aph/org-property-comparator-maker (prop type &optional default transform)
+  "Return a comparator that sorts by PROP.
+
+The returned function takes two arguments (Org-mode agenda
+entries).  It compares the two entries (in a manner suitable for
+use in `org-agenda-cmp-user-defined') based on their values for
+PROP.
+
+The parameter TYPE specifies what type of comparison to use and
+should be one of the following keywords:
+
+:number            Numeric comparison
+:string            String comparison, case-sensitive
+:string-no-case    String comparison, case-insensitive
+:transform         Numeric comparison, no conversion (see below)
+
+If the optional parameter DEFAULT is supplied, it will be used
+for entries which lack a value for PROP.  Otherwise, such entries
+will be sorted last.
+
+If the second optional parameter TRANSFORM is supplied, it should
+be a function that is applied to the parameter values before
+comparison.  If TYPE is :numeric, the values are coerced to
+numbers before TRANSFORM is applied.
+
+If TYPE is :transform, then the values are compared as numbers
+but are not coerced to numbers.  In this case, TRANSFORM has the
+responsibility of converting the values to numbers itself.  If it
+does not, an error will be signaled." 
+  (let ((transform (or transform #'identity)))
+    (lambda (x y)
+      (let ((x-val  (->> (aph/org-get-property x prop (eq type :number) default)
+                         (funcall transform)))
+            (y-val  (->> (aph/org-get-property y prop (eq type :number) default)
+                         (funcall transform))))
+        (cond
+         ;; Nil handling
+         ((and (null x-val) (null y-val))  nil)
+         ((null x-val)                     -1)
+         ((null y-val)                     +1) 
+         ;; String comparison
+         ((-contains-p '(:string :string-no-case) type)
+          (aph/org-compare-strings x-val y-val (eq type :string-no-case))) 
+         ;; Numeric comparison
+         ((= x-val y-val)  nil)
+         ((< x-val y-val)  -1)
+         ((> x-val y-val)  +1))))))
+
 (defun aph/org-comparator-rating-to-weight-default (rating)
   "The default for `aph/org-comparator-rating-weight-function'.
 
