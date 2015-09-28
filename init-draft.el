@@ -7,7 +7,6 @@
 ;; This file is for drafting new portions of the init files. It is not
 ;; automatically loaded on initialization.
 
-
 
 ;;; `hippie-unexpand'
 ;;;==================
