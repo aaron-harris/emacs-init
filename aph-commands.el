@@ -42,19 +42,6 @@ case.  Otherwise, bypass confirmation and pass the argument to
    (t                                    (message "Abort"))))
 
 ;;;###autoload
-(defun aph/info-mode-or-clone-buffer (prefix)
-  "Enter info mode or clone info buffer.
-
-In an info buffer when no prefix argument has been supplied,
-clone the buffer (as `clone-buffer').  Otherwise, enter info
-mode (as `info')."
-  (interactive "P")
-  (if (and (eq major-mode 'Info-mode) (null prefix))
-      (clone-buffer (not :rename) :popto)
-    (setq prefix-arg prefix)
-    (call-interactively #'info)))
-
-;;;###autoload
 (defun aph/kill-active-buffer (&optional choose)
   "Kill the active buffer.
 

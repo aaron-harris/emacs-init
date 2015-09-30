@@ -210,6 +210,29 @@ uncleared outputs).
 
 ;;;***
 
+;;;### (autoloads nil "aph-info" "aph-info.el" (22028 30124 325364
+;;;;;;  500000))
+;;; Generated autoloads from aph-info.el
+
+(autoload 'aph/info-mode-or-clone-buffer "aph-info" "\
+Enter info mode or clone info buffer.
+
+In an info buffer when no prefix argument has been supplied,
+clone the buffer (as `clone-buffer').  Otherwise, enter info
+mode (as `info').
+
+\(fn PREFIX)" t nil)
+
+(autoload 'aph/Info-final-menu-item "aph-info" "\
+Go to the node of the last menu item.
+
+This command duplicates the functionality of the 0 key in the
+standalone info application.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-mpc" "aph-mpc.el" (22008 32806 532682
 ;;;;;;  400000))
 ;;; Generated autoloads from aph-mpc.el
@@ -242,8 +265,8 @@ cde will return 14.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22008 25643 751950
-;;;;;;  0))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22025 48738 210449
+;;;;;;  200000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-spin-basic "aph-org" "\
@@ -340,12 +363,12 @@ first element of `aph/theme-list'.
 
 ;;;### (autoloads nil nil ("aph-comparators.el" "aph-hooks.el" "aph-keys.el"
 ;;;;;;  "aph-lib.el" "aph-org-agenda.el" "aph-require.el" "init-ahk.el"
-;;;;;;  "init-color-identifiers.el" "init-core.el" "init-docview.el"
-;;;;;;  "init-draft.el" "init-gnus.el" "init-ido.el" "init-keys.el"
-;;;;;;  "init-latex.el" "init-lisp-clojure.el" "init-lisp-emacs.el"
+;;;;;;  "init-color-identifiers.el" "init-completion.el" "init-core.el"
+;;;;;;  "init-docview.el" "init-draft.el" "init-elfeed.el" "init-ido.el"
+;;;;;;  "init-keys.el" "init-latex.el" "init-lisp-clojure.el" "init-lisp-emacs.el"
 ;;;;;;  "init-lisp.el" "init-misc.el" "init-org-agenda.el" "init-org-capture.el"
 ;;;;;;  "init-org.el" "init-package.el" "init-smartparens.el" "init-startup.el"
-;;;;;;  "init-visible-mark.el") (22019 26342 786817 800000))
+;;;;;;  "init-visible-mark.el") (22028 30154 69910 900000))
 
 ;;;***
 
