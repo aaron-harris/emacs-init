@@ -40,11 +40,11 @@
 (aph/require-softly 'init-package)
 
 ;; Major Features
-(aph/require-only-for-machine 'peregrine 'init-gnus)
 (aph/require-softly 'init-completion)
 (aph/require-softly 'init-ido)
 (aph/require-softly 'init-org)
 (aph/require-softly 'init-smartparens)
+(aph/require-softly 'init-elfeed)
 
 ;; Specific Modes
 (aph/require-softly 'init-docview)
