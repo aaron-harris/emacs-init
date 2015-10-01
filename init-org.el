@@ -181,7 +181,10 @@ directive)."
       '("/OPEN" ("TODO" "UNREAD")))
 
 ;; Make refreshing an agenda preserve the current text scale.
-(advice-add #'org-agenda-redo :around #'aph/preserving-text-scale)
+;; (The `with-eval-after-load' is because the advice isn't necessary
+;; unless the text scale has been adjusted.)
+(with-eval-after-load 'face-remap
+  (advice-add #'org-agenda-redo :around #'aph/preserving-text-scale))
 
 ;; Loading custom agenda commands.
 (require 'init-org-agenda)
