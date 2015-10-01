@@ -5,7 +5,7 @@
 ;;;;============================================================================ 
 
 (require 'aph-hooks)  ; For `aph/add-hook-safely', and some hook code.
-(require 'aph-lib)    ; For `aph/with-advice'
+(require 'aph-lib)    ; For `aph/with-advice', `aph/preserving-text-scale'
 
 
 ;;; Basic Setup
@@ -179,6 +179,9 @@ directive)."
 ;; marked TODO or UNREAD.
 (setq org-stuck-projects
       '("/OPEN" ("TODO" "UNREAD")))
+
+;; Make refreshing an agenda preserve the current text scale.
+(advice-add #'org-agenda-redo :around #'aph/preserving-text-scale)
 
 ;; Loading custom agenda commands.
 (require 'init-org-agenda)
