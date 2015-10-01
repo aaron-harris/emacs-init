@@ -30,6 +30,15 @@ event of an error or nonlocal exit."
                  adlist))))
 
 
+;;; General Advice
+;;;===============
+(defun aph/preserving-text-scale (fn &rest args)
+  "Call FN with ARGS, preserving current text scaling."
+  (let ((scale text-scale-mode-amount))
+    (apply fn args)
+    (text-scale-set scale)))
+
+
 ;;; Utility Functions
 ;;;==================
 (defun aph/assoc-delete-all (key alist)
