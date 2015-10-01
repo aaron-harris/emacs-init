@@ -41,11 +41,11 @@ If the binding succeeds, return COMMAND.  Otherwise return nil."
 (defmacro aph/define-keys-safely (keymap &rest bindings)
   "Define multiple keys using `aph/define-key-safely'.
 
-All BINDINGS must be for the same KEYMAP, and the PACKAGE
-parameter applies to all keybindings.  Each binding should be of
-the form (KEY COMMAND NOMSG-ON-REBIND).  See
-`aph/define-key-safely' for details." 
-  (declare (indent 1))
+All BINDINGS must be for the same KEYMAP.  Each binding should be
+of the form (KEY COMMAND [NOMSG-ON-REBIND]).  See
+`aph/define-key-safely' for details."
+  (declare (indent 1)
+           (debug (sexp &rest (form form &optional form))))
   `(progn
      ,@(mapcar
         (lambda (keydef)
@@ -61,7 +61,8 @@ the form (KEY COMMAND NOMSG-ON-REBIND).  See
 
 (defmacro aph/global-set-keys-safely (&rest bindings)
   "As `aph/define-keys-safely', but use the global keymap."
-  (declare (indent 0))
+  (declare (indent 0)
+           (debug (&rest (form form &optional form))))
   `(aph/define-keys-safely (current-global-map) ,@bindings))
 
 (provide 'aph-keys)
