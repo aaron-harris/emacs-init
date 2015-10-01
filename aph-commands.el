@@ -135,12 +135,16 @@ one line downward."
 ;;;==================
 
 (defvar aph/help-window-names
-  '("*Help*"
+  '(
+    ;; Ubiquitous help buffers
+    "*Help*"
     "*Apropos*"
     "*Messages*"
     "*Completions*"
-    "*disabled command*"
-    "*Command History*")
+    ;; Other general buffers
+    "*Command History*"
+    "*Compile-Log*"
+    "*disabled command*")
   "Names of buffers that `aph/quit-help-windows' should quit.")
 
 ;;;###autoload
