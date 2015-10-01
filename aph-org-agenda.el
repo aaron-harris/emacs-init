@@ -46,15 +46,16 @@ that value."
 ;;       to work properly when the headline they're called on is visible. Until
 ;;       this is sorted out, all agenda files should have their default
 ;;       visibility setting set to CONTENTS or higher.
-(defun aph/org-agenda-skip-tag (tag)
-  "Skip current headline if it is tagged with TAG.
+(defun aph/org-agenda-skip-tags (&rest tags)
+  "Skip current headline if it is tagged with any of TAGS.
 
-Return nil if headline containing point is tagged with TAG, and the
-position of the next headline in current buffer otherwise.
+Return nil if headline containing point is tagged with any tag in
+TAGS, and the position of the next headline in current buffer
+otherwise.
 
 Intended for use with `org-agenda-skip-function', where this will
-skip exactly those headlines tagged with TAG (including by
-inheritance)."
+skip exactly those headlines tagged with a tag in TAGS (including
+by inheritance)."
   (let ((next-headline
          (save-excursion (or (outline-next-heading)
                                   (point-max))))
@@ -62,20 +63,22 @@ inheritance)."
         (current-headline
          (or (and (org-at-heading-p) (point))
              (save-excursion (org-back-to-heading)))))
-    
-    (if (member tag (org-get-tags-at current-headline))
-        (1- next-headline)
-      nil)))
 
-(defun aph/org-agenda-skip-without-tag (tag)
-  "Skip current headline unless it is tagged with TAG.
+    (catch 'skip
+      (dolist (tag tags)
+        (when (member tag (org-get-tags-at current-headline))
+          (throw 'skip (1- next-headline))))))) 
 
-Return nil if headline containing point is not tagged with TAG, and the
-position of the next headline in current buffer otherwise.
+(defun aph/org-agenda-skip-without-tags (&rest tags)
+  "Skip current headline unless it is tagged with one of the TAGS.
+
+Return nil if headline containing point is not tagged with some
+tag in TAGS, and the position of the next headline in current
+buffer otherwise.
 
 Intended for use with `org-agenda-skip-function', where this will
-skip exactly those headlines not tagged with TAG (including by
-inheritance)."
+skip exactly those headlines not tagged with a tag in
+TAGS (including by inheritance)."
   (let ((next-headline
          (save-excursion (or (outline-next-heading)
                              (point-max))))
@@ -83,10 +86,34 @@ inheritance)."
         (current-headline
          (or (and (org-at-heading-p) (point))
              (save-excursion (org-back-to-heading)))))
-    
-    (if (member tag (org-get-tags-at current-headline))
-        nil
-      (1- next-headline))))
+
+    (catch 'noskip
+      (dolist (tag tags (1- next-headline))
+        (when (member tag (org-get-tags-at current-headline))
+          (throw 'noskip nil))))))
+
+(defun aph/org-agenda-skip-without-all-tags (&rest tags)
+  "Skip current headline unless it is tagged with every tag in TAGS.
+
+Return nil if headline containing point is not tagged with every
+tag in TAGS, and the position of the next headline in current
+buffer otherwise.
+
+Intended for use with `org-agenda-skip-function', where this will
+skip exactly those headlines not tagged with every tag in
+TAGS (including by inheritance)."
+  (let ((next-headline
+         (save-excursion (or (outline-next-heading)
+                             (point-max))))
+        
+        (current-headline
+         (or (and (org-at-heading-p) (point))
+             (save-excursion (org-back-to-heading)))))
+
+    (catch 'skip
+      (dolist (tag tags)
+        (unless (member tag (org-get-tags-at current-headline))
+          (throw 'skip (1- next-headline)))))))
 
 
 ;;; Comparators

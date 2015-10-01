@@ -34,6 +34,7 @@ event of an error or nonlocal exit."
 ;;;===============
 (defun aph/preserving-text-scale (fn &rest args)
   "Call FN with ARGS, preserving current text scaling."
+  (require 'face-remap)                 ; For `text-scale-mode-amount'
   (let ((scale text-scale-mode-amount))
     (apply fn args)
     (text-scale-set scale)))

@@ -11,12 +11,20 @@
 ;;; Block Definitions
 ;;;==================
 ;;; For ease of reuse, we define some functions to create custom agenda blocks.
-(defun aph/org-agenda-block-tagged-agenda (header tag &optional only)
-  "Return an agenda block for items tagged with TAG.
+(defun aph/org-agenda-block-tagged-agenda (header tags &optional only)
+  "Return an agenda block for items tagged with all TAGS.
 
 The returned block (a list form) has header HEADER and includes
-only items tagged with :all: or TAG, but excludes habits.  If
-ONLY is non-nil, it also excludes :all:-tagged items."
+only items tagged with every tag in TAGS (a list), excluding
+habits.
+
+Instead of a list, TAGS may also be a string, which is
+interpreted as a single tag.
+
+Unless ONLY is non-nil, it also excludes items tagged with
+the :all: tag."
+  (unless (listp tags)
+    (setq tags (list tags)))
   `(agenda
     ""
     ((org-agenda-overriding-header ,header)
@@ -26,23 +34,30 @@ ONLY is non-nil, it also excludes :all:-tagged items."
      (org-agenda-use-time-grid nil)
      (org-agenda-skip-function
       ',(if only
-            `(aph/org-agenda-skip-without-tag ,tag)
-          `(and (aph/org-agenda-skip-without-tag ,tag)
-                (aph/org-agenda-skip-without-tag "all")))))))
+            `(aph/org-agenda-skip-without-all-tags ,@tags)
+          `(and (aph/org-agenda-skip-without-all-tags ,@tags)
+                (aph/org-agenda-skip-without-tags "all")))))))
 
-(defun aph/org-agenda-block-tagged-habits (header tag &optional only)
-  "Return an agenda block for habits tagged with TAG.
+(defun aph/org-agenda-block-tagged-habits (header tags &optional only)
+  "Return an agenda block for habits tagged with all TAGS.
 
 The returned block (a list form) has header HEADER and includes
-only habits tagged with :all: or TAG.  If ONLY is non-nil, it
-also excludes :all:-tagged items."
+only habits tagged with every tag in TAGS (a list).
+
+Instead of a list, TAGS may also be a string, which is
+interpreted as a single tag.
+
+Unless ONLY is non-nil, it also excludes items tagged with
+the :all: tag."
+  (unless (listp tags)
+    (setq tags (list tags)))
   `(agenda
     ""
     ((org-agenda-overriding-header ,header)
      (org-agenda-entry-types '(:scheduled))
      (org-agenda-skip-function 
-      '(or (and (aph/org-agenda-skip-without-tag ,tag)
-                ,@(unless only `((aph/org-agenda-skip-without-tag "all"))))
+      '(or (and (aph/org-agenda-skip-without-all-tags ,@tags)
+                ,@(unless only `((aph/org-agenda-skip-without-tags "all"))))
            (org-agenda-skip-entry-if 'notregexp ":STYLE:.*habit"))))))
 
 (defun aph/org-agenda-block-match
@@ -181,21 +196,20 @@ suffix."
          (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Knowledge"
                                                "meal" :only)
           ,(aph/org-agenda-block-tagged-habits "Habits:"
-                                               "meal+knowledge" :only)
+                                               '("meal" "knowledge") :only)
           ,(aph/org-agenda-block-match-media "Knowledge Media:"
                                              "meal+knowledge")))
         ("zl" "Leisure"
          (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Leisure"
                                                "meal" :only)
           ,(aph/org-agenda-block-tagged-habits "Habits:"
-                                               "meal+leisure" :only)
+                                               '("meal" "leisure") :only)
           ,(aph/org-agenda-block-match-media "Leisure Media:"
                                              "meal+leisure")))
         ("zo" "Other"
          (,(aph/org-agenda-block-tagged-agenda "Meal Agenda: Other"
                                                "meal" :only)
-          ,(aph/org-agenda-block-tagged-habits "Habits:"
-                                               "meal-knowledge-leisure" :only)
+          ,(aph/org-agenda-block-tagged-habits "Habits:" "meal" :only)
           ,(aph/org-agenda-block-match-media "Other Media:"
                                              "meal-knowledge-leisure")))
         
@@ -208,7 +222,7 @@ suffix."
             (org-agenda-use-time-grid nil)
             (org-habit-show-habits nil)
             (org-agenda-skip-function
-             '(aph/org-agenda-skip-tag "review"))))
+             '(aph/org-agenda-skip-without-tags "review"))))
           ,(aph/org-agenda-block-tagged-agenda
             "Scheduled for Review" "review" :only)
           (tags-todo
@@ -218,15 +232,11 @@ suffix."
            ""
            ((org-agenda-overriding-header "Missed Agenda Items")
             (org-agenda-ndays 1)
-            (org-agenda-use-time-grid nil)
+            (org-agenda-use-time-grid nil) 
             (org-agenda-skip-function
-             '(or (aph/org-agenda-skip-tag "all")
-                  (aph/org-agenda-skip-tag "work")
-                  (aph/org-agenda-skip-tag "evening")
-                  (aph/org-agenda-skip-tag "review")
-                  (aph/org-agenda-skip-tag "weekend")
-                  (aph/org-agenda-skip-tag "computer")
-                  (aph/org-agenda-skip-tag "leisure")))))
+             '(aph/org-agenda-skip-tags
+               "all" "work" "evening" "weekend"
+               "review" "computer" "leisure"))))
           ,(aph/org-agenda-block-match-tasks
             "Missed Tasks"
             "-work-computer-weekend-review-unfiled-leisure")
