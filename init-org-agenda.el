@@ -168,7 +168,8 @@ suffix."
           ,(aph/org-agenda-block-new-projects "Five Random AutoHotkey Projects"
                                               "+ahk" 5 :random)
           ,(aph/org-agenda-block-new-projects "Five Random Other Projects"
-                                              "+computer-emacs-anki" 5 :random)))
+                                              "+computer-emacs-anki-ahk"
+                                              5 :random)))
 
         ("l" "Leisure Agenda"
          (,(aph/org-agenda-block-tagged-habits "Habits:" "leisure")
