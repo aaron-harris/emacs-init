@@ -182,7 +182,7 @@
 (aph/global-set-keys-safely
   ((kbd "C-h i") #'aph/info-mode-or-clone-buffer :rebind))
 (aph/define-keys-safely Info-mode-map
-  ((kbd "0") #'aph/Info-final-menu-item))
+  ((kbd "0") #'aph/Info-final-menu-item :rebind))
 
 ;; Mercurial
 (aph/global-set-keys-safely
