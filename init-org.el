@@ -176,9 +176,9 @@ directive)."
 (setq org-agenda-tags-todo-honor-ignore-options t)
 
 ;; We designate a project as stuck if it is OPEN and does not have a subtask
-;; marked TODO or UNREAD.
+;; marked TODO or CONSUME.
 (setq org-stuck-projects
-      '("/OPEN" ("TODO" "UNREAD")))
+      '("/OPEN" ("TODO" "CONSUME")))
 
 ;; Make refreshing an agenda preserve the current text scale.
 ;; (The `with-eval-after-load' is because the advice isn't necessary
