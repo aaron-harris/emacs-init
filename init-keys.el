@@ -52,6 +52,7 @@
   ((kbd "C-x C-c")        #'aph/delete-frame-or-exit   :rebind)
   ;; Information about Buffer
   ((kbd "M-= w")          #'count-words)
+  ((kbd "M-= l")          #'what-line)
   ((kbd "M-= p")          #'aph/sum-parens-in-region)
   ;; Buffer/Region Manipulation
   ((kbd "s-<apps> d")     #'delete-duplicate-lines)
