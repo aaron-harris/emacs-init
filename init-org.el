@@ -38,13 +38,29 @@
 ;;;==============
 (setq org-use-fast-todo-selection t)
 
+;; TODO keywords don't display very well in the fast selection buffer
+;; if these sequences are longer than three items long (not including
+;; "|" entries).
 (setq org-todo-keywords
       '((sequence "START(s)" "|" "CANCELLED(c!)")         ; General items
         (sequence "TODO(t)" "WAITING(;@)" "|" "DONE(d!)") ; Tasks
         (sequence "OPEN(o)" "SHELVED(S!)" "|" "DONE(d!)") ; Projects
-        (sequence "CONSUME(z)" "CONTINUE(-)" "AGAIN(r)"
-                  "|" "FINISHED(f!)")                     ; Media items
+        (sequence "CONSUME(z)" "CONTINUE(-)" "|" "FINISHED(f!)") ; Media items
         (sequence "UNAVAIL(u)" "BUY(b)" "|" "OWNED(O)"))) ; Media to obtain
+
+;; Advice to adjust where the TODO selection window appears
+(defun aph/org-todo-window-advice (orig-fn)
+  "Advice to fix window placement in `org-fast-todo-selection'."
+  (require 'aph-framewin)      ; For `aph/display-buffer-in-subwindow'
+  (let  ((override '("\\*Org todo\\*" aph/display-buffer-in-subwindow)))
+    (add-to-list 'display-buffer-alist override)
+    (aph/with-advice
+        ((#'org-switch-to-buffer-other-window :override #'pop-to-buffer))
+      (unwind-protect (funcall orig-fn)
+        (setq display-buffer-alist
+              (delete override display-buffer-alist))))))
+
+(advice-add #'org-fast-todo-selection :around #'aph/org-todo-window-advice)
 
 
 ;;; Tags
