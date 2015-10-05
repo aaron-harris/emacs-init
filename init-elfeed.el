@@ -34,9 +34,9 @@
    ("http://feeds.feedburner.com/hijinksensue?format=xml" comics)
    ("http://feeds.feedburner.com/rsspect/fJur" comics)
    ("http://feeds.feedburner.com/uclick/basicinstructions" comics link)
-   ("http://feeds.feedburner.com/uclick/foxtrot" comics)
+   ("http://feeds.feedburner.com/uclick/foxtrot" comics link)
    ("http://feeds.penny-arcade.com/pa-mainsite/" comics link)
-   ("http://flakypastry.runningwithpencils.com/flakypastryrss.xml" comics)
+   ("http://flakypastry.runningwithpencils.com/flakypastryrss.xml" comics link)
    ("http://lastmechanicalmonster.blogspot.com/feeds/posts/default" comics)
    ("http://over-encumbered.com/rss" comics)
    ("http://plox-comic.com/feed/" comics)
@@ -59,7 +59,7 @@
    ("http://www.useswordonmonster.com/?feed=rss2" comics link)
    ("http://xkcd.com/atom.xml" comics)
    ("http://youdamnkid.com/?feed=rss2" comics link)
-   ("http://frivolesque.com/feed" comics)
+   ("http://frivolesque.com/feed" comics link)
    ;; Math
    ("http://blog.plover.com/index.rss" math)
    ("http://golem.ph.utexas.edu/category/atom10.xml" math)
@@ -91,11 +91,12 @@
    ("http://swannodette.github.io/atom.xml" programming)
    ("https://aphyr.com/posts.atom" programming)
    ("https://yoo2080.wordpress.com/feed/" programming)
-   ;; Stackoverflow
-   ("http://stackoverflow.com/feeds/tag?tagnames=clojure&sort=newest"
-    programming stackoverflow)
-   ("http://stackoverflow.com/feeds/tag?tagnames=emacs&sort=newest"
-    programming stackoverflow)
+   ;; Stackexchange
+   ("http://stackoverflow.com/feeds/tag/clojure" programming stackexchange)
+   ("http://stackoverflow.com/feeds/tag/emacs" programming stackexchange)
+   ("http://superuser.com/feeds/tag/emacs" programming stackexchange)
+   ("http://superuser.com/feeds/tag/autohotkey" programming stackexchange)
+   ("http://emacs.stackexchange.com/feeds" programming stackexchange)
    ;; Other
    ("http://alasdairstuart.com/?feed=rss2" blog)
    ("http://allkindsofhistory.wordpress.com/feed/" history)
