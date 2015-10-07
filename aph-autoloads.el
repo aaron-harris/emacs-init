@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22011 16828
-;;;;;;  223440 900000))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22029 33819
+;;;;;;  328156 300000))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -27,15 +27,6 @@ case.  Otherwise, bypass confirmation and pass the argument to
 `save-buffers-kill-terminal'.
 
 \(fn &optional ARG)" t nil)
-
-(autoload 'aph/info-mode-or-clone-buffer "aph-commands" "\
-Enter info mode or clone info buffer.
-
-In an info buffer when no prefix argument has been supplied,
-clone the buffer (as `clone-buffer').  Otherwise, enter info
-mode (as `info').
-
-\(fn PREFIX)" t nil)
 
 (autoload 'aph/kill-active-buffer "aph-commands" "\
 Kill the active buffer.
@@ -117,8 +108,8 @@ See `aph/sum-parens' to get similar functionality from elisp.
 
 ;;;***
 
-;;;### (autoloads nil "aph-framewin" "aph-framewin.el" (22019 26110
-;;;;;;  836891 700000))
+;;;### (autoloads nil "aph-framewin" "aph-framewin.el" (22034 45614
+;;;;;;  275659 800000))
 ;;; Generated autoloads from aph-framewin.el
 
 (autoload 'aph/slide-buffer-forward "aph-framewin" "\
@@ -265,8 +256,8 @@ cde will return 14.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22025 48738 210449
-;;;;;;  200000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22037 20537 252072
+;;;;;;  300000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-spin-basic "aph-org" "\
@@ -361,14 +352,55 @@ first element of `aph/theme-list'.
 
 ;;;***
 
-;;;### (autoloads nil nil ("aph-comparators.el" "aph-hooks.el" "aph-keys.el"
-;;;;;;  "aph-lib.el" "aph-org-agenda.el" "aph-require.el" "init-ahk.el"
-;;;;;;  "init-color-identifiers.el" "init-completion.el" "init-core.el"
-;;;;;;  "init-docview.el" "init-draft.el" "init-elfeed.el" "init-ido.el"
-;;;;;;  "init-keys.el" "init-latex.el" "init-lisp-clojure.el" "init-lisp-emacs.el"
-;;;;;;  "init-lisp.el" "init-misc.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "init-package.el" "init-smartparens.el" "init-startup.el"
-;;;;;;  "init-visible-mark.el") (22028 30154 69910 900000))
+;;;### (autoloads nil "aph-web" "aph-web.el" (22037 21198 43476 800000))
+;;; Generated autoloads from aph-web.el
+
+(autoload 'aph/browse-url-prefer-eww "aph-web" "\
+Browse URL in `eww', or in an external browser.
+
+If a prefix argument is supplied, browse URL in an external
+browser; otherwise, use `eww'.
+
+Interactively, prompt the user for URL, using any URL at point as
+a default.
+
+\(fn EXTERNAL URL &rest ARGS)" t nil)
+
+(autoload 'aph/browse-url-prefer-external "aph-web" "\
+Browse URL in an external browser, or in `eww'.
+
+If a prefix argument is supplied, browse URL in `eww'; otherwise,
+use an external browser.
+
+Interactively, prompt the user for URL, using any URL at point as
+a default.
+
+\(fn EWW URL &rest ARGS)" t nil)
+
+(autoload 'aph/elfeed-search-show-entry "aph-web" "\
+As `elfeed-search-show-entry', but intelligently follow links.
+
+If ENTRY is tagged with the 'link tag, presume that the text of
+ENTRY will be incomplete and open the url in ENTRY's link field.
+If the optional parameter EXTERNAL is supplied (interactively, with a
+prefix argument), use an external browser; otherwise, use `eww'.
+
+If ENTRY doesn't have the \"link\" tag, call `elfeed-show-entry'.
+In this case, ignore the EXTERNAL parameter.
+
+\(fn ENTRY &optional EXTERNAL)" t nil)
+
+;;;***
+
+;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-hooks.el"
+;;;;;;  "aph-keys.el" "aph-lib.el" "aph-org-agenda.el" "aph-require.el"
+;;;;;;  "init-ahk.el" "init-color-identifiers.el" "init-completion.el"
+;;;;;;  "init-core.el" "init-docview.el" "init-draft.el" "init-elfeed.el"
+;;;;;;  "init-ido.el" "init-keys.el" "init-latex.el" "init-lisp-clojure.el"
+;;;;;;  "init-lisp-emacs.el" "init-lisp.el" "init-misc.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-smartparens.el"
+;;;;;;  "init-startup.el" "init-visible-mark.el") (22037 21584 383561
+;;;;;;  0))
 
 ;;;***
 
