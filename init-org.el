@@ -5,7 +5,8 @@
 ;;;;============================================================================ 
 
 (require 'aph-hooks)  ; For `aph/add-hook-safely', and some hook code.
-(require 'aph-lib)    ; For `aph/with-advice', `aph/preserving-text-scale'
+(require 'aph-lib)    ; For `aph/preserving-text-scale'
+(require 'aph-advice) ; For `aph/with-advice'
 
 
 ;;; Basic Setup

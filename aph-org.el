@@ -4,7 +4,7 @@
 ;;;; CUSTOM FUNCTIONS - ORG MODE
 ;;;;============================================================================
 
-(require 'aph-lib)                ; For `aph/with-advice'
+(require 'aph-advice)             ; For `aph/with-advice'
 (require 'dash)                   ; For `->>'
 
 
