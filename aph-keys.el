@@ -25,11 +25,14 @@ KEY.  Proceed with the rebinding in any case.
 If the binding succeeds, return COMMAND.  Otherwise return nil."
   (catch 'esc
     (let ((old-binding (lookup-key keymap key)))
-      (if (fboundp command)
+      ;; Binding the key
+      (if (or (null command) (fboundp command))
           (define-key keymap key command)
         (message "Cannot bind #'%s to %s: Command not defined"
                  command (key-description key))
         (throw 'esc nil))
+
+      ;; Warning message on rebind
       (unless (or nomsg-on-rebind
                   (not old-binding)     ; No previous binding
                   (numberp old-binding) ; New binding on existing prefix
