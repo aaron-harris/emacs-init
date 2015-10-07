@@ -175,15 +175,21 @@
   (aph/define-keys-safely company-active-map
     ((kbd "<tab>") #'company-complete-common-or-cycle :rebind)))
 
+;; Elfeed
+(with-eval-after-load 'elfeed
+  (aph/define-keys-safely elfeed-search-mode-map
+    ((kbd "<return>") #'aph/elfeed-search-show-entry :rebind)))
+
 ;; Eww
-(eval-after-load 'eww
-  '(aph/define-key-safely eww-mode-map (kbd "S-<tab>") #'shr-previous-link))
+(with-eval-after-load 'eww
+  (aph/define-key-safely eww-mode-map (kbd "S-<tab>") #'shr-previous-link))
 
 ;; Info
 (aph/global-set-keys-safely
   ((kbd "C-h i") #'aph/info-mode-or-clone-buffer :rebind))
-(aph/define-keys-safely Info-mode-map
-  ((kbd "0") #'aph/Info-final-menu-item :rebind))
+(with-eval-after-load 'info
+  (aph/define-keys-safely Info-mode-map
+    ((kbd "0") #'aph/Info-final-menu-item :rebind)))
 
 ;; Mercurial
 (aph/global-set-keys-safely
