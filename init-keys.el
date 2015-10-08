@@ -140,8 +140,8 @@
     ((kbd "C-c t r") #'org-clock-in-last))
   (aph/define-keys-safely org-mode-map
     ;; Unbinding
-    ((kbd "C-c [")   nil)
-    ((kbd "C-c ]")   nil)
+    ((kbd "C-c [")   nil :rebind)
+    ((kbd "C-c ]")   nil :rebind)
     ;; Clocking Commands
     ((kbd "C-c t i") #'org-clock-in)
     ;; Spinner Commands
