@@ -48,5 +48,6 @@ first element of `aph/theme-list'."
 ;;; Theme Settings
 ;;;===============
 (custom-theme-set-faces 'aph '(region ((t (:inverse-video t)))))
+(custom-theme-set-faces 'aph '(avy-lead-face-0 ((t (:inverse-video t)))))
 
 (provide-theme 'aph)

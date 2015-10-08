@@ -39,6 +39,12 @@
 (setq resize-mini-windows t)            ; Allow minibuffer to shrink.
 (setq shift-select-mode nil)            ; Disable shift selection.
 
+;; Avy
+(setq avy-style 'pre)
+(setq avy-background t)
+(setq avy-all-windows nil)
+(setq avy-highlight-first t)
+
 ;; Calendar settings
 (setq calendar-longitude -93.2
       calendar-latitude 45.0)
@@ -83,7 +89,7 @@
 ;;; Rectangle Patch
 ;;;================
 ;; There seems to be a bug in Emacs 25 where movement commands in
-;; rectangle mode hang when given a prefix argument.  This is an a
+;; rectangle mode hang when given a prefix argument.  This is a
 ;; workaround until the issue is fixed.
 (defun aph/rectangle-repetition-fix (fn cmd n &optional other-cmd)
   "Advice to fix bug in `rectangle-mark-mode' motion commands.
