@@ -28,11 +28,13 @@
 
 (aph/global-set-keys-safely
   ;; Scrolling
-  ((kbd "<down>")         #'aph/scroll-up-by-line      :rebind)
-  ((kbd "<up>")           #'aph/scroll-down-by-line    :rebind)
+  ((kbd "<down>")         #'aph/scroll-up-by-line   :rebind)
+  ((kbd "<up>")           #'aph/scroll-down-by-line :rebind)
   ;; Basic Editing
   ([remap open-line]      #'aph/open-line)
   ((kbd "C-S-o")          #'join-line)
+  ;; Undo
+  ((kbd "C-M-/")          #'undo-only :rebind)
   ;; Kill and Copy
   ((kbd "C-x M-k")        #'append-next-kill) ; Moving for `sp-copy-sexp'
   ;; Completion
@@ -46,10 +48,10 @@
   ((kbd "s-|")            #'aph/swap-buffer-forward)
   ;; General Buffer Control
   ([remap list-buffers]   #'ibuffer)
-  ((kbd "C-x k")          #'aph/kill-active-buffer     :rebind)
+  ((kbd "C-x k")          #'aph/kill-active-buffer :rebind)
   ;; Window and Frame Control
   ((kbd "C-c q")          #'aph/quit-help-windows)
-  ((kbd "C-x C-c")        #'aph/delete-frame-or-exit   :rebind)
+  ((kbd "C-x C-c")        #'aph/delete-frame-or-exit :rebind)
   ;; Information about Buffer
   ((kbd "M-= w")          #'count-words)
   ((kbd "M-= l")          #'what-line)
@@ -178,7 +180,7 @@
   ((kbd "M-g M-g") #'avy-goto-line :rebind)
   ((kbd "M-g M-w") #'avy-goto-word-or-subword-1))
 (aph/define-keys-safely isearch-mode-map 
-  ((kbd "M-g")     #'avy-isearch :rebind))
+  ((kbd "M-g")     #'avy-isearch))
 
 ;; Company Mode
 (with-eval-after-load 'company
