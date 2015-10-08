@@ -5,6 +5,11 @@
 ;;;;============================================================================
 
 
+;;; Display settings
+;;;=================
+(setq elfeed-sort-order 'ascending)
+
+
 ;;; Update settings
 ;;;================
 (setq url-queue-parallel-processes 1)
