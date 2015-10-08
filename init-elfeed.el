@@ -40,7 +40,7 @@
    ("http://lastmechanicalmonster.blogspot.com/feeds/posts/default" comics)
    ("http://over-encumbered.com/rss" comics)
    ("http://plox-comic.com/feed/" comics)
-   ("http://ps238.nodwick.com/?feed=rss2" comics)
+   ("http://ps238.nodwick.com/?feed=rss2" comics link)
    ("http://pvponline.com/feed" comics link)
    ("http://samandfuzzy.com/rss.php" comics link)
    ("http://skin-horse.com/feed/" comics link)
