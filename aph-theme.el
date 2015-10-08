@@ -45,6 +45,26 @@ first element of `aph/theme-list'."
       (enable-theme 'aph))))
 
 
+;;; Modifications to Underlying Themes
+;;;===================================
+;; The `hc-zenburn' theme lacks definitions for the the `avy' faces.
+;; These specs are translated directly from those in the `zenburn'
+;; theme.
+(with-eval-after-load 'hc-zenburn-theme
+  (hc-zenburn-with-color-variables
+    (custom-theme-set-faces
+     'hc-zenburn
+     `(avy-background-face
+       ((t (:foreground ,hc-zenburn-fg-1 :background ,hc-zenburn-bg
+                        :inverse-video nil))))
+     `(avy-lead-face-0
+       ((t (:foreground ,hc-zenburn-green+3 :background ,hc-zenburn-bg
+                        :inverse-video nil))))
+     `(avy-lead-face
+       ((t (:foreground ,hc-zenburn-green+2 :background ,hc-zenburn-bg
+                        :inverse-video nil)))))))
+
+
 ;;; Theme Settings
 ;;;===============
 (custom-theme-set-faces 'aph '(region ((t (:inverse-video t)))))
