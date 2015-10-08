@@ -72,4 +72,22 @@ In this case, ignore the EXTERNAL parameter."
        (aph/browse-url-prefer-eww external (elfeed-entry-link entry)))))
   (elfeed-search-show-entry entry))
 
+;;;###autoload
+(defun aph/elfeed-show-next (&optional external)
+  "As `elfeed-show-next', but intelligently follow links.
+See `aph/elfeed-search-show-entry' for details."
+  (interactive)
+  (aph/advice-once #'elfeed-search-show-entry
+                   :override #'aph/elfeed-search-show-entry) 
+  (elfeed-show-next))
+
+;;;###autoload
+(defun aph/elfeed-show-prev (&optional external)
+  "As `elfeed-show-prev', but intelligently follow links.
+See `aph/elfeed-search-show-entry' for details."
+  (interactive)
+  (aph/advice-once #'elfeed-search-show-entry
+                   :override #'aph/elfeed-search-show-entry) 
+  (elfeed-show-prev))
+
 (provide 'aph-web)
