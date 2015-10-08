@@ -185,10 +185,10 @@ keybinding for that function is not appropriate."
 ;;;=======
 
 ;;;###autoload
-(defun aph/org-agenda ()
-  "As `org-agenda', and automatically refresh sticky agendas."
-  (interactive)
-  (when (equal (call-interactively #'org-agenda)
+(defun aph/org-agenda (&optional arg org-keys restriction)
+  "As `org-agenda', and automatically refresh sticky agendas." 
+  (interactive "P") 
+  (when (equal (org-agenda arg org-keys restriction)
                "Sticky Agenda buffer, use `r' to refresh")
     (org-agenda-redo)))
 

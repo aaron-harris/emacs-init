@@ -292,13 +292,14 @@ by the variables `aph/workday-start' and `aph/workday-end')
 hasn't started yet, the work agenda if it's in progress, and the
 evening agenda if it's already ended."
   (interactive)
-  (let ((day            (nth 6 (decode-time)))
-        (hour           (nth 2 (decode-time))))
-    (if (< 0 day 6)
-        (cond
-         ((< hour aph/workday-start)  (org-agenda nil "r"))
-         ((>= hour aph/workday-end)   (org-agenda nil "2"))
-         (t                           (org-agenda nil "1")))
-      (org-agenda nil "3"))))
+  (let* ((day   (nth 6 (decode-time)))
+         (hour  (nth 2 (decode-time)))
+         (key   (cond
+                 ((= day 0)                   "3")    ; Sunday
+                 ((= day 6)                   "3")    ; Saturday
+                 ((< hour aph/workday-start)  "r")    ; morning
+                 ((>= hour aph/workday-end)   "2")    ; evening
+                 (t                           "1")))) ; workday
+    (aph/org-agenda nil key)))
 
 (provide 'init-org-agenda)
