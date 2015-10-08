@@ -192,11 +192,26 @@
 ;; Elfeed
 (with-eval-after-load 'elfeed
   (aph/define-keys-safely elfeed-search-mode-map
-    ((kbd "<return>") #'aph/elfeed-search-show-entry :rebind)))
+    ((kbd "<return>") #'aph/elfeed-search-show-entry :rebind))
+  (aph/define-keys-safely elfeed-show-mode-map
+    ((kbd "p")        #'aph/elfeed-show-prev :rebind)
+    ((kbd "n")        #'aph/elfeed-show-next :rebind)))
 
 ;; Eww
 (with-eval-after-load 'eww
-  (aph/define-key-safely eww-mode-map (kbd "S-<tab>") #'shr-previous-link))
+  (aph/define-keys-safely eww-mode-map
+    ;; Clear keys for later rebinding in presence of `elfeed'
+    ((kbd "p")       nil :rebind)
+    ((kbd "n")       nil :rebind)
+    ;; Intrapage navigation
+    ((kbd "S-<tab>") #'shr-previous-link)
+    ;; Interpage navigation
+    ((kbd "[")       #'eww-previous-url) ; Moved from p
+    ((kbd "]")       #'eww-next-url))    ; Moved from n
+  (with-eval-after-load 'elfeed
+    (aph/define-keys-safely eww-mode-map
+      ((kbd "p")     #'aph/elfeed-show-prev)
+      ((kbd "n")     #'aph/elfeed-show-next))))
 
 ;; Info
 (aph/global-set-keys-safely

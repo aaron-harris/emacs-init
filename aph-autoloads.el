@@ -256,8 +256,8 @@ cde will return 14.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22037 20537 252072
-;;;;;;  300000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22037 53159 784272
+;;;;;;  0))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-spin-basic "aph-org" "\
@@ -307,7 +307,7 @@ keybinding for that function is not appropriate.
 (autoload 'aph/org-agenda "aph-org" "\
 As `org-agenda', and automatically refresh sticky agendas.
 
-\(fn)" t nil)
+\(fn &optional ARG ORG-KEYS RESTRICTION)" t nil)
 
 (autoload 'aph/org-eww-store-link "aph-org" "\
 Store the current eww url as an Org-Mode link.
@@ -339,8 +339,8 @@ Run the shell command \"hg status\".
 
 ;;;***
 
-;;;### (autoloads nil "aph-theme" "aph-theme.el" (22008 32818 732466
-;;;;;;  200000))
+;;;### (autoloads nil "aph-theme" "aph-theme.el" (22038 55685 890266
+;;;;;;  300000))
 ;;; Generated autoloads from aph-theme.el
 
 (autoload 'aph/theme-cycle "aph-theme" "\
@@ -352,7 +352,8 @@ first element of `aph/theme-list'.
 
 ;;;***
 
-;;;### (autoloads nil "aph-web" "aph-web.el" (22037 21198 43476 800000))
+;;;### (autoloads nil "aph-web" "aph-web.el" (22038 63260 437517
+;;;;;;  300000))
 ;;; Generated autoloads from aph-web.el
 
 (autoload 'aph/browse-url-prefer-eww "aph-web" "\
@@ -390,6 +391,18 @@ In this case, ignore the EXTERNAL parameter.
 
 \(fn ENTRY &optional EXTERNAL)" t nil)
 
+(autoload 'aph/elfeed-show-next "aph-web" "\
+As `elfeed-show-next', but intelligently follow links.
+See `aph/elfeed-search-show-entry' for details.
+
+\(fn &optional EXTERNAL)" t nil)
+
+(autoload 'aph/elfeed-show-prev "aph-web" "\
+As `elfeed-show-prev', but intelligently follow links.
+See `aph/elfeed-search-show-entry' for details.
+
+\(fn &optional EXTERNAL)" t nil)
+
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-hooks.el"
@@ -399,8 +412,8 @@ In this case, ignore the EXTERNAL parameter.
 ;;;;;;  "init-ido.el" "init-keys.el" "init-latex.el" "init-lisp-clojure.el"
 ;;;;;;  "init-lisp-emacs.el" "init-lisp.el" "init-misc.el" "init-org-agenda.el"
 ;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-smartparens.el"
-;;;;;;  "init-startup.el" "init-visible-mark.el") (22037 21584 383561
-;;;;;;  0))
+;;;;;;  "init-startup.el" "init-visible-mark.el") (22038 64094 49379
+;;;;;;  900000))
 
 ;;;***
 
