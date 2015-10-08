@@ -24,10 +24,10 @@ Interactively, prompt the user for URL, using any URL at point as
 a default."
   (interactive (cons current-prefix-arg
                      (browse-url-interactive-arg "URL: ")))
-  (if external
-      (message "Sending URL to external browser.") 
-      (apply #'browse-url (cons url args))
-    (eww-browse-url url)))
+  (if (not external)
+      (eww-browse-url url)
+    (message "Sending URL to external browser.") 
+    (apply #'browse-url (cons url args))))
 
 ;;;###autoload
 (defun aph/browse-url-prefer-external (eww url &rest args)
