@@ -36,7 +36,8 @@
   ;; Undo
   ((kbd "C-M-/")          #'undo-only :rebind)
   ;; Kill and Copy
-  ((kbd "C-x M-k")        #'append-next-kill) ; Moving for `sp-copy-sexp'
+  ((kbd "C-S-k")          #'kill-whole-line)  ; Was at C-S-<backspace>
+  ((kbd "C-x M-k")        #'append-next-kill) ; Was at C-M-w
   ;; Completion
   ([remap dabbrev-expand] #'hippie-expand)
   ;; Cyclic Window Control
