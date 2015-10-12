@@ -25,6 +25,7 @@
 (global-unset-key (kbd "M-="))          ; Freeing this for use as a prefix.
 (global-unset-key (kbd "C-h a"))        ; Freeing this for use as a prefix.
 (global-unset-key (kbd "M-!"))          ; Freeing this for use as a prefix.
+(global-unset-key (kbd "C-h C-h"))      ; Interferes with viewing `C-h' prefix.
 
 (aph/global-set-keys-safely
   ;; Scrolling
@@ -71,7 +72,7 @@
   ;; Themes
   ((kbd "s-n")            #'aph/theme-cycle)
   ;; Keybinding Control
-  ((kbd "C-<kp-enter>")   #'aph/kp-enter-newline-toggle)
+  ((kbd "C-<kp-enter>")   #'aph/kp-enter-newline-toggle) 
   ;; Apropos
   ((kbd "C-h a a")        #'apropos)
   ((kbd "C-h a c")        #'apropos-command)
@@ -82,6 +83,11 @@
   ((kbd "C-h a l")        #'apropos-library)
   ((kbd "C-h a i")        #'info-apropos)
   ((kbd "C-h a t")        #'tags-apropos))
+;; Help keys
+(with-eval-after-load 'help-fns+
+  (aph/global-set-keys-safely
+    ((kbd "C-h c")   #'describe-key-briefly :rebind)
+    ((kbd "C-h M-b") #'describe-buffer)))
 
 
 ;;; Smartparens Keybindings
