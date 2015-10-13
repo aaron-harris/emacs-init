@@ -29,7 +29,7 @@
    ("http://campcomic.com/rss" comics link)
    ("http://cdn.drivecomic.com/rss.xml" comics)
    ("http://cdn.sheldoncomics.com/rss.xml" comics)
-   ("http://cthulhuslippers.com/feed/" comics)
+   ("http://cthulhuslippers.com/feed/" comics link)
    ("http://egscomics.com/rss.php" comics link)
    ("http://emacsredux.com/atom.xml" comics)
    ("http://erfworld.com/erf_stream/view?view=rss" comics)
