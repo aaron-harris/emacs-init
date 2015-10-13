@@ -31,6 +31,10 @@ all such modes.")
 
 ;;; Output Format Control
 ;;;======================
+;; At minimum, we want to avoid truncating elisp output.
+(setq eval-expression-print-level nil)
+(setq eval-expression-print-length nil)
+
 ;; This function was taken from a stackexchange answer by user Harald
 ;; Hanche-Olsen.  I have subsequently reformatted it to match my code
 ;; style.
