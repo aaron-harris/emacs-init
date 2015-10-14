@@ -113,9 +113,9 @@
 (with-eval-after-load 'helm
   (aph/global-set-keys-safely
     ;; Helm
-    ((kbd "C-x C-h")          #'helm-command-prefix)
+    ((kbd "C-x x")            #'helm-command-prefix)
     ((kbd "C-x c")            nil :rebind) ; Was `helm-command-prefix'
-    ((kbd "C-x C-h C-u")      #'helm-resume)
+    ((kbd "C-x x C-u")        #'helm-resume)
     ;; Command Invocation
     ((kbd "M-x")              #'helm-M-x :rebind)
     ([remap eval-expression]  #'helm-eval-expression-with-eldoc)
