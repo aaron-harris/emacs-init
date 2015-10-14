@@ -37,4 +37,10 @@
 (add-to-list 'helm-completing-read-handlers-alist
              '(org-refile . nil))
 
+
+;;; Extensions
+;;;===========
+(when (aph/require-softly 'helm-descbinds)
+  (helm-descbinds-mode))
+
 (provide 'init-helm)
