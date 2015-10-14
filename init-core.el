@@ -41,7 +41,7 @@
 
 ;; Major Features
 (aph/require-softly 'init-completion)
-(aph/require-softly 'init-ido)
+(aph/require-softly 'init-helm)
 (aph/require-softly 'init-org)
 (aph/require-softly 'init-smartparens)
 (aph/require-softly 'init-elfeed)

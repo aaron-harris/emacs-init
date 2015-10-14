@@ -29,70 +29,100 @@
 
 (aph/global-set-keys-safely
   ;; Scrolling
-  ((kbd "<down>")         #'aph/scroll-up-by-line   :rebind)
-  ((kbd "<up>")           #'aph/scroll-down-by-line :rebind)
+  ((kbd "<down>")          #'aph/scroll-up-by-line   :rebind)
+  ((kbd "<up>")            #'aph/scroll-down-by-line :rebind)
   ;; Basic Editing
-  ([remap open-line]      #'aph/open-line)
-  ((kbd "C-S-o")          #'join-line)
+  ([remap open-line]       #'aph/open-line)
+  ((kbd "C-S-o")           #'join-line)
   ;; Undo
-  ((kbd "C-M-/")          #'undo-only :rebind)
+  ((kbd "C-M-/")           #'undo-only :rebind)
   ;; Kill and Copy
-  ((kbd "C-S-k")          #'kill-whole-line)  ; Was at C-S-<backspace>
-  ((kbd "C-x M-k")        #'append-next-kill) ; Was at C-M-w
+  ((kbd "C-S-k")           #'kill-whole-line)  ; Was at C-S-<backspace>
+  ((kbd "C-x M-k")         #'append-next-kill) ; Was at C-M-w
+  ;; Registers
+  ((kbd "C-x r a")         #'append-to-register)
   ;; Completion
-  ([remap dabbrev-expand] #'hippie-expand)
-  ;; Cyclic Window Control
-  ((kbd "s-]")            #'other-window)
-  ((kbd "s-[")            #'aph/other-window-backwards)
-  ((kbd "s-{")            #'aph/pull-buffer-backward)
-  ((kbd "s-}")            #'aph/slide-buffer-forward)
-  ((kbd "s-\\")           #'aph/swap-buffer-forward-and-ride)
-  ((kbd "s-|")            #'aph/swap-buffer-forward)
-  ;; General Buffer Control
-  ([remap list-buffers]   #'ibuffer)
-  ((kbd "C-x k")          #'aph/kill-active-buffer :rebind)
-  ;; Window and Frame Control
-  ((kbd "C-c q")          #'aph/quit-help-windows)
-  ((kbd "C-x C-c")        #'aph/delete-frame-or-exit :rebind)
+  ([remap dabbrev-expand]  #'hippie-expand)
   ;; Information about Buffer
-  ((kbd "M-= w")          #'count-words)
-  ((kbd "M-= l")          #'what-line)
-  ((kbd "M-= p")          #'aph/sum-parens-in-region)
+  ((kbd "M-= w")           #'count-words)
+  ((kbd "M-= l")           #'what-line)
+  ((kbd "M-= p")           #'aph/sum-parens-in-region)
   ;; Buffer/Region Manipulation
-  ((kbd "s-<apps> d")     #'delete-duplicate-lines)
+  ((kbd "s-<apps> d")      #'delete-duplicate-lines)
+  ;; Cyclic Window Control
+  ((kbd "s-]")             #'other-window)
+  ((kbd "s-[")             #'aph/other-window-backwards)
+  ((kbd "s-{")             #'aph/pull-buffer-backward)
+  ((kbd "s-}")             #'aph/slide-buffer-forward)
+  ((kbd "s-\\")            #'aph/swap-buffer-forward-and-ride)
+  ((kbd "s-|")             #'aph/swap-buffer-forward)
+  ;; General Buffer Control
+  ([remap list-buffers]    #'ibuffer)
+  ((kbd "C-x k")           #'aph/kill-active-buffer :rebind)
+  ;; Window and Frame Control
+  ((kbd "C-c q")           #'aph/quit-help-windows)
+  ((kbd "C-x C-c")         #'aph/delete-frame-or-exit :rebind)
   ;; Application Control
-  ((kbd "C-c C-o")        #'browse-url)
+  ((kbd "C-c C-o")         #'browse-url)
   ;; Shell Commands
-  ((kbd "M-! M-!")        #'shell-command)
-  ((kbd "M-! M-&")        #'async-shell-command)
-  ((kbd "M-! r")          #'shell-command-on-region)
+  ((kbd "M-! M-!")         #'shell-command)
+  ((kbd "M-! M-&")         #'async-shell-command)
+  ((kbd "M-! r")           #'shell-command-on-region)
   ;; Highlighting
-  ((kbd "C-c h l")        #'hl-line-mode)
-  ;((kbd "C-c h x")       #'flash-crosshairs)
+  ((kbd "C-c h l")         #'hl-line-mode)
+;;((kbd "C-c h x")        #'flash-crosshairs)
   ;; Themes
-  ((kbd "s-n")            #'aph/theme-cycle)
+  ((kbd "s-n")             #'aph/theme-cycle)
   ;; Keybinding Control
-  ((kbd "C-<kp-enter>")   #'aph/kp-enter-newline-toggle) 
-  ;; Apropos
-  ((kbd "C-h a a")        #'apropos)
-  ((kbd "C-h a c")        #'apropos-command)
-  ((kbd "C-h a f")        #'aph/apropos-function)
-  ((kbd "C-h a v")        #'apropos-variable)
-  ((kbd "C-h a <space>")  #'apropos-value)
-  ((kbd "C-h a d")        #'apropos-documentation)
-  ((kbd "C-h a l")        #'apropos-library)
-  ((kbd "C-h a i")        #'info-apropos)
-  ((kbd "C-h a t")        #'tags-apropos))
-;; Help keys
-(with-eval-after-load 'help-fns+
+  ((kbd "C-<kp-enter>")    #'aph/kp-enter-newline-toggle)
+  ;; Help Keys
+  ((kbd "C-h c")           #'describe-key-briefly :rebind)
+  ((kbd "C-h M-b")         #'describe-buffer))
+
+
+;;; Helm Keybindings
+;;;=================
+(with-eval-after-load 'helm
   (aph/global-set-keys-safely
-    ((kbd "C-h c")   #'describe-key-briefly :rebind)
-    ((kbd "C-h M-b") #'describe-buffer)))
+    ;; Helm
+    ((kbd "C-x C-h")          #'helm-command-prefix)
+    ((kbd "C-x c")            nil :rebind) ; Was `helm-command-prefix'
+    ((kbd "C-x C-h C-u")      #'helm-resume)
+    ;; Command Invocation
+    ((kbd "M-x")              #'helm-M-x :rebind)
+    ([remap eval-expression]  #'helm-eval-expression-with-eldoc)
+    ;; Yank
+    ((kbd "M-y")              #'helm-show-kill-ring :rebind) ; Was `yank-pop'
+    ;; Registers
+    ((kbd "C-x r i")          #'helm-register :rebind) ; Was `insert-register'
+    ;; Navigation and Search
+    ((kbd "C-c ,")            #'helm-semantic-or-imenu)
+    ((kbd "M-s o")            #'helm-occur :rebind) ; Was `occur'
+    ((kbd "M-s r")            #'helm-regexp)
+    ((kbd "C-c SPC")          #'helm-all-mark-rings)
+    ;; General Buffer Control
+    ([remap switch-to-buffer] #'helm-mini)
+    ([remap find-file]        #'helm-find-files)
+    ;; Application Control
+    ((kbd "C-z C-s")          #'helm-google-suggest)
+    ;; Help Keys
+    ((kbd "C-h C-f")          #'helm-colors :rebind) ; Was `view-emacs-FAQ'
+    ([remap manual-entry]     #'helm-man-woman)
+    ((kbd "C-h C-i")          #'helm-info-at-point)
+    ((kbd "C-h a")            #'helm-apropos :rebind)) ; Was `apropos'
+  (aph/define-keys-safely helm-map
+    ;; Persistent Action
+    ;; (Disabling C-j and C-z is so tooltip correctly points to <tab>.)
+    ((kbd "<tab>")    #'helm-execute-persistent-action)
+    ((kbd "C-j")      nil :rebind)      ; Was `helm-execute-persistent-action'
+    ((kbd "C-z")      nil :rebind)      ; Was `helm-execute-persistent-action'
+    ;; Action Menu
+    ((kbd "s-<apps>") #'helm-select-action)))
 
 
 ;;; Smartparens Keybindings
 ;;;========================
-(with-eval-after-load 'smartparens 
+(with-eval-after-load 'smartparens
   (aph/define-keys-safely smartparens-mode-map
     ;; Movement
     ([remap backward-sexp]    #'sp-backward-sexp)
@@ -138,7 +168,7 @@
   ((kbd "C-c c")   #'aph/org-capture-in-popout-frame)
   ;; Link Commands
   ((kbd "C-c l")   #'org-store-link))
-(with-eval-after-load 'org 
+(with-eval-after-load 'org
   (aph/global-set-keys-safely
     ;; Capture and Refile Commands
     ((kbd "C-c w")   #'aph/org-goto-last-refile)
@@ -151,6 +181,8 @@
     ;; Unbinding
     ((kbd "C-c [")   nil :rebind)
     ((kbd "C-c ]")   nil :rebind)
+    ;; Buffer Navigation
+    ((kbd "C-c C-j") #'helm-semantic-or-imenu :rebind) ; Was `org-goto'
     ;; Clocking Commands
     ((kbd "C-c t i") #'org-clock-in)
     ;; Spinner Commands
@@ -186,8 +218,13 @@
   ((kbd "M-g q")   #'avy-goto-char)
   ((kbd "M-g M-g") #'avy-goto-line :rebind)
   ((kbd "M-g M-w") #'avy-goto-word-or-subword-1))
-(aph/define-keys-safely isearch-mode-map 
+(aph/define-keys-safely isearch-mode-map
   ((kbd "M-g")     #'avy-isearch))
+
+;; Calc
+(aph/global-set-keys-safely
+  ((kbd "C-z C-c") #'calc)
+  ((kbd "C-z M-c") #'helm-calcul-expression))
 
 ;; Company Mode
 (with-eval-after-load 'company
@@ -198,6 +235,8 @@
 
 ;; Elfeed
 (with-eval-after-load 'elfeed
+  (aph/global-set-keys-safely
+    ((kbd "C-z C-f")  #'elfeed))
   (aph/define-keys-safely elfeed-search-mode-map
     ((kbd "<return>") #'aph/elfeed-search-show-entry :rebind))
   (aph/define-keys-safely elfeed-show-mode-map
@@ -206,6 +245,8 @@
 
 ;; Eww
 (with-eval-after-load 'eww
+  (aph/global-set-keys-safely
+    ((kbd "C-z C-w")  #'eww))
   (aph/define-keys-safely eww-mode-map
     ;; Clear keys for later rebinding in presence of `elfeed'
     ((kbd "p")       nil :rebind)
