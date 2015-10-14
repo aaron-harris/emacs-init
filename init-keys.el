@@ -113,31 +113,33 @@
 (with-eval-after-load 'helm
   (aph/global-set-keys-safely
     ;; Helm
-    ((kbd "C-x x")            #'helm-command-prefix)
-    ((kbd "C-x c")            nil :rebind) ; Was `helm-command-prefix'
-    ((kbd "C-x x C-u")        #'helm-resume)
+    ((kbd "C-x x")          #'helm-command-prefix)
+    ((kbd "C-x c")          nil :rebind) ; `helm-command-prefix'
+    ((kbd "C-x x C-u")      #'helm-resume)
     ;; Command Invocation
-    ((kbd "M-x")              #'helm-M-x :rebind)
-    ([remap eval-expression]  #'helm-eval-expression-with-eldoc)
+    ((kbd "M-x")             #'helm-M-x :rebind)
+    ([remap eval-expression] #'helm-eval-expression-with-eldoc)
     ;; Yank
-    ((kbd "M-y")              #'helm-show-kill-ring :rebind) ; Was `yank-pop'
+    ((kbd "M-y")            #'helm-show-kill-ring :rebind) ; `yank-pop'
     ;; Registers
-    ((kbd "C-x r i")          #'helm-register :rebind) ; Was `insert-register'
+    ((kbd "C-x r i")        #'helm-register :rebind) ; `insert-register'
+    ;; Bookmarks
+    ((kbd "C-c b b")        #'helm-filtered-bookmarks :rebind) ; `bookmark-jump'
     ;; Navigation and Search
-    ((kbd "C-c ,")            #'helm-semantic-or-imenu)
-    ((kbd "M-s o")            #'helm-occur :rebind) ; Was `occur'
-    ((kbd "M-s r")            #'helm-regexp)
-    ((kbd "C-c SPC")          #'helm-all-mark-rings)
+    ((kbd "C-c ,")          #'helm-semantic-or-imenu)
+    ((kbd "M-s o")          #'helm-occur :rebind) ; `occur'
+    ((kbd "M-s r")          #'helm-regexp)
+    ((kbd "C-c SPC")        #'helm-all-mark-rings)
     ;; General Buffer Control
     ([remap switch-to-buffer] #'helm-mini)
     ([remap find-file]        #'helm-find-files)
     ;; Application Control
-    ((kbd "C-z C-s")          #'helm-google-suggest)
+    ((kbd "C-z C-s")        #'helm-google-suggest)
     ;; Help Keys
-    ((kbd "C-h C-f")          #'helm-colors :rebind) ; Was `view-emacs-FAQ'
-    ([remap manual-entry]     #'helm-man-woman)
-    ((kbd "C-h C-i")          #'helm-info-at-point)
-    ((kbd "C-h a")            #'helm-apropos :rebind)) ; Was `apropos'
+    ((kbd "C-h C-f")        #'helm-colors :rebind) ; `view-emacs-FAQ'
+    ([remap manual-entry]   #'helm-man-woman)
+    ((kbd "C-h C-i")        #'helm-info-at-point)
+    ((kbd "C-h a")          #'helm-apropos :rebind)) ; `apropos'
   (aph/define-keys-safely helm-map
     ;; Persistent Action
     ;; (Disabling C-j and C-z is so tooltip correctly points to <tab>.)
