@@ -302,6 +302,10 @@
  ((kbd "M-! h l") #'aph/hg-log)
  ((kbd "M-! h c") #'aph/hg-commit))
 
+;; Packages
+(aph/global-set-keys-safely
+  ((kbd "C-z C-p") #'helm-list-elisp-packages))
+
 
 ;;; Machine-Specific Keybindings
 ;;;=============================
