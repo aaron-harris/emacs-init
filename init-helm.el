@@ -43,4 +43,10 @@
 (when (aph/require-softly 'helm-descbinds)
   (helm-descbinds-mode))
 
+(when (aph/require-softly 'projectile)
+  (projectile-global-mode)
+  (setq projectile-completion-system 'helm)
+  (setq projectile-switch-project-action #'helm-projectile)
+  (helm-projectile-on))
+
 (provide 'init-helm)

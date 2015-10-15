@@ -133,6 +133,11 @@
     ;; General Buffer Control
     ([remap switch-to-buffer] #'helm-mini)
     ([remap find-file]        #'helm-find-files)
+    ((kbd "C-x p")            #'helm-projectile)
+    ((kbd "C-x M-p")          #'helm-browse-project)
+    ;; Filesystem Interaction
+    ((kbd "M-s g")          #'helm-do-grep)
+    ((kbd "M-s M-g")        #'helm-projectile-grep) 
     ;; Application Control
     ((kbd "C-z C-s")        #'helm-google-suggest)
     ;; Help Keys
@@ -297,12 +302,6 @@
 (with-eval-after-load 'info
   (aph/define-keys-safely Info-mode-map
     ((kbd "0") #'aph/Info-final-menu-item :rebind)))
-
-;; Mercurial
-(aph/global-set-keys-safely
- ((kbd "M-! h s") #'aph/hg-status)
- ((kbd "M-! h l") #'aph/hg-log)
- ((kbd "M-! h c") #'aph/hg-commit))
 
 ;; Packages
 (aph/global-set-keys-safely
