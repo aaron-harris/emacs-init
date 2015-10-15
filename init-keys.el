@@ -269,9 +269,9 @@
     ((kbd "<tab>") #'company-complete-common-or-cycle :rebind)))
 
 ;; Elfeed
-(with-eval-after-load 'elfeed
-  (aph/global-set-keys-safely
+(aph/global-set-keys-safely
     ((kbd "C-z C-f")  #'elfeed))
+(with-eval-after-load 'elfeed 
   (aph/define-keys-safely elfeed-search-mode-map
     ((kbd "<return>") #'aph/elfeed-search-show-entry :rebind))
   (aph/define-keys-safely elfeed-show-mode-map
@@ -279,9 +279,9 @@
     ((kbd "n")        #'aph/elfeed-show-next :rebind)))
 
 ;; Eww
-(with-eval-after-load 'eww
-  (aph/global-set-keys-safely
+(aph/global-set-keys-safely
     ((kbd "C-z C-w")  #'eww))
+(with-eval-after-load 'eww 
   (aph/define-keys-safely eww-mode-map
     ;; Clear keys for later rebinding in presence of `elfeed'
     ((kbd "p")       nil :rebind)
