@@ -47,6 +47,7 @@
   (projectile-global-mode)
   (setq projectile-completion-system 'helm)
   (setq projectile-switch-project-action #'helm-projectile)
+  (setq projectile-enable-caching t)
   (helm-projectile-on))
 
 (provide 'init-helm)
