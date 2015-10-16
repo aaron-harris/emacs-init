@@ -24,7 +24,6 @@
 (global-unset-key (kbd "C-z"))          ; I don't need minimization on a key.
 (global-unset-key (kbd "M-="))          ; Freeing this for use as a prefix.
 (global-unset-key (kbd "C-h a"))        ; Freeing this for use as a prefix.
-(global-unset-key (kbd "M-!"))          ; Freeing this for use as a prefix.
 (global-unset-key (kbd "C-h C-h"))      ; Interferes with viewing `C-h' prefix.
 
 (aph/global-set-keys-safely
@@ -91,11 +90,7 @@
   ((kbd "C-c q")           #'aph/quit-help-windows)
   ((kbd "C-x C-c")         #'aph/delete-frame-or-exit :rebind)
   ;; Application Control
-  ((kbd "C-c C-o")         #'browse-url)
-  ;; Shell Commands
-  ((kbd "M-! M-!")         #'shell-command)
-  ((kbd "M-! M-&")         #'async-shell-command)
-  ((kbd "M-! r")           #'shell-command-on-region)
+  ((kbd "C-c C-o")         #'browse-url) 
   ;; Highlighting
   ((kbd "C-c h l")         #'hl-line-mode)
 ;;((kbd "C-c h x")        #'flash-crosshairs)
