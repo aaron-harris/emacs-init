@@ -77,7 +77,7 @@
    ("http://rigtriv.wordpress.com/feed/" math)
    ("http://terrytao.wordpress.com/feed/" math)
    ("http://www.ams.org/featurecolumn.rss" math link)
-   ("http://www.goodmath.org/blog/?feed=rss2" math)
+   ("http://www.goodmath.org/blog/feed/" math)
    ("http://www.scottaaronson.com/blog/?feed=rss2" math)
    ;; Programming
    ("http://250bpm.com/feed/pages/pagename/start/category/blog/t/250bpm-blogs/h/"
