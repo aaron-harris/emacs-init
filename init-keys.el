@@ -21,17 +21,12 @@
 ;;; General Keybindings
 ;;;====================
 ;; Removing Unnecessary Bindings
-(global-unset-key (kbd "C-z"))          ; I don't need minimization on a key.
-(global-unset-key (kbd "M-="))          ; Freeing this for use as a prefix.
-(global-unset-key (kbd "C-h a"))        ; Freeing this for use as a prefix.
-(global-unset-key (kbd "C-h C-h"))      ; Interferes with viewing `C-h' prefix.
-
 (aph/global-set-keys-safely
   ;; Scrolling
   ((kbd "<down>")          #'aph/scroll-up-by-line   :rebind)
   ((kbd "<up>")            #'aph/scroll-down-by-line :rebind)
   ;; Basic Editing
-  ([remap open-line]       #'aph/open-line)
+  ([remap open-line]       #'aph/open-line) ; At C-o
   ((kbd "C-S-o")           #'join-line)
   ;; Undo
   ((kbd "C-M-/")           #'undo-only :rebind)
@@ -67,11 +62,13 @@
   ;; (Moved to prefix "C-c b")
   ((kbd "C-c b b")         #'bookmark-jump)
   ((kbd "C-c b l")         #'bookmark-bmenu-list)
-  ((kbd "C-c b m")         #'bookmark-set) 
+  ((kbd "C-c b m")         #'bookmark-set)
   ;; Completion
-  ([remap dabbrev-expand]  #'hippie-expand)
+  ([remap dabbrev-expand]  #'hippie-expand) ; At M-/
   ;; Information about Buffer
+  ((kbd "M-=")             nil :rebind) ; `count-words', see below
   ((kbd "M-= w")           #'count-words)
+  ((kbd "M-= b")           #'describe-buffer)
   ((kbd "M-= l")           #'what-line)
   ((kbd "M-= p")           #'aph/sum-parens-in-region)
   ;; Buffer/Region Manipulation
@@ -90,17 +87,24 @@
   ((kbd "C-c q")           #'aph/quit-help-windows)
   ((kbd "C-x C-c")         #'aph/delete-frame-or-exit :rebind)
   ;; Application Control
-  ((kbd "C-c C-o")         #'browse-url) 
+  ((kbd "C-z")             nil :rebind) ; `suspend-frame' (for use as prefix)
+  ((kbd "C-c C-o")         #'browse-url)
   ;; Highlighting
   ((kbd "C-c h l")         #'hl-line-mode)
-;;((kbd "C-c h x")        #'flash-crosshairs)
   ;; Themes
   ((kbd "s-n")             #'aph/theme-cycle)
   ;; Keybinding Control
   ((kbd "C-<kp-enter>")    #'aph/kp-enter-newline-toggle)
   ;; Help Keys
+  ((kbd "C-h C-h")         nil :rebind) ; `help-for-help'
   ((kbd "C-h c")           #'describe-key-briefly :rebind)
   ((kbd "C-h M-b")         #'describe-buffer))
+(with-eval-after-load 'smartscan
+  (aph/define-keys-safely smartscan-map
+    ((kbd "M-n")           nil :rebind) ; `smartscan-symbol-go-forward'
+    ((kbd "C-M-s")         #'smartscan-symbol-go-forward)
+    ((kbd "M-p")           nil :rebind) ; `smartscan-symbol-go-backward'
+    ((kbd "C-M-r")         #'smartscan-symbol-go-backward)))
 
 
 ;;; Helm Keybindings
@@ -108,44 +112,44 @@
 (with-eval-after-load 'helm
   (aph/global-set-keys-safely
     ;; Helm
-    ((kbd "C-x x")          #'helm-command-prefix)
-    ((kbd "C-x c")          nil :rebind) ; `helm-command-prefix'
-    ((kbd "C-x x C-u")      #'helm-resume)
+    ((kbd "C-x x")            #'helm-command-prefix)
+    ((kbd "C-x c")            nil :rebind) ; `helm-command-prefix'
+    ((kbd "C-x x C-u")        #'helm-resume)
     ;; Command Invocation
-    ((kbd "M-x")             #'helm-M-x :rebind)
-    ([remap eval-expression] #'helm-eval-expression-with-eldoc)
+    ((kbd "M-x")              #'helm-M-x :rebind)
+    ([remap eval-expression]  #'helm-eval-expression-with-eldoc)
     ;; Yank
-    ((kbd "M-y")            #'helm-show-kill-ring :rebind) ; `yank-pop'
+    ((kbd "M-y")              #'helm-show-kill-ring :rebind) ; `yank-pop'
     ;; Registers
-    ((kbd "C-x r i")        #'helm-register :rebind) ; `insert-register'
+    ((kbd "C-x r i")          #'helm-register :rebind) ; `insert-register'
     ;; Bookmarks
-    ((kbd "C-c b b")        #'helm-filtered-bookmarks :rebind) ; `bookmark-jump'
+    ((kbd "C-c b b")          #'helm-filtered-bookmarks :rebind) ; `bookmark-jump'
     ;; Navigation and Search
-    ((kbd "C-c ,")          #'helm-semantic-or-imenu)
-    ((kbd "M-s o")          #'helm-occur :rebind) ; `occur'
-    ((kbd "M-s r")          #'helm-regexp)
-    ((kbd "C-c SPC")        #'helm-all-mark-rings)
+    ((kbd "C-c ,")            #'helm-semantic-or-imenu)
+    ((kbd "M-s o")            #'helm-occur :rebind) ; `occur'
+    ((kbd "M-s r")            #'helm-regexp)
+    ((kbd "C-c SPC")          #'helm-all-mark-rings)
     ;; General Buffer Control
     ([remap switch-to-buffer] #'helm-mini)
     ([remap find-file]        #'helm-find-files)
     ((kbd "C-x p")            #'helm-projectile)
     ((kbd "C-x M-p")          #'helm-browse-project)
     ;; Filesystem Interaction
-    ((kbd "M-s g")          #'helm-do-grep)
-    ((kbd "M-s M-g")        #'helm-projectile-grep) 
+    ((kbd "M-s g")            #'helm-do-grep)
+    ((kbd "M-s M-g")          #'helm-projectile-grep)
     ;; Application Control
-    ((kbd "C-z C-s")        #'helm-google-suggest)
+    ((kbd "C-z C-s")          #'helm-google-suggest)
     ;; Help Keys
-    ((kbd "C-h C-f")        #'helm-colors :rebind) ; `view-emacs-FAQ'
-    ([remap manual-entry]   #'helm-man-woman)
-    ((kbd "C-h C-i")        #'helm-info-at-point)
-    ((kbd "C-h a")          #'helm-apropos :rebind)) ; `apropos'
+    ((kbd "C-h C-f")          #'helm-colors :rebind) ; `view-emacs-FAQ'
+    ([remap manual-entry]     #'helm-man-woman)
+    ((kbd "C-h C-i")          #'helm-info-at-point)
+    ((kbd "C-h a")            #'helm-apropos :rebind)) ; `apropos'
   (aph/define-keys-safely helm-map
     ;; Persistent Action
     ;; (Disabling C-j and C-z is so tooltip correctly points to <tab>.)
     ((kbd "<tab>")    #'helm-execute-persistent-action)
-    ((kbd "C-j")      nil :rebind)      ; Was `helm-execute-persistent-action'
-    ((kbd "C-z")      nil :rebind)      ; Was `helm-execute-persistent-action'
+    ((kbd "C-j")      nil :rebind)      ; `helm-execute-persistent-action'
+    ((kbd "C-z")      nil :rebind)      ; `helm-execute-persistent-action'
     ;; Action Menu
     ((kbd "s-<apps>") #'helm-select-action)))
 
@@ -192,115 +196,115 @@
 ;;;=====================
 (aph/global-set-keys-safely
   ;; Agenda Commands
-  ((kbd "C-c a")   #'aph/org-agenda)
-  ((kbd "<f1>")    #'aph/org-agenda-display-smart-agenda :rebind)
+  ((kbd "C-c a")         #'aph/org-agenda)
+  ((kbd "<f1>")          #'aph/org-agenda-display-smart-agenda :rebind)
   ;; Capture and Refile Commands
-  ((kbd "C-c c")   #'aph/org-capture-in-popout-frame)
+  ((kbd "C-c c")         #'aph/org-capture-in-popout-frame)
   ;; Link Commands
-  ((kbd "C-c l")   #'org-store-link))
+  ((kbd "C-c l")         #'org-store-link))
 (with-eval-after-load 'org
   (aph/global-set-keys-safely
     ;; Capture and Refile Commands
-    ((kbd "C-c w")   #'aph/org-goto-last-refile)
+    ((kbd "C-c w")       #'aph/org-goto-last-refile)
     ;; Clocking Commands
-    ((kbd "C-c t j") #'org-clock-goto)
-    ((kbd "C-c t o") #'org-clock-out)
-    ((kbd "C-c t x") #'org-clock-cancel)
-    ((kbd "C-c t r") #'org-clock-in-last))
+    ((kbd "C-c t j")     #'org-clock-goto)
+    ((kbd "C-c t o")     #'org-clock-out)
+    ((kbd "C-c t x")     #'org-clock-cancel)
+    ((kbd "C-c t r")     #'org-clock-in-last))
   (aph/define-keys-safely org-mode-map
     ;; Unbinding
-    ((kbd "C-c [")   nil :rebind)
-    ((kbd "C-c ]")   nil :rebind)
+    ((kbd "C-c [")       nil :rebind)
+    ((kbd "C-c ]")       nil :rebind)
     ;; Buffer Navigation
-    ((kbd "C-c C-j") #'helm-semantic-or-imenu :rebind) ; Was `org-goto'
+    ((kbd "C-c C-j")     #'helm-semantic-or-imenu :rebind) ; `org-goto'
     ;; Clocking Commands
-    ((kbd "C-c t i") #'org-clock-in)
+    ((kbd "C-c t i")     #'org-clock-in)
     ;; Spinner Commands
-    ((kbd "C-z s")   #'aph/org-spin-basic)
-    ((kbd "C-z C-s") #'aph/org-spin-weighted)))
+    ((kbd "C-c s SPC")   #'aph/org-spin-basic)
+    ((kbd "C-c s M-SPC") #'aph/org-spin-weighted)))
 
 
 ;;; Programming Keybindings
 ;;;========================
 ;; Elisp
 (aph/global-set-keys-safely
-  ((kbd "C-x M-l") #'find-library)
-  ((kbd "C-:")     #'pp-eval-expression))
-
+  ((kbd "C-x M-l")    #'find-library)
+  ((kbd "C-:")        #'pp-eval-expression))
 (with-eval-after-load 'ielm
   (aph/define-keys-safely ielm-map
-    ((kbd "C-c M-w") #'aph/ielm-copy-last-output)
-    ((kbd "C-c C-t") #'aph/eval-expression-toggle-clean-output)))
+    ((kbd "C-c M-w")  #'aph/ielm-copy-last-output)
+    ((kbd "C-c C-t")  #'aph/eval-expression-toggle-clean-output)))
 
 ;; Clojure and Cider
-(aph/global-set-key-safely (kbd "C-c M-c") #'cider-connect)
+(aph/global-set-keys-safely
+  ((kbd "C-c M-c")  #'cider-connect))
 (with-eval-after-load 'cider
-  (aph/define-keys-safely clojure-mode-map
-    ((kbd "C-h A a") #'cider-apropos)
-    ((kbd "C-h A d") #'cider-apropos-documentation)))
+  (aph/define-keys-safely cider-mode-map
+    ((kbd "C-h A")  #'cider-apropos)
+    ((kbd "C-h D")  #'cider-apropos-documentation)))
 
 
 ;;; Other Keybindings
 ;;;==================
 ;; Avy
 (aph/global-set-keys-safely
-  ((kbd "M-g M-q") #'avy-goto-char-2)
-  ((kbd "M-g q")   #'avy-goto-char)
-  ((kbd "M-g M-g") #'avy-goto-line :rebind)
-  ((kbd "M-g M-w") #'avy-goto-word-or-subword-1))
+  ((kbd "M-g M-q")  #'avy-goto-char-2)
+  ((kbd "M-g q")    #'avy-goto-char)
+  ((kbd "M-g M-g")  #'avy-goto-line :rebind) ; `goto-line'
+  ((kbd "M-g M-w")  #'avy-goto-word-or-subword-1))
 (aph/define-keys-safely isearch-mode-map
-  ((kbd "M-g")     #'avy-isearch))
+  ((kbd "M-g")      #'avy-isearch))
 
 ;; Calc
 (aph/global-set-keys-safely
-  ((kbd "C-z C-c") #'calc)
-  ((kbd "C-z M-c") #'helm-calcul-expression))
+  ((kbd "C-z C-c")  #'calc)
+  ((kbd "C-z M-c")  #'helm-calcul-expression))
 
 ;; Company Mode
 (with-eval-after-load 'company
   (aph/define-keys-safely company-mode-map
-    ((kbd "<tab>") #'company-indent-or-complete-common))
+    ((kbd "<tab>")  #'company-indent-or-complete-common))
   (aph/define-keys-safely company-active-map
-    ((kbd "<tab>") #'company-complete-common-or-cycle :rebind)))
+    ((kbd "<tab>")  #'company-complete-common-or-cycle :rebind)))
 
 ;; Elfeed
 (aph/global-set-keys-safely
-    ((kbd "C-z C-f")  #'elfeed))
-(with-eval-after-load 'elfeed 
+    ((kbd "C-z C-f")   #'elfeed))
+(with-eval-after-load 'elfeed
   (aph/define-keys-safely elfeed-search-mode-map
-    ((kbd "<return>") #'aph/elfeed-search-show-entry :rebind))
+    ((kbd "<return>")  #'aph/elfeed-search-show-entry :rebind))
   (aph/define-keys-safely elfeed-show-mode-map
-    ((kbd "p")        #'aph/elfeed-show-prev :rebind)
-    ((kbd "n")        #'aph/elfeed-show-next :rebind)))
+    ((kbd "p")         #'aph/elfeed-show-prev :rebind)
+    ((kbd "n")         #'aph/elfeed-show-next :rebind)))
 
 ;; Eww
 (aph/global-set-keys-safely
     ((kbd "C-z C-w")  #'eww))
-(with-eval-after-load 'eww 
+(with-eval-after-load 'eww
   (aph/define-keys-safely eww-mode-map
     ;; Clear keys for later rebinding in presence of `elfeed'
-    ((kbd "p")       nil :rebind)
-    ((kbd "n")       nil :rebind)
+    ((kbd "p")        nil :rebind) ; `eww-previous-url', see below
+    ((kbd "n")        nil :rebind) ; `eww-next-url', see below
     ;; Intrapage navigation
-    ((kbd "S-<tab>") #'shr-previous-link)
+    ((kbd "S-<tab>")  #'shr-previous-link)
     ;; Interpage navigation
-    ((kbd "[")       #'eww-previous-url) ; Moved from p
-    ((kbd "]")       #'eww-next-url))    ; Moved from n
+    ((kbd "[")        #'eww-previous-url) ; Moved from p
+    ((kbd "]")        #'eww-next-url))    ; Moved from n
   (with-eval-after-load 'elfeed
     (aph/define-keys-safely eww-mode-map
-      ((kbd "p")     #'aph/elfeed-show-prev)
-      ((kbd "n")     #'aph/elfeed-show-next))))
+      ((kbd "p")      #'aph/elfeed-show-prev)
+      ((kbd "n")      #'aph/elfeed-show-next))))
 
 ;; Info
 (aph/global-set-keys-safely
-  ((kbd "C-h i") #'aph/info-mode-or-clone-buffer :rebind))
+  ((kbd "C-h i")  #'aph/info-mode-or-clone-buffer :rebind)) ; `info'
 (with-eval-after-load 'info
   (aph/define-keys-safely Info-mode-map
-    ((kbd "0") #'aph/Info-final-menu-item :rebind)))
+    ((kbd "0")    #'aph/Info-final-menu-item :rebind)))
 
 ;; Packages
 (aph/global-set-keys-safely
-  ((kbd "C-z C-p") #'helm-list-elisp-packages))
+  ((kbd "C-z C-p")  #'helm-list-elisp-packages))
 
 
 ;;; Machine-Specific Keybindings
