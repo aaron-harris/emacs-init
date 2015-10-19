@@ -28,6 +28,7 @@
   ;; Basic Editing
   ([remap open-line]       #'aph/open-line) ; At C-o
   ((kbd "C-S-o")           #'join-line)
+  ((kbd "C-S-t")           #'transpose-paragraphs)
   ;; Undo
   ((kbd "C-M-/")           #'undo-only :rebind)
   ;; Kill and Copy
@@ -73,6 +74,9 @@
   ((kbd "M-= p")           #'aph/sum-parens-in-region)
   ;; Buffer/Region Manipulation
   ((kbd "s-<apps> d")      #'delete-duplicate-lines)
+  ((kbd "s-<apps> k")      #'flush-lines)
+  ((kbd "s-<apps> M-k")    #'keep-lines)
+  ((kbd "s-<apps> s")      #'sort-lines)
   ;; Cyclic Window Control
   ((kbd "s-]")             #'other-window)
   ((kbd "s-[")             #'aph/other-window-backwards)
