@@ -67,7 +67,7 @@
    ("http://frivolesque.com/feed" comics link)
    ;; Math
    ("http://blog.plover.com/index.rss" math)
-   ("http://golem.ph.utexas.edu/category/atom10.xml" math)
+   ("http://golem.ph.utexas.edu/category/atom10.xml" math link)
    ("http://gottwurfelt.wordpress.com/feed/" math)
    ("http://gowers.wordpress.com/feed/" math)
    ("http://igorpak.wordpress.com/feed/" math)
