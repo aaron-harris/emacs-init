@@ -6,13 +6,15 @@
 
 (require 'dash)                         ; For `-drop-while'
 
-(deftheme aph "Personal theme of Aaron Harris")
-
 
 ;;; Base Theme Setup
 ;;;=================
 ;; This theme is designed to be an extension for some other base
 ;; theme.  Support is provided for cycling the base theme used.
+
+(defvar aph/theme-base-change-hook nil
+  "Hook run after a base change for the 'aph theme.
+The hook is run after the new base theme has been loaded.")
 
 (defvar aph/theme-list '(zenburn hc-zenburn)
   "A list of themes the 'aph theme can use as bases.
@@ -23,11 +25,6 @@ base.
 
 Be aware that 'aph will treat all of these themes as safe
 regardless of the value of `custom-safe-themes'.")
-
-;; Load all the base themes, and enable the first one.
-(load-theme (car aph/theme-list) :noconfirm)
-(dolist (thm (cdr aph/theme-list))
-        (load-theme thm :noconfirm :noenable))
 
 ;;;###autoload
 (defun aph/theme-cycle ()
@@ -42,11 +39,19 @@ first element of `aph/theme-list'."
         (enable-theme (car aph/theme-list))
       (disable-theme (car themes))
       (enable-theme (or (cadr themes) (car aph/theme-list)))
-      (enable-theme 'aph))))
+      (enable-theme 'aph))
+    (run-hooks 'aph/theme-base-change-hook)))
 
 
-;;; Modifications to Underlying Themes
-;;;===================================
+;;; Theme Definition
+;;;=================
+(deftheme aph "Personal theme of Aaron Harris")
+
+;; Load all the base themes, and enable the first one.
+(load-theme (car aph/theme-list) :noconfirm)
+(dolist (thm (cdr aph/theme-list))
+  (load-theme thm :noconfirm :noenable)) 
+
 ;; The `hc-zenburn' theme lacks definitions for the the `avy' faces.
 ;; These specs are translated directly from those in the `zenburn'
 ;; theme.
@@ -64,9 +69,7 @@ first element of `aph/theme-list'."
        ((t (:foreground ,hc-zenburn-green+2 :background ,hc-zenburn-bg
                         :inverse-video nil)))))))
 
-
-;;; Theme Settings
-;;;===============
+;; Face settings that should apply to all base themes.
 (custom-theme-set-faces
  'aph
  '(region ((t (:inverse-video t))))
