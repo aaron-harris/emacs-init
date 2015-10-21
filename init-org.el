@@ -2,7 +2,7 @@
 
 ;;;; The Emacs init file of Aaron Harris.
 ;;;; ORG-MODE CONFIGURATION
-;;;;============================================================================ 
+;;;;============================================================================
 
 (require 'aph-hooks)  ; For `aph/add-hook-safely', and some hook code.
 (require 'aph-lib)    ; For `aph/preserving-text-scale'
@@ -96,10 +96,10 @@
         (:newline    . nil)
         ("knowledge" . ?k)
         ("leisure"   . ?l)
-        (:newline    . nil) 
+        (:newline    . nil)
         ("emacs"     . ?x)
         ("anki"      . ?i)
-        ("ahk"       . ?a))) 
+        ("ahk"       . ?a)))
 
 ;; TODO: Replace this advice with a more precisely-directed version that will
 ;;       still allow buffer-local tags.
@@ -225,7 +225,7 @@ directive)."
   "Advice to enable custom markup delimiters.
 
 This is advice for `org-element-text-markup-successor' to make it
-aware of my changes to `org-emphasis-alist'." 
+aware of my changes to `org-emphasis-alist'."
   (condition-case err
       (funcall oldfn)
     (error
@@ -261,6 +261,21 @@ All other behavior of `org-cycle' remains unchanged."
             (#'smart-tab-default :override #'indent-for-tab-command))
          (apply fn arg)))
      (advice-add #'org-cycle :around #'aph/org-cycle-smart-tab-advice)))
+
+
+;;; Face and Display Tweaks
+;;;========================
+;; This function makes sure the `org-hide' face is being displayed
+;; correctly.  We need to run it in `aph/theme-base-change-hook', or
+;; else changing base themes will show black stars in indented Org
+;; buffers.
+(defun aph/org-update-faces ()
+  "Update definition of `org-hide' to match current theme."
+  (let ((foreground (org-find-invisible-foreground)))
+    (if foreground
+        (set-face-foreground 'org-hide foreground))))
+
+(add-hook 'aph/theme-base-change-hook #'aph/org-update-faces)
 
 
 ;;; Mobile
