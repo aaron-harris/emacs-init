@@ -293,7 +293,9 @@
     ((kbd "S-<tab>")  #'shr-previous-link)
     ;; Interpage navigation
     ((kbd "[")        #'eww-previous-url) ; Moved from p
-    ((kbd "]")        #'eww-next-url))    ; Moved from n
+    ((kbd "]")        #'eww-next-url)     ; Moved from n
+    ;; Image commands
+    ((kbd "z")        #'shr-zoom-image))
   (with-eval-after-load 'elfeed
     (aph/define-keys-safely eww-mode-map
       ((kbd "p")      #'aph/elfeed-show-prev)
