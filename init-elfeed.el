@@ -58,7 +58,7 @@
    ("http://www.giantitp.com/comics/oots.rss" comics link)
    ("http://www.girlgeniusonline.com/ggmain.rss" comics link)
    ("http://www.kiwiblitz.com/rss.php" comics link)
-   ("http://www.questionablecontent.net/QCRSS.xml" comics link)
+   ("http://www.questionablecontent.net/QCRSS.xml" comics)
    ("http://www.smbc-comics.com/rss.php" comics)
    ("http://www.somethingpositive.net/sp.xml" comics link)
    ("http://www.useswordonmonster.com/?feed=rss2" comics link)
