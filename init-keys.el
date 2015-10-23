@@ -122,7 +122,7 @@
     ((kbd "C-x x C-u")        #'helm-resume)
     ;; Command Invocation
     ((kbd "M-x")              #'helm-M-x :rebind)
-    ([remap eval-expression]  #'helm-eval-expression-with-eldoc)
+    ((kbd "C-M-:")            #'helm-eval-expression-with-eldoc) 
     ;; Yank
     ((kbd "M-y")              #'helm-show-kill-ring :rebind) ; `yank-pop'
     ;; Registers
