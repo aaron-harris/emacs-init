@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22029 33819
-;;;;;;  328156 300000))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22058 26208
+;;;;;;  291152 900000))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -82,6 +82,21 @@ Also, a negative prefix argument is treated as -1, scrolling only
 one line downward.
 
 \(fn &optional ARG)" t nil)
+
+(autoload 'aph/yank-rectangle-from-kill-ring "aph-commands" "\
+Yank the top of kill ring as a rectangle.
+Make the \"last killed rectangle\" be the top entry of the kill
+ring, then yank that rectangle at point.
+
+With \\[universal-argument] as argument, just save the top entry
+of the kill ring as a rectangle, without yanking.  Print a
+message to that effect.  When called from elisp, this message is
+suppressed unless the optional argument VERBOSE is supplied.
+ 
+With argument N, save the Nth most recent kill instead of the
+most recent.
+
+\(fn &optional ARG VERBOSE)" t nil)
 
 (autoload 'aph/quit-help-windows "aph-commands" "\
 Quit all windows with help-like buffers.
@@ -339,8 +354,8 @@ Run the shell command \"hg status\".
 
 ;;;***
 
-;;;### (autoloads nil "aph-theme" "aph-theme.el" (22038 55685 890266
-;;;;;;  300000))
+;;;### (autoloads nil "aph-theme" "aph-theme.el" (22055 60847 642136
+;;;;;;  900000))
 ;;; Generated autoloads from aph-theme.el
 
 (autoload 'aph/theme-cycle "aph-theme" "\
@@ -352,8 +367,8 @@ first element of `aph/theme-list'.
 
 ;;;***
 
-;;;### (autoloads nil "aph-web" "aph-web.el" (22038 63260 437517
-;;;;;;  300000))
+;;;### (autoloads nil "aph-web" "aph-web.el" (22038 65305 279383
+;;;;;;  0))
 ;;; Generated autoloads from aph-web.el
 
 (autoload 'aph/browse-url-prefer-eww "aph-web" "\
@@ -409,11 +424,12 @@ See `aph/elfeed-search-show-entry' for details.
 ;;;;;;  "aph-keys.el" "aph-lib.el" "aph-org-agenda.el" "aph-require.el"
 ;;;;;;  "init-ahk.el" "init-color-identifiers.el" "init-completion.el"
 ;;;;;;  "init-core.el" "init-docview.el" "init-draft.el" "init-elfeed.el"
-;;;;;;  "init-ido.el" "init-keys.el" "init-latex.el" "init-lisp-clojure.el"
-;;;;;;  "init-lisp-emacs.el" "init-lisp.el" "init-misc.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-smartparens.el"
-;;;;;;  "init-startup.el" "init-visible-mark.el") (22038 64094 49379
-;;;;;;  900000))
+;;;;;;  "init-helm.el" "init-ido.el" "init-keys.el" "init-latex.el"
+;;;;;;  "init-lisp-clojure.el" "init-lisp-emacs.el" "init-lisp.el"
+;;;;;;  "init-misc.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "init-package.el" "init-smartparens.el" "init-startup.el"
+;;;;;;  "init-visible-mark.el" "init-web.el") (22058 26528 152754
+;;;;;;  500000))
 
 ;;;***
 

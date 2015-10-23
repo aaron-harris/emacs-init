@@ -59,6 +59,7 @@
   ((kbd "C-c r r")         #'copy-rectangle-to-register)
   ((kbd "C-c r t")         #'string-rectangle)
   ((kbd "C-c r y")         #'yank-rectangle)
+  ((kbd "C-c r C-y")       #'aph/yank-rectangle-from-kill-ring)
   ;; Bookmarks
   ;; (Moved to prefix "C-c b")
   ((kbd "C-c b b")         #'bookmark-jump)
