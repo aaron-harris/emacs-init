@@ -39,13 +39,30 @@ that value."
 ;;; Skip Functions
 ;;;===============
 ;;; These are functions to be used with `org-agenda-skip-function'.
-;;; The initial structure was taken from a stackexchange question, written by
-;;; user Jonathan Leech-Pepin.
 
-;; TODO: These functions are still a little quirky. Specifically, they only seem
-;;       to work properly when the headline they're called on is visible. Until
-;;       this is sorted out, all agenda files should have their default
-;;       visibility setting set to CONTENTS or higher.
+(defun aph/org-agenda-skip-without-match (match)
+  "Skip current headline if it matches MATCH.
+
+Return nil if headline containing point matches MATCH (which
+should be a match string of the same format used by
+`org-tags-view').  If headline does not match, return the
+position of the next headline in current buffer.
+
+Intended for use with `org-agenda-skip-function', where this will
+skip exactly those headlines that do not match."
+  (require 'aph-org)                    ; For `aph/org-match-at-point-p'
+  (save-excursion
+    (unless (org-at-heading-p) (org-back-to-heading)) 
+    (let ((next-headline (save-excursion
+                           (or (outline-next-heading) (point-max)))))
+      (if (aph/org-match-at-point-p match) nil next-headline))))
+
+;;; The remaining functions are obsolete, but remain here until the
+;;; agendas can be switched over to
+;;; `aph/org-agenda-skip-without-match'.  The initial structure of
+;;; these functions was taken from a stackexchange question, written
+;;; by user Jonathan Leech-Pepin.
+
 (defun aph/org-agenda-skip-tags (&rest tags)
   "Skip current headline if it is tagged with any of TAGS.
 
