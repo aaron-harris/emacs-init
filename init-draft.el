@@ -61,3 +61,9 @@ For other functions, an index search is attempted."
   (interactive "vFind documentation for variable: ")
   (info (aph/Info-find-manual-to-search variable :var))
   (Info-index (symbol-name variable)))
+
+
+;;; Adding font lock for `aph/defun-dyn'
+;;;=====================================
+(font-lock-add-keywords 'emacs-lisp-mode
+                        '(("\(\\(aph/defun-dyn\\_>\\)" 1 font-lock-keyword-face)))

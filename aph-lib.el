@@ -8,6 +8,20 @@
 ;; Some functions in this file also require 'cl-lib at runtime.
 
 
+;;; Macros
+;;;=======
+(defmacro aph/defun-dyn (&rest def)
+  "As `defun', but always in dynamic scope.
+A function defined in this way ignores the value of
+`lexical-binding' and treats it as if it were nil.
+
+\(fn NAME ARGLIST &optional DOCSTRING DECL &rest BODY)"
+  (declare (debug defun)
+           (indent defun)
+           (doc-string 3))
+  `(eval '(defun ,@def) nil))
+
+
 ;;; General Advice
 ;;;===============
 (defun aph/preserving-text-scale (fn &rest args)
