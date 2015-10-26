@@ -10,6 +10,20 @@
 
 ;;; Block Definitions
 ;;;==================
+(defvar aph/org-agenda-block-calendar 
+  '(agenda
+    ""
+    ((org-agenda-overriding-header "Calendar")
+     (org-agenda-ndays 1)
+     (org-agenda-sorting-strategy '(time-up category-up))
+     (org-habit-show-habits nil)
+     (org-agenda-use-time-grid nil)
+     (org-agenda-skip-function
+      '(aph/org-agenda-skip-without-match "+calendar"))))
+  "Custom agenda block containing an overview of the day.
+This block contains those tasks tagged with the \"calendar\" tag.
+Note that it has nothing to do with the Emacs calendar.")
+
 ;;; For ease of reuse, we define some functions to create custom agenda blocks.
 (defun aph/org-agenda-block-tagged-agenda (header tags &optional only)
   "Return an agenda block for items tagged with all TAGS.

@@ -67,3 +67,11 @@ For other functions, an index search is attempted."
 ;;;=====================================
 (font-lock-add-keywords 'emacs-lisp-mode
                         '(("\(\\(aph/defun-dyn\\_>\\)" 1 font-lock-keyword-face)))
+
+
+;;; Agenda restructuring
+;;;=====================
+(setq org-agenda-custom-commands nil)
+(add-to-list 'org-agenda-custom-commands
+             `("b" "Breakfast"
+               (,aph/org-agenda-block-calendar)))

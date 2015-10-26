@@ -84,6 +84,8 @@
 (setq org-tag-alist
       '(("home"      . ?h)
         ("work"      . ?w)
+        ("calendar"  . ?C)
+        (:newline    . nil)
         ("all"       . ?*)
         (:newline    . nil)
         ("evening"   . ?v)
