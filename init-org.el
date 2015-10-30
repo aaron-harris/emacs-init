@@ -41,13 +41,12 @@
 
 ;; TODO keywords don't display very well in the fast selection buffer
 ;; if these sequences are longer than three items long (not including
-;; "|" entries).
+;; "|" entries).  Hence some keywords are out of place; see margin
+;; comments.
 (setq org-todo-keywords
-      '((sequence "START(s)" "|" "CANCELLED(c!)")         ; General items
-        (sequence "TODO(t)" "WAITING(;@)" "|" "DONE(d!)") ; Tasks
-        (sequence "OPEN(o)" "SHELVED(S!)" "|" "DONE(d!)") ; Projects
-        (sequence "CONSUME(z)" "CONTINUE(-)" "|" "FINISHED(f!)") ; Media items
-        (sequence "UNAVAIL(u)" "BUY(b)" "|" "OWNED(O)"))) ; Media to obtain
+      '((type "TODO(t)" "ACTIVE(a)" "|" "DONE(d)")    ; also WAIT, HOLD
+        (type "MEDIA(m)" "BUY(b)" "|" "REF(r)")       ; also WAIT
+        (type "PROJECT(p)" "WAIT(w)" "|" "HOLD(h)"))) ; no WAIT
 
 ;; Advice to adjust where the TODO selection window appears
 (defun aph/org-todo-window-advice (orig-fn)
@@ -66,42 +65,24 @@
 
 ;;; Tags
 ;;;=====
-
-;; Intended meaning of the tags, and which agenda views reference them:
-;;   home: Can only be done at home.
-;;   work: Shows up in work agenda. (work)
-;;   all: Shows up in all agendas. (all)
-;;   evening: Shows up in evening agenda. (evening)
-;;   weekend: Shows up in weekend agenda. (weekend)
-;;   computer: Shows up in computer agenda. (computer, projects)
-;;   meal: Can be done while eating. (meal)
-;;   review: Shows up in review agenda. (review)
-;;   listening: Audio tasks.
-;;   emacs: Involves tweaking Emacs configuration. (computer)
-;;   anki: Involves working with Anki. (computer)
-;;   leisure: Done for fun. (meal, leisure)
-;;   education: Done for personal enrichment. (meal)
 (setq org-tag-alist
-      '(("home"      . ?h)
-        ("work"      . ?w)
-        ("calendar"  . ?C)
-        (:newline    . nil)
-        ("all"       . ?*)
-        (:newline    . nil)
-        ("evening"   . ?v)
-        ("weekend"   . ?s)
-        ("computer"  . ?c)
-        (:newline    . nil)
-        ("review"    . ?r)
-        ("meal"      . ?m)
-        ("listening" . ?L)
-        (:newline    . nil)
-        ("knowledge" . ?k)
-        ("leisure"   . ?l)
-        (:newline    . nil)
-        ("emacs"     . ?x)
-        ("anki"      . ?i)
-        ("ahk"       . ?a)))
+      '(("home"     . ?h)               ; Can be done only at home
+        ("work"     . ?w)               ; Appears in work agenda
+        ("calendar" . ?d)               ; Appears in calendar block
+        (:newline   . nil)
+        ("morning"  . ?m)               ; Appears in morning agenda
+        ("evening"  . ?e)               ; Appears in evening agenda
+        ("weekend"  . ?s)               ; Appears in weekend agenda
+        (:newline   . nil)
+        ("computer" . ?c)               ; For computer-related hobbies
+        ("review"   . ?r)               ; Periodic review tasks
+        ("all"      . ?*)               ; Appears in all "normal" agendas
+        (:newline   . nil)
+        ("text"     . ?t)               ; Text media
+        ("video"    . ?v)               ; Video media
+        ("audio"    . ?a)               ; Audio media
+        (:newline   . nil)
+        ("leisure"  . ?l)))             ; Non-productive "tasks"
 
 ;; TODO: Replace this advice with a more precisely-directed version that will
 ;;       still allow buffer-local tags.
@@ -175,6 +156,7 @@ directive)."
 (setq org-habit-graph-column 50)
 (setq org-agenda-window-setup 'current-window)
 (setq org-agenda-sticky t)
+(setq org-agenda-dim-blocked-tasks 'invisible)
 
 ;; Format string for agenda items
 (setq org-agenda-prefix-format
@@ -189,15 +171,9 @@ directive)."
 (setq org-agenda-skip-scheduled-if-done t)
 (setq org-agenda-skip-timestamp-if-done t)
 (setq org-agenda-skip-deadline-if-done t)
-(setq org-agenda-todo-ignore-with-date 'all)
-(setq org-agenda-todo-ignore-scheduled 'all)
-(setq org-agenda-todo-ignore-timestamp 'all)
+(setq org-agenda-todo-ignore-with-date nil)
+(setq org-agenda-todo-ignore-timestamp nil)
 (setq org-agenda-tags-todo-honor-ignore-options t)
-
-;; We designate a project as stuck if it is OPEN and does not have a subtask
-;; marked TODO or CONSUME.
-(setq org-stuck-projects
-      '("/OPEN" ("TODO" "CONSUME")))
 
 ;; Make refreshing an agenda preserve the current text scale.
 ;; (The `with-eval-after-load' is because the advice isn't necessary

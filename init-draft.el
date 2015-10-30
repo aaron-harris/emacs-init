@@ -69,9 +69,6 @@ For other functions, an index search is attempted."
                         '(("\(\\(aph/defun-dyn\\_>\\)" 1 font-lock-keyword-face)))
 
 
-;;; Agenda restructuring
-;;;=====================
-(setq org-agenda-custom-commands nil)
-(add-to-list 'org-agenda-custom-commands
-             `("b" "Breakfast"
-               (,aph/org-agenda-block-calendar)))
+;;; Freeing `C-[' and `C-i'
+;;;========================
+(define-key input-decode-map [?\C-\[] (kbd "<C-[>"))
