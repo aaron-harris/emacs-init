@@ -104,7 +104,7 @@ be used."
 (add-to-list 'org-capture-templates
              `("tp" "Plain task" entry
                (file+headline org-default-notes-file "Tasks")
-               ,(-> "* START %^{Effort}p%?"
+               ,(-> "* TODO %^{Effort}p%?"
                     aph/org-capture-add-logbook
                     aph/org-capture-add-properties)
                :kill-buffer))
@@ -112,7 +112,7 @@ be used."
 (add-to-list 'org-capture-templates
              `("tl" "Link" entry
                (file+headline org-default-notes-file "Tasks")
-               ,(-> "* START %^L%^{Effort}p%?"
+               ,(-> "* TODO %^L%^{Effort}p%?"
                     aph/org-capture-add-logbook
                     aph/org-capture-add-properties)
                :kill-buffer))
@@ -120,7 +120,7 @@ be used."
 (add-to-list 'org-capture-templates
              `("tL" "Link to here" entry
               (file+headline org-default-notes-file "Tasks")
-              ,(-> "* START %A%^{Effort}p%?"
+              ,(-> "* TODO %A%^{Effort}p%?"
                    aph/org-capture-add-logbook
                    aph/org-capture-add-properties)
               :kill-buffer))
@@ -168,7 +168,7 @@ be used."
                (file+headline ,(concat org-directory "/media.org")
                               "Unfiled Novels")
               ,(aph/org-capture-add-properties
-                "* CONSUME %\\2%?"
+                "* MEDIA %\\2%?"
                 '(("Author"    . "%^{Author}")
                   ("Title"     . "%^{Title}")
                   ("Series"    . "%^{Series}")
@@ -180,7 +180,7 @@ be used."
                (file+headline ,(concat org-directory "/media.org")
                               "Unfiled Comics")
               ,(aph/org-capture-add-properties
-                "* CONSUME [[%^{Link to comic|%x}][%\\2 #%\\3]]%?"
+                "* MEDIA [[%^{Link to comic|%x}][%\\2 #%\\3]]%?"
                 '(("Series"    . "%^{Series}")
                   ("Issue_No"  . "%^{Issue number}")
                   ("Writer"    . "%^{Writer}")
@@ -192,7 +192,7 @@ be used."
                (file+headline ,(concat org-directory "/media.org")
                               "Unfiled Television")
               ,(aph/org-capture-add-properties
-                "* CONSUME %\\1: Season \\2%?"
+                "* MEDIA %\\1: Season \\2%?"
                 '(("Series"    . "%^{Series}")
                   ("Season_No" . "%^{Season number}")))
               :kill-buffer))
@@ -202,7 +202,7 @@ be used."
                (file+headline ,(concat org-directory "/media.org")
                               "Unfiled Television")
                ,(aph/org-capture-add-properties
-                 "* CONSUME %\\1%?"
+                 "* MEDIA %\\1%?"
                  '(("Title"     . "%^{Title}")
                    ("Series"    . "%^{Series}")
                    ("Series_No" . "%^{Number in series}")))
@@ -222,7 +222,7 @@ be used."
              `("ml" "Internet link" entry
                (file+headline ,(concat org-directory "/media.org")
                               "Internet")
-              "* CONSUME %^L%?"
+               "* MEDIA %^L%?"
               :kill-buffer))
 
 (setq org-capture-templates (nreverse org-capture-templates))
