@@ -4,10 +4,15 @@
 ;;;; ELFEED CONFIGURATION
 ;;;;============================================================================
 
+(require 'aph-elfeed)
+
 
 ;;; Display settings
 ;;;=================
 (setq elfeed-sort-order 'ascending)
+(setq aph/elfeed-favorite-filters
+      '("@6-months-ago +unread"
+        "+todo"))
 
 
 ;;; Update settings
