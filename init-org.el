@@ -82,7 +82,8 @@
         ("video"    . ?v)               ; Video media
         ("audio"    . ?a)               ; Audio media
         (:newline   . nil)
-        ("leisure"  . ?l)))             ; Non-productive "tasks"
+        ("leisure"  . ?l)               ; Non-productive "tasks"
+        ("flag"     . ?F)))             ; Generic "mark for action"
 
 ;; TODO: Replace this advice with a more precisely-directed version that will
 ;;       still allow buffer-local tags.
