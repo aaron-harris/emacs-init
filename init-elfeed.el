@@ -96,6 +96,7 @@
    ("http://swannodette.github.io/atom.xml" programming)
    ("https://aphyr.com/posts.atom" programming)
    ("https://yoo2080.wordpress.com/feed/" programming)
+   ("http://kranglefant.tumblr.com/rss" programming)
    ;; Stackexchange
    ("http://stackoverflow.com/feeds/tag/clojure" programming stackexchange)
    ("http://stackoverflow.com/feeds/tag/emacs" programming stackexchange)
