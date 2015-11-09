@@ -31,6 +31,7 @@
 (setq org-M-RET-may-split-line nil)            ; Better heading insertion.
 (setq org-blank-before-new-entry               ; No extraneous blank lines.
       '((heading . nil) (plain-list-item . nil)))
+(setq org-special-ctrl-a/e t)
 
 (aph/add-hook-safely 'org-mode-hook #'aph/truncate-lines-off)
 
