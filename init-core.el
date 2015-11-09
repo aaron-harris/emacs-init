@@ -4,8 +4,6 @@
 ;;;; CORE FILE
 ;;;;============================================================================
 
-(message "Beginning initialization process...") 
-
 
 ;;; Bootstrapping Variables
 ;;;========================
