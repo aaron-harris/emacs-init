@@ -7,15 +7,16 @@
 
 ;;; Smart Tab
 ;;;==========
-(when (aph/require-softly 'smart-tab)
+(use-package smart-tab
+  :ensure t
+  :config
   (global-smart-tab-mode 1)
-
   ;; Always use `hippie-expand'.  In situations where we want to use a
   ;; mode-specific completion function, I'd rather configure
   ;; `hippie-expand' to use it and let `smart-tab' just call
   ;; `hippie-expand' in all cases.
-  (setq smart-tab-using-hippie-expand t)
-  (setq smart-tab-completion-functions-alist nil))
+  (setq smart-tab-using-hippie-expand        t
+        smart-tab-completion-functions-alist nil))
 
 
 ;;; Company Mode
