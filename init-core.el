@@ -8,7 +8,7 @@
 ;;; Bootstrapping Variables
 ;;;========================
 ;; These variables should have been set by the bootstrapper.
-(defvar aph/init-path "~/sync/emacs-init"
+(defvar aph/init-path "~/sync/emacs/init"
   "The path to the directory containing my init files.")
 
 (defvar aph/machine 'default
@@ -21,7 +21,7 @@
 ;; prevent chrome from being drawn at all, rather than drawing it then
 ;; removing it.
 (menu-bar-mode -1)
-(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(when (fboundp 'tool-bar-mode)   (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 
