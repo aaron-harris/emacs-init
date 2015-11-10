@@ -95,13 +95,13 @@ See `aph/eval-expression-clean-output' for more information."
 
 ;; Package code is a special problem, because these buffers need to be
 ;; writable for `package-install'.
-(dir-locals-set-directory-class "~/.emacs.d/elpa" 'emacs) 
+(dir-locals-set-directory-class package-user-dir 'emacs)
 
 (defun aph/package-install-writability (package-install &rest args)
   "Advice so `package-install' can write to elpa directory."
-  (dir-locals-set-directory-class "~/.emacs.d/elpa" 'default)
+  (dir-locals-set-directory-class package-user-dir 'default)
   (apply package-install args)
-  (dir-locals-set-directory-class "~/.emacs.d/elpa" 'emacs)) 
+  (dir-locals-set-directory-class package-user-dir 'emacs))
 (advice-add #'package-install :around #'aph/package-install-writability)
 
 
