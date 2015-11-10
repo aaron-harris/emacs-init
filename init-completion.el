@@ -8,7 +8,6 @@
 ;;; Smart Tab
 ;;;==========
 (use-package smart-tab
-  :ensure t
   :config
   (global-smart-tab-mode 1)
   ;; Always use `hippie-expand'.  In situations where we want to use a
@@ -26,7 +25,6 @@
 ;; `smart-tab'.  We still want to use tab completion and not idle
 ;; completion.
 (use-package company
-  :ensure t
   :defer t
   :config
   (setq company-idle-delay nil)
