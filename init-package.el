@@ -11,6 +11,9 @@
 The return value depends only on `aph/machine'."
   (eq aph/machine 'mpc))
 
+;; Use elpa folder on Dropbox
+(setq package-user-dir "~/sync/emacs/elpa")
+
 (setq package-archives
       (and (not (aph/offline-p))
            '(("elpa"      . "http://elpa.gnu.org/packages/")
