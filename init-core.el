@@ -28,7 +28,6 @@
 ;;; Path Management
 ;;;================
 (add-to-list 'load-path (expand-file-name aph/init-path))
-(add-to-list 'load-path "~/.emacs.d/lisp")
 
 
 ;;; Loading Submodules
