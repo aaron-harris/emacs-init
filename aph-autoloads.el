@@ -123,6 +123,37 @@ See `aph/sum-parens' to get similar functionality from elisp.
 
 ;;;***
 
+;;;### (autoloads nil "aph-elfeed" "aph-elfeed.el" (22071 58266 146543
+;;;;;;  500000))
+;;; Generated autoloads from aph-elfeed.el
+
+(autoload 'aph/elfeed-search-show-entry "aph-elfeed" "\
+As `elfeed-search-show-entry', but intelligently follow links.
+
+If ENTRY is tagged with the 'link tag, presume that the text of
+ENTRY will be incomplete and open the url in ENTRY's link field.
+If the optional parameter EXTERNAL is supplied (interactively, with a
+prefix argument), use an external browser; otherwise, use `eww'.
+
+If ENTRY doesn't have the \"link\" tag, call `elfeed-show-entry'.
+In this case, ignore the EXTERNAL parameter.
+
+\(fn ENTRY &optional EXTERNAL)" t nil)
+
+(autoload 'aph/elfeed-show-next "aph-elfeed" "\
+As `elfeed-show-next', but intelligently follow links.
+See `aph/elfeed-search-show-entry' for details.
+
+\(fn &optional EXTERNAL)" t nil)
+
+(autoload 'aph/elfeed-show-prev "aph-elfeed" "\
+As `elfeed-show-prev', but intelligently follow links.
+See `aph/elfeed-search-show-entry' for details.
+
+\(fn &optional EXTERNAL)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-framewin" "aph-framewin.el" (22034 45614
 ;;;;;;  275659 800000))
 ;;; Generated autoloads from aph-framewin.el
@@ -271,8 +302,7 @@ cde will return 14.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22037 53159 784272
-;;;;;;  0))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22060 17701 0 0))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-spin-basic "aph-org" "\
@@ -354,6 +384,22 @@ Run the shell command \"hg status\".
 
 ;;;***
 
+;;;### (autoloads nil "aph-simple" "aph-simple.el" (22083 56965 435260
+;;;;;;  400000))
+;;; Generated autoloads from aph-simple.el
+
+(autoload 'aph/truncate-lines-on "aph-simple" "\
+Cause current buffer to truncate long lines.
+
+\(fn)" nil nil)
+
+(autoload 'aph/truncate-lines-off "aph-simple" "\
+Cause current buffer to fold long lines.
+
+\(fn)" nil nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-theme" "aph-theme.el" (22055 60847 642136
 ;;;;;;  900000))
 ;;; Generated autoloads from aph-theme.el
@@ -367,8 +413,8 @@ first element of `aph/theme-list'.
 
 ;;;***
 
-;;;### (autoloads nil "aph-web" "aph-web.el" (22038 65305 279383
-;;;;;;  0))
+;;;### (autoloads nil "aph-web" "aph-web.el" (22071 58050 230079
+;;;;;;  700000))
 ;;; Generated autoloads from aph-web.el
 
 (autoload 'aph/browse-url-prefer-eww "aph-web" "\
@@ -393,43 +439,18 @@ a default.
 
 \(fn EWW URL &rest ARGS)" t nil)
 
-(autoload 'aph/elfeed-search-show-entry "aph-web" "\
-As `elfeed-search-show-entry', but intelligently follow links.
-
-If ENTRY is tagged with the 'link tag, presume that the text of
-ENTRY will be incomplete and open the url in ENTRY's link field.
-If the optional parameter EXTERNAL is supplied (interactively, with a
-prefix argument), use an external browser; otherwise, use `eww'.
-
-If ENTRY doesn't have the \"link\" tag, call `elfeed-show-entry'.
-In this case, ignore the EXTERNAL parameter.
-
-\(fn ENTRY &optional EXTERNAL)" t nil)
-
-(autoload 'aph/elfeed-show-next "aph-web" "\
-As `elfeed-show-next', but intelligently follow links.
-See `aph/elfeed-search-show-entry' for details.
-
-\(fn &optional EXTERNAL)" t nil)
-
-(autoload 'aph/elfeed-show-prev "aph-web" "\
-As `elfeed-show-prev', but intelligently follow links.
-See `aph/elfeed-search-show-entry' for details.
-
-\(fn &optional EXTERNAL)" t nil)
-
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-hooks.el"
 ;;;;;;  "aph-keys.el" "aph-lib.el" "aph-org-agenda.el" "aph-require.el"
-;;;;;;  "init-ahk.el" "init-color-identifiers.el" "init-completion.el"
+;;;;;;  "aph-shr.el" "init-ahk.el" "init-color-identifiers.el" "init-completion.el"
 ;;;;;;  "init-core.el" "init-docview.el" "init-draft.el" "init-elfeed.el"
 ;;;;;;  "init-helm.el" "init-ido.el" "init-keys.el" "init-latex.el"
 ;;;;;;  "init-lisp-clojure.el" "init-lisp-emacs.el" "init-lisp.el"
 ;;;;;;  "init-misc.el" "init-org-agenda.el" "init-org-capture.el"
 ;;;;;;  "init-org.el" "init-package.el" "init-smartparens.el" "init-startup.el"
-;;;;;;  "init-visible-mark.el" "init-web.el") (22058 26528 152754
-;;;;;;  500000))
+;;;;;;  "init-visible-mark.el" "init-web.el") (22083 56993 353812
+;;;;;;  100000))
 
 ;;;***
 
