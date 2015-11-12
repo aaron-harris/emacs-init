@@ -126,39 +126,9 @@ tasks will be displayed."
 (setq org-agenda-custom-commands (nreverse org-agenda-custom-commands))
 
 
-;;; Smart Agenda
-;;;=============
-
-;; Variables used to control `aph/org-agenda-display-smart-agenda', below.
-(defvar aph/workday-start 10
-  "The start of the workday (in hours, according to a 24-hour
-clock).  Used by the function
-`aph/org-agenda-display-smart-agenda' to display the correct
-agenda.")
-
-(defvar aph/workday-end 18
-  "The end of the workday (in hours, according to a 24-hour
-clock).  Used by the function
-`aph/org-agenda-display-smart-agenda' to display the correct
-agenda.")
-
-(defun aph/org-agenda-display-smart-agenda ()
-  "Display an Org-Mode agenda based on current day and time.
-
-On Saturdays and Sundays, displays the weekend agenda.  On
-weekdays, displays the morning agenda if the workday (as defined
-by the variables `aph/workday-start' and `aph/workday-end')
-hasn't started yet, the work agenda if it's in progress, and the
-evening agenda if it's already ended." 
-  (interactive)
-  (let* ((day   (nth 6 (decode-time)))
-         (hour  (nth 2 (decode-time)))
-         (key   (cond
-                 ((= day 0)                   "ds")    ; Sunday
-                 ((= day 6)                   "ds")    ; Saturday
-                 ((< hour aph/workday-start)  "dm")    ; morning
-                 ((>= hour aph/workday-end)   "de")    ; evening
-                 (t                           "dw")))) ; workday
-    (aph/org-agenda nil key)))
+;;; Smart Agenda Setup
+;;;===================
+(setq aph/org-agenda-smart-agenda-views '("dm" "dw" "de" "ds")
+      aph/org-agenda-workday            '(10 . 18.5))
 
 (provide 'init-org-agenda)

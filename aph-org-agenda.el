@@ -302,4 +302,50 @@ has no effect."
 
 (advice-add #'org-agenda-finalize :before #'aph/org-agenda-mark-habits)
 
+
+;;; Smart Agenda
+;;;=============
+(defvar aph/org-agenda-workday '(9 . 5)
+  "The user's typical workday hours.
+
+This should be a pair (START . END), where both elements are
+hours according to a 24-hour clock.  These are used by
+`aph/org-agenda-display-smart-agenda' to determine when to
+display the work agenda.")
+
+(defvar aph/org-agenda-smart-agenda-views '("m" "w" "e" "s")
+  "The keys for the agenda views used by the smart agenda.
+In order, the entries should be:
+- The agenda to display on weekday mornings.
+- The agenda to display during the workday.
+- The agenda to display on weekday evenings.
+- The agenda to display on weekends.")
+
+(defun aph/org-agenda-display-smart-agenda ()
+  "Display an Org-mode agenda based on current day and time.
+
+On Saturdays and Sundays, displays the weekend agenda (defined by
+`aph/org-agenda-weekend').  On weekdays, displays the morning
+agenda (`aph/org-agenda-morning') if the workday (as defined by
+the variables `aph/org-agenda-workday-start' and
+`aph/org-agenda-workday-end') hasn't started yet, the work
+agenda (`aph/org-agenda-work') if it's in progress, and the
+evening agenda (`aph/org-agenda-evening') if it's already ended."
+  (interactive)
+  (let* ((start-work (car aph/org-agenda-workday))
+         (end-work   (cdr aph/org-agenda-workday))
+         (morning-ag (nth 0 aph/org-agenda-smart-agenda-views))
+         (work-ag    (nth 1 aph/org-agenda-smart-agenda-views))
+         (evening-ag (nth 2 aph/org-agenda-smart-agenda-views))
+         (weekend-ag (nth 3 aph/org-agenda-smart-agenda-views)) 
+         (day        (nth 6 (decode-time)))
+         (hour       (nth 2 (decode-time)))
+         (key        (cond
+                      ((= day 0)            weekend-ag)
+                      ((= day 6)            weekend-ag)
+                      ((< hour start-work)  morning-ag)
+                      ((>= hour end-work)   evening-ag)
+                      (t                    work-ag))))
+    (aph/org-agenda nil key)))
+
 (provide 'aph-org-agenda)
