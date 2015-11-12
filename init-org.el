@@ -8,6 +8,8 @@
 (require 'aph-lib)    ; For `aph/preserving-text-scale'
 (require 'aph-advice) ; For `aph/with-advice'
 
+(require 'aph-org)
+
 
 ;;; Basic setup
 ;;;============
@@ -48,18 +50,6 @@
         (type "MEDIA(m)" "BUY(b)" "|" "REF(r)")       ; also WAIT
         (type "PROJECT(p)" "WAIT(w)" "|" "HOLD(h)"))) ; no WAIT
 
-;; Advice to adjust where the TODO selection window appears
-(defun aph/org-todo-window-advice (orig-fn)
-  "Advice to fix window placement in `org-fast-todo-selection'."
-  (require 'aph-framewin)      ; For `aph/display-buffer-in-subwindow'
-  (let  ((override '("\\*Org todo\\*" aph/display-buffer-in-subwindow)))
-    (add-to-list 'display-buffer-alist override)
-    (aph/with-advice
-        ((#'org-switch-to-buffer-other-window :override #'pop-to-buffer))
-      (unwind-protect (funcall orig-fn)
-        (setq display-buffer-alist
-              (delete override display-buffer-alist))))))
-
 (advice-add #'org-fast-todo-selection :around #'aph/org-todo-window-advice)
 
 
@@ -84,20 +74,6 @@
         (:newline   . nil)
         ("leisure"  . ?l)               ; Non-productive "tasks"
         ("flag"     . ?F)))             ; Generic "mark for action"
-
-;; TODO: Replace this advice with a more precisely-directed version that will
-;;       still allow buffer-local tags.
-(defun aph/org-reset-tag-alist ()
-  "Advice to block spurious :newline tags when using `org-tag-alist'.
-
-The function `org-set-regexps-and-options-for-tags', which sets a
-buffer-local version of `org-tag-alist', seems to screw
-up :newline entries, replacing (:newline) with (\"\\n\"), which
-ends up defining a tag with a newline character as its name. This
-is a crude attempt to fix it (which will probably make it
-impossible to create buffer-local tags with the #+TAGS
-directive)."
-  (kill-local-variable 'org-tag-alist))
 
 (advice-add #'org-set-regexps-and-options-for-tags :after
             #'aph/org-reset-tag-alist)
