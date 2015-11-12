@@ -124,23 +124,24 @@
 
 
 ;;; Agenda
-;;;=======
-;; All Org-mode files in the Org directory should be indexed for the
-;; agenda.
+;;;======= 
 (setq org-agenda-files (list org-directory))
-
-;; General agenda settings:
-(setq org-agenda-block-separator (make-string 80 ?=))
-(setq org-agenda-remove-tags t)
-(setq org-agenda-span 'day)
-(setq org-agenda-timegrid-use-ampm t)
-(setq org-extend-today-until 4)
-(setq org-habit-graph-column 50)
-(setq org-agenda-window-setup 'current-window)
-(setq org-agenda-sticky t)
-(setq org-agenda-dim-blocked-tasks 'invisible)
-
-;; Format string for agenda items
+(setq org-agenda-block-separator   (make-string 80 ?=)
+      org-agenda-dim-blocked-tasks 'invisible
+      org-agenda-remove-tags       t
+      org-agenda-span              'day
+      org-agenda-sticky            t
+      org-agenda-timegrid-use-ampm t
+      org-agenda-window-setup      'current-window
+      org-extend-today-until       4
+      org-habit-graph-column       50)
+(setq org-agenda-skip-deadline-if-done                 t
+      org-agenda-skip-deadline-prewarning-if-scheduled t
+      org-agenda-skip-scheduled-if-done                t
+      org-agenda-skip-timestamp-if-done                t
+      org-agenda-tags-todo-honor-ignore-options        t
+      org-agenda-todo-ignore-timestamp                 nil
+      org-agenda-todo-ignore-with-date                 nil)
 (setq org-agenda-prefix-format
       '((agenda   . " %i %-13:c%?-12t% s")
         (timeline . "  % s")
@@ -148,22 +149,13 @@
         (tags     . " %i %-13:c")
         (search   . " %i %-13:c")))
 
-;; Settings for timestamps, scheduled items, and deadlines:
-(setq org-agenda-skip-deadline-prewarning-if-scheduled t)
-(setq org-agenda-skip-scheduled-if-done t)
-(setq org-agenda-skip-timestamp-if-done t)
-(setq org-agenda-skip-deadline-if-done t)
-(setq org-agenda-todo-ignore-with-date nil)
-(setq org-agenda-todo-ignore-timestamp nil)
-(setq org-agenda-tags-todo-honor-ignore-options t)
-
 ;; Make refreshing an agenda preserve the current text scale.
 ;; (The `with-eval-after-load' is because the advice isn't necessary
 ;; unless the text scale has been adjusted.)
 (with-eval-after-load 'face-remap
   (advice-add #'org-agenda-redo :around #'aph/preserving-text-scale))
 
-;; Loading custom agenda commands.
+;; Load custom agenda commands:
 (require 'init-org-agenda)
 
 
