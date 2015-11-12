@@ -203,12 +203,6 @@ to put the number at the end of the line is unavailable."
           (replace-match "")
           (end-of-line))))))
 
-(aph/global-set-keys-safely
-  ((kbd "s-<apps> n")       #'aph/number-lines)
-  ((kbd "s-<apps> C-n")     #'aph/number-lines-alpha)
-  ((kbd "s-<apps> M-n o")   #'aph/number-lines-open)
-  ((kbd "s-<apps> M-n M-o") #'aph/number-lines-open-multiple))
-
 (defun aph/number-lines-open (beg end n)
   "Renumber lines in region to skip N.
 Non-interactively, act on the text between BEG and END.
@@ -243,6 +237,12 @@ Here NUMS may be a comma- or whitespace-delimited string, or a list."
           (mapcar #'string-to-number
                   (split-string nums "[, \f\t\n\r\v]" :omit-nulls "\s-+"))))
   (mapcar (apply-partially #'aph/number-lines-open beg end) nums))
+
+(aph/global-set-keys-safely
+  ((kbd "s-<apps> n")       #'aph/number-lines)
+  ((kbd "s-<apps> C-n")     #'aph/number-lines-alpha)
+  ((kbd "s-<apps> M-n o")   #'aph/number-lines-open)
+  ((kbd "s-<apps> M-n M-o") #'aph/number-lines-open-multiple))
 
 (ert-deftest aph/test-number-lines ()
   "Test basic functionality of `aph/number-lines'."
