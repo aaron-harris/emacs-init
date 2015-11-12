@@ -33,15 +33,5 @@ If the optional parameter SAFELY is supplied, use
         (aph/add-hook-safely hook function)
       (add-hook hook function))))
 
-
-;;; Hook Code
-;;;==========
-(defun aph/truncate-lines-on ()
-  "Cause current buffer to truncate long lines."
-  (toggle-truncate-lines 1))
-
-(defun aph/truncate-lines-off ()
-  "Cause current buffer to fold long lines."
-  (toggle-truncate-lines -1))
 
 (provide 'aph-hooks)
