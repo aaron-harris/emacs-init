@@ -81,9 +81,9 @@
 
 ;;; Priorities
 ;;;===========
-(setq org-highest-priority ?A)
-(setq org-lowest-priority ?E)
-(setq org-default-priority ?C)
+(setq org-highest-priority ?A
+      org-lowest-priority  ?E
+      org-default-priority ?C)
 
 
 ;;; Properties and Column View
@@ -94,23 +94,28 @@
       "%50ITEM(Task) %TODO %2PRIORITY(^) %20TAGS(Tags) %6Effort{:} %CLOCKSUM")
 
 
-;;; Capture, Refile, and Archive
-;;;=============================
-;; Default locations and targets:
+;;; Capture
+;;;========
 (setq org-default-notes-file (concat org-directory "/capture.org"))
-(setq org-archive-location "archive/%s_archive::")
-(setq org-refile-targets '((org-agenda-files :maxlevel . 5)))
-(setq org-refile-allow-creating-parent-nodes 'confirm)
 
-;; Miscellaneous settings:
-(setq org-refile-use-outline-path 'file)
+;; Load capture templates:
+(require 'init-org-capture)
 
 ;; Support for `aph/org-capture-in-popout-frame':
 (aph/add-hook-safely 'org-capture-after-finalize-hook
                      #'aph/org-capture-delete-capture-frame)
 
-;; Load capture templates:
-(require 'init-org-capture)
+
+;;; Refile
+;;;=======
+(setq org-refile-targets '((org-agenda-files :maxlevel . 5)))
+(setq org-refile-allow-creating-parent-nodes 'confirm
+      org-refile-use-outline-path            'file)
+
+
+;;; Archive
+;;;========
+(setq org-archive-location "archive/%s_archive::")
 
 
 ;;; Links
