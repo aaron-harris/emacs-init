@@ -8,34 +8,36 @@
 (require 'aph-lib)    ; For `aph/preserving-text-scale'
 (require 'aph-advice) ; For `aph/with-advice'
 
-(use-package org
-  :ensure t
-  :defer t
-  :config
-  ;; Basic setup
-  (setq org-modules   '(org-docview org-habit org-info)
-        org-directory "~/sync/org")
-  ;; Editing
-  (setq org-catch-invisible-edits  'smart
-        org-cycle-emulate-tab      'exc-hl-bol
-        org-use-speed-commands     t
-        org-M-RET-may-split-line   nil
-        org-special-ctrl-a/e       t)
-  (aph/add-hook-safely 'org-mode-hook #'aph/truncate-lines-off)
-  ;; Tree Structure
-  (setq org-blank-before-new-entry '((heading . nil)
-                                     (plain-list-item . nil)))
-  ;; Tasks
-  (setq org-enforce-todo-dependencies       t
-        org-track-ordered-property-with-tag t
-        org-log-into-drawer                 t))
-
-(require 'org)                          ; Temporary pending refactoring
+
+;;; Basic setup
+;;;============
+(setq org-modules   '(org-docview org-habit org-info)
+      org-directory "~/sync/org")
 
 
-;;; TODO Keywords
-;;;==============
-(setq org-use-fast-todo-selection t)
+;;; Editing
+;;;========
+(setq org-M-RET-may-split-line   nil
+      org-catch-invisible-edits  'smart
+      org-cycle-emulate-tab      'exc-hl-bol
+      org-special-ctrl-a/e       t
+      org-use-speed-commands     t)
+
+(aph/add-hook-safely 'org-mode-hook #'aph/truncate-lines-off)
+
+
+;;; Tree Structure
+;;;===============
+(setq org-blank-before-new-entry '((heading . nil)
+                                   (plain-list-item . nil))
+      org-log-into-drawer         t)
+
+
+;;; TODO Items
+;;;===========
+(setq org-enforce-todo-dependencies       t 
+      org-track-ordered-property-with-tag t
+      org-use-fast-todo-selection         t)
 
 ;; TODO keywords don't display very well in the fast selection buffer
 ;; if these sequences are longer than three items long (not including

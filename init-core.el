@@ -40,7 +40,14 @@
 (aph/require-softly 'init-completion)
 (aph/require-softly 'init-helm)
 (aph/require-softly 'init-web)
-(aph/require-softly 'init-org)
+
+(use-package org
+  :ensure t
+  :defer t
+  :config
+  (use-package init-org))
+(require 'org)                          ; Temporary pending refactoring
+
 (aph/require-softly 'init-smartparens)
 (aph/require-softly 'init-elfeed)
 
