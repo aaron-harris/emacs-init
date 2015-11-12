@@ -220,4 +220,34 @@ keybinding for that function is not appropriate."
          :link         (eww-current-url)
          :description  (plist-get eww-data :title))))
 
+
+;;; Advice
+;;;=======
+(defun aph/org-todo-window-advice (orig-fn)
+  "Advice to fix window placement in `org-fast-todo-selection'.
+Intended as :around advice for `org-fact-todo-selection'."
+  (require 'aph-framewin)      ; For `aph/display-buffer-in-subwindow'
+  (let  ((override '("\\*Org todo\\*" aph/display-buffer-in-subwindow)))
+    (add-to-list 'display-buffer-alist override)
+    (aph/with-advice
+        ((#'org-switch-to-buffer-other-window :override #'pop-to-buffer))
+      (unwind-protect (funcall orig-fn)
+        (setq display-buffer-alist
+              (delete override display-buffer-alist))))))
+
+;; TODO: Replace this advice with a more precisely-directed version that will
+;;       still allow buffer-local tags.
+(defun aph/org-reset-tag-alist ()
+  "Advice to block spurious :newline tags when using `org-tag-alist'.
+Use as :after advice for `aph/org-reset-tag-alist'.
+
+The function `org-set-regexps-and-options-for-tags', which sets a
+buffer-local version of `org-tag-alist', seems to screw
+up :newline entries, replacing (:newline) with (\"\\n\"), which
+ends up defining a tag with a newline character as its name. This
+is a crude attempt to fix it (which will probably make it
+impossible to create buffer-local tags with the #+TAGS
+directive)."
+  (kill-local-variable 'org-tag-alist))
+
 (provide 'aph-org)
