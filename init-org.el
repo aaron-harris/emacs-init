@@ -10,6 +10,12 @@
 
 (require 'aph-org)
 
+;; The `provide' statement needs to be at the beginning because
+;; `aph/org-emphasis-alist-update' called `org-reload', and this file
+;; will probably be called in the :config block of a `use-package'
+;; declaration.
+(provide 'init-org)
+
 
 ;;; Basic setup
 ;;;============
@@ -163,34 +169,8 @@
 ;;;=======
 ;; Remove strike-through markup, and change code markup to use ` as a
 ;; delimiter rather than ~.
-(setq org-emphasis-alist
-      '(("*"  bold)
-        ("/"  italic)
-        ("_"  underline)
-        ("="  org-verbatim verbatim)
-        ("`"  org-code verbatim)))
-
-;; We also need to make `org-element-text-markup-successor' (which is
-;; a function involved in paragraph filling) aware of the change, by
-;; way of the following advice:
-(defun aph/org-element-text-markup-successor-advice (oldfn)
-  "Advice to enable custom markup delimiters.
-
-This is advice for `org-element-text-markup-successor' to make it
-aware of my changes to `org-emphasis-alist'."
-  (condition-case err
-      (funcall oldfn)
-    (error
-     (let ((delim
-            (->> (cadr err)
-                 (replace-regexp-in-string "[^0-9]" "")
-                 string-to-number
-                 char-after)))
-       (if (= delim ?`)
-           (cons 'code (match-beginning 2))
-         (signal (car err) (cdr err)))))))
-(advice-add 'org-element-text-markup-successor :around
-            #'aph/org-element-text-markup-successor-advice)
+(setq org-emphasis-alist (aph/assoc-delete-all "+" org-emphasis-alist))
+(aph/org-emphasis-alist-update "~" "`")
 
 
 ;;; Smart Tab Compatibility
@@ -240,6 +220,3 @@ All other behavior of `org-cycle' remains unchanged."
 (when (eq aph/machine 'mpc)
   (setq org-mobile-checksum-binary
         "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe"))
-
-(require 'org)           ; Finish loading Org-Mode.
-(provide 'init-org)
