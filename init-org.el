@@ -181,16 +181,6 @@
 
 ;;; Face and Display Tweaks
 ;;;========================
-;; This function makes sure the `org-hide' face is being displayed
-;; correctly.  We need to run it in `aph/theme-base-change-hook', or
-;; else changing base themes will show black stars in indented Org
-;; buffers.
-(defun aph/org-update-faces ()
-  "Update definition of `org-hide' to match current theme."
-  (let ((foreground (org-find-invisible-foreground)))
-    (if foreground
-        (set-face-foreground 'org-hide foreground))))
-
 (add-hook 'aph/theme-base-change-hook #'aph/org-update-faces)
 
 
