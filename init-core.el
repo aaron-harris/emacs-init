@@ -103,6 +103,15 @@
   (use-package init-org))
 (require 'org)                          ; Temporary pending refactoring
 
+(use-package org-mobile
+  :disabled t
+  :config
+  (setq org-mobile-directory       "~/sync/mobile"
+      org-mobile-inbox-for-pull (concat org-directory "/capture.org"))
+  (when (eq aph/machine 'mpc)
+    (setq org-mobile-checksum-binary
+          "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe")))
+
 (aph/require-softly 'init-smartparens)
 (aph/require-softly 'init-elfeed)
 
