@@ -182,15 +182,3 @@
 ;;; Face and Display Tweaks
 ;;;========================
 (add-hook 'aph/theme-base-change-hook #'aph/org-update-faces)
-
-
-;;; Mobile
-;;;=======
-(require 'org-mobile)
-
-(setq org-mobile-directory "~/sync/mobile")
-(setq org-mobile-inbox-for-pull (concat org-directory "/capture.org"))
-
-(when (eq aph/machine 'mpc)
-  (setq org-mobile-checksum-binary
-        "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe"))
