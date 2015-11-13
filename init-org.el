@@ -175,24 +175,8 @@
 
 ;;; Smart Tab Compatibility
 ;;;========================
-(eval-after-load 'smart-tab
-  '(progn
-     (defun aph/org-cycle-smart-tab-advice (fn &optional arg)
-       "Advice to make `org-cycle' use `smart-tab'.
-
-With this advice :around `org-cycle', that function will use
-`smart-tab' as its fallback action instead of just indenting.
-All other behavior of `org-cycle' remains unchanged."
-       (aph/with-advice
-           ;; Make `org-cycle' use `smart-tab' as fallback action.
-           ((#'global-key-binding :before-until
-                                  (lambda (keys &optional accept-default)
-                                    (when (equal keys "\t")
-                                      #'smart-tab)))
-            ;; Prevent `smart-tab' from using `org-cycle' as its fallback.
-            (#'smart-tab-default :override #'indent-for-tab-command))
-         (apply fn arg)))
-     (advice-add #'org-cycle :around #'aph/org-cycle-smart-tab-advice)))
+(with-eval-after-load 'smart-tab
+  (advice-add #'org-cycle :around #'aph/org-cycle-smart-tab-advice))
 
 
 ;;; Face and Display Tweaks
