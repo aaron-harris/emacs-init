@@ -112,7 +112,20 @@
     (setq org-mobile-checksum-binary
           "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe")))
 
-(aph/require-softly 'init-smartparens)
+(use-package smartparens-config
+  :ensure smartparens
+  :config 
+  (smartparens-global-mode)
+  ;; String handling
+  (add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
+  (add-to-list 'sp-navigate-consider-stringlike-sexp 'lisp-mode)
+  (add-to-list 'sp-navigate-consider-stringlike-sexp 'clojure-mode)
+  ;; Disable '' pair in minibuffer for `eval-expression'
+  (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
+  ;; Use `` instead of `' in Clojure mode
+  (sp-local-pair 'clojure-mode "`" "`"
+                 :when '(sp-in-string-p sp-in-comment-p)))
+
 (aph/require-softly 'init-elfeed)
 
 ;; Specific Modes
