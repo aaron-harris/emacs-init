@@ -126,7 +126,17 @@
   (sp-local-pair 'clojure-mode "`" "`"
                  :when '(sp-in-string-p sp-in-comment-p)))
 
-(aph/require-softly 'init-elfeed)
+(use-package elfeed
+  :ensure t
+  :defer t
+  :config
+  (use-package aph-elfeed)
+  (setq elfeed-sort-order            'ascending
+        aph/elfeed-favorite-filters  '("@6-months-ago +unread" "+todo"))
+  (setq url-queue-parallel-processes 1
+        url-queue-timeout            30)
+  (setq elfeed-db-directory "~/sync/elfeed")
+  (use-package init-elfeed))            ; Feed list
 
 ;; Specific Modes
 (aph/require-softly 'init-docview)

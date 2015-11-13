@@ -4,27 +4,6 @@
 ;;;; ELFEED CONFIGURATION
 ;;;;============================================================================
 
-(require 'aph-elfeed)
-
-
-;;; Display settings
-;;;=================
-(setq elfeed-sort-order 'ascending)
-(setq aph/elfeed-favorite-filters
-      '("@6-months-ago +unread"
-        "+todo"))
-
-
-;;; Update settings
-;;;================
-(setq url-queue-parallel-processes 1)
-(setq url-queue-timeout 30)
-
-
-;;; Storage settings
-;;;=================
-(setq elfeed-db-directory "~/sync/elfeed")
-
 
 ;;; Feed settings
 ;;;==============
