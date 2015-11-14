@@ -146,8 +146,40 @@
   (when (eq aph/machine 'mpc)
     (setq doc-view-ghostscript-program "mgs.exe")))
 
+(use-package tex-site
+  :ensure auctex
+  :defer t
+  :config
+  (use-package aph-latex)
+  (setq-default TeX-master nil)
+  ;; Caching settings
+  (setq TeX-auto-save  t
+        TeX-parse-self t)
+  ;; Outline settings
+  (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
+  ;; Preview settings
+  (setq preview-image-type          'dvipng
+        preview-preserve-counters   t
+        preview-auto-cache-preamble t)
+  ;; Math mode settings
+  (add-hook 'LaTeX-mode-hook #'LaTeX-math-mode)
+  (setq LaTeX-math-list
+        '(("'" (lambda () (interactive) (insert "^{\\prime}")))))
+  ;; RefTeX settings
+  (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
+  (setq reftex-plug-into-auctex t)
+  ;; Compilation and viewer settings
+  (setq TeX-PDF-mode t)
+  (add-hook 'LaTeX-mode-hook #'aph/LaTeX-use-emacs-as-viewer)
+  ;; Miscellaneous settings
+  (with-eval-after-load 'aph-commands
+    (add-to-list 'aph/help-window-names "*TeX Help*"))
+  (defun aph/LaTeX-mode-hook ()
+    "Apply my settings for `LaTeX-mode'."
+    (setq fill-column 75))
+  (add-hook 'LaTeX-mode-hook #'aph/LaTeX-mode-hook))
+
 ;; Specific Modes
-(aph/require-softly 'init-latex)
 (aph/require-softly 'init-lisp)
 (aph/require-softly 'init-ahk)
 
