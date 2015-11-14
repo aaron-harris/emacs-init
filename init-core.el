@@ -138,8 +138,15 @@
   (setq elfeed-db-directory "~/sync/elfeed")
   (use-package init-elfeed))            ; Feed list
 
+(use-package doc-view
+  :defer t
+  :config
+  (setq doc-view-resolution 200)
+  ;; On mpc, Ghostview has a different name.
+  (when (eq aph/machine 'mpc)
+    (setq doc-view-ghostscript-program "mgs.exe")))
+
 ;; Specific Modes
-(aph/require-softly 'init-docview)
 (aph/require-softly 'init-latex)
 (aph/require-softly 'init-lisp)
 (aph/require-softly 'init-ahk)
