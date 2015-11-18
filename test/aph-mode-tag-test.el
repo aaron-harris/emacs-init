@@ -12,7 +12,8 @@
 ;;; Testing Apparatus
 ;;;==================
 (defmacro aph/with-test-mode-tag (names doc &rest body)
-  "Execute BODY in environment with a temporary mode tag.
+  "Execute BODY in an environment with a temporary mode tag.
+
 More specifically:
 - Use `cl-gensym' to construct a name guaranteed not to already be in
   use, and create a mode tag (using `aph/mode-tag-create') with this
@@ -106,5 +107,14 @@ the body, deferring this to testing of `aph/mode-tag-create'."
     (should-error (eval `(aph/mode-tag-create ,tag "doc")))
     (should (null (symbol-plist tag)))
     (should (equal (symbol-value hook) (list #'ignore)))))
+
+(ert-deftest aph/mode-tag-test-delete ()
+  "Test functionality of `aph/mode-tag-delete'."
+  (aph/with-test-mode-tag (tag hook) "doc"
+    (aph/mode-tag-delete tag)
+    (should (null (get tag 'aph/mode-tag)))
+    (should (null (get tag 'aph/mode-tag-docstring)))
+    (should-not (boundp hook))
+    (should (null (get hook 'variable-documentation)))))
 
 (provide 'aph-mode-tag-test)
