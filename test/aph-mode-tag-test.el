@@ -17,7 +17,7 @@
 More specifically:
 - Use `cl-gensym' to construct a name guaranteed not to already be in
   use, and create a mode tag (using `aph/mode-tag-create') with this
-  name and DOC as its docstring. 
+  name and DOC as its docstring.
 - Execute BODY, with the name of the mode tag bound to TAG.  If HOOK
   is supplied, bind to it the name of the hook variable associated
   with the mode tag.
@@ -33,7 +33,7 @@ More specifically:
     `(let* ((,tag   (cl-gensym "tag"))
             (,hook  (aph/mode-tag-hook-var ,tag)))
        (unwind-protect
-           (progn (eval `(aph/mode-tag-create ,,tag ,,doc))
+           (progn (aph/mode-tag-create tag ,doc)
                   ,@body)
          ;; Since tag is uninterned, its symbol properties won't
          ;; persist, but we need to clean up after hook, which was
@@ -111,7 +111,7 @@ the body, deferring this to testing of `aph/mode-tag-create'."
     ;; Test collision with hook variable 
     (setplist tag nil)
     (add-hook hook #'ignore) 
-    (should-error (eval `(aph/mode-tag-create ,tag "doc")))
+    (should-error (aph/mode-tag-create tag "doc"))
     (should (null (symbol-plist tag)))
     (should (equal (symbol-value hook) (list #'ignore)))))
 
@@ -149,11 +149,20 @@ the body, deferring this to testing of `aph/mode-tag-create'."
 ;; implementation details.
 
 (ert-deftest aph/mode-tag-test-pred ()
-  "Test functionality of `aph/mode-tag-test-pred'."
+  "Test functionality of `aph/mode-tag-p'."
   (aph/with-test-mode-tag (tag) "doc"
     (should (aph/mode-tag-p tag)))
   (let ((tag (make-symbol "tag")))
     (should-not (aph/mode-tag-p tag))))
+
+(ert-deftest aph/mode-tag-test-create/delete ()
+  "Test `aph/mode-tag-create' and `aph/mode-tag-delete'."
+  (aph/with-test-mode-tag (tag) "doc"
+    (should (aph/mode-tag-p tag))
+    (aph/mode-tag-delete tag)
+    (should-not (aph/mode-tag-p tag))
+    (aph/mode-tag-create tag) 
+    (should (aph/mode-tag-p tag))))
 
       
 (provide 'aph-mode-tag-test)

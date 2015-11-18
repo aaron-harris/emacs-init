@@ -16,7 +16,7 @@ Note that SYMBOL need not be defined as a mode tag, and hence the
 value returned is not necessarily bound as a variable."
   (intern (concat (symbol-name symbol) "-tag-hook")))
 
-(defmacro aph/mode-tag-create (tag &optional docstring)
+(defmacro aph/def-mode-tag (tag &optional docstring)
   "Define TAG as a mode tag.
 
 A mode tag is a way to designate several otherwise-unrelated
@@ -30,6 +30,11 @@ between modes and tags, use `aph/mode-tag-p',
 `aph/mode-tag-get-tags-for-mode', or
 `aph/mode-tag-get-modes-for-tag'.  To delete an existing mode
 tag, use `aph/mode-tag-delete'.
+
+Instead of this macro, you can also use the function
+`aph/mode-tag-create' to define mode tags.  As a function, it has
+an interface more consistent with the other functions mentioned
+above.
 
 Defining a mode tag creates a hook variable named `TAG-tag-hook',
 and all modes tagged with a tag (or derived from such a mode) run
@@ -62,9 +67,26 @@ No problems result if this variable is not bound.
 `add-hook' automatically binds it.  (This is true for all hook variables.)"
                     tag))))))
 
+(defun aph/mode-tag-create (tag &optional docstring)
+  "Define TAG as a mode tag.
+
+This is just a thin wrapper around `aph/def-mode-tag' with an
+interface more consistent with other mode tag functions (e.g.,
+`aph/mode-tag-delete').
+
+More specifically, the problems this alleviates are these:
+- Because `aph/def-mode-tag' is a macro and not a function, you do not
+  need to quote TAG, unlike the functions used to manipulate mode
+  tags, and this may be confusing.
+- In order to use `aph/def-mode-tag' to create a mode tag whose name
+  is obtained from a variable or from a function call (e.g., to use an
+  uninterned symbol for testing purposes), you need to use `eval' and
+  backquote.  This is unintuitive and ugly."
+  (eval `(aph/def-mode-tag ,tag ,docstring)))
+
 (defun aph/mode-tag-delete (tag)
   "Delete TAG as a mode tag.
-See `aph/mode-tag-create' for more information on mode tags."
+See `aph/def-mode-tag' for more information on mode tags."
   (let ((hook (aph/mode-tag-hook-var tag)))
     (put tag 'aph/mode-tag nil)
     (put tag 'aph/mode-tag-docstring nil)
@@ -73,7 +95,7 @@ See `aph/mode-tag-create' for more information on mode tags."
 
 (defun aph/mode-tag-add (mode tag)
   "Tag MODE with TAG.
-See `aph/mode-tag-create' for more information on mode tags."
+See `aph/def-mode-tag' for more information on mode tags."
   (cl-pushnew mode (get tag  'aph/mode-tag-modes))
   (cl-pushnew tag  (get mode 'aph/mode-tag-tags)))
 
@@ -82,13 +104,13 @@ See `aph/mode-tag-create' for more information on mode tags."
 If MODE is not tagged with TAG, print a warning message unless
 the optional argument NOWARN is non-nil.
 
-See `aph/mode-tag-create' for more information on mode tags."
+See `aph/def-mode-tag' for more information on mode tags."
   (aph/symprop-delq mode tag  'aph/mode-tag-modes)
   (aph/symprop-delq tag  mode 'aph/mode-tag-tags))
 
 (defun aph/mode-tag-p (sym)
   "Return non-nil if SYM is the name of a mode tag.
-See `aph/mode-tag-create' for more information on mode tags."
+See `aph/def-mode-tag' for more information on mode tags."
   (get sym 'aph/mode-tag))
 
 (defun aph/mode-tag-tagged-p (mode tag &optional inherit)
@@ -96,14 +118,14 @@ See `aph/mode-tag-create' for more information on mode tags."
 If the optional parameter INHERIT is non-nil, also return non-nil
 if any ancestor of MODE is tagged with TAG.
 
-See `aph/mode-tag-create' for more information on mode tags.")
+See `aph/def-mode-tag' for more information on mode tags.")
 
 (defun aph/mode-tag-get-tags-for-mode (mode)
   "Return a list of all mode tags on MODE.
-See `aph/mode-tag-create' for more information on mode tags.")
+See `aph/def-mode-tag' for more information on mode tags.")
 
 (defun aph/mode-tag-get-modes-for-tag (tag)
   "Return a list of all modes tagged with TAG.
-See `aph/mode-tag-create' for more information on mode tags.")
+See `aph/def-mode-tag' for more information on mode tags.")
 
 (provide 'aph-mode-tag)
