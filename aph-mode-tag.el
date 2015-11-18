@@ -62,7 +62,12 @@ No problems result if this variable is not bound.
 
 (defun aph/mode-tag-delete (tag)
   "Delete TAG as a mode tag.
-See `aph/mode-tag-create' for more information on mode tags.")
+See `aph/mode-tag-create' for more information on mode tags."
+  (let ((hook (aph/mode-tag-hook-var tag)))
+    (put tag 'aph/mode-tag nil)
+    (put tag 'aph/mode-tag-docstring nil)
+    (makunbound hook)
+    (put hook 'variable-documentation nil)))
 
 (defun aph/mode-tag-add (mode tag)
   "Tag MODE with TAG.
