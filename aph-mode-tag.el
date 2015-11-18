@@ -8,6 +8,8 @@
 ;; support the collection of otherwise-unrelated modes under a common
 ;; umbrella and provide those collections with a common hook variable.
 
+(require 'aph-symprop)
+
 (defun aph/mode-tag-hook-var (symbol)
   "Return the name of the hook variable for a mode tag named SYMBOL.
 Note that SYMBOL need not be defined as a mode tag, and hence the
@@ -81,10 +83,8 @@ If MODE is not tagged with TAG, print a warning message unless
 the optional argument NOWARN is non-nil.
 
 See `aph/mode-tag-create' for more information on mode tags."
-  (put tag 'aph/mode-tag-mode
-       (delq mode (get tag 'aph/mode-tag-modes)))
-  (put mode 'aph/mode-tag-tags
-       (delq tag (get mode 'aph/mode-tag-tags))))
+  (aph/symprop-delq mode tag  'aph/mode-tag-modes)
+  (aph/symprop-delq tag  mode 'aph/mode-tag-tags))
 
 (defun aph/mode-tag-p (sym)
   "Return non-nil if SYM is the name of a mode tag.
