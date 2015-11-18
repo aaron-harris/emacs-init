@@ -125,4 +125,14 @@ the body, deferring this to testing of `aph/mode-tag-create'."
       (should (cl-find mode (get tag  'aph/mode-tag-modes)))
       (should (cl-find tag  (get mode 'aph/mode-tag-tags))))))
 
+(ert-deftest aph/mode-tag-test-remove ()
+  "Test functionality of `aph/mode-tag-remove'."
+  (aph/with-test-mode-tag (tag hook) "doc"
+    (let ((mode (make-symbol "foo-mode")))
+      (aph/mode-tag-add mode tag)
+      ;; Remove an existing association
+      (aph/mode-tag-remove mode tag)
+      (should-not (cl-find mode (get tag  'aph/mode-tag-modes)))
+      (should-not (cl-find tag  (get mode 'aph/mode-tag-tags))))))
+      
 (provide 'aph-mode-tag-test)
