@@ -71,7 +71,9 @@ See `aph/mode-tag-create' for more information on mode tags."
 
 (defun aph/mode-tag-add (mode tag)
   "Tag MODE with TAG.
-See `aph/mode-tag-create' for more information on mode tags.")
+See `aph/mode-tag-create' for more information on mode tags."
+  (cl-pushnew mode (get tag  'aph/mode-tag-modes))
+  (cl-pushnew tag  (get mode 'aph/mode-tag-tags)))
 
 (defun aph/mode-tag-remove (mode tag &optional nowarn)
   "If MODE is tagged with TAG, remove it.

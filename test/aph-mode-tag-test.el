@@ -117,4 +117,12 @@ the body, deferring this to testing of `aph/mode-tag-create'."
     (should-not (boundp hook))
     (should (null (get hook 'variable-documentation)))))
 
+(ert-deftest aph/mode-tag-test-add ()
+  "Test functionality of `aph/mode-tag-add'."
+  (aph/with-test-mode-tag (tag hook) "doc"
+    (let ((mode (make-symbol "foo-mode")))
+      (aph/mode-tag-add mode tag)
+      (should (cl-find mode (get tag  'aph/mode-tag-modes)))
+      (should (cl-find tag  (get mode 'aph/mode-tag-tags))))))
+
 (provide 'aph-mode-tag-test)
