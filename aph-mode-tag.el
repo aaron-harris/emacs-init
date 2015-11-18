@@ -80,7 +80,11 @@ See `aph/mode-tag-create' for more information on mode tags."
 If MODE is not tagged with TAG, print a warning message unless
 the optional argument NOWARN is non-nil.
 
-See `aph/mode-tag-create' for more information on mode tags.")
+See `aph/mode-tag-create' for more information on mode tags."
+  (put tag 'aph/mode-tag-mode
+       (delq mode (get tag 'aph/mode-tag-modes)))
+  (put mode 'aph/mode-tag-tags
+       (delq tag (get mode 'aph/mode-tag-tags))))
 
 (defun aph/mode-tag-p (sym)
   "Return non-nil if SYM is the name of a mode tag.
