@@ -4,7 +4,7 @@
 ;;;; SHR EXTENSIONS
 ;;;;============================================================================
 
-;; Extensions for `shr' package.
+;; Extensions for `shr' package. 
 
 
 ;;; Link Displey

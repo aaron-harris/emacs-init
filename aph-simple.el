@@ -33,4 +33,4 @@
   (setq truncate-lines nil))
 
 
-(provide 'aph-shr)
+(provide 'aph-simple)
