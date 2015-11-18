@@ -85,16 +85,23 @@ the body, deferring this to testing of `aph/mode-tag-create'."
     (should-not (intern-soft hook-x))))
     
 
-;;; Content Tests
-;;;==============
+;;; Basic Tests
+;;;============
 (ert-deftest aph/mode-tag-test-hook-var ()
   "Test functionality of `aph/mode-tag-hook-var'."
   ;; Basic testing
   (should (eq 'foo-tag-hook (aph/mode-tag-hook-var 'foo)))
   (should (eq 'foo-tag-hook (aph/mode-tag-hook-var (make-symbol "foo")))))
+
+
+;;; Implementation Tests
+;;;=====================
+;; These tests confirm that these functions are storing things
+;; properly in symbol properties; thus, they depend on implementation
+;; details.
   
-(ert-deftest aph/mode-tag-test-create ()
-  "Test functionality of `aph/mode-tag-create'." 
+(ert-deftest aph/mode-tag-test-impl-create ()
+  "Test implementation of `aph/mode-tag-create'." 
   (aph/with-test-mode-tag (tag hook) "doc"
     ;; Test basic functionality
     (should (get tag 'aph/mode-tag))
@@ -108,8 +115,8 @@ the body, deferring this to testing of `aph/mode-tag-create'."
     (should (null (symbol-plist tag)))
     (should (equal (symbol-value hook) (list #'ignore)))))
 
-(ert-deftest aph/mode-tag-test-delete ()
-  "Test functionality of `aph/mode-tag-delete'."
+(ert-deftest aph/mode-tag-test-impl-delete ()
+  "Test implementation of `aph/mode-tag-delete'."
   (aph/with-test-mode-tag (tag hook) "doc"
     (aph/mode-tag-delete tag)
     (should (null (get tag 'aph/mode-tag)))
@@ -117,22 +124,36 @@ the body, deferring this to testing of `aph/mode-tag-create'."
     (should-not (boundp hook))
     (should (null (get hook 'variable-documentation)))))
 
-(ert-deftest aph/mode-tag-test-add ()
-  "Test functionality of `aph/mode-tag-add'."
-  (aph/with-test-mode-tag (tag hook) "doc"
+(ert-deftest aph/mode-tag-test-impl-add ()
+  "Test implementation of `aph/mode-tag-add'."
+  (aph/with-test-mode-tag (tag) "doc"
     (let ((mode (make-symbol "foo-mode")))
       (aph/mode-tag-add mode tag)
       (should (cl-find mode (get tag  'aph/mode-tag-modes)))
       (should (cl-find tag  (get mode 'aph/mode-tag-tags))))))
 
-(ert-deftest aph/mode-tag-test-remove ()
-  "Test functionality of `aph/mode-tag-remove'."
-  (aph/with-test-mode-tag (tag hook) "doc"
+(ert-deftest aph/mode-tag-test-impl-remove ()
+  "Test implementation of `aph/mode-tag-remove'."
+  (aph/with-test-mode-tag (tag) "doc"
     (let ((mode (make-symbol "foo-mode")))
       (aph/mode-tag-add mode tag)
       ;; Remove an existing association
       (aph/mode-tag-remove mode tag)
       (should-not (cl-find mode (get tag  'aph/mode-tag-modes)))
       (should-not (cl-find tag  (get mode 'aph/mode-tag-tags))))))
+
+
+;;; Content Tests
+;;;==============
+;; Tests in this section verify correct behavior without relying on
+;; implementation details.
+
+(ert-deftest aph/mode-tag-test-pred ()
+  "Test functionality of `aph/mode-tag-test-pred'."
+  (aph/with-test-mode-tag (tag) "doc"
+    (should (aph/mode-tag-p tag)))
+  (let ((tag (make-symbol "tag")))
+    (should-not (aph/mode-tag-p tag))))
+
       
 (provide 'aph-mode-tag-test)
