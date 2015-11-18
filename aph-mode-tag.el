@@ -88,7 +88,8 @@ See `aph/mode-tag-create' for more information on mode tags."
 
 (defun aph/mode-tag-p (sym)
   "Return non-nil if SYM is the name of a mode tag.
-See `aph/mode-tag-create' for more information on mode tags.")
+See `aph/mode-tag-create' for more information on mode tags."
+  (get sym 'aph/mode-tag))
 
 (defun aph/mode-tag-tagged-p (mode tag &optional inherit)
   "Return non-nil if MODE is tagged with TAG.
