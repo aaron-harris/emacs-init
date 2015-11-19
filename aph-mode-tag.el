@@ -8,14 +8,8 @@
 ;; support the collection of otherwise-unrelated modes under a common
 ;; umbrella and provide those collections with a common hook variable.
 
-(require 'aph-symprop)
+(require 'aph-symbol)
 (require 'dash)                         ; For `-when-let'
-
-(defun aph/mode-tag-hook-var (symbol)
-  "Return the name of the hook variable for a mode tag named SYMBOL.
-Note that SYMBOL need not be defined as a mode tag, and hence the
-value returned is not necessarily bound as a variable."
-  (intern (concat (symbol-name symbol) "-tag-hook")))
 
 (defmacro aph/def-mode-tag (tag &optional docstring)
   "Define TAG as a mode tag.
@@ -55,7 +49,7 @@ these properties are associated with the symbol naming the mode tag.
   functionality to reference this (e.g., in a Help buffer) has not yet
   been implemented."
   (declare (debug (&define name [&optional stringp]))) 
-  (let ((hook (aph/mode-tag-hook-var tag)))
+  (let ((hook (aph/symbol-concat tag "-tag-hook")))
     `(progn
        (if (boundp ',hook)
            (error "Variable %s already exists; tag %s not created"
@@ -88,7 +82,7 @@ More specifically, the problems this alleviates are these:
 (defun aph/mode-tag-delete (tag)
   "Delete TAG as a mode tag.
 See `aph/def-mode-tag' for more information on mode tags."
-  (let ((hook (aph/mode-tag-hook-var tag)))
+  (let ((hook (aph/symbol-concat tag "-tag-hook")))
     (put tag 'aph/mode-tag nil)
     (put tag 'aph/mode-tag-docstring nil)
     (makunbound hook)
@@ -106,8 +100,8 @@ If MODE is not tagged with TAG, print a warning message unless
 the optional argument NOWARN is non-nil.
 
 See `aph/def-mode-tag' for more information on mode tags."
-  (aph/symprop-delq mode tag  'aph/mode-tag-modes)
-  (aph/symprop-delq tag  mode 'aph/mode-tag-tags))
+  (aph/symbol-prop-delq mode tag  'aph/mode-tag-modes)
+  (aph/symbol-prop-delq tag  mode 'aph/mode-tag-tags))
 
 (defun aph/mode-tag-p (sym)
   "Return non-nil if SYM is the name of a mode tag.
