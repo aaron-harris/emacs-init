@@ -25,8 +25,8 @@ More specifically:
   using `unwind-protect' to ensure the tag is deleted in the event of
   an error or nonlocal exit from BODY.
 
-\(fn (TAG [HOOK]) BODY)"
-  (declare (debug ((symbolp &optional symbolp) form &rest form))
+\(fn (TAG [HOOK]) &rest BODY)"
+  (declare (debug ((symbolp &optional symbolp) form body))
            (indent 2))
   (let ((tag   (car names))
         (hook  (or (cadr names) (make-symbol "hook"))))
@@ -40,7 +40,56 @@ More specifically:
          ;; created with `defvar'.  It should suffice to unintern it.
          (unintern ,hook)))))
 
-(ert-deftest aph/mode-tag-test-wrapper ()
+(defmacro aph/with-test-mode (names parent &rest body)
+  "Execute BODY in an environment with a temporarily-defined major mode.
+
+More specifically:
+- Use `cl-gensym' to construct a name guaranteed not to already be in
+  use, and create a major mode (using `define-derived-mode') with this
+  name.  Evaluate PARENT to get the name of the parent mode.
+- Execute BODY, with the name of the new mode bound to MODE.  If HOOK
+  is supplied, bind it to the name of the hook variable associated
+  with the mode tag.
+- Make sure the mode created does not persist outside this form, using
+  `unwind-protect' to ensure the tag is deleted in the event of an
+  error or nonlocal exit from BODY.
+
+Note that the major mode constructed in this block doesn't actually do
+anything (i.e., its body is empty).
+
+\(fn (MODE [HOOK]) PARENT &rest BODY)"
+  (declare (debug (symbolp form body))
+           (indent 2))
+  (let ((parent-mode (eval parent))
+        (mode        (car names))
+        (hook        (or (cadr names) (make-symbol "hook")))
+        (keymap      (make-symbol "keymap"))
+        (syntax      (make-symbol "syntax"))
+        (abbrev      (make-symbol "abbrev")))
+    `(let* ((,mode        (cl-gensym "mode"))
+            (,hook        (intern (concat (symbol-name ,mode) "-hook")))
+            (,keymap      (intern (concat (symbol-name ,mode) "-map")))
+            (,syntax      (intern (concat (symbol-name ,mode) "-syntax-table")))
+            (,abbrev      (intern (concat (symbol-name ,mode) "-abbrev-table"))))
+       (unwind-protect
+           (progn (eval ,(list 'backquote
+                               (list 'define-derived-mode
+                                     (list '\, mode)
+                                     parent-mode
+                                     "Lighter")))
+                  ,@body)
+         (unintern ,hook)
+         (unintern ,keymap)
+         (unintern ,syntax)
+         (unintern ,abbrev)))))
+
+
+;;; Apparatus Testing
+;;;==================
+;; Tests to verify that the testing macros just defined function
+;; correctly.
+
+(ert-deftest aph/mode-tag-test-with-tag ()
   "Test functionality of the wrapper macro `aph/with-test-mode-tag'.
 
 In particular, we want to make sure of the following points:
@@ -83,7 +132,53 @@ the body, deferring this to testing of `aph/mode-tag-create'."
         (error "Triggered error")))
     (should-not (intern-soft tag-x))
     (should-not (intern-soft hook-x))))
-    
+
+(ert-deftest aph/mode-tag-test-with-mode ()
+  "Test functionality of the wrapper macro `aph/with-test-mode'.
+
+In particular, we want to make sure of the following points:
+- No trace of the mode persists outside the form.
+- The macro is only as anaphoric as advertised.
+- Cleanup occurs even in case of an error." 
+  ;; Test that body is executed
+  (let (foo)
+    (should (aph/with-test-mode (mode hook) 'text-mode
+              (setq foo 'bar)
+              (= 2 (+ 1 1))))
+    (should (eq foo 'bar))
+    (should-not (aph/with-test-mode (mode hook) 'text-mode
+                  'bar
+                  'baz
+                  (= 3 (+ 1 1)))))
+  ;; Test that mode and hook exist inside form, and parentage is correct
+  (aph/with-test-mode (mode hook) 'text-mode
+    (should (fboundp mode))
+    (should (boundp hook))
+    (should (eq 'text-mode (get mode 'derived-mode-parent)))) 
+  ;; Test that hook binding is correct
+  (aph/with-test-mode (mode hook) 'text-mode
+    (should (eq hook (intern (concat (symbol-name mode) "-hook")))))
+  ;; Test for unnecessary bindings
+  (aph/with-test-mode (mode) 'text-mode
+    (should-error hook   :type 'void-variable)
+    (should-error keymap :type 'void-variable)
+    (should-error syntax :type 'void-variable)
+    (should-error abbrev :type 'void-variable))
+  ;; Test cleanup
+  (let (mode-x hook-x)
+    (aph/with-test-mode (mode hook) 'text-mode
+      (setq mode-x mode
+            hook-x hook)))
+  ;; Test for cleanup in case of error
+  (let (mode-x hook-x)
+    (ignore-errors
+      (aph/with-test-mode (mode hook) 'text-mode
+        (setq mode-x mode
+              hook-x hook)
+        (error "Triggered error")))
+    (should-not (intern-soft mode-x))
+    (should-not (intern-soft hook-x))))
+
 
 ;;; Basic Tests
 ;;;============
