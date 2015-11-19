@@ -58,25 +58,24 @@ Note that the major mode constructed in this block doesn't actually do
 anything (i.e., its body is empty).
 
 \(fn (MODE [HOOK]) PARENT &rest BODY)"
-  (declare (debug (symbolp form body))
+  (declare (debug ((symbolp &optional symbolp) form body))
            (indent 2))
-  (let ((parent-mode (eval parent))
-        (mode        (car names))
-        (hook        (or (cadr names) (make-symbol "hook")))
-        (keymap      (make-symbol "keymap"))
-        (syntax      (make-symbol "syntax"))
-        (abbrev      (make-symbol "abbrev")))
-    `(let* ((,mode        (cl-gensym "mode"))
-            (,hook        (intern (concat (symbol-name ,mode) "-hook")))
-            (,keymap      (intern (concat (symbol-name ,mode) "-map")))
-            (,syntax      (intern (concat (symbol-name ,mode) "-syntax-table")))
-            (,abbrev      (intern (concat (symbol-name ,mode) "-abbrev-table"))))
+  (let ((mode       (car names))
+        (hook       (or (cadr names) (make-symbol "hook"))) 
+        (keymap     (make-symbol "keymap"))
+        (syntax     (make-symbol "syntax"))
+        (abbrev     (make-symbol "abbrev"))
+        (make-mode  (make-symbol "make-mode")))
+    `(let* ((,mode       (cl-gensym "mode"))
+            (,hook       (intern (concat (symbol-name ,mode) "-hook")))
+            (,keymap     (intern (concat (symbol-name ,mode) "-map")))
+            (,syntax     (intern (concat (symbol-name ,mode) "-syntax-table")))
+            (,abbrev     (intern (concat (symbol-name ,mode) "-abbrev-table")))
+            (,make-mode  (lambda (child parent)
+                           (eval `(define-derived-mode
+                                    ,child ,parent "Lighter")))))
        (unwind-protect
-           (progn (eval ,(list 'backquote
-                               (list 'define-derived-mode
-                                     (list '\, mode)
-                                     parent-mode
-                                     "Lighter")))
+           (progn (funcall ,make-mode ,mode ,parent)
                   ,@body)
          (unintern ,hook)
          (unintern ,keymap)
@@ -150,11 +149,15 @@ In particular, we want to make sure of the following points:
                   'bar
                   'baz
                   (= 3 (+ 1 1)))))
-  ;; Test that mode and hook exist inside form, and parentage is correct
+  ;; Test that mode and hook exist inside form
   (aph/with-test-mode (mode hook) 'text-mode
     (should (fboundp mode))
-    (should (boundp hook))
-    (should (eq 'text-mode (get mode 'derived-mode-parent)))) 
+    (should (boundp hook)))
+  ;; Test parentage
+  (aph/with-test-mode (mode1) 'text-mode
+    (aph/with-test-mode (mode2) mode1
+      (should (eq 'text-mode (get mode1 'derived-mode-parent)))
+      (should (eq mode1      (get mode2 'derived-mode-parent)))))
   ;; Test that hook binding is correct
   (aph/with-test-mode (mode hook) 'text-mode
     (should (eq hook (intern (concat (symbol-name mode) "-hook")))))
@@ -258,6 +261,25 @@ In particular, we want to make sure of the following points:
     (should-not (aph/mode-tag-p tag))
     (aph/mode-tag-create tag) 
     (should (aph/mode-tag-p tag))))
+
+(ert-deftest aph/mode-tag-test-add/remove ()
+  "Test `aph/mode-tag-add' and `aph/mode-tag-remove'.
+Also test `aph/mode-tag-tagged-p'."
+  ;; Basic functionality
+  (aph/with-test-mode-tag (tag) "doc" 
+    (aph/with-test-mode (mode) 'text-mode
+      (aph/mode-tag-add mode tag)
+      (should (aph/mode-tag-tagged-p mode tag))
+      (aph/mode-tag-remove mode tag)
+      (should-not (aph/mode-tag-tagged-p mode tag))))
+  ;; Test inheritance
+  (aph/with-test-mode-tag (tag) "doc"
+    (aph/with-test-mode (mode1) 'text-mode
+      (aph/with-test-mode (mode2) mode1
+        (aph/mode-tag-add mode1 tag)
+        (should (aph/mode-tag-tagged-p mode1 tag))
+        (should-not (aph/mode-tag-tagged-p mode2 tag))
+        (should (aph/mode-tag-tagged-p mode2 tag :inherit))))))
 
       
 (provide 'aph-mode-tag-test)

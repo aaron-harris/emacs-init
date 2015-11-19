@@ -9,6 +9,7 @@
 ;; umbrella and provide those collections with a common hook variable.
 
 (require 'aph-symprop)
+(require 'dash)                         ; For `-when-let'
 
 (defun aph/mode-tag-hook-var (symbol)
   "Return the name of the hook variable for a mode tag named SYMBOL.
@@ -118,7 +119,11 @@ See `aph/def-mode-tag' for more information on mode tags."
 If the optional parameter INHERIT is non-nil, also return non-nil
 if any ancestor of MODE is tagged with TAG.
 
-See `aph/def-mode-tag' for more information on mode tags.")
+See `aph/def-mode-tag' for more information on mode tags."
+  (or (cl-find mode (get tag 'aph/mode-tag-modes))
+      (when inherit
+        (-when-let (parent (get mode 'derived-mode-parent))
+          (aph/mode-tag-tagged-p parent tag inherit)))))
 
 (defun aph/mode-tag-get-tags-for-mode (mode)
   "Return a list of all mode tags on MODE.
