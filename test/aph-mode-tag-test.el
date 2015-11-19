@@ -31,7 +31,7 @@ More specifically:
   (let ((tag   (car names))
         (hook  (or (cadr names) (make-symbol "hook"))))
     `(let* ((,tag   (cl-gensym "tag"))
-            (,hook  (aph/mode-tag-hook-var ,tag)))
+            (,hook  (aph/symbol-concat ,tag "-tag-hook")))
        (unwind-protect
            (progn (aph/mode-tag-create tag ,doc)
                   ,@body)
@@ -62,15 +62,9 @@ anything (i.e., its body is empty).
            (indent 2))
   (let ((mode       (car names))
         (hook       (or (cadr names) (make-symbol "hook"))) 
-        (keymap     (make-symbol "keymap"))
-        (syntax     (make-symbol "syntax"))
-        (abbrev     (make-symbol "abbrev"))
         (make-mode  (make-symbol "make-mode")))
     `(let* ((,mode       (cl-gensym "mode"))
-            (,hook       (intern (concat (symbol-name ,mode) "-hook")))
-            (,keymap     (intern (concat (symbol-name ,mode) "-map")))
-            (,syntax     (intern (concat (symbol-name ,mode) "-syntax-table")))
-            (,abbrev     (intern (concat (symbol-name ,mode) "-abbrev-table")))
+            (,hook       (aph/symbol-concat ,mode "-hook")) 
             (,make-mode  (lambda (child parent)
                            (eval `(define-derived-mode
                                     ,child ,parent "Lighter")))))
@@ -78,9 +72,9 @@ anything (i.e., its body is empty).
            (progn (funcall ,make-mode ,mode ,parent)
                   ,@body)
          (unintern ,hook)
-         (unintern ,keymap)
-         (unintern ,syntax)
-         (unintern ,abbrev)))))
+         (unintern (aph/symbol-concat ,mode "-map"))
+         (unintern (aph/symbol-concat ,mode "-syntax-table"))
+         (unintern (aph/symbol-concat ,mode "-abbrev-table"))))))
 
 
 ;;; Apparatus Testing
@@ -105,16 +99,13 @@ the body, deferring this to testing of `aph/mode-tag-create'."
               (= 2 (+ 1 1))))
     (should (eq foo 'bar))
     (should-not (aph/with-test-mode-tag (tag hook) "doc"
-                  'bar
-                  'baz
                   (= 3 (+ 1 1)))))
   ;; Test that hook binding is correct
   (aph/with-test-mode-tag (tag hook) "doc"
-    (should (eq hook (aph/mode-tag-hook-var tag)))) 
+    (should (eq hook (aph/symbol-concat tag "-tag-hook"))))
   ;; Test for unnecessary bindings
-  (should-error (aph/with-test-mode-tag (tag) "doc" 
-                  hook)
-                :type 'void-variable)
+  (aph/with-test-mode-tag (tag) "doc"
+    (should-error hook :type 'void-variable))
   ;; Test cleanup
   (let (tag-x hook-x)
     (aph/with-test-mode-tag (tag hook) "doc"
@@ -145,9 +136,7 @@ In particular, we want to make sure of the following points:
               (setq foo 'bar)
               (= 2 (+ 1 1))))
     (should (eq foo 'bar))
-    (should-not (aph/with-test-mode (mode hook) 'text-mode
-                  'bar
-                  'baz
+    (should-not (aph/with-test-mode (mode hook) 'text-mode 
                   (= 3 (+ 1 1)))))
   ;; Test that mode and hook exist inside form
   (aph/with-test-mode (mode hook) 'text-mode
@@ -160,7 +149,7 @@ In particular, we want to make sure of the following points:
       (should (eq mode1      (get mode2 'derived-mode-parent)))))
   ;; Test that hook binding is correct
   (aph/with-test-mode (mode hook) 'text-mode
-    (should (eq hook (intern (concat (symbol-name mode) "-hook")))))
+    (should (eq hook (aph/symbol-concat mode "-hook"))))
   ;; Test for unnecessary bindings
   (aph/with-test-mode (mode) 'text-mode
     (should-error hook   :type 'void-variable)
@@ -180,16 +169,7 @@ In particular, we want to make sure of the following points:
               hook-x hook)
         (error "Triggered error")))
     (should-not (intern-soft mode-x))
-    (should-not (intern-soft hook-x))))
-
-
-;;; Basic Tests
-;;;============
-(ert-deftest aph/mode-tag-test-hook-var ()
-  "Test functionality of `aph/mode-tag-hook-var'."
-  ;; Basic testing
-  (should (eq 'foo-tag-hook (aph/mode-tag-hook-var 'foo)))
-  (should (eq 'foo-tag-hook (aph/mode-tag-hook-var (make-symbol "foo")))))
+    (should-not (intern-soft hook-x)))) 
 
 
 ;;; Implementation Tests
