@@ -23,8 +23,7 @@ a tag, use `aph/mode-tag-remove'.  To check for the existence of
 a tag, use `aph/mode-tag-p'.  To check for the association
 between modes and tags, use `aph/mode-tag-p',
 `aph/mode-tag-get-tags-for-mode', or
-`aph/mode-tag-get-modes-for-tag'.  To delete an existing mode
-tag, use `aph/mode-tag-delete'.
+`aph/mode-tag-get-modes-for-tag'.
 
 Instead of this macro, you can also use the function
 `aph/mode-tag-create' to define mode tags.  As a function, it has
@@ -34,8 +33,11 @@ above.
 Defining a mode tag creates a hook variable named `TAG-tag-hook',
 and all modes tagged with a tag (or derived from such a mode) run
 this hook along with their individual mode hooks.  If a variable
-with this name already exists, an error is signalled and the tag
-is not created.
+with this name already exists (unless TAG is already a mode tag;
+see below), an error is signalled and the tag is not created.
+
+If a mode tag named TAG already exists, then its docstring is
+updated to DOCSTRING and no other change is made. 
 
 Information about mode tags is primarily stored using symbol
 properties.  Four properties are used; except for `aph/mode-tag-tags',
@@ -51,7 +53,7 @@ these properties are associated with the symbol naming the mode tag.
   (declare (debug (&define name [&optional stringp]))) 
   (let ((hook (aph/symbol-concat tag "-tag-hook")))
     `(progn
-       (if (boundp ',hook)
+       (if (and (boundp ',hook) (not (aph/mode-tag-p ',tag)))
            (error "Variable %s already exists; tag %s not created"
                   ',hook ',tag)
          (put ',tag 'aph/mode-tag t)

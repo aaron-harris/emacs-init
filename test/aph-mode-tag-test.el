@@ -190,6 +190,18 @@ anything (i.e., its body is empty).
     (should (boundp hook))
     (should (null (eval hook)))))
 
+(ert-deftest aph/mode-tag-test-create--redef ()
+  "Test handling of existing tags for `aph/mode-tag-create'."
+  (aph/with-test-mode-tag (tag hook) "foo"
+    (add-hook hook #'ignore)
+    (aph/with-test-mode (mode) 'text-mode
+      (aph/mode-tag-add mode tag)
+      (aph/mode-tag-create tag "bar")
+      (should (aph/mode-tag-p tag))
+      (should (equal "bar" (get tag 'aph/mode-tag-docstring)))
+      (should (equal (symbol-value hook) (list #'ignore)))
+      (should (aph/mode-tag-tagged-p mode tag)))))
+
 (ert-deftest aph/mode-tag-test-create--collision ()
   "Test that `aph/mode-tag-create' aborts when hook var exists."
   (aph/with-test-mode-tag (tag hook) "doc"
