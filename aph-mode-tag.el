@@ -116,10 +116,12 @@ See `aph/def-mode-tag' for more information on mode tags."
 
 (defun aph/mode-tag-get-tags-for-mode (mode)
   "Return a list of all mode tags on MODE.
-See `aph/def-mode-tag' for more information on mode tags.")
+See `aph/def-mode-tag' for more information on mode tags."
+  (get mode 'aph/mode-tag-tags))
 
 (defun aph/mode-tag-get-modes-for-tag (tag)
   "Return a list of all modes tagged with TAG.
-See `aph/def-mode-tag' for more information on mode tags.")
+See `aph/def-mode-tag' for more information on mode tags."
+  (get tag 'aph/mode-tag-modes))
 
 (provide 'aph-mode-tag)
