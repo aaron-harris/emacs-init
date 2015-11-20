@@ -79,15 +79,6 @@ More specifically, the problems this alleviates are these:
   backquote.  This is unintuitive and ugly."
   (eval `(aph/def-mode-tag ,tag ,docstring)))
 
-(defun aph/mode-tag-delete (tag)
-  "Delete TAG as a mode tag.
-See `aph/def-mode-tag' for more information on mode tags."
-  (let ((hook (aph/symbol-concat tag "-tag-hook")))
-    (put tag 'aph/mode-tag nil)
-    (put tag 'aph/mode-tag-docstring nil)
-    (makunbound hook)
-    (put hook 'variable-documentation nil)))
-
 (defun aph/mode-tag-add (mode tag)
   "Tag MODE with TAG.
 See `aph/def-mode-tag' for more information on mode tags."
