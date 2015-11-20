@@ -85,8 +85,7 @@ More specifically, the problems this alleviates are these:
   "Tag MODE with TAG.  If TAG doesn't exist, create it. 
 See `aph/def-mode-tag' for more information on mode tags."
   (unless (aph/mode-tag-p tag)
-    (aph/mode-tag-create tag))
-  (add-hook (aph/symbol-concat mode "-hook") #'aph/mode-tag-run-hooks)
+    (aph/mode-tag-create tag)) 
   (cl-pushnew mode (get tag  'aph/mode-tag-modes))
   (cl-pushnew tag  (get mode 'aph/mode-tag-tags)))
 
@@ -97,10 +96,7 @@ the optional argument NOWARN is non-nil.
 
 See `aph/def-mode-tag' for more information on mode tags." 
   (aph/symbol-prop-delq mode tag  'aph/mode-tag-modes)
-  (aph/symbol-prop-delq tag  mode 'aph/mode-tag-tags)
-  (unless (aph/mode-tag-get-tags-for-mode mode)
-    (remove-hook (aph/symbol-concat mode "-hook")
-                 #'aph/mode-tag-run-hooks)))
+  (aph/symbol-prop-delq tag  mode 'aph/mode-tag-tags))
 
 (defun aph/mode-tag-p (sym)
   "Return non-nil if SYM is the name of a mode tag.
@@ -118,10 +114,17 @@ See `aph/def-mode-tag' for more information on mode tags."
         (-when-let (parent (get mode 'derived-mode-parent))
           (aph/mode-tag-tagged-p parent tag inherit)))))
 
-(defun aph/mode-tag-get-tags-for-mode (mode)
+(defun aph/mode-tag-get-tags-for-mode (mode &optional inherit)
   "Return a list of all mode tags on MODE.
-See `aph/def-mode-tag' for more information on mode tags."
-  (get mode 'aph/mode-tag-tags))
+If the optional parameter INHERIT is non-nil, also include all tags on
+the ancestors of MODE.  If multiple ancestors have a particular tag,
+it is only included once.
+
+See `aph/def-mode-tag' for more information on mode tags." 
+  (when mode
+    (let ((parent (and inherit (get mode 'derived-mode-parent)))) 
+      (cl-union (aph/mode-tag-get-tags-for-mode parent inherit)
+                (get mode 'aph/mode-tag-tags)))))
 
 (defun aph/mode-tag-get-modes-for-tag (tag)
   "Return a list of all modes tagged with TAG.
@@ -137,6 +140,8 @@ that has one or more mode tags.
 See `aph/def-mode-tag' for more information on mode tags."
   (apply #'run-hooks
          (mapcar (lambda (tag) (aph/symbol-concat tag "-tag-hook"))
-                 (aph/mode-tag-get-tags-for-mode major-mode))))
+                 (aph/mode-tag-get-tags-for-mode major-mode :inherit))))
+
+(add-hook 'change-major-mode-after-body-hook #'aph/mode-tag-run-hooks)
 
 (provide 'aph-mode-tag)
