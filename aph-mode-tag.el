@@ -50,7 +50,8 @@ these properties are associated with the symbol naming the mode tag.
 - `aph/mode-tag-docstring' stores the docstring for the tag.  The
   functionality to reference this (e.g., in a Help buffer) has not yet
   been implemented."
-  (declare (debug (&define name [&optional stringp]))) 
+  (declare (debug (&define name [&optional stringp]))
+           (indent defun))
   (let ((hook (aph/symbol-concat tag "-tag-hook")))
     `(progn
        (if (and (boundp ',hook) (not (aph/mode-tag-p ',tag)))
@@ -79,6 +80,7 @@ More specifically, the problems this alleviates are these:
   is obtained from a variable or from a function call (e.g., to use an
   uninterned symbol for testing purposes), you need to use `eval' and
   backquote.  This is unintuitive and ugly."
+  (declare (indent defun))
   (eval `(aph/def-mode-tag ,tag ,docstring)))
 
 (defun aph/mode-tag-add (mode tag)
