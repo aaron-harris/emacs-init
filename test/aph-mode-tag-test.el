@@ -197,13 +197,7 @@ anything (i.e., its body is empty).
     (add-hook hook #'ignore) 
     (should-error (aph/mode-tag-create tag "doc"))
     (should (null (symbol-plist tag)))
-    (should (equal (symbol-value hook) (list #'ignore)))))
-
-(ert-deftest aph/mode-tag-test-delete ()
-  "Test functionality of `aph/mode-tag-delete'."
-  (aph/with-test-mode-tag (tag hook) "doc" 
-    (aph/mode-tag-delete tag)
-    (should-not (aph/mode-tag-p tag))))
+    (should (equal (symbol-value hook) (list #'ignore))))) 
 
 (ert-deftest aph/mode-tag-test-add/remove ()
   "Test association of tags to modes.
