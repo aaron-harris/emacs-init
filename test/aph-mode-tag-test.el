@@ -273,7 +273,7 @@ These are `aph/mode-tag-get-tags-for-mode' and
             (should (cl-find :hook2 log))))))))
 
 (ert-deftest aph/mode-tag-test-hooks--removal ()
-  "Test that `aph/mode-tag-remove' cleans up mode hooks."
+  "Test that a mode doesn't run tag hooks after tag is removed."
   (let (log)
     (aph/with-test-mode (mode) 'fundamental-mode
       (aph/with-test-mode-tag (tag hook) "doc"
@@ -285,7 +285,7 @@ These are `aph/mode-tag-get-tags-for-mode' and
           (should-not (cl-find :hook log)))))))
 
 (ert-deftest aph/mode-tag-test-hooks--partial-removal ()
-  "Test that `aph/mode-tag-remove' doesn't unhook too much."
+  "Test that removing a tag doesn't remove all tag hooks."
   (let (log)
     (aph/with-test-mode (mode) 'fundamental-mode
       (aph/with-test-mode-tag (tag1 hook1) "doc"
@@ -299,6 +299,20 @@ These are `aph/mode-tag-get-tags-for-mode' and
             (funcall mode)
             (should (cl-find :hook1 log))
             (should-not (cl-find :hook2 log))))))))
+
+(ert-deftest aph/mode-tag-test-hooks--inheritance ()
+  "Test that a mode runs its ancestors' tag hooks (only once)."
+  (let (log)
+    (aph/with-test-mode (mode1) 'fundamental-mode
+      (aph/with-test-mode (mode2) mode1
+        (aph/with-test-mode (mode3) mode2
+          (aph/with-test-mode-tag (tag hook) "doc"
+            (add-hook hook (lambda () (push :hook log)))
+            (aph/mode-tag-add mode1 tag)
+            (aph/mode-tag-add mode2 tag)
+            (with-temp-buffer
+              (funcall mode3)
+              (should (equal log '(:hook))))))))))
 
       
 (provide 'aph-mode-tag-test)
