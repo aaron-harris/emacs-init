@@ -77,43 +77,41 @@ anything (i.e., its body is empty).
          (unintern (aph/symbol-concat ,mode "-abbrev-table"))))))
 
 
-;;; Apparatus Testing
-;;;==================
-;; Tests to verify that the testing macros just defined function
-;; correctly.
+;;; Apparatus Testing: `aph/with-test-mode-tag'
+;;;============================================
+;; Tests to verify that `aph/with-test-mode-tag', just defined,
+;; functions correctly.
 
-(ert-deftest aph/mode-tag-test-with-tag ()
-  "Test functionality of the wrapper macro `aph/with-test-mode-tag'.
-
-In particular, we want to make sure of the following points:
-- No trace of the mode tag persists outside the form.
-- The macro is only as anaphoric as advertised.
-- Cleanup occurs even in case of an error.
-
-Note that we do not test that the mode tag actually exists within
-the body, deferring this to testing of `aph/mode-tag-create'." 
-  ;; Test that body is executed
+(ert-deftest aph/mode-tag-test-with-mode-tag--body ()
+  "Test that body of `aph/with-test-mode-tag' is executed."
   (let (foo)
-    (should (aph/with-test-mode-tag (tag hook) "doc"
-              (setq foo 'bar)
-              (= 2 (+ 1 1))))
-    (should (eq foo 'bar))
-    (should-not (aph/with-test-mode-tag (tag hook) "doc"
-                  (= 3 (+ 1 1)))))
-  ;; Test that hook binding is correct
+    ;; Return value
+    (should (= 7 (aph/with-test-mode-tag (tag) "doc"
+                   (setq foo 'bar)
+                   (+ 1 6))))
+    ;; Side effect
+    (should (eq foo 'bar))))
+
+(ert-deftest aph/mode-tag-test-with-mode-tag--bindings ()
+  "Test that `aph/with-test-mode-tag' sets bindings correctly."
+  ;; Intentional bindings
   (aph/with-test-mode-tag (tag hook) "doc"
+    (should (symbolp tag))
     (should (eq hook (aph/symbol-concat tag "-tag-hook"))))
-  ;; Test for unnecessary bindings
+  ;; No unintentional bindings
   (aph/with-test-mode-tag (tag) "doc"
-    (should-error hook :type 'void-variable))
-  ;; Test cleanup
+    (should-error hook :type 'void-variable)))
+
+(ert-deftest aph/mode-tag-test-with-mode-tag--cleanup ()
+  "Test that `aph/with-test-mode-tag' cleans up after itself." 
+  ;; Normal exit 
   (let (tag-x hook-x)
     (aph/with-test-mode-tag (tag hook) "doc"
       (setq tag-x  tag
             hook-x hook))
     (should-not (intern-soft tag-x))
     (should-not (intern-soft hook-x)))
-  ;; Test for cleanup in case of error
+  ;; Error
   (let (tag-x hook-x)
     (ignore-errors
       (aph/with-test-mode-tag (tag hook) "doc"
@@ -123,45 +121,49 @@ the body, deferring this to testing of `aph/mode-tag-create'."
     (should-not (intern-soft tag-x))
     (should-not (intern-soft hook-x))))
 
-(ert-deftest aph/mode-tag-test-with-mode ()
-  "Test functionality of the wrapper macro `aph/with-test-mode'.
+
+;;; Apparatus Testing: `aph/with-test-mode'
+;;;============================================
+;; Tests to verify that `aph/with-test-mode', just defined, functions
+;; correctly.
 
-In particular, we want to make sure of the following points:
-- No trace of the mode persists outside the form.
-- The macro is only as anaphoric as advertised.
-- Cleanup occurs even in case of an error." 
-  ;; Test that body is executed
+(ert-deftest aph/mode-tag-test-with-mode--body ()
+  "Test that body of `aph/with-test-mode' is executed." 
   (let (foo)
-    (should (aph/with-test-mode (mode hook) 'text-mode
-              (setq foo 'bar)
-              (= 2 (+ 1 1))))
-    (should (eq foo 'bar))
-    (should-not (aph/with-test-mode (mode hook) 'text-mode 
-                  (= 3 (+ 1 1)))))
-  ;; Test that mode and hook exist inside form
+    ;; Return value
+    (should (= 7 (aph/with-test-mode (mode) 'text-mode
+                   (setq foo 'bar)
+                   (+ 1 6))))
+    ;; Side effects
+    (should (eq foo 'bar))))
+
+(ert-deftest aph/mode-tag-test-with-mode--bindings ()
+  "Test that `aph/with-test-mode' sets bindings correctly."
+  ;; Intentional bindings
   (aph/with-test-mode (mode hook) 'text-mode
     (should (fboundp mode))
+    (should (eq hook (aph/symbol-concat mode "-hook")))
     (should (boundp hook)))
-  ;; Test parentage
+  ;; No unintentional bindings
+  (aph/with-test-mode (mode) 'text-mode
+    (should-error hook      :type 'void-variable)
+    (should-error make-mode :type 'void-variable)))
+
+(ert-deftest aph/mode-tag-test-with-mode--nesting ()
+  "Test that `aph/with-test-mode' nests properly."
   (aph/with-test-mode (mode1) 'text-mode
     (aph/with-test-mode (mode2) mode1
       (should (eq 'text-mode (get mode1 'derived-mode-parent)))
-      (should (eq mode1      (get mode2 'derived-mode-parent)))))
-  ;; Test that hook binding is correct
-  (aph/with-test-mode (mode hook) 'text-mode
-    (should (eq hook (aph/symbol-concat mode "-hook"))))
-  ;; Test for unnecessary bindings
-  (aph/with-test-mode (mode) 'text-mode
-    (should-error hook   :type 'void-variable)
-    (should-error keymap :type 'void-variable)
-    (should-error syntax :type 'void-variable)
-    (should-error abbrev :type 'void-variable))
-  ;; Test cleanup
+      (should (eq mode1      (get mode2 'derived-mode-parent))))))
+
+(ert-deftest aph/mode-tag-test-with-mode--cleanup ()
+  "Test that `aph/with-test-mode' cleans up after itself."
+  ;; Normal exit
   (let (mode-x hook-x)
     (aph/with-test-mode (mode hook) 'text-mode
       (setq mode-x mode
             hook-x hook)))
-  ;; Test for cleanup in case of error
+  ;; Error
   (let (mode-x hook-x)
     (ignore-errors
       (aph/with-test-mode (mode hook) 'text-mode
@@ -169,7 +171,7 @@ In particular, we want to make sure of the following points:
               hook-x hook)
         (error "Triggered error")))
     (should-not (intern-soft mode-x))
-    (should-not (intern-soft hook-x)))) 
+    (should-not (intern-soft hook-x))))
 
 
 ;;; Implementation Tests
