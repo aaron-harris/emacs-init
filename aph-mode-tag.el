@@ -82,8 +82,10 @@ More specifically, the problems this alleviates are these:
   (eval `(aph/def-mode-tag ,tag ,docstring)))
 
 (defun aph/mode-tag-add (mode tag)
-  "Tag MODE with TAG.
+  "Tag MODE with TAG.  If TAG doesn't exist, create it. 
 See `aph/def-mode-tag' for more information on mode tags."
+  (unless (aph/mode-tag-p tag)
+    (aph/mode-tag-create tag))
   (cl-pushnew mode (get tag  'aph/mode-tag-modes))
   (cl-pushnew tag  (get mode 'aph/mode-tag-tags)))
 

@@ -223,6 +223,14 @@ This test confirms basic functionality of the functions
       (aph/mode-tag-remove mode tag)
       (should-not (aph/mode-tag-tagged-p mode tag)))))
 
+(ert-deftest aph/mode-tag-test-add--new ()
+  "Test `aph/mode-tag-add' when tag doesn't yet exist."
+  (let ((tag (cl-gensym "tag")))
+    (aph/with-test-mode (mode) 'text-mode
+      (aph/mode-tag-add mode tag)
+      (should (aph/mode-tag-p tag))
+      (should (aph/mode-tag-tagged-p mode tag)))))
+
 (ert-deftest aph/mode-tag-test-tagged-p--inherit ()
   "Test `aph/mode-tag-tagged-p' on inherited mode tags."
   (aph/with-test-mode-tag (tag) "doc"
