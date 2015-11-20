@@ -241,5 +241,18 @@ This test confirms basic functionality of the functions
         (should-not (aph/mode-tag-tagged-p mode2 tag))
         (should (aph/mode-tag-tagged-p mode2 tag :inherit))))))
 
+(ert-deftest aph/mode-tag-test-lists ()
+  "Test get-all functions for mode tags.
+These are `aph/mode-tag-get-tags-for-mode' and
+`aph/mode-tag-get-modes-for-tag'."
+  (aph/with-test-mode-tag (tag) "doc" 
+    (aph/with-test-mode (mode) 'text-mode
+      (aph/mode-tag-add mode tag)
+      (should (cl-find mode (aph/mode-tag-get-modes-for-tag tag)))
+      (should (cl-find tag (aph/mode-tag-get-tags-for-mode mode)))
+      (aph/mode-tag-remove mode tag)
+      (should-not (cl-find mode (aph/mode-tag-get-modes-for-tag tag)))
+      (should-not (cl-find tag (aph/mode-tag-get-tags-for-mode mode))))))
+
       
 (provide 'aph-mode-tag-test)
