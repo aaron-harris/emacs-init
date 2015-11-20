@@ -33,7 +33,7 @@ More specifically:
     `(let* ((,tag   (cl-gensym "tag"))
             (,hook  (aph/symbol-concat ,tag "-tag-hook")))
        (unwind-protect
-           (progn (aph/mode-tag-create tag ,doc)
+           (progn (aph/mode-tag-create ,tag ,doc)
                   ,@body)
          ;; Since tag is uninterned, its symbol properties won't
          ;; persist, but we need to clean up after hook, which was
@@ -95,12 +95,12 @@ anything (i.e., its body is empty).
 (ert-deftest aph/mode-tag-test-with-mode-tag--bindings ()
   "Test that `aph/with-test-mode-tag' sets bindings correctly."
   ;; Intentional bindings
-  (aph/with-test-mode-tag (tag hook) "doc"
-    (should (symbolp tag))
-    (should (eq hook (aph/symbol-concat tag "-tag-hook"))))
+  (aph/with-test-mode-tag (foo bar) "doc"
+    (should (symbolp foo))
+    (should (eq bar (aph/symbol-concat foo "-tag-hook"))))
   ;; No unintentional bindings
-  (aph/with-test-mode-tag (tag) "doc"
-    (should-error hook :type 'void-variable)))
+  (aph/with-test-mode-tag (foo) "doc"
+    (should-error bar :type 'void-variable)))
 
 (ert-deftest aph/mode-tag-test-with-mode-tag--cleanup ()
   "Test that `aph/with-test-mode-tag' cleans up after itself." 
@@ -227,9 +227,12 @@ This test confirms basic functionality of the functions
   "Test `aph/mode-tag-add' when tag doesn't yet exist."
   (let ((tag (cl-gensym "tag")))
     (aph/with-test-mode (mode) 'text-mode
-      (aph/mode-tag-add mode tag)
-      (should (aph/mode-tag-p tag))
-      (should (aph/mode-tag-tagged-p mode tag)))))
+      (unwind-protect
+          (progn
+            (aph/mode-tag-add mode tag)
+            (should (aph/mode-tag-p tag))
+            (should (aph/mode-tag-tagged-p mode tag)))
+        (unintern (aph/symbol-concat tag "-tag-hook"))))))
 
 (ert-deftest aph/mode-tag-test-tagged-p--inherit ()
   "Test `aph/mode-tag-tagged-p' on inherited mode tags."
@@ -253,6 +256,49 @@ These are `aph/mode-tag-get-tags-for-mode' and
       (aph/mode-tag-remove mode tag)
       (should-not (cl-find mode (aph/mode-tag-get-modes-for-tag tag)))
       (should-not (cl-find tag (aph/mode-tag-get-tags-for-mode mode))))))
+
+(ert-deftest aph/mode-tag-test-hooks--addition ()
+  "Test that a tagged mode runs its tags' hooks."
+  (let (log)
+    (aph/with-test-mode (mode) 'fundamental-mode
+      (aph/with-test-mode-tag (tag1 hook1) "doc"
+        (aph/with-test-mode-tag (tag2 hook2) "doc"
+          (add-hook hook1 (lambda () (push :hook1 log)))
+          (add-hook hook2 (lambda () (push :hook2 log)))
+          (aph/mode-tag-add mode tag1)
+          (aph/mode-tag-add mode tag2)
+          (with-temp-buffer
+            (funcall mode)
+            (should (cl-find :hook1 log))
+            (should (cl-find :hook2 log))))))))
+
+(ert-deftest aph/mode-tag-test-hooks--removal ()
+  "Test that `aph/mode-tag-remove' cleans up mode hooks."
+  (let (log)
+    (aph/with-test-mode (mode) 'fundamental-mode
+      (aph/with-test-mode-tag (tag hook) "doc"
+        (add-hook hook (lambda () (push :hook log)))
+        (aph/mode-tag-add mode tag)
+        (aph/mode-tag-remove mode tag)
+        (with-temp-buffer
+          (funcall mode)
+          (should-not (cl-find :hook log)))))))
+
+(ert-deftest aph/mode-tag-test-hooks--partial-removal ()
+  "Test that `aph/mode-tag-remove' doesn't unhook too much."
+  (let (log)
+    (aph/with-test-mode (mode) 'fundamental-mode
+      (aph/with-test-mode-tag (tag1 hook1) "doc"
+        (aph/with-test-mode-tag (tag2 hook2) "doc"
+          (add-hook hook1 (lambda () (push :hook1 log)))
+          (add-hook hook2 (lambda () (push :hook2 log)))
+          (aph/mode-tag-add mode tag1)
+          (aph/mode-tag-add mode tag2)
+          (aph/mode-tag-remove mode tag2)
+          (with-temp-buffer
+            (funcall mode)
+            (should (cl-find :hook1 log))
+            (should-not (cl-find :hook2 log))))))))
 
       
 (provide 'aph-mode-tag-test)

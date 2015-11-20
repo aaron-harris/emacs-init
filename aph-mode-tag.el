@@ -86,6 +86,7 @@ More specifically, the problems this alleviates are these:
 See `aph/def-mode-tag' for more information on mode tags."
   (unless (aph/mode-tag-p tag)
     (aph/mode-tag-create tag))
+  (add-hook (aph/symbol-concat mode "-hook") #'aph/mode-tag-run-hooks)
   (cl-pushnew mode (get tag  'aph/mode-tag-modes))
   (cl-pushnew tag  (get mode 'aph/mode-tag-tags)))
 
@@ -94,9 +95,12 @@ See `aph/def-mode-tag' for more information on mode tags."
 If MODE is not tagged with TAG, print a warning message unless
 the optional argument NOWARN is non-nil.
 
-See `aph/def-mode-tag' for more information on mode tags."
+See `aph/def-mode-tag' for more information on mode tags." 
   (aph/symbol-prop-delq mode tag  'aph/mode-tag-modes)
-  (aph/symbol-prop-delq tag  mode 'aph/mode-tag-tags))
+  (aph/symbol-prop-delq tag  mode 'aph/mode-tag-tags)
+  (unless (aph/mode-tag-get-tags-for-mode mode)
+    (remove-hook (aph/symbol-concat mode "-hook")
+                 #'aph/mode-tag-run-hooks)))
 
 (defun aph/mode-tag-p (sym)
   "Return non-nil if SYM is the name of a mode tag.
@@ -123,5 +127,16 @@ See `aph/def-mode-tag' for more information on mode tags."
   "Return a list of all modes tagged with TAG.
 See `aph/def-mode-tag' for more information on mode tags."
   (get tag 'aph/mode-tag-modes))
+
+(defun aph/mode-tag-run-hooks ()
+  "Run hooks for all mode tags associated with current major mode.
+
+This function is automatically run in the mode hook of any mode
+that has one or more mode tags.
+
+See `aph/def-mode-tag' for more information on mode tags."
+  (apply #'run-hooks
+         (mapcar (lambda (tag) (aph/symbol-concat tag "-tag-hook"))
+                 (aph/mode-tag-get-tags-for-mode major-mode))))
 
 (provide 'aph-mode-tag)
