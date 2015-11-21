@@ -7,6 +7,7 @@
 ;; Tests for the module aph-mode-tag.el.
 
 (require 'cl-lib)                       ; For `cl-gensym'
+(require 'aph-advice)                   ; For `aph/with-advice'
 
 
 ;;; Testing Apparatus
@@ -74,7 +75,7 @@ anything (i.e., its body is empty).
          (unintern ,hook)
          (unintern (aph/symbol-concat ,mode "-map"))
          (unintern (aph/symbol-concat ,mode "-syntax-table"))
-         (unintern (aph/symbol-concat ,mode "-abbrev-table"))))))
+         (unintern (aph/symbol-concat ,mode "-abbrev-table")))))) 
 
 
 ;;; Apparatus Testing: `aph/with-test-mode-tag'
@@ -197,19 +198,18 @@ anything (i.e., its body is empty).
     (aph/with-test-mode (mode) 'text-mode
       (aph/mode-tag-add mode tag)
       (aph/mode-tag-create tag "bar")
+      (aph/mode-tag-create tag nil)
       (should (aph/mode-tag-p tag))
       (should (equal "bar" (get tag 'aph/mode-tag-docstring)))
       (should (equal (symbol-value hook) (list #'ignore)))
-      (should (aph/mode-tag-tagged-p mode tag)))))
+      (should (aph/mode-tag-tagged-p mode tag))))) 
 
-(ert-deftest aph/mode-tag-test-create--collision ()
-  "Test that `aph/mode-tag-create' aborts when hook var exists."
-  (aph/with-test-mode-tag (tag hook) "doc"
-    (setplist tag nil)
-    (add-hook hook #'ignore) 
-    (should-error (aph/mode-tag-create tag "doc"))
-    (should (null (symbol-plist tag)))
-    (should (equal (symbol-value hook) (list #'ignore))))) 
+(ert-deftest aph/mode-tag-test-create--out-of-order ()
+  "Test that hooks can be added before tag is defined."
+  (let ((tag (cl-gensym "tag")))
+    (add-hook (aph/symbol-concat tag "-tag-hook") #'ignore)
+    (aph/mode-tag-create tag "doc")
+    (should (aph/mode-tag-p tag))))
 
 (ert-deftest aph/mode-tag-test-add/remove ()
   "Test association of tags to modes.
@@ -231,7 +231,9 @@ This test confirms basic functionality of the functions
           (progn
             (aph/mode-tag-add mode tag)
             (should (aph/mode-tag-p tag))
-            (should (aph/mode-tag-tagged-p mode tag)))
+            (should (aph/mode-tag-tagged-p mode tag))
+            (aph/mode-tag-create tag "doc")
+            (should (equal "doc" (get tag 'aph/mode-tag-docstring))))
         (unintern (aph/symbol-concat tag "-tag-hook"))))))
 
 (ert-deftest aph/mode-tag-test-tagged-p--inherit ()

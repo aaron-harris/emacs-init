@@ -32,12 +32,15 @@ above.
 
 Defining a mode tag creates a hook variable named `TAG-tag-hook',
 and all modes tagged with a tag (or derived from such a mode) run
-this hook along with their individual mode hooks.  If a variable
-with this name already exists (unless TAG is already a mode tag;
-see below), an error is signalled and the tag is not created.
+this hook along with their individual mode hooks.
 
 If a mode tag named TAG already exists, then its docstring is
-updated to DOCSTRING and no other change is made. 
+updated to DOCSTRING and no other change is made.  Similarly, if
+*any* variable exists with the same name as the desired hook
+variable, it will be \"stolen\" by the mode tag, but its value
+will not be changed; this is necessary in order to allow for
+out-of-order hooks.  Use care when naming mode tags to avoid
+collisions.
 
 Information about mode tags is primarily stored using symbol
 properties.  Four properties are used; except for `aph/mode-tag-tags',
@@ -53,17 +56,14 @@ these properties are associated with the symbol naming the mode tag.
   (declare (debug (&define name [&optional stringp]))
            (indent defun))
   (let ((hook (aph/symbol-concat tag "-tag-hook")))
-    `(progn
-       (if (and (boundp ',hook) (not (aph/mode-tag-p ',tag)))
-           (error "Variable %s already exists; tag %s not created"
-                  ',hook ',tag)
-         (put ',tag 'aph/mode-tag t)
-         (put ',tag 'aph/mode-tag-docstring ,docstring)
-         (defvar ,hook nil
-           ,(format "Hook run for all modes tagged with the mode tag %s.
+    `(progn 
+       (put ',tag 'aph/mode-tag t)
+       ,@(when docstring `((put ',tag 'aph/mode-tag-docstring ,docstring)))
+       (defvar ,hook nil
+         ,(format "Hook run for all modes tagged with the mode tag %s.
 No problems result if this variable is not bound.
 `add-hook' automatically binds it.  (This is true for all hook variables.)"
-                    tag))))))
+                  tag)))))
 
 (defun aph/mode-tag-create (tag &optional docstring)
   "Define TAG as a mode tag.
