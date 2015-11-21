@@ -43,11 +43,17 @@
   (global-smart-tab-mode 1) 
   (setq smart-tab-using-hippie-expand        t
         smart-tab-completion-functions-alist nil)
+  ;; Use `hippie-expand' in elisp buffers.
+  (setq smart-tab-completion-functions-alist
+        (assq-delete-all 'emacs-lisp-mode
+                         smart-tab-completion-functions-alist))
   :diminish smart-tab-mode)
 
 (use-package company
   :ensure t
   :defer t
+  :init
+  (add-hook 'lisp-tag-hook #'company-mode)
   :config
   (setq company-idle-delay nil)
   :diminish company-mode)
@@ -114,6 +120,8 @@
 
 (use-package smartparens-config
   :ensure smartparens
+  :init
+  (add-hook 'lisp-tag-hook #'smartparens-strict-mode)
   :config 
   (smartparens-global-mode)
   ;; String handling
@@ -179,8 +187,130 @@
     (setq fill-column 75))
   (add-hook 'LaTeX-mode-hook #'aph/LaTeX-mode-hook))
 
+(use-package aph-mode-tag)
+
+(aph/mode-tag-create 'lisp
+    "Tag for modes used to edit any sort of Lisp, including REPLs.")
+
+;; All-Lisp config 
+(use-package lisp-mode
+  :defer t 
+  :config
+  ;; Mode tags
+  (aph/mode-tag-add 'lisp-mode             'lisp)
+  (aph/mode-tag-add 'emacs-lisp-mode       'lisp)
+  (aph/mode-tag-add 'lisp-interaction-mode 'lisp))
+
+(use-package files
+  :defer t
+  :config
+  (use-package aph-files)
+  (when (eq aph/machine 'mpc)
+    (setq aph/emacs-source-dirs
+          '("C:/Program Files (Portable)/Emacs/share/emacs")))
+  (aph/emacs-source-make-read-only))
+
+(use-package simple
+  :defer t
+  :config
+  ;; Tweaking `eval-expression'
+  (defun aph/mode-tag-run-hook--lisp ()
+    "Run the hook for the `lisp' mode tag."
+    (run-hooks 'lisp-tag-hook))
+  (add-hook 'eval-expression-minibuffer-setup-hook
+            #'aph/mode-tag-run-hook--lisp) 
+  (setq eval-expression-print-length nil
+        eval-expression-print-level  nil)
+  (when (eq aph/machine 'mpc)
+    (setq aph/eval-expression-clean-output t)))
+
+;; Not entirely sure where this should go yet.
+(defun aph/hippie-expand-config-lisp ()
+  "Configure `hippie-expand-try-functions-list' for Lisps."
+  (setq hippie-expand-try-functions-list
+        '(try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-all-abbrevs
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol
+          try-expand-dabbrev
+          try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-from-kill
+          try-expand-list
+          try-expand-line
+          try-expand-line-all-buffers)))
+(add-hook 'lisp-tag-hook #'aph/hippie-expand-config-lisp)
+
+(use-package rainbow-delimiters
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'lisp-tag-hook #'rainbow-delimiters-mode))
+
+(use-package color-identifiers-mode
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'lisp-tag-hook #'color-identifiers-mode)
+  :config 
+  (setq color-identifiers:num-colors      12
+        color-identifiers:color-luminance 0.65)
+
+  (use-package aph-font-lock)
+  (add-hook 'color-identifiers-mode-hook #'aph/font-lock-decolorize)
+  
+  ;; In the function `color-identifiers:clojure-declarations-in-sexp',
+  ;; there is a call to `evenp', which is not defined; presumably, the
+  ;; package maintainers are expecting use to be using `cl' rather
+  ;; than `cl-lib'.  As a stopgap, I'm aliasing just `evenp' globally.
+  (defalias #'evenp #'cl-evenp))
+
+(use-package clojure-mode
+  :ensure t
+  :defer t
+  :init
+  (aph/mode-tag-create 'clojure
+    "Tag for modes used to edit Clojure, including REPLs.")
+  :config
+  (aph/mode-tag-add 'clojure-mode 'lisp)
+  (aph/mode-tag-add 'clojure-mode 'clojure)
+  (add-hook 'clojure-tag-hook #'subword-mode))
+
+(use-package cider
+  :ensure t
+  :defer t
+  :config
+  (setq cider-auto-select-error-buffer      nil
+        cider-show-error-buffer             'except-in-repl
+        cider-repl-pop-to-buffer-on-connect nil)
+  (aph/mode-tag-add 'cider-repl-mode 'lisp)
+  (aph/mode-tag-add 'cider-repl-mode 'clojure)
+  (eval-after-load 'aph-commands
+  '(add-to-list 'aph/help-window-names "*cider-doc*"))
+  ;; Output from the JVM has Windows-style newlines, so we need to
+  ;; strip those unless we want to see ^M characters in Cider buffers.
+  (use-package aph-w32)
+  (add-hook 'cider-repl-mode-hook            #'aph/remove-dos-eol)
+  (add-hook 'cider-macroexpansion-mode-hook  #'aph/remove-dos-eol)
+  (add-hook 'cider-test-report-mode-hook     #'aph/remove-dos-eol))
+
+(use-package eldoc
+  :defer t
+  :init
+  (add-hook 'lisp-tag-hook #'eldoc-mode)) 
+
+(use-package ielm
+  :defer t
+  :config
+  (aph/mode-tag-add 'ielm-mode 'lisp))
+
+(use-package font-lock
+  :defer t
+  :config
+  (eval-after-load 'dash        #'dash-enable-font-lock)
+  (eval-after-load 'aph-require #'aph/require-enable-font-lock))
+
 ;; Specific Modes
-(aph/require-softly 'init-lisp)
 (aph/require-softly 'init-ahk)
 
 ;; Other

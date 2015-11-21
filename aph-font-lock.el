@@ -1,14 +1,10 @@
 ;;; -*- lexical-binding: t -*-
 
 ;;;; The Emacs init file of Aaron Harris.
-;;;; COLOR IDENTIFIERS CONFIGURATION
+;;;; FONT LOCK EXTENSIONS
 ;;;;============================================================================
 
-
-;;; General Settings
-;;;=================
-(setq color-identifiers:num-colors 12)
-(setq color-identifiers:color-luminance 0.65)
+;; Extensions for the `font-lock' package. 
 
 
 ;;; Decolorization
@@ -34,17 +30,6 @@
                       :slant 'italic)
   (set-face-attribute 'font-lock-type-face nil
                       :foreground nil
-                      :underline t))
+                      :underline t)) 
 
-(add-hook 'color-identifiers-mode-hook #'aph/font-lock-decolorize)
-
-
-;;; Patching
-;;;=========
-;; In the function `color-identifiers:clojure-declarations-in-sexp',
-;; there is a call to `evenp', which is not defined.  I'm guessing
-;; that cl-lib renamed this at some point.  As a stopgap, I'm just
-;; restoring the `evenp' alias globally.
-(defalias #'evenp #'cl-evenp)
-
-(provide 'init-color-identifiers)
+(provide 'aph-font-lock)
