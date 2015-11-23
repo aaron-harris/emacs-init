@@ -4,35 +4,10 @@
 ;;;; MISCELLANEOUS SETTINGS
 ;;;;============================================================================
 
-(require 'aph-require)                  ; For `aph/require-softly' 
-
-;; Avy
-(setq avy-style 'pre)
-(setq avy-background t)
-(setq avy-all-windows nil)
-(setq avy-highlight-first t)
-
-;; Calendar settings
-(setq calendar-longitude -93.2
-      calendar-latitude 45.0)
-
-;; Clipboard settings (copied verbatim from better-defaults.el)
-(setq x-select-enable-clipboard t
-      x-select-enable-primary t
-      save-interprogram-paste-before-kill t)
-
-;; Completion settings
-(setq completion-auto-help 'lazy)
-
-;; Saved place and backup settings
-(require 'saveplace)
-(setq-default save-place t)
-(setq save-place-file (concat user-emacs-directory "places"))
-(setq backup-directory-alist
-      `(("." . ,(concat user-emacs-directory "backups"))))
+(require 'aph-require)                  ; For `aph/require-softly'
 
 ;; Scrolling settings
-(setq scroll-margin 1 
+(setq scroll-margin 1
       scroll-conservatively 1000
       scroll-preserve-screen-position :always)
 

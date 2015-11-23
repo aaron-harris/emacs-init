@@ -209,6 +209,10 @@
   :defer t
   :config
   (use-package aph-files)
+  ;; Backup file location
+  (setq backup-directory-alist
+        `(("." . ,(concat user-emacs-directory "backups"))))
+  ;; Make Emacs source read-only
   (when (eq aph/machine 'mpc)
     (setq aph/emacs-source-dirs
           '("C:/Program Files (Portable)/Emacs/share/emacs")))
@@ -219,7 +223,8 @@
   ;; Global minor modes
   (column-number-mode)
   ;; Misc. settings
-  (setq shift-select-mode nil)
+  (setq save-interprogram-paste-before-kill t
+        shift-select-mode                   nil)
   ;; Tweaking `eval-expression'
   (defun aph/mode-tag-run-hook--lisp ()
     "Run the hook for the `lisp' mode tag."
@@ -396,6 +401,32 @@
   :config
   (setq-default indent-tabs-mode nil))
 
+(use-package avy
+  :ensure t
+  :defer t
+  :config
+  (setq avy-all-windows     nil
+        avy-background      t
+        avy-highlight-first t
+        avy-style           'pre))
+
+(use-package solar
+  :defer t
+  :config
+  (setq calendar-longitude -93.2
+        calendar-latitude   45.0))
+
+(use-package minibuffer
+  :defer t
+  :config
+  (setq completion-auto-help 'lazy))
+
+(use-package saveplace
+  :config
+  (setq-default save-place t) 
+  (setq save-place-file (concat user-emacs-directory "places")))
+
+
 ;; Other
 (aph/require-softly 'init-misc) 
 (aph/require-softly 'init-keys)
