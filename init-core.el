@@ -15,14 +15,18 @@
   "A symbol denoting the specific PC being used.")
 
 
-;;; Disabling Window Chrome
-;;;========================
+;;; Display Settings
+;;;=================
 ;; Placing this close to the beginning of initialization should
 ;; prevent chrome from being drawn at all, rather than drawing it then
 ;; removing it.
 (menu-bar-mode -1)
 (when (fboundp 'tool-bar-mode)   (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(setq-default resize-mini-windows        t
+              ring-bell-function         #'ignore
+              cursor-type                'box
+              indicate-buffer-boundaries 'right)
 
 
 ;;; Path Management
@@ -214,6 +218,8 @@
   :config
   ;; Global minor modes
   (column-number-mode)
+  ;; Misc. settings
+  (setq shift-select-mode nil)
   ;; Tweaking `eval-expression'
   (defun aph/mode-tag-run-hook--lisp ()
     "Run the hook for the `lisp' mode tag."
@@ -379,6 +385,16 @@
   :config
   ;; Improves functionality of `C-h F' for Org commands.
   (add-to-list 'Info-file-list-for-emacs "org"))
+
+(use-package mule-cmds
+  :defer t
+  :config
+  (prefer-coding-system 'utf-8-unix))
+
+(use-package indent
+  :defer t
+  :config
+  (setq-default indent-tabs-mode nil))
 
 ;; Other
 (aph/require-softly 'init-misc) 
