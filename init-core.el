@@ -313,6 +313,39 @@
 (use-package xahk-mode
   :mode "\\.ahk\\'")
 
+(use-package server
+  :config
+  (unless (server-running-p) (server-start))
+  (setq server-window 'pop-to-buffer))
+
+(use-package smartscan
+  :ensure t
+  :config
+  (global-smartscan-mode 1))
+
+(use-package visible-mark
+  :ensure t
+  :defer t
+  :init
+  (defface visible-mark-active
+    '((t (:underline "magenta")))
+    "Face for the active mark. Preempts default definition."
+    :group 'visible-mark) 
+  :config
+  (global-visible-mark-mode 1)
+  (defface aph/visible-mark-top
+    '((t (:underline "light salmon")))
+    "Face for the most recent inactive mark."
+    :group 'visible-mark)
+
+  (defface aph/visible-mark-other
+    '((t (:underline "light goldenrod")))
+    "Face for marks other than the most recent."
+    :group 'visible-mark)
+  (setq visible-mark-max   2
+        visible-mark-faces '(aph/visible-mark-top
+                             aph/visible-mark-other)))
+
 ;; Other
 (aph/require-softly 'init-misc) 
 (aph/require-softly 'init-keys)
