@@ -39,24 +39,24 @@
 ;; Major Features
 (use-package smart-tab
   :ensure t
+  :diminish smart-tab-mode
   :config
-  (global-smart-tab-mode 1) 
+  (global-smart-tab-mode 1)
   (setq smart-tab-using-hippie-expand        t
         smart-tab-completion-functions-alist nil)
   ;; Use `hippie-expand' in elisp buffers.
   (setq smart-tab-completion-functions-alist
         (assq-delete-all 'emacs-lisp-mode
-                         smart-tab-completion-functions-alist))
-  :diminish smart-tab-mode)
+                         smart-tab-completion-functions-alist)))
 
 (use-package company
   :ensure t
   :defer t
+  :diminish company-mode
   :init
   (add-hook 'lisp-tag-hook #'company-mode)
   :config
-  (setq company-idle-delay nil)
-  :diminish company-mode)
+  (setq company-idle-delay nil))
 
 (use-package helm-config
   :ensure helm
@@ -211,8 +211,9 @@
   (aph/emacs-source-make-read-only))
 
 (use-package simple
-  :defer t
   :config
+  ;; Global minor modes
+  (column-number-mode)
   ;; Tweaking `eval-expression'
   (defun aph/mode-tag-run-hook--lisp ()
     "Run the hook for the `lisp' mode tag."
@@ -250,6 +251,7 @@
 (use-package color-identifiers-mode
   :ensure t
   :defer t
+  :diminish color-identifiers-mode
   :init
   (add-hook 'lisp-tag-hook #'color-identifiers-mode)
   :config 
@@ -296,6 +298,7 @@
 
 (use-package eldoc
   :defer t
+  :diminish eldoc-mode
   :init
   (add-hook 'lisp-tag-hook #'eldoc-mode)) 
 
@@ -325,7 +328,6 @@
 
 (use-package visible-mark
   :ensure t
-  :defer t
   :init
   (defface visible-mark-active
     '((t (:underline "magenta")))
@@ -345,6 +347,14 @@
   (setq visible-mark-max   2
         visible-mark-faces '(aph/visible-mark-top
                              aph/visible-mark-other)))
+
+(use-package paren
+  :config
+  (show-paren-mode))
+
+(use-package winner
+  :config
+  (winner-mode))
 
 ;; Other
 (aph/require-softly 'init-misc) 
