@@ -7,21 +7,6 @@
 (require 'aph-require)                  ; For `aph/require-softly'
 
 
-;;; Help Improvements
-;;;==================
-(aph/require-softly 'help+)
-(aph/require-softly 'help-mode+)
-(aph/require-softly 'help-fns+)
-
-;; Add Org manual to list of manuals to include links for in help.
-;; This is a stopgap measure.  In the long run, keying in to
-;; `Info-file-list-for-emacs' is probably the way to go.
-(setq help-cross-reference-manuals '(("emacs" "elisp" "org")))
-
-;; Improves functionality of `C-h F' for Org commands.
-(add-to-list 'Info-file-list-for-emacs "org")
-
-
 ;;; Miscellaneous Settings
 ;;;======================= 
 (prefer-coding-system 'utf-8-unix)      ; Use Unix-style line endings.
