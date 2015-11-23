@@ -331,7 +331,7 @@
   :init
   (defface visible-mark-active
     '((t (:underline "magenta")))
-    "Face for the active mark. Preempts default definition."
+    "Face for the active mark.  Preempts default definition."
     :group 'visible-mark) 
   :config
   (global-visible-mark-mode 1)
@@ -355,6 +355,30 @@
 (use-package winner
   :config
   (winner-mode))
+
+(use-package help+
+  :ensure t
+  :defer t)
+
+(use-package help-mode+
+  :ensure t
+  :defer t)
+
+(use-package help-fns+
+  :ensure t
+  :defer t
+  :commands describe-buffer
+  :config
+  ;; Add Org manual to list of manuals to include links for in help.
+  ;; This is a stopgap measure.  In the long run, keying in to
+  ;; `Info-file-list-for-emacs' is probably the way to go.
+  (setq help-cross-reference-manuals '(("emacs" "elisp" "org"))))
+
+(use-package info
+  :defer t
+  :config
+  ;; Improves functionality of `C-h F' for Org commands.
+  (add-to-list 'Info-file-list-for-emacs "org"))
 
 ;; Other
 (aph/require-softly 'init-misc) 
