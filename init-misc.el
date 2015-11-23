@@ -6,11 +6,6 @@
 
 (require 'aph-require)                  ; For `aph/require-softly'
 
-;; Built-in modes
-(column-number-mode t)                  ; Show col number in mode line.
-(show-paren-mode 1)                     ; Highlight matching parens.
-(winner-mode 1)                         ; Window config undo and redo.
-
 
 ;;; Help Improvements
 ;;;==================
