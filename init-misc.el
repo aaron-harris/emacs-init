@@ -6,23 +6,6 @@
 
 (require 'aph-require)                  ; For `aph/require-softly'
 
-
-;;; Emacs Client Settings
-;;;======================
-(require 'server)
-(unless (server-running-p) (server-start)) ; Run Emacs in server mode.
-(setq server-window 'pop-to-buffer)     ; Client buffers open in other window.
-
-
-;;; Global Modes
-;;;=============
-;; Smartscan Mode
-(when (fboundp 'smartscan-mode)
-  (global-smartscan-mode 1))            ; Search for matching symbols.
-
-;; Visible Mark Mode
-(aph/require-softly 'init-visible-mark)
-
 ;; Built-in modes
 (column-number-mode t)                  ; Show col number in mode line.
 (show-paren-mode 1)                     ; Highlight matching parens.
