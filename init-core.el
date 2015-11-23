@@ -310,8 +310,8 @@
   (eval-after-load 'dash        #'dash-enable-font-lock)
   (eval-after-load 'aph-require #'aph/require-enable-font-lock))
 
-;; Specific Modes
-(aph/require-softly 'init-ahk)
+(use-package xahk-mode
+  :mode "\\.ahk\\'")
 
 ;; Other
 (aph/require-softly 'init-misc) 
