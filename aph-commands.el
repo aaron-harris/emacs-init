@@ -93,16 +93,7 @@ An argument of -N calls `join-line' N times."
   (interactive "p")
   (if (< n 0)
       (dotimes (i (- n)) (join-line))
-    (newline n)))
-
-;;;###autoload
-(defun aph/open-line (n)
-  "As `open-line', with support for negative argument.
-An argument of -N calls `join-line' with an argument N times."
-  (interactive "p")
-  (if (< n 0)
-      (dotimes (i (- n)) (join-line :invert))
-    (open-line n)))
+    (newline n))) 
 
 ;;;###autoload
 (defun aph/other-window-backwards (count &optional all-frames)

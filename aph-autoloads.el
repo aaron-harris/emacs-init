@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22100 46857
-;;;;;;  870271 0))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22100 59953
+;;;;;;  125635 500000))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -53,12 +53,6 @@ For convenience, return the new mapping.
 (autoload 'aph/newline "aph-commands" "\
 As `newline', with support for negative argument.
 An argument of -N calls `join-line' N times.
-
-\(fn N)" t nil)
-
-(autoload 'aph/open-line "aph-commands" "\
-As `open-line', with support for negative argument.
-An argument of -N calls `join-line' with an argument N times.
 
 \(fn N)" t nil)
 
@@ -369,8 +363,8 @@ Run the shell command \"hg status\".
 
 ;;;***
 
-;;;### (autoloads nil "aph-simple" "aph-simple.el" (22095 34773 160109
-;;;;;;  400000))
+;;;### (autoloads nil "aph-simple" "aph-simple.el" (22100 59949 186059
+;;;;;;  500000))
 ;;; Generated autoloads from aph-simple.el
 
 (autoload 'aph/truncate-lines-on "aph-simple" "\
@@ -433,7 +427,7 @@ a default.
 ;;;;;;  "aph-w32.el" "aph-window.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-elfeed.el" "init-ido.el" "init-keys.el" "init-org-agenda.el"
 ;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-startup.el")
-;;;;;;  (22100 47894 990198 500000))
+;;;;;;  (22100 59974 372160 300000))
 
 ;;;***
 
