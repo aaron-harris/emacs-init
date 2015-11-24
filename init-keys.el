@@ -11,10 +11,7 @@
 ;;; General Keybindings
 ;;;====================
 ;; Removing Unnecessary Bindings
-(aph/global-set-keys-safely
-  ;; Scrolling
-  ((kbd "<down>")          #'aph/scroll-up-by-line   :rebind)
-  ((kbd "<up>")            #'aph/scroll-down-by-line :rebind)
+(aph/global-set-keys-safely 
   ;; Basic Editing
   ([remap open-line]       #'aph/open-line) ; At C-o
   ((kbd "C-S-o")           #'join-line)

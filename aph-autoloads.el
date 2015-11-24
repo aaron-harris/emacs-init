@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22058 26208
-;;;;;;  291152 900000))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22100 46857
+;;;;;;  870271 0))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -66,22 +66,6 @@ An argument of -N calls `join-line' with an argument N times.
 As `other-window' but reversed.
 
 \(fn COUNT &optional ALL-FRAMES)" t nil)
-
-(autoload 'aph/scroll-down-by-line "aph-commands" "\
-As `scroll-down-command', but ARG defaults to 1.
-
-Also, a negative prefix argument is treated as -1, scrolling only
-one line upward.
-
-\(fn &optional ARG)" t nil)
-
-(autoload 'aph/scroll-up-by-line "aph-commands" "\
-As `scroll-up-command', but ARG defaults to 1.
-
-Also, a negative prefix argument is treated as -1, scrolling only
-one line downward.
-
-\(fn &optional ARG)" t nil)
 
 (autoload 'aph/yank-rectangle-from-kill-ring "aph-commands" "\
 Yank the top of kill ring as a rectangle.
@@ -302,7 +286,8 @@ cde will return 14.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22060 17701 0 0))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22085 11309 492504
+;;;;;;  800000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-spin-basic "aph-org" "\
@@ -384,7 +369,7 @@ Run the shell command \"hg status\".
 
 ;;;***
 
-;;;### (autoloads nil "aph-simple" "aph-simple.el" (22083 56965 435260
+;;;### (autoloads nil "aph-simple" "aph-simple.el" (22095 34773 160109
 ;;;;;;  400000))
 ;;; Generated autoloads from aph-simple.el
 
@@ -441,16 +426,14 @@ a default.
 
 ;;;***
 
-;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-hooks.el"
-;;;;;;  "aph-keys.el" "aph-lib.el" "aph-org-agenda.el" "aph-require.el"
-;;;;;;  "aph-shr.el" "init-ahk.el" "init-color-identifiers.el" "init-completion.el"
-;;;;;;  "init-core.el" "init-docview.el" "init-draft.el" "init-elfeed.el"
-;;;;;;  "init-helm.el" "init-ido.el" "init-keys.el" "init-latex.el"
-;;;;;;  "init-lisp-clojure.el" "init-lisp-emacs.el" "init-lisp.el"
-;;;;;;  "init-misc.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "init-package.el" "init-smartparens.el" "init-startup.el"
-;;;;;;  "init-visible-mark.el" "init-web.el") (22083 56993 353812
-;;;;;;  100000))
+;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-files.el"
+;;;;;;  "aph-font-lock.el" "aph-hooks.el" "aph-keys.el" "aph-latex.el"
+;;;;;;  "aph-lib.el" "aph-mode-tag.el" "aph-org-agenda.el" "aph-org-capture.el"
+;;;;;;  "aph-rect.el" "aph-require.el" "aph-shr.el" "aph-symbol.el"
+;;;;;;  "aph-w32.el" "aph-window.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-elfeed.el" "init-ido.el" "init-keys.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-startup.el")
+;;;;;;  (22100 47894 990198 500000))
 
 ;;;***
 
