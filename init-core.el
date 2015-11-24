@@ -30,13 +30,16 @@
 (add-to-list 'load-path (expand-file-name aph/init-path))
 
 
-;;; Loading Submodules
-;;;===================
+;;; Bootstrapping
+;;;==============
 (require 'aph-require)                  ; For `aph/require-softly', etc.
 (aph/require-softly 'aph-autoloads)
 (aph/require-softly 'init-package)
 
-;; Source Variables
+
+;;; Source Variable Configuration
+;;;==============================
+;; UI Configuration
 (setq-default cursor-type                     'box
               indicate-buffer-boundaries      'right
               resize-mini-windows             t
@@ -44,8 +47,20 @@
               scroll-conservatively           1000
               scroll-margin                   1
               scroll-preserve-screen-position :always)
+
+;; Use Windows keys for super modifier.
+(setq w32-lwindow-modifier       'super
+      w32-pass-lwindow-to-system nil 
+      w32-rwindow-modifier       'super
+      w32-pass-rwindow-to-system nil)
+
+;; Enable some disabled commands
 (put 'downcase-region 'disabled nil) 
 (put 'upcase-region   'disabled nil)
+
+
+;;; Package Loading
+;;;================
 
 ;; Major Features
 (use-package smart-tab
