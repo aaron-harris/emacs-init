@@ -108,27 +108,7 @@ An argument of -N calls `join-line' with an argument N times."
 (defun aph/other-window-backwards (count &optional all-frames)
   "As `other-window' but reversed."
   (interactive "p")
-  (other-window (- count) all-frames))
-
-;;;###autoload
-(defun aph/scroll-down-by-line (&optional arg)
-  "As `scroll-down-command', but ARG defaults to 1.
-
-Also, a negative prefix argument is treated as -1, scrolling only
-one line upward."
-  ;; All of our changes are encapsulated in the `interactive' form.
-  (interactive "^p")
-  (scroll-down-command arg))
-
-;;;###autoload
-(defun aph/scroll-up-by-line (&optional arg)
-  "As `scroll-up-command', but ARG defaults to 1.
-
-Also, a negative prefix argument is treated as -1, scrolling only
-one line downward."
-  ;; All of our changes are encapsulated in the `interactive' form.
-  (interactive "^p")
-  (scroll-up-command arg))
+  (other-window (- count) all-frames)) 
 
 ;;;###autoload
 (defun aph/yank-rectangle-from-kill-ring (&optional arg verbose)

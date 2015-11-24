@@ -60,9 +60,7 @@
 
 
 ;;; Package Loading
-;;;================
-
-;; Major Features
+;;;================ 
 (use-package smart-tab
   :ensure t
   :diminish smart-tab-mode
@@ -472,6 +470,10 @@
   (use-package aph-rect)
   (when (>= emacs-major-version 25)
     (advice-add #'rectangle--*-char :around #'aph/rectangle-repetition-fix)))
+
+(use-package aph-window
+  :bind (("<up>"   . aph/scroll-down-by-line)
+         ("<down>" . aph/scroll-up-by-line)))
 
 
 ;; Other 
