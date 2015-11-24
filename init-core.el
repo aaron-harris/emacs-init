@@ -39,14 +39,17 @@
 
 ;;; Source Variable Configuration
 ;;;==============================
+(prefer-coding-system 'utf-8-unix)
+
 ;; UI Configuration
 (setq-default cursor-type                     'box
+              indent-tabs-mode                nil
               indicate-buffer-boundaries      'right
               resize-mini-windows             t
               ring-bell-function              #'ignore
               scroll-conservatively           1000
               scroll-margin                   1
-              scroll-preserve-screen-position :always)
+              scroll-preserve-screen-position :always) 
 
 ;; Use Windows keys for super modifier.
 (setq w32-lwindow-modifier       'super
@@ -414,17 +417,7 @@
   :defer t
   :config
   ;; Improves functionality of `C-h F' for Org commands.
-  (add-to-list 'Info-file-list-for-emacs "org"))
-
-(use-package mule-cmds
-  :defer t
-  :config
-  (prefer-coding-system 'utf-8-unix))
-
-(use-package indent
-  :defer t
-  :config
-  (setq-default indent-tabs-mode nil))
+  (add-to-list 'Info-file-list-for-emacs "org")) 
 
 (use-package avy
   :ensure t
