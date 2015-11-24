@@ -7,14 +7,6 @@
 (require 'aph-require)                  ; For `aph/require-softly'
 
 
-;;; Enabling Commands
-;;;==================
-;; These enable commands which are by default disabled.
-(put 'downcase-region 'disabled nil)
-(put 'narrow-to-page  'disabled nil)
-(put 'upcase-region   'disabled nil)
-
-
 ;;; Rectangle Patch
 ;;;================
 ;; There seems to be a bug in Emacs 25 where movement commands in

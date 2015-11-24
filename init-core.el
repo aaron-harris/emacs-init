@@ -44,6 +44,8 @@
               scroll-conservatively           1000
               scroll-margin                   1
               scroll-preserve-screen-position :always)
+(put 'downcase-region 'disabled nil) 
+(put 'upcase-region   'disabled nil)
 
 ;; Major Features
 (use-package smart-tab
@@ -443,6 +445,11 @@
 (use-package uniquify
   :config
   (setq uniquify-buffer-name-style 'forward))
+
+(use-package page
+  :defer t
+  :config
+  (put 'narrow-to-page  'disabled nil))
 
 
 ;; Other
