@@ -451,9 +451,15 @@
   :config
   (put 'narrow-to-page  'disabled nil))
 
+(use-package rect
+  :defer t
+  :config
+  (use-package aph-rect)
+  (when (>= emacs-major-version 25)
+    (advice-add #'rectangle--*-char :around #'aph/rectangle-repetition-fix)))
+
 
-;; Other
-(aph/require-softly 'init-misc) 
+;; Other 
 (aph/require-softly 'init-keys)
 (aph/require-softly 'init-startup)
 
