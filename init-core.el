@@ -23,10 +23,6 @@
 (menu-bar-mode -1)
 (when (fboundp 'tool-bar-mode)   (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(setq-default resize-mini-windows        t
-              ring-bell-function         #'ignore
-              cursor-type                'box
-              indicate-buffer-boundaries 'right)
 
 
 ;;; Path Management
@@ -39,6 +35,15 @@
 (require 'aph-require)                  ; For `aph/require-softly', etc.
 (aph/require-softly 'aph-autoloads)
 (aph/require-softly 'init-package)
+
+;; Source Variables
+(setq-default cursor-type                     'box
+              indicate-buffer-boundaries      'right
+              resize-mini-windows             t
+              ring-bell-function              #'ignore
+              scroll-conservatively           1000
+              scroll-margin                   1
+              scroll-preserve-screen-position :always)
 
 ;; Major Features
 (use-package smart-tab
@@ -367,23 +372,28 @@
   :config
   (winner-mode))
 
-(use-package help+
-  :ensure t
-  :defer t)
-
-(use-package help-mode+
-  :ensure t
-  :defer t)
-
-(use-package help-fns+
-  :ensure t
+(use-package help
   :defer t
-  :commands describe-buffer
   :config
-  ;; Add Org manual to list of manuals to include links for in help.
-  ;; This is a stopgap measure.  In the long run, keying in to
-  ;; `Info-file-list-for-emacs' is probably the way to go.
-  (setq help-cross-reference-manuals '(("emacs" "elisp" "org"))))
+  (use-package help+
+    :ensure t))
+
+(use-package help-mode
+  :defer t
+  :config
+  (use-package help-mode+
+    :ensure t))
+
+(use-package help-fns
+  :defer t
+  :config
+  (use-package help-fns+
+    :ensure t 
+    :config
+    ;; Add Org manual to list of manuals to include links for in help.
+    ;; This is a stopgap measure.  In the long run, keying in to
+    ;; `Info-file-list-for-emacs' is probably the way to go.
+    (setq help-cross-reference-manuals '(("emacs" "elisp" "org")))))
 
 (use-package info
   :defer t
@@ -424,7 +434,7 @@
 (use-package saveplace
   :config
   (setq-default save-place t) 
-  (setq save-place-file (concat user-emacs-directory "places")))
+  (setq save-place-file (concat user-emacs-directory "places"))) 
 
 
 ;; Other

@@ -6,11 +6,6 @@
 
 (require 'aph-require)                  ; For `aph/require-softly'
 
-;; Scrolling settings
-(setq scroll-margin 1
-      scroll-conservatively 1000
-      scroll-preserve-screen-position :always)
-
 ;; Tooltip Settings
 (tooltip-mode -1)
 (setq tooltip-use-echo-area t)
