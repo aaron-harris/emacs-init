@@ -436,6 +436,14 @@
   (setq-default save-place t) 
   (setq save-place-file (concat user-emacs-directory "places"))) 
 
+(use-package tooltip
+  :config
+  (tooltip-mode -1))
+
+(use-package uniquify
+  :config
+  (setq uniquify-buffer-name-style 'forward))
+
 
 ;; Other
 (aph/require-softly 'init-misc) 

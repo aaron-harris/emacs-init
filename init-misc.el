@@ -6,14 +6,6 @@
 
 (require 'aph-require)                  ; For `aph/require-softly'
 
-;; Tooltip Settings
-(tooltip-mode -1)
-(setq tooltip-use-echo-area t)
-
-;; Uniquify settings
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-
 
 ;;; Enabling Commands
 ;;;==================
