@@ -109,12 +109,12 @@
                '(org-refile . nil)))
 
 (use-package helm-descbinds
-  :requires helm
+  :after helm
   :ensure t
   :config (helm-descbinds-mode))
 
 (use-package projectile
-  :requires helm
+  :after helm
   :ensure t
   :config
   (projectile-global-mode)
@@ -242,6 +242,8 @@
   (aph/emacs-source-make-read-only))
 
 (use-package simple
+  :bind ("C-S-o" . join-line)
+  :demand t
   :config
   ;; Global minor modes
   (column-number-mode)
@@ -255,7 +257,12 @@
   (add-hook 'eval-expression-minibuffer-setup-hook
             #'aph/mode-tag-run-hook--lisp) 
   (setq eval-expression-print-length nil
-        eval-expression-print-level  nil)
+        eval-expression-print-level  nil))
+
+(use-package aph-simple
+  :after simple
+  :bind ([remap open-line] . aph/open-line) ; C-o
+  :config
   (when (eq aph/machine 'mpc)
     (setq aph/eval-expression-clean-output t)))
 

@@ -4,7 +4,19 @@
 ;;;; SIMPLE EXTENSIONS
 ;;;;============================================================================
 
-;; Extensions for `simple' package.
+;; Extensions for `simple' package. 
+(require 'simple)
+
+
+;;; Editing Commands
+;;;=================
+(defun aph/open-line (n)
+  "As `open-line', with support for negative argument.
+An argument of -N calls `join-line' with an argument N times."
+  (interactive "p")
+  (if (< n 0)
+      (dotimes (i (- n)) (join-line :invert))
+    (open-line n)))
 
 
 ;;; Eval Expression

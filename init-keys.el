@@ -12,9 +12,7 @@
 ;;;====================
 ;; Removing Unnecessary Bindings
 (aph/global-set-keys-safely 
-  ;; Basic Editing
-  ([remap open-line]       #'aph/open-line) ; At C-o
-  ((kbd "C-S-o")           #'join-line)
+  ;; Basic Editing 
   ((kbd "C-S-t")           #'transpose-paragraphs)
   ;; Undo
   ((kbd "C-M-/")           #'undo-only :rebind)
