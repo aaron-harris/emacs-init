@@ -174,32 +174,25 @@
                '(org-refile . nil)))
 
 (use-package helm-descbinds
-  :after helm
   :ensure t
+  :after helm
   :config (helm-descbinds-mode))
 
-(use-package help
-  :defer t
-  :config
-  (use-package help+
-    :ensure t))
+(use-package help+
+  :ensure t
+  :after help)
 
-(use-package help-mode
-  :defer t
-  :config
-  (use-package help-mode+
-    :ensure t))
+(use-package help-mode+
+  :ensure t
+  :after help-mode)
 
-(use-package help-fns
-  :defer t
+(use-package help-fns+
+  :after help-fns
   :config
-  (use-package help-fns+
-    :ensure t 
-    :config
-    ;; Add Org manual to list of manuals to include links for in help.
-    ;; This is a stopgap measure.  In the long run, keying in to
-    ;; `Info-file-list-for-emacs' is probably the way to go.
-    (setq help-cross-reference-manuals '(("emacs" "elisp" "org")))))
+  ;; Add Org manual to list of manuals to include links for in help.
+  ;; This is a stopgap measure.  In the long run, keying in to
+  ;; `Info-file-list-for-emacs' is probably the way to go.
+  (setq help-cross-reference-manuals '(("emacs" "elisp" "org"))))
 
 (use-package hippie-exp
   :bind ([remap dabbrev-expand] . hippie-expand) ; M-/
@@ -328,7 +321,9 @@
          ("C-M-/"   . undo-only)
          ("C-S-k"   . kill-whole-line)  ; Was at C-S-<backspace>
          ("C-x M-k" . append-next-kill) ; Was at C-M-w
-         )
+         ("M-="     . nil)              ; Move to M-= w; see below
+         ("M-= w"   . count-words)
+         ("M-= l"   . what-line))
   :demand t
   :config
   ;; Global minor modes
