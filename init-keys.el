@@ -11,8 +11,6 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; Completion
-  ([remap dabbrev-expand]  #'hippie-expand) ; At M-/
   ;; Information about Buffer
   ((kbd "M-=")             nil :rebind) ; `count-words', see below
   ((kbd "M-= w")           #'count-words)
