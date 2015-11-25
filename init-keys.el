@@ -9,18 +9,8 @@
 
 
 ;;; General Keybindings
-;;;====================
-;; Removing Unnecessary Bindings
+;;;==================== 
 (aph/global-set-keys-safely 
-  ;; Basic Editing 
-  ((kbd "C-S-t")           #'transpose-paragraphs)
-  ;; Undo
-  ((kbd "C-M-/")           #'undo-only :rebind)
-  ;; Kill and Copy
-  ((kbd "C-S-k")           #'kill-whole-line)  ; Was at C-S-<backspace>
-  ((kbd "C-x M-k")         #'append-next-kill) ; Was at C-M-w
-  ;; Registers
-  ((kbd "C-x r a")         #'append-to-register)
   ;; (Former rectangle commands)
   ((kbd "C-x r N")         nil :rebind)
   ((kbd "C-x r c")         nil :rebind)
