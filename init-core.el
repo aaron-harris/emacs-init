@@ -280,6 +280,7 @@
 
 (use-package aph-rect
   :after rect
+  :bind ("C-c r C-y" . aph/yank-rectangle-from-kill-ring)
   :config
   (when (>= emacs-major-version 25)
     (advice-add #'rectangle--*-char :around #'aph/rectangle-repetition-fix)))
