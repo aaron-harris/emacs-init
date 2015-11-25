@@ -19,7 +19,7 @@
 ;; only one window, with our smart agenda.
 (when (eq aph/machine 'peregrine)
   (add-to-list 'initial-frame-alist '(fullscreen . maximized))
-  (aph/add-hook-safely 'after-init-hook #'aph/org-agenda-display-smart-agenda)
+  (aph/add-hook-safely 'after-init-hook #'aph/org-agenda-display-smart-agenda) 
   (add-hook            'after-init-hook #'delete-other-windows))
 
 

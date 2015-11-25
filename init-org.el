@@ -11,7 +11,7 @@
 (require 'aph-org)
 
 ;; The `provide' statement needs to be at the beginning because
-;; `aph/org-emphasis-alist-update' called `org-reload', and this file
+;; `aph/org-emphasis-alist-update' calls `org-reload', and this file
 ;; will probably be called in the :config block of a `use-package'
 ;; declaration.
 (provide 'init-org)

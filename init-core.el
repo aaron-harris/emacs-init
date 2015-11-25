@@ -211,8 +211,10 @@
   :config
   (setq completion-auto-help 'lazy)) 
 
-(require 'org)                          ; Temporary pending refactoring
-(require 'init-org)
+(use-package org 
+  :ensure t 
+  :config
+  (use-package init-org))
 
 (use-package org-mobile
   :disabled t
