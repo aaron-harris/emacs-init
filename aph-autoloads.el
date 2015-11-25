@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22100 59953
-;;;;;;  125635 500000))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22101 62169
+;;;;;;  41623 900000))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -60,21 +60,6 @@ An argument of -N calls `join-line' N times.
 As `other-window' but reversed.
 
 \(fn COUNT &optional ALL-FRAMES)" t nil)
-
-(autoload 'aph/yank-rectangle-from-kill-ring "aph-commands" "\
-Yank the top of kill ring as a rectangle.
-Make the \"last killed rectangle\" be the top entry of the kill
-ring, then yank that rectangle at point.
-
-With \\[universal-argument] as argument, just save the top entry
-of the kill ring as a rectangle, without yanking.  Print a
-message to that effect.  When called from elisp, this message is
-suppressed unless the optional argument VERBOSE is supplied.
- 
-With argument N, save the Nth most recent kill instead of the
-most recent.
-
-\(fn &optional ARG VERBOSE)" t nil)
 
 (autoload 'aph/quit-help-windows "aph-commands" "\
 Quit all windows with help-like buffers.
@@ -363,8 +348,8 @@ Run the shell command \"hg status\".
 
 ;;;***
 
-;;;### (autoloads nil "aph-simple" "aph-simple.el" (22100 59949 186059
-;;;;;;  500000))
+;;;### (autoloads nil "aph-simple" "aph-simple.el" (22100 60334 515250
+;;;;;;  300000))
 ;;; Generated autoloads from aph-simple.el
 
 (autoload 'aph/truncate-lines-on "aph-simple" "\
@@ -427,7 +412,7 @@ a default.
 ;;;;;;  "aph-w32.el" "aph-window.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-elfeed.el" "init-ido.el" "init-keys.el" "init-org-agenda.el"
 ;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-startup.el")
-;;;;;;  (22100 59974 372160 300000))
+;;;;;;  (22101 62263 316480 700000))
 
 ;;;***
 

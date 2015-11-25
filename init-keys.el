@@ -11,7 +11,6 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ((kbd "C-c r C-y")       #'aph/yank-rectangle-from-kill-ring) 
   ;; Completion
   ([remap dabbrev-expand]  #'hippie-expand) ; At M-/
   ;; Information about Buffer
