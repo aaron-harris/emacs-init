@@ -201,6 +201,25 @@
     ;; `Info-file-list-for-emacs' is probably the way to go.
     (setq help-cross-reference-manuals '(("emacs" "elisp" "org")))))
 
+(use-package hippie-exp
+  :bind ([remap dabbrev-expand] . hippie-expand) ; M-/
+  :init
+  (defun aph/hippie-expand-config-lisp ()
+    "Configure `hippie-expand-try-functions-list' for Lisps."
+    (setq hippie-expand-try-functions-list
+          '(try-complete-file-name-partially
+            try-complete-file-name
+            try-expand-all-abbrevs
+            try-complete-lisp-symbol-partially
+            try-complete-lisp-symbol
+            try-expand-dabbrev
+            try-expand-dabbrev-all-buffers
+            try-expand-dabbrev-from-kill
+            try-expand-list
+            try-expand-line
+            try-expand-line-all-buffers)))
+  (add-hook 'lisp-tag-hook #'aph/hippie-expand-config-lisp))
+
 (use-package info
   :defer t
   :config
@@ -443,27 +462,7 @@
   (winner-mode)) 
 
 (use-package xahk-mode
-  :mode "\\.ahk\\'")
-
-
-;;; Unfiled Code
-;;;=============
-;; Not entirely sure where this should go yet.
-(defun aph/hippie-expand-config-lisp ()
-  "Configure `hippie-expand-try-functions-list' for Lisps."
-  (setq hippie-expand-try-functions-list
-        '(try-complete-file-name-partially
-          try-complete-file-name
-          try-expand-all-abbrevs
-          try-complete-lisp-symbol-partially
-          try-complete-lisp-symbol
-          try-expand-dabbrev
-          try-expand-dabbrev-all-buffers
-          try-expand-dabbrev-from-kill
-          try-expand-list
-          try-expand-line
-          try-expand-line-all-buffers)))
-(add-hook 'lisp-tag-hook #'aph/hippie-expand-config-lisp)
+  :mode "\\.ahk\\'") 
 
 
 ;;; Not-Yet Refactored
