@@ -61,6 +61,9 @@
 (put 'downcase-region 'disabled nil) 
 (put 'upcase-region   'disabled nil)
 
+;; Keybindings for source-defined commands
+(bind-key "C-S-t" 'transpose-paragraphs)
+
 
 ;;; Package Loading
 ;;;================ 
@@ -242,7 +245,11 @@
   (aph/emacs-source-make-read-only))
 
 (use-package simple
-  :bind ("C-S-o" . join-line)
+  :bind (("C-S-o"   . join-line)
+         ("C-M-/"   . undo-only)
+         ("C-S-k"   . kill-whole-line)  ; Was at C-S-<backspace>
+         ("C-x M-k" . append-next-kill) ; Was at C-M-w
+         )
   :demand t
   :config
   ;; Global minor modes
@@ -265,6 +272,9 @@
   :config
   (when (eq aph/machine 'mpc)
     (setq aph/eval-expression-clean-output t)))
+
+(use-package register
+  :bind (("C-x r a" . append-to-register)))
 
 ;; Not entirely sure where this should go yet.
 (defun aph/hippie-expand-config-lisp ()
@@ -462,12 +472,11 @@
 (use-package page
   :defer t
   :config
-  (put 'narrow-to-page  'disabled nil))
+  (put 'narrow-to-page  'disabled nil)) 
 
-(use-package rect
-  :defer t
+(use-package aph-rect
+  :after rect
   :config
-  (use-package aph-rect)
   (when (>= emacs-major-version 25)
     (advice-add #'rectangle--*-char :around #'aph/rectangle-repetition-fix)))
 
