@@ -80,6 +80,15 @@
         avy-highlight-first t
         avy-style           'pre))
 
+(use-package bookmark
+  ;; Move from "C-x r" prefix to "C-c b"
+  :bind (("C-x r b" . nil)
+         ("C-x r l" . nil)
+         ("C-x r m" . nil)
+         ("C-c b b" . bookmark-jump)
+         ("C-c b l" . bookmark-bmenu-list)
+         ("C-c b m" . bookmark-set)))
+
 (use-package color-identifiers-mode
   :ensure t
   :defer t
@@ -249,6 +258,25 @@
   :defer t
   :init
   (add-hook 'lisp-tag-hook #'rainbow-delimiters-mode))
+
+(use-package rect
+  ;; Move from "C-x r" prefix to "C-c r"
+  :bind (("C-x r N" . nil)
+         ("C-x r c" . nil)
+         ("C-x r d" . nil)
+         ("C-x r k" . nil)
+         ("C-x r o" . nil)
+         ("C-x r r" . nil)
+         ("C-x r t" . nil)
+         ("C-x r y" . nil)
+         ("C-c r N" . rectangle-number-lines)
+         ("C-c r c" . clear-rectangle)
+         ("C-c r d" . delete-rectangle)
+         ("C-c r k" . kill-rectangle)
+         ("C-c r o" . open-rectangle)
+         ("C-c r r" . copy-rectangle-to-register)
+         ("C-c r t" . string-rectangle)
+         ("C-c r y" . yank-rectangle)))
 
 (use-package aph-rect
   :after rect

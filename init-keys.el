@@ -11,35 +11,7 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; (Former rectangle commands)
-  ((kbd "C-x r N")         nil :rebind)
-  ((kbd "C-x r c")         nil :rebind)
-  ((kbd "C-x r d")         nil :rebind)
-  ((kbd "C-x r k")         nil :rebind)
-  ((kbd "C-x r o")         nil :rebind)
-  ((kbd "C-x r r")         nil :rebind)
-  ((kbd "C-x r t")         nil :rebind)
-  ((kbd "C-x r y")         nil :rebind)
-  ;; (Former bookmark commands)
-  ((kbd "C-x r b")         nil :rebind)
-  ((kbd "C-x r l")         nil :rebind)
-  ((kbd "C-x r m")         nil :rebind)
-  ;; Rectangles
-  ;; (Moved to prefix "C-c r")
-  ((kbd "C-c r N")         #'rectangle-number-lines)
-  ((kbd "C-c r c")         #'clear-rectangle)
-  ((kbd "C-c r d")         #'delete-rectangle)
-  ((kbd "C-c r k")         #'kill-rectangle)
-  ((kbd "C-c r o")         #'open-rectangle)
-  ((kbd "C-c r r")         #'copy-rectangle-to-register)
-  ((kbd "C-c r t")         #'string-rectangle)
-  ((kbd "C-c r y")         #'yank-rectangle)
-  ((kbd "C-c r C-y")       #'aph/yank-rectangle-from-kill-ring)
-  ;; Bookmarks
-  ;; (Moved to prefix "C-c b")
-  ((kbd "C-c b b")         #'bookmark-jump)
-  ((kbd "C-c b l")         #'bookmark-bmenu-list)
-  ((kbd "C-c b m")         #'bookmark-set)
+  ((kbd "C-c r C-y")       #'aph/yank-rectangle-from-kill-ring) 
   ;; Completion
   ([remap dabbrev-expand]  #'hippie-expand) ; At M-/
   ;; Information about Buffer
