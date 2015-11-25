@@ -11,11 +11,8 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; Information about Buffer
-  ((kbd "M-=")             nil :rebind) ; `count-words', see below
-  ((kbd "M-= w")           #'count-words)
-  ((kbd "M-= b")           #'describe-buffer)
-  ((kbd "M-= l")           #'what-line)
+  ;; Information about Buffer 
+  ((kbd "M-= b")           #'describe-buffer) 
   ((kbd "M-= p")           #'aph/sum-parens-in-region)
   ;; Buffer/Region Manipulation
   ((kbd "s-<apps> d")      #'delete-duplicate-lines)
