@@ -95,12 +95,6 @@ An argument of -N calls `join-line' N times."
       (dotimes (i (- n)) (join-line))
     (newline n))) 
 
-;;;###autoload
-(defun aph/other-window-backwards (count &optional all-frames)
-  "As `other-window' but reversed."
-  (interactive "p")
-  (other-window (- count) all-frames)) 
-
 
 ;;; Quit help windows
 ;;;==================

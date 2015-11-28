@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22101 62169
-;;;;;;  41623 900000))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22106 12186
+;;;;;;  655616 0))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -56,11 +56,6 @@ An argument of -N calls `join-line' N times.
 
 \(fn N)" t nil)
 
-(autoload 'aph/other-window-backwards "aph-commands" "\
-As `other-window' but reversed.
-
-\(fn COUNT &optional ALL-FRAMES)" t nil)
-
 (autoload 'aph/quit-help-windows "aph-commands" "\
 Quit all windows with help-like buffers.
 
@@ -74,15 +69,6 @@ omitted parameter and will be ignored; use some other value if
 you want to quit windows on all frames.
 
 \(fn &optional KILL FRAME)" t nil)
-
-(autoload 'aph/sum-parens-in-region "aph-commands" "\
-Sum all parenthesized numbers in region and echo the result.
-If the region is not active, sum all parenthesized numbers in
-active buffer.
-
-See `aph/sum-parens' to get similar functionality from elisp.
-
-\(fn START END)" t nil)
 
 ;;;***
 
@@ -114,80 +100,6 @@ As `elfeed-show-prev', but intelligently follow links.
 See `aph/elfeed-search-show-entry' for details.
 
 \(fn &optional EXTERNAL)" t nil)
-
-;;;***
-
-;;;### (autoloads nil "aph-framewin" "aph-framewin.el" (22034 45614
-;;;;;;  275659 800000))
-;;; Generated autoloads from aph-framewin.el
-
-(autoload 'aph/slide-buffer-forward "aph-framewin" "\
-Slide active buffer to another window.
-
-Display this buffer COUNT windows forward (in the same ordering
-as `other-window'), skipping windows dedicated to their current
-buffers, and display in this window the previous buffer displayed
-here (using `switch-to-prev-buffer').
-
-If the optional parameter RIDE is supplied, \"ride\" the buffer,
-making its new window the selected one.
-
-As a special case, if COUNT is zero, treat COUNT as 1 and RIDE as
-t.  This allows the RIDE parameter to be used interactively.
-
-\(fn &optional COUNT RIDE)" t nil)
-
-(autoload 'aph/slide-buffer-backward "aph-framewin" "\
-As `aph/slide-buffer-forward' with direction reversed.
-
-\(fn &optional COUNT RIDE)" t nil)
-
-(autoload 'aph/swap-buffer-forward "aph-framewin" "\
-Swap active buffer with that in another window.
-
-Display this buffer COUNT forward (in the same ordering as
-`other-window'), skipping windows dedicated to their current
-buffers, and display in this window the buffer that was displayed
-there.
-
-If the optional parameter RIDE is supplied, \"ride\" the buffer,
-making its new window the selected one.
-
-As a special case, if COUNT is zero, treat COUNT as 1 and RIDE as
-t.  This allows the RIDE parameter to be used interactively.
-
-\(fn &optional COUNT RIDE)" t nil)
-
-(autoload 'aph/swap-buffer-backward "aph-framewin" "\
-As `aph/swap-buffer-forward' with direction reversed.
-
-\(fn &optional COUNT RIDE)" t nil)
-
-(autoload 'aph/swap-buffer-forward-and-ride "aph-framewin" "\
-As `aph/swap-buffer-forward' but always ride.
-
-\(fn &optional COUNT)" t nil)
-
-(autoload 'aph/swap-buffer-backward-and-ride "aph-framewin" "\
-As `aph/swap-buffer-backward' but always ride.
-
-\(fn &optional COUNT)" t nil)
-
-(autoload 'aph/pull-buffer-backward "aph-framewin" "\
-Pull buffer from another window.
-
-Display in this buffer the one currently displayed in the window
-COUNT windows forward (in the same ordering as `other-window'),
-skipping windows dedicated to their current buffers.  Display in
-the window previously occupied by this buffer the previous buffer
-displayed in that window (using `switch-to-prev-buffer').
-
-\(fn &optional COUNT)" t nil)
-
-(autoload 'aph/pull-buffer-forward "aph-framewin" "\
-As `aph/pull-buffer-backward' with direction reversed.
-
-\(fn &optional COUNT)" t nil)
 
 ;;;***
 
@@ -406,13 +318,14 @@ a default.
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-files.el"
-;;;;;;  "aph-font-lock.el" "aph-hooks.el" "aph-keys.el" "aph-latex.el"
-;;;;;;  "aph-lib.el" "aph-mode-tag.el" "aph-org-agenda.el" "aph-org-capture.el"
-;;;;;;  "aph-rect.el" "aph-require.el" "aph-shr.el" "aph-symbol.el"
-;;;;;;  "aph-w32.el" "aph-window.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-elfeed.el" "init-ido.el" "init-keys.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-startup.el")
-;;;;;;  (22101 62263 316480 700000))
+;;;;;;  "aph-font-lock.el" "aph-framewin.el" "aph-hooks.el" "aph-keys.el"
+;;;;;;  "aph-latex.el" "aph-lib.el" "aph-mode-tag.el" "aph-org-agenda.el"
+;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-require.el" "aph-shr.el"
+;;;;;;  "aph-symbol.el" "aph-w32.el" "aph-window.el" "init-core.el"
+;;;;;;  "init-draft.el" "init-elfeed.el" "init-ido.el" "init-keys.el"
+;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
+;;;;;;  "init-package.el" "init-startup.el") (22106 12490 477133
+;;;;;;  500000))
 
 ;;;***
 
