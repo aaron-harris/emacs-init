@@ -42,17 +42,6 @@ case.  Otherwise, bypass confirmation and pass the argument to
    (t                                    (message "Abort"))))
 
 ;;;###autoload
-(defun aph/kill-active-buffer (&optional choose)
-  "Kill the active buffer.
-
-With a prefix argument, choose the buffer to kill (as the
-standard `kill-buffer')."
-  (interactive "P")
-  (if choose
-      (call-interactively #'kill-buffer)
-    (kill-buffer)))
-
-;;;###autoload
 (defun aph/kp-enter-newline-toggle (&optional verbose)
   "Toggle whether <kp-enter> should act like C-n instead of enter.
 Accomplish this by updating the entry for <kp-enter> in

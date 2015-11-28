@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22106 12186
-;;;;;;  655616 0))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22106 13794
+;;;;;;  180651 0))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -27,14 +27,6 @@ case.  Otherwise, bypass confirmation and pass the argument to
 `save-buffers-kill-terminal'.
 
 \(fn &optional ARG)" t nil)
-
-(autoload 'aph/kill-active-buffer "aph-commands" "\
-Kill the active buffer.
-
-With a prefix argument, choose the buffer to kill (as the
-standard `kill-buffer').
-
-\(fn &optional CHOOSE)" t nil)
 
 (autoload 'aph/kp-enter-newline-toggle "aph-commands" "\
 Toggle whether <kp-enter> should act like C-n instead of enter.
@@ -324,8 +316,8 @@ a default.
 ;;;;;;  "aph-symbol.el" "aph-w32.el" "aph-window.el" "init-core.el"
 ;;;;;;  "init-draft.el" "init-elfeed.el" "init-ido.el" "init-keys.el"
 ;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "init-package.el" "init-startup.el") (22106 12490 477133
-;;;;;;  500000))
+;;;;;;  "init-package.el" "init-startup.el") (22106 14075 305875
+;;;;;;  100000))
 
 ;;;***
 

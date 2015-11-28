@@ -156,11 +156,15 @@
 
 (use-package files
   :defer t
-  :config
-  (use-package aph-files)
+  :config 
   ;; Backup file location
   (setq backup-directory-alist
-        `(("." . ,(concat user-emacs-directory "backups"))))
+        `(("." . ,(concat user-emacs-directory "backups")))))
+
+(use-package aph-files
+  :after files
+  :bind ("C-x k" . aph/kill-active-buffer)
+  :config
   ;; Make Emacs source read-only
   (when (eq aph/machine 'mpc)
     (setq aph/emacs-source-dirs
