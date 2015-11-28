@@ -11,13 +11,6 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; Cyclic Window Control
-  ((kbd "s-]")             #'other-window)
-  ((kbd "s-[")             #'aph/other-window-backwards)
-  ((kbd "s-{")             #'aph/pull-buffer-backward)
-  ((kbd "s-}")             #'aph/slide-buffer-forward)
-  ((kbd "s-\\")            #'aph/swap-buffer-forward-and-ride)
-  ((kbd "s-|")             #'aph/swap-buffer-forward)
   ;; General Buffer Control
   ([remap list-buffers]    #'ibuffer)
   ((kbd "C-x k")           #'aph/kill-active-buffer :rebind)

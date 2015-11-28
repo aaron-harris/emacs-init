@@ -78,7 +78,9 @@
 (put 'upcase-region   'disabled nil)
 
 ;; Keybindings for source-defined commands
-(bind-key "C-S-t" 'transpose-paragraphs)
+(bind-keys
+ ("s-]"   . other-window)
+ ("C-S-t" . transpose-paragraphs))
 (bind-keys :map aph/region-manip-map
            ("k" .   flush-lines)
            ("M-k" . keep-lines))
@@ -469,11 +471,16 @@
     :group 'visible-mark)
   (setq visible-mark-max   2
         visible-mark-faces '(aph/visible-mark-top
-                             aph/visible-mark-other)))
+                             aph/visible-mark-other))) 
 
 (use-package aph-window
   :bind (("<up>"   . aph/scroll-down-by-line)
-         ("<down>" . aph/scroll-up-by-line)))
+         ("<down>" . aph/scroll-up-by-line)
+         ("s-["    . aph/other-window-backward)
+         ("s-{"    . aph/pull-buffer-backward)
+         ("s-}"    . aph/slide-buffer-forward)
+         ("s-\\"   . aph/swap-buffer-forward-and-ride)
+         ("s-|"    . aph/swap-buffer-forward)))
 
 (use-package winner
   :config
