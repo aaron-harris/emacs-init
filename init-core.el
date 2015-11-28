@@ -37,6 +37,8 @@
 ;;; Mode Tags
 ;;;==========
 (use-package aph-mode-tag)
+(aph/mode-tag-create 'clojure
+  "Tag for modes used to edit Clojure, including REPLs.")
 (aph/mode-tag-create 'lisp
   "Tag for modes used to edit any sort of Lisp, including REPLs.")
 
@@ -106,6 +108,32 @@
          ("C-c b l" . bookmark-bmenu-list)
          ("C-c b m" . bookmark-set)))
 
+(use-package cider
+  :ensure t
+  :defer t
+  :config
+  (setq cider-auto-select-error-buffer      nil
+        cider-show-error-buffer             'except-in-repl
+        cider-repl-pop-to-buffer-on-connect nil)
+  (aph/mode-tag-add 'cider-repl-mode 'lisp)
+  (aph/mode-tag-add 'cider-repl-mode 'clojure)
+  (eval-after-load 'aph-commands
+  '(add-to-list 'aph/help-window-names "*cider-doc*"))
+  ;; Output from the JVM has Windows-style newlines, so we need to
+  ;; strip those unless we want to see ^M characters in Cider buffers.
+  (use-package aph-w32)
+  (add-hook 'cider-repl-mode-hook            #'aph/remove-dos-eol)
+  (add-hook 'cider-macroexpansion-mode-hook  #'aph/remove-dos-eol)
+  (add-hook 'cider-test-report-mode-hook     #'aph/remove-dos-eol))
+
+(use-package clojure-mode
+  :ensure t
+  :defer t 
+  :config
+  (aph/mode-tag-add 'clojure-mode 'lisp)
+  (aph/mode-tag-add 'clojure-mode 'clojure)
+  (add-hook 'clojure-tag-hook #'subword-mode))
+
 (use-package color-identifiers-mode
   :ensure t
   :defer t
@@ -142,6 +170,12 @@
   (when (eq aph/machine 'mpc)
     (setq doc-view-ghostscript-program "mgs.exe")))
 
+(use-package eldoc
+  :defer t
+  :diminish eldoc-mode
+  :init
+  (add-hook 'lisp-tag-hook #'eldoc-mode))
+
 (use-package elfeed
   :ensure t
   :defer t
@@ -170,6 +204,12 @@
     (setq aph/emacs-source-dirs
           '("C:/Program Files (Portable)/Emacs/share/emacs")))
   (aph/emacs-source-make-read-only))
+
+(use-package font-lock
+  :defer t
+  :config
+  (eval-after-load 'dash        #'dash-enable-font-lock)
+  (eval-after-load 'aph-require #'aph/require-enable-font-lock))
 
 (use-package helm-config
   :ensure helm
@@ -238,6 +278,11 @@
 
 (use-package ibuffer
   :bind ([remap list-buffers] . ibuffer))
+
+(use-package ielm
+  :defer t
+  :config
+  (aph/mode-tag-add 'ielm-mode 'lisp))
 
 (use-package info
   :defer t
