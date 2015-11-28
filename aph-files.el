@@ -7,6 +7,19 @@
 ;; Extensions for `files' package.
 
 
+;;; Killing Buffers
+;;;================
+(defun aph/kill-active-buffer (&optional choose)
+  "Kill the active buffer.
+
+With a prefix argument, choose the buffer to kill (as the
+standard `kill-buffer')."
+  (interactive "P")
+  (if choose
+      (call-interactively #'kill-buffer)
+    (kill-buffer)))
+
+
 ;;; Make Emacs Source Read-Only
 ;;;============================
 ;; This code makes Emacs source code default to read-only mode.
@@ -17,6 +30,13 @@
     "/usr/share/emacs")
   "List of directories containing Emacs source.
 Referenced by `aph/emacs-source-make-read-only'.")
+
+(defun aph/package-install-writability (orig-fn &rest args)
+  "Advice so `package-install' can write to ELPA directory.
+Intended as :around advice for `package-install'."
+  (dir-locals-set-directory-class package-user-dir 'default)
+  (apply orig-fn args)
+  (dir-locals-set-directory-class package-user-dir 'emacs))
 
 (defun aph/emacs-source-make-read-only ()
   "Make Emacs source code open in read-only mode by default.
@@ -35,14 +55,7 @@ files or other user code."
   ;; Package code is a special problem, because these buffers need to be
   ;; writable for `package-install'.
   (dir-locals-set-directory-class package-user-dir 'emacs)
-  (advice-add #'package-install :around #'aph/package-install-writability))
-
-(defun aph/package-install-writability (orig-fn &rest args)
-  "Advice so `package-install' can write to ELPA directory.
-Intended as :around advice for `package-install'."
-  (dir-locals-set-directory-class package-user-dir 'default)
-  (apply orig-fn args)
-  (dir-locals-set-directory-class package-user-dir 'emacs)) 
+  (advice-add #'package-install :around #'aph/package-install-writability)) 
 
 
 (provide 'aph-files)

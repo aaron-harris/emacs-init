@@ -11,8 +11,6 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; General Buffer Control
-  ((kbd "C-x k")           #'aph/kill-active-buffer :rebind)
   ;; Window and Frame Control
   ((kbd "C-c q")           #'aph/quit-help-windows)
   ((kbd "C-x C-c")         #'aph/delete-frame-or-exit :rebind)
