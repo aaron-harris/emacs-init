@@ -11,8 +11,6 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; Information about Buffer 
-  ((kbd "M-= p")           #'aph/sum-parens-in-region)
   ;; Buffer/Region Manipulation
   ((kbd "s-<apps> d")      #'delete-duplicate-lines)
   ((kbd "s-<apps> k")      #'flush-lines)
