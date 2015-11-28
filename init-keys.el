@@ -12,7 +12,6 @@
 ;;;==================== 
 (aph/global-set-keys-safely 
   ;; Information about Buffer 
-  ((kbd "M-= b")           #'describe-buffer) 
   ((kbd "M-= p")           #'aph/sum-parens-in-region)
   ;; Buffer/Region Manipulation
   ((kbd "s-<apps> d")      #'delete-duplicate-lines)

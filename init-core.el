@@ -69,6 +69,13 @@
   "Tag for modes used to edit any sort of Lisp, including REPLs.")
 
 
+;;; Prefix Maps
+;;;============
+(defvar aph/buffer-info-map (make-sparse-keymap)
+  "Keymap for commands presenting info about current buffer.")
+(defalias 'aph/buffer-info-prefix aph/buffer-info-map)
+
+
 ;;; Package Configuration
 ;;;======================
 (use-package avy
@@ -188,6 +195,8 @@
 
 (use-package help-fns+
   :after help-fns
+  :bind (:map aph/buffer-info-map       ; M-=
+              ("b" . describe-buffer))
   :config
   ;; Add Org manual to list of manuals to include links for in help.
   ;; This is a stopgap measure.  In the long run, keying in to
@@ -317,14 +326,15 @@
   (advice-add #'shr-urlify :before #'aph/shr-urlify-advice))
 
 (use-package simple
+  :demand t
   :bind (("C-S-o"   . join-line)
          ("C-M-/"   . undo-only)
-         ("C-S-k"   . kill-whole-line)  ; Was at C-S-<backspace>
-         ("C-x M-k" . append-next-kill) ; Was at C-M-w
-         ("M-="     . nil)              ; Move to M-= w; see below
-         ("M-= w"   . count-words)
-         ("M-= l"   . what-line))
-  :demand t
+         ("C-S-k"   . kill-whole-line)   ; Was at C-S-<backspace>
+         ("C-x M-k" . append-next-kill)  ; Was at C-M-w
+         ("M-="     . aph/buffer-info-prefix))
+  :bind (:map aph/buffer-info-map
+              ("w" . count-words)
+              ("l" . what-line))
   :config
   ;; Global minor modes
   (column-number-mode)
