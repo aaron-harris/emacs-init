@@ -11,11 +11,6 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; Buffer/Region Manipulation
-  ((kbd "s-<apps> d")      #'delete-duplicate-lines)
-  ((kbd "s-<apps> k")      #'flush-lines)
-  ((kbd "s-<apps> M-k")    #'keep-lines)
-  ((kbd "s-<apps> s")      #'sort-lines)
   ;; Cyclic Window Control
   ((kbd "s-]")             #'other-window)
   ((kbd "s-[")             #'aph/other-window-backwards)
