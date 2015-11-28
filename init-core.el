@@ -232,6 +232,9 @@
             try-expand-line-all-buffers)))
   (add-hook 'lisp-tag-hook #'aph/hippie-expand-config-lisp))
 
+(use-package ibuffer
+  :bind ([remap list-buffers] . ibuffer))
+
 (use-package info
   :defer t
   :config

@@ -12,7 +12,6 @@
 ;;;==================== 
 (aph/global-set-keys-safely 
   ;; General Buffer Control
-  ([remap list-buffers]    #'ibuffer)
   ((kbd "C-x k")           #'aph/kill-active-buffer :rebind)
   ;; Window and Frame Control
   ((kbd "C-c q")           #'aph/quit-help-windows)
