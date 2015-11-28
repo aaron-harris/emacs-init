@@ -31,8 +31,26 @@
 
 (require 'aph-require)                  ; For `aph/require-softly', etc.
 (aph/require-softly 'aph-autoloads)
-(aph/require-softly 'init-package)
+(aph/require-softly 'init-package) 
+
+
+;;; Mode Tags
+;;;==========
 (use-package aph-mode-tag)
+(aph/mode-tag-create 'lisp
+  "Tag for modes used to edit any sort of Lisp, including REPLs.")
+
+
+;;; Prefix Maps
+;;;============
+(defvar aph/buffer-info-map (make-sparse-keymap)
+  "Keymap for commands presenting info about current buffer.")
+(defalias 'aph/buffer-info-prefix aph/buffer-info-map)
+
+(defvar aph/region-manip-map (make-sparse-keymap)
+  "Keymap for commands manipulating the region.")
+(defalias 'aph/region-manip-prefix aph/region-manip-map)
+(bind-key "s-<apps>" #'aph/region-manip-prefix)
 
 
 ;;; Configuration: Source-Level
@@ -61,19 +79,9 @@
 
 ;; Keybindings for source-defined commands
 (bind-key "C-S-t" 'transpose-paragraphs)
-
-
-;;; Mode Tags
-;;;========== 
-(aph/mode-tag-create 'lisp
-  "Tag for modes used to edit any sort of Lisp, including REPLs.")
-
-
-;;; Prefix Maps
-;;;============
-(defvar aph/buffer-info-map (make-sparse-keymap)
-  "Keymap for commands presenting info about current buffer.")
-(defalias 'aph/buffer-info-prefix aph/buffer-info-map)
+(bind-keys :map aph/region-manip-map
+           ("k" .   flush-lines)
+           ("M-k" . keep-lines))
 
 
 ;;; Package Configuration
@@ -395,6 +403,11 @@
   :config
   (setq calendar-longitude -93.2
         calendar-latitude   45.0))
+
+(use-package sort
+  :bind (:map aph/region-manip-map
+              ("d" . delete-duplicate-lines)
+              ("s" . sort-lines)))
 
 (use-package tex-site
   :ensure auctex
