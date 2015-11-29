@@ -119,8 +119,7 @@
         cider-repl-pop-to-buffer-on-connect nil)
   (aph/mode-tag-add 'cider-repl-mode 'lisp)
   (aph/mode-tag-add 'cider-repl-mode 'clojure)
-  (eval-after-load 'aph-commands
-  '(add-to-list 'aph/help-window-names "*cider-doc*"))
+  (add-to-list 'aph/help-window-names "*cider-doc*")
   ;; Output from the JVM has Windows-style newlines, so we need to
   ;; strip those unless we want to see ^M characters in Cider buffers.
   (use-package aph-w32)
@@ -491,8 +490,7 @@
   (setq TeX-PDF-mode t)
   (add-hook 'LaTeX-mode-hook #'aph/LaTeX-use-emacs-as-viewer)
   ;; Miscellaneous settings
-  (with-eval-after-load 'aph-commands
-    (add-to-list 'aph/help-window-names "*TeX Help*"))
+  (add-to-list 'aph/help-window-names "*TeX Help*")
   (defun aph/LaTeX-mode-hook ()
     "Apply my settings for `LaTeX-mode'."
     (setq fill-column 75))
@@ -532,7 +530,8 @@
          ("s-{"    . aph/pull-buffer-backward)
          ("s-}"    . aph/slide-buffer-forward)
          ("s-\\"   . aph/swap-buffer-forward-and-ride)
-         ("s-|"    . aph/swap-buffer-forward)))
+         ("s-|"    . aph/swap-buffer-forward)
+         ("C-c q"  . aph/quit-help-windows)))
 
 (use-package winner
   :config

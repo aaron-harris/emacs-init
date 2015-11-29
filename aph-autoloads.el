@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22106 13794
-;;;;;;  180651 0))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22107 19513
+;;;;;;  164071 900000))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -47,20 +47,6 @@ As `newline', with support for negative argument.
 An argument of -N calls `join-line' N times.
 
 \(fn N)" t nil)
-
-(autoload 'aph/quit-help-windows "aph-commands" "\
-Quit all windows with help-like buffers.
-
-Call `quit-windows-on' for every buffer named in
-`aph/help-windows-name'.  The optional parameters KILL and FRAME
-are just as in `quit-windows-on', except FRAME defaults to t (so
-that only windows on the selected frame are considered).
-
-Note that a nil value for FRAME cannot be distinguished from an
-omitted parameter and will be ignored; use some other value if
-you want to quit windows on all frames.
-
-\(fn &optional KILL FRAME)" t nil)
 
 ;;;***
 
@@ -309,15 +295,23 @@ a default.
 
 ;;;***
 
+;;;### (autoloads nil "aph-window" "aph-window.el" (22107 19482 83804
+;;;;;;  400000))
+;;; Generated autoloads from aph-window.el
+
+(defvar aph/help-window-names '("*Help*" "*Apropos*" "*Messages*" "*Completions*" "*Command History*" "*Compile-Log*" "*disabled command*") "\
+Names of buffers that `aph/quit-help-windows' should quit.")
+
+;;;***
+
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-files.el"
 ;;;;;;  "aph-font-lock.el" "aph-framewin.el" "aph-hooks.el" "aph-keys.el"
 ;;;;;;  "aph-latex.el" "aph-lib.el" "aph-mode-tag.el" "aph-org-agenda.el"
 ;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-require.el" "aph-shr.el"
-;;;;;;  "aph-symbol.el" "aph-w32.el" "aph-window.el" "init-core.el"
-;;;;;;  "init-draft.el" "init-elfeed.el" "init-ido.el" "init-keys.el"
-;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "init-package.el" "init-startup.el") (22106 14075 305875
-;;;;;;  100000))
+;;;;;;  "aph-symbol.el" "aph-w32.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-elfeed.el" "init-ido.el" "init-keys.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-startup.el")
+;;;;;;  (22107 19854 599538 300000))
 
 ;;;***
 
