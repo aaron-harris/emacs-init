@@ -84,39 +84,4 @@ An argument of -N calls `join-line' N times."
       (dotimes (i (- n)) (join-line))
     (newline n))) 
 
-
-;;; Quit help windows
-;;;==================
-
-(defvar aph/help-window-names
-  '(
-    ;; Ubiquitous help buffers
-    "*Help*"
-    "*Apropos*"
-    "*Messages*"
-    "*Completions*"
-    ;; Other general buffers
-    "*Command History*"
-    "*Compile-Log*"
-    "*disabled command*")
-  "Names of buffers that `aph/quit-help-windows' should quit.")
-
-;;;###autoload
-(defun aph/quit-help-windows (&optional kill frame)
-  "Quit all windows with help-like buffers.
-
-Call `quit-windows-on' for every buffer named in
-`aph/help-windows-name'.  The optional parameters KILL and FRAME
-are just as in `quit-windows-on', except FRAME defaults to t (so
-that only windows on the selected frame are considered).
-
-Note that a nil value for FRAME cannot be distinguished from an
-omitted parameter and will be ignored; use some other value if
-you want to quit windows on all frames."
-  (interactive)
-  (let ((frame (or frame t)))
-    (dolist (buffer aph/help-window-names)
-      (ignore-errors
-        (quit-windows-on buffer kill frame))))) 
-
 (provide 'aph-commands)
