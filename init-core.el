@@ -114,6 +114,9 @@
          ("C-c b l" . bookmark-bmenu-list)
          ("C-c b m" . bookmark-set)))
 
+(use-package browse-url
+  :bind ("C-c C-o" . browse-url))
+
 (use-package cider
   :ensure t
   :defer t
@@ -284,6 +287,9 @@
             try-expand-line
             try-expand-line-all-buffers)))
   (add-hook 'lisp-tag-hook #'aph/hippie-expand-config-lisp))
+
+(use-package hl-line
+  :bind ("C-c h l" . hl-line-mode))
 
 (use-package ibuffer
   :bind ([remap list-buffers] . ibuffer))

@@ -11,10 +11,6 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; Application Control
-  ((kbd "C-c C-o")         #'browse-url)
-  ;; Highlighting
-  ((kbd "C-c h l")         #'hl-line-mode)
   ;; Themes
   ((kbd "s-n")             #'aph/theme-cycle)
   ;; Keybinding Control
