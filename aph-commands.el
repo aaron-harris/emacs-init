@@ -25,23 +25,6 @@ value for `apropos-do-all')"
   (apropos-command pattern (not commands-only) var-predicate))
 
 ;;;###autoload
-(defun aph/delete-frame-or-exit (&optional arg)
-  "Delete this frame. With only one frame, exit Emacs.
-
-When there is more than one visible frame, run `delete-frame'.
-Otherwise, exit Emacs with `save-buffers-kill-terminal' after
-confirming this with user.
-
-If a prefix ARG is supplied, ignore it in the multiple-frame
-case.  Otherwise, bypass confirmation and pass the argument to
-`save-buffers-kill-terminal'."
-  (interactive "P")
-  (cond
-   ((> (length (visible-frame-list)) 1)  (delete-frame))
-   ((or arg (y-or-n-p "Quit Emacs?"))    (save-buffers-kill-terminal arg))
-   (t                                    (message "Abort"))))
-
-;;;###autoload
 (defun aph/kp-enter-newline-toggle (&optional verbose)
   "Toggle whether <kp-enter> should act like C-n instead of enter.
 Accomplish this by updating the entry for <kp-enter> in

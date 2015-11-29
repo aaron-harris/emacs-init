@@ -198,7 +198,8 @@
 
 (use-package aph-files
   :after files
-  :bind ("C-x k" . aph/kill-active-buffer)
+  :bind (("C-x k"   . aph/kill-active-buffer)
+         ("C-x C-c" . aph/delete-frame-or-exit))
   :config
   ;; Make Emacs source read-only
   (when (eq aph/machine 'mpc)
