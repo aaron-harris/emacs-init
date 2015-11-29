@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22107 19513
-;;;;;;  164071 900000))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22107 20633
+;;;;;;  363730 500000))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -14,19 +14,6 @@ prefix argument will show only commands (and override a non-nil
 value for `apropos-do-all')
 
 \(fn PATTERN &optional COMMANDS-ONLY VAR-PREDICATE)" t nil)
-
-(autoload 'aph/delete-frame-or-exit "aph-commands" "\
-Delete this frame. With only one frame, exit Emacs.
-
-When there is more than one visible frame, run `delete-frame'.
-Otherwise, exit Emacs with `save-buffers-kill-terminal' after
-confirming this with user.
-
-If a prefix ARG is supplied, ignore it in the multiple-frame
-case.  Otherwise, bypass confirmation and pass the argument to
-`save-buffers-kill-terminal'.
-
-\(fn &optional ARG)" t nil)
 
 (autoload 'aph/kp-enter-newline-toggle "aph-commands" "\
 Toggle whether <kp-enter> should act like C-n instead of enter.
@@ -311,7 +298,7 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 ;;;;;;  "aph-symbol.el" "aph-w32.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-elfeed.el" "init-ido.el" "init-keys.el" "init-org-agenda.el"
 ;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-startup.el")
-;;;;;;  (22107 19854 599538 300000))
+;;;;;;  (22107 20644 62195 500000))
 
 ;;;***
 

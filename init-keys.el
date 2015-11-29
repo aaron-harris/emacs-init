@@ -11,8 +11,6 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; Window and Frame Control
-  ((kbd "C-x C-c")         #'aph/delete-frame-or-exit :rebind)
   ;; Application Control
   ((kbd "C-z")             nil :rebind) ; `suspend-frame' (for use as prefix)
   ((kbd "C-c C-o")         #'browse-url)

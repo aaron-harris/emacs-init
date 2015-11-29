@@ -20,6 +20,25 @@ standard `kill-buffer')."
     (kill-buffer)))
 
 
+;;; Extensions to `save-buffers-kill-terminal'
+;;;===========================================
+(defun aph/delete-frame-or-exit (&optional arg)
+  "Delete this frame.  With only one frame, exit Emacs.
+
+When there is more than one visible frame, run `delete-frame'.
+Otherwise, exit Emacs with `save-buffers-kill-terminal' after
+confirming this with user.
+
+If a prefix ARG is supplied, ignore it in the multiple-frame
+case.  Otherwise, bypass confirmation and pass the argument to
+`save-buffers-kill-terminal'."
+  (interactive "P")
+  (cond
+   ((> (length (visible-frame-list)) 1)  (delete-frame))
+   ((or arg (y-or-n-p "Quit Emacs?"))    (save-buffers-kill-terminal arg))
+   (t                                    (message "Abort"))))
+
+
 ;;; Make Emacs Source Read-Only
 ;;;============================
 ;; This code makes Emacs source code default to read-only mode.
