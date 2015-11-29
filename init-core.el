@@ -81,8 +81,10 @@
 
 ;; Keybindings for source-defined commands
 (bind-keys
- ("s-]"   . other-window)
- ("C-S-t" . transpose-paragraphs))
+ ("<up>"   . scroll-down-line)
+ ("<down>" . scroll-up-line)
+ ("s-]"    . other-window)
+ ("C-S-t"  . transpose-paragraphs))
 (bind-keys :map aph/region-manip-map
            ("k" .   flush-lines)
            ("M-k" . keep-lines))
@@ -526,9 +528,7 @@
                              aph/visible-mark-other))) 
 
 (use-package aph-window
-  :bind (("<up>"   . aph/scroll-down-by-line)
-         ("<down>" . aph/scroll-up-by-line)
-         ("s-["    . aph/other-window-backward)
+  :bind (("s-["    . aph/other-window-backward)
          ("s-{"    . aph/pull-buffer-backward)
          ("s-}"    . aph/slide-buffer-forward)
          ("s-\\"   . aph/swap-buffer-forward-and-ride)
