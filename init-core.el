@@ -49,6 +49,10 @@
   "Keymap for commands presenting info about current buffer.")
 (defalias 'aph/buffer-info-prefix aph/buffer-info-map)
 
+(defvar aph/launch-map (make-sparse-keymap)
+  "Keymap for commands launching new \"apps\" within Emacs.")
+(defalias 'aph/launch-prefix aph/launch-map)
+
 (defvar aph/region-manip-map (make-sparse-keymap)
   "Keymap for commands manipulating the region.")
 (defalias 'aph/region-manip-prefix aph/region-manip-map)
@@ -212,6 +216,9 @@
   :config
   (eval-after-load 'dash        #'dash-enable-font-lock)
   (eval-after-load 'aph-require #'aph/require-enable-font-lock))
+
+(use-package frame
+  :bind (("C-z" . aph/launch-prefix)))
 
 (use-package helm-config
   :ensure helm

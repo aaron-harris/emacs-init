@@ -12,7 +12,6 @@
 ;;;==================== 
 (aph/global-set-keys-safely 
   ;; Application Control
-  ((kbd "C-z")             nil :rebind) ; `suspend-frame' (for use as prefix)
   ((kbd "C-c C-o")         #'browse-url)
   ;; Highlighting
   ((kbd "C-c h l")         #'hl-line-mode)
