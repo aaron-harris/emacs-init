@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22107 20633
-;;;;;;  363730 500000))
+;;;### (autoloads nil "aph-commands" "aph-commands.el" (22107 42214
+;;;;;;  438722 0))
 ;;; Generated autoloads from aph-commands.el
 
 (autoload 'aph/apropos-function "aph-commands" "\
@@ -14,20 +14,6 @@ prefix argument will show only commands (and override a non-nil
 value for `apropos-do-all')
 
 \(fn PATTERN &optional COMMANDS-ONLY VAR-PREDICATE)" t nil)
-
-(autoload 'aph/kp-enter-newline-toggle "aph-commands" "\
-Toggle whether <kp-enter> should act like C-n instead of enter.
-Accomplish this by updating the entry for <kp-enter> in
-`function-key-map'.  If this entry is something other than these
-two keys, restore it to the default mapping (enter, i.e. C-m).
-
-When called interactively, or when the optional parameter is
-supplied, supply feedback messages.  Always print a message when
-the entry being overridden is unexpected.
-
-For convenience, return the new mapping.
-
-\(fn &optional VERBOSE)" t nil)
 
 (autoload 'aph/newline "aph-commands" "\
 As `newline', with support for negative argument.
@@ -292,13 +278,14 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-files.el"
-;;;;;;  "aph-font-lock.el" "aph-framewin.el" "aph-hooks.el" "aph-keys.el"
-;;;;;;  "aph-latex.el" "aph-lib.el" "aph-mode-tag.el" "aph-org-agenda.el"
-;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-require.el" "aph-shr.el"
-;;;;;;  "aph-symbol.el" "aph-w32.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-elfeed.el" "init-ido.el" "init-keys.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-startup.el")
-;;;;;;  (22107 20644 62195 500000))
+;;;;;;  "aph-font-lock.el" "aph-framewin.el" "aph-hooks.el" "aph-keypad.el"
+;;;;;;  "aph-keys.el" "aph-latex.el" "aph-lib.el" "aph-mode-tag.el"
+;;;;;;  "aph-org-agenda.el" "aph-org-capture.el" "aph-rect.el" "aph-require.el"
+;;;;;;  "aph-shr.el" "aph-symbol.el" "aph-w32.el" "init-core.el"
+;;;;;;  "init-draft.el" "init-elfeed.el" "init-ido.el" "init-keys.el"
+;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
+;;;;;;  "init-package.el" "init-startup.el") (22107 42264 279266
+;;;;;;  700000))
 
 ;;;***
 
