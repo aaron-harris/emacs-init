@@ -476,7 +476,12 @@
 
 (use-package smartscan
   :ensure t
-  :config
+  :bind (:map smartscan-map
+              ("M-p"   . nil)
+              ("M-n"   . nil)
+              ("C-M-r" . smartscan-symbol-go-backward)
+              ("C-M-s" . smartscan-symbol-go-forward))
+  :init
   (global-smartscan-mode 1))
 
 (use-package solar
