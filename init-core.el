@@ -308,6 +308,9 @@
   ;; Improves functionality of `C-h F' for Org commands.
   (add-to-list 'Info-file-list-for-emacs "org")) 
 
+(use-package aph-keypad
+  :bind ("C-<kp-enter>" . aph/keypad-enter-toggle-newline))
+
 (use-package lisp-mode
   :defer t 
   :config

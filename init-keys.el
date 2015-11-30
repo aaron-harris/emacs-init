@@ -11,8 +11,6 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; Keybinding Control
-  ((kbd "C-<kp-enter>")    #'aph/kp-enter-newline-toggle)
   ;; Help Keys
   ((kbd "C-h C-h")         nil :rebind) ; `help-for-help'
   ((kbd "C-h c")           #'describe-key-briefly :rebind)
