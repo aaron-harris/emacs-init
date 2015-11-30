@@ -10,11 +10,6 @@
 
 ;;; General Keybindings
 ;;;==================== 
-(aph/global-set-keys-safely 
-  ;; Help Keys
-  ((kbd "C-h C-h")         nil :rebind) ; `help-for-help'
-  ((kbd "C-h c")           #'describe-key-briefly :rebind)
-  ((kbd "C-h M-b")         #'describe-buffer))
 (with-eval-after-load 'smartscan
   (aph/define-keys-safely smartscan-map
     ((kbd "M-n")           nil :rebind) ; `smartscan-symbol-go-forward'
