@@ -254,6 +254,9 @@
   :after helm
   :config (helm-descbinds-mode))
 
+(use-package help
+  :bind (("C-h C-h" . nil)))
+
 (use-package help+
   :ensure t
   :after help)
@@ -264,9 +267,12 @@
 
 (use-package help-fns+
   :after help-fns
+  :bind ("C-h M-b" . describe-buffer)
   :bind (:map aph/buffer-info-map       ; M-=
               ("b" . describe-buffer))
   :config
+  ;; Undo binding changes at C-h c.
+  (bind-key "C-h c" 'describe-key-briefly)
   ;; Add Org manual to list of manuals to include links for in help.
   ;; This is a stopgap measure.  In the long run, keying in to
   ;; `Info-file-list-for-emacs' is probably the way to go.
