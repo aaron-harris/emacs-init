@@ -8,16 +8,6 @@
 (require 'aph-keys)                     ; For `aph/define-keys-safely', etc. 
 
 
-;;; General Keybindings
-;;;==================== 
-(with-eval-after-load 'smartscan
-  (aph/define-keys-safely smartscan-map
-    ((kbd "M-n")           nil :rebind) ; `smartscan-symbol-go-forward'
-    ((kbd "C-M-s")         #'smartscan-symbol-go-forward)
-    ((kbd "M-p")           nil :rebind) ; `smartscan-symbol-go-backward'
-    ((kbd "C-M-r")         #'smartscan-symbol-go-backward)))
-
-
 ;;; Helm Keybindings
 ;;;=================
 (with-eval-after-load 'helm
