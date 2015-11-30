@@ -11,8 +11,6 @@
 ;;; General Keybindings
 ;;;==================== 
 (aph/global-set-keys-safely 
-  ;; Themes
-  ((kbd "s-n")             #'aph/theme-cycle)
   ;; Keybinding Control
   ((kbd "C-<kp-enter>")    #'aph/kp-enter-newline-toggle)
   ;; Help Keys

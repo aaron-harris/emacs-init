@@ -96,6 +96,9 @@
 
 ;;; Package Configuration
 ;;;======================
+(use-package aph-theme
+  :bind ("s-n" . aph/theme-cycle))
+
 (use-package avy
   :ensure t
   :defer t
