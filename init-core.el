@@ -224,18 +224,50 @@
   (eval-after-load 'aph-require #'aph/require-enable-font-lock))
 
 (use-package frame
-  :bind (("C-z" . aph/launch-prefix)))
+  :bind (("C-z" . aph/launch-prefix))) 
 
-(use-package helm-config
-  :ensure helm
+(use-package helm
+  :ensure t
+  :demand t
+  :bind (("M-x"                    . helm-M-x)
+         ("C-M-:"                  . helm-eval-expression-with-eldoc)
+         ("M-y"                    . helm-show-kill-ring)
+         ("C-x r i"                . helm-register)
+         ("C-c b b"                . helm-filtered-bookmarks)
+         ("C-c ,"                  . helm-semantic-or-imenu)
+         ("M-s o"                  . helm-occur)
+         ("M-s r"                  . helm-regexp)
+         ("C-c SPC"                . helm-all-mark-rings)
+         ([remap switch-to-buffer] . helm-mini)
+         ([remap find-file]        . helm-find-files)
+         ("C-x M-p"                . helm-browse-project)
+         ("M-s g"                  . helm-do-grep)
+         ("C-h C-f"                . helm-colors)
+         ([remap manual-entry]     . helm-man-woman)
+         ("C-h C-i"                . helm-info-at-point)
+         ([remap apropos]          . helm-apropos)) 
+  :bind (:map aph/launch-map
+              ("C-s" . helm-google-suggest))
+  :bind (:map helm-map
+              ("<tab>"    . helm-execute-persistent-action)
+              ("C-j"      . nil)
+              ("C-z"      . nil)
+              ("s-<apps>" . helm-select-action)))
+
+(use-package helm-config 
+  :after helm
   :diminish helm-mode
-  :config
+  :bind (("C-x c" . nil)
+         ("C-x x" . helm-command-prefix))
+  :bind (:map helm-command-map
+              ("C-u" . helm-resume))
+  :config 
   (helm-mode 1)
   (helm-autoresize-mode t)
-  (setq helm-scroll-amount                    8  ; For `C-M-v', `C-S-M-v'
-        helm-split-window-in-side-p           t  ; Leave window splits alone
-        helm-ff-file-name-history-use-recentf t  ; Better file history
-        helm-ff-search-library-in-sexp        t) ; Like `ffap' for `require'
+  (setq helm-scroll-amount                    8
+        helm-split-window-in-side-p           t
+        helm-ff-file-name-history-use-recentf t
+        helm-ff-search-library-in-sexp        t)
   ;; Info pages to use for `helm-info-at-point'.
   (setq helm-info-default-sources
         '(helm-source-info-emacs
@@ -253,6 +285,11 @@
   :ensure t
   :after helm
   :config (helm-descbinds-mode))
+
+(use-package helm-projectile
+  :ensure t
+  :bind (("C-x p"   . helm-projectile)
+         ("M-s M-g" . helm-projectile-grep)))
 
 (use-package help
   :bind (("C-h C-h" . nil)))
