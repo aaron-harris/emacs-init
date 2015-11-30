@@ -8,53 +8,6 @@
 (require 'aph-keys)                     ; For `aph/define-keys-safely', etc. 
 
 
-;;; Helm Keybindings
-;;;=================
-(with-eval-after-load 'helm
-  (aph/global-set-keys-safely
-    ;; Helm
-    ((kbd "C-x x")            #'helm-command-prefix)
-    ((kbd "C-x c")            nil :rebind) ; `helm-command-prefix'
-    ((kbd "C-x x C-u")        #'helm-resume)
-    ;; Command Invocation
-    ((kbd "M-x")              #'helm-M-x :rebind)
-    ((kbd "C-M-:")            #'helm-eval-expression-with-eldoc) 
-    ;; Yank
-    ((kbd "M-y")              #'helm-show-kill-ring :rebind) ; `yank-pop'
-    ;; Registers
-    ((kbd "C-x r i")          #'helm-register :rebind) ; `insert-register'
-    ;; Bookmarks
-    ((kbd "C-c b b")          #'helm-filtered-bookmarks :rebind) ; `bookmark-jump'
-    ;; Navigation and Search
-    ((kbd "C-c ,")            #'helm-semantic-or-imenu)
-    ((kbd "M-s o")            #'helm-occur :rebind) ; `occur'
-    ((kbd "M-s r")            #'helm-regexp)
-    ((kbd "C-c SPC")          #'helm-all-mark-rings)
-    ;; General Buffer Control
-    ([remap switch-to-buffer] #'helm-mini)
-    ([remap find-file]        #'helm-find-files)
-    ((kbd "C-x p")            #'helm-projectile)
-    ((kbd "C-x M-p")          #'helm-browse-project)
-    ;; Filesystem Interaction
-    ((kbd "M-s g")            #'helm-do-grep)
-    ((kbd "M-s M-g")          #'helm-projectile-grep)
-    ;; Application Control
-    ((kbd "C-z C-s")          #'helm-google-suggest)
-    ;; Help Keys
-    ((kbd "C-h C-f")          #'helm-colors :rebind) ; `view-emacs-FAQ'
-    ([remap manual-entry]     #'helm-man-woman)
-    ((kbd "C-h C-i")          #'helm-info-at-point)
-    ((kbd "C-h a")            #'helm-apropos :rebind)) ; `apropos'
-  (aph/define-keys-safely helm-map
-    ;; Persistent Action
-    ;; (Disabling C-j and C-z is so tooltip correctly points to <tab>.)
-    ((kbd "<tab>")    #'helm-execute-persistent-action)
-    ((kbd "C-j")      nil :rebind)      ; `helm-execute-persistent-action'
-    ((kbd "C-z")      nil :rebind)      ; `helm-execute-persistent-action'
-    ;; Action Menu
-    ((kbd "s-<apps>") #'helm-select-action)))
-
-
 ;;; Smartparens Keybindings
 ;;;========================
 (with-eval-after-load 'smartparens
