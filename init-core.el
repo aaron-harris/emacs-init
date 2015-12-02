@@ -261,7 +261,7 @@
          ("C-x x" . helm-command-prefix))
   :bind (:map helm-command-map
               ("C-u" . helm-resume))
-  :config 
+  :config
   (helm-mode 1)
   (helm-autoresize-mode t)
   (setq helm-scroll-amount                    8
@@ -496,11 +496,44 @@
                          smart-tab-completion-functions-alist)))
 
 (use-package smartparens-config
-  :ensure smartparens
+  :ensure smartparens 
   :init
-  (add-hook 'lisp-tag-hook #'smartparens-strict-mode)
-  :config 
   (smartparens-global-mode)
+  (add-hook 'lisp-tag-hook #'smartparens-strict-mode)
+  :config
+  (bind-keys :map smartparens-mode-map
+             ;; Movement
+             ([remap backward-sexp]    . sp-backward-sexp)
+             ([remap forward-sexp]     . sp-forward-sexp)
+             ([remap backward-up-list] . sp-backward-up-sexp)
+             ([remap down-list]        . sp-down-sexp)
+             ([remap forward-list]     . sp-next-sexp)
+             ([remap backward-list]    . sp-previous-sexp)
+             ("M-B"                    . sp-backward-symbol)
+             ("M-F"                    . sp-forward-symbol)
+             ;; Selection
+             ([remap mark-sexp]        . sp-select-next-thing-exchange)
+             ;; Barf and Slurp
+             ("C-<left>"               . sp-forward-barf-sexp)
+             ("C-<right>"              . sp-forward-slurp-sexp)
+             ("C-S-<left>"             . sp-backward-slurp-sexp)
+             ("C-S-<right>"            . sp-backward-barf-sexp)
+             ;; Kill and Copy
+             ([remap kill-sexp]        . sp-kill-sexp)
+             ("C-M-w"                  . sp-copy-sexp)
+             ("C-S-<backspace>"        . sp-splice-sexp-killing-around)
+             ;; Editing
+             ([remap transpose-sexps]  . sp-transpose-sexp)
+             ;; Unwrap and Splice
+             ("C-<delete>"             . sp-unwrap-sexp)
+             ("C-<backspace>"          . sp-backward-unwrap-sexp)
+             ("M-D"                    . sp-splice-sexp)
+             ;; Indentation
+             ("M-)"                    . sp-up-sexp)
+             ;; Narrowing
+             ("C-x n ("                . sp-narrow-to-sexp))
+  (bind-keys :map smartparens-strict-mode-map
+             (")" . sp-up-sexp)) 
   ;; String handling
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'lisp-mode)

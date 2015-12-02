@@ -8,44 +8,6 @@
 (require 'aph-keys)                     ; For `aph/define-keys-safely', etc. 
 
 
-;;; Smartparens Keybindings
-;;;========================
-(with-eval-after-load 'smartparens
-  (aph/define-keys-safely smartparens-mode-map
-    ;; Movement
-    ([remap backward-sexp]    #'sp-backward-sexp)
-    ([remap forward-sexp]     #'sp-forward-sexp)
-    ([remap backward-up-list] #'sp-backward-up-sexp)
-    ([remap down-list]        #'sp-down-sexp)
-    ([remap forward-list]     #'sp-next-sexp)
-    ([remap backward-list]    #'sp-previous-sexp)
-    ((kbd "M-B")              #'sp-backward-symbol)
-    ((kbd "M-F")              #'sp-forward-symbol)
-    ;; Selection
-    ([remap mark-sexp]        #'sp-select-next-thing-exchange)
-    ;; Barf and Slurp
-    ((kbd "C-<left>")         #'sp-forward-barf-sexp)
-    ((kbd "C-<right>")        #'sp-forward-slurp-sexp)
-    ((kbd "C-S-<left>")       #'sp-backward-slurp-sexp)
-    ((kbd "C-S-<right>")      #'sp-backward-barf-sexp)
-    ;; Kill and Copy
-    ([remap kill-sexp]        #'sp-kill-sexp)
-    ((kbd "C-M-w")            #'sp-copy-sexp)
-    ((kbd "C-S-<backspace>")  #'sp-splice-sexp-killing-around)
-    ;; Editing
-    ([remap transpose-sexps]  #'sp-transpose-sexp)
-    ;; Unwrap and Splice
-    ((kbd "C-<delete>")       #'sp-unwrap-sexp)
-    ((kbd "C-<backspace>")    #'sp-backward-unwrap-sexp)
-    ((kbd "M-D")              #'sp-splice-sexp)
-    ;; Indentation
-    ((kbd "M-)")              #'sp-up-sexp)
-    ;; Narrowing
-    ((kbd "C-x n (")          #'sp-narrow-to-sexp))
-  (aph/define-keys-safely smartparens-strict-mode-map
-    ((kbd ")")                #'sp-up-sexp)))
-
-
 ;;; Org Mode Keybindings
 ;;;=====================
 (aph/global-set-keys-safely
