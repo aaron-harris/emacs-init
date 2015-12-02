@@ -10,12 +10,6 @@
 
 ;;; Programming Keybindings
 ;;;========================
-;; Elisp 
-(with-eval-after-load 'ielm
-  (aph/define-keys-safely ielm-map
-    ((kbd "C-c M-w")  #'aph/ielm-copy-last-output)
-    ((kbd "C-c C-t")  #'aph/eval-expression-toggle-clean-output)))
-
 ;; Clojure and Cider
 (aph/global-set-keys-safely
   ((kbd "C-c M-c")  #'cider-connect))

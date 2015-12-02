@@ -54,25 +54,6 @@ See `aph/elfeed-search-show-entry' for details.
 
 ;;;***
 
-;;;### (autoloads nil "aph-ielm" "aph-ielm.el" (22008 19541 730390
-;;;;;;  800000))
-;;; Generated autoloads from aph-ielm.el
-
-(autoload 'aph/ielm-copy-last-output "aph-ielm" "\
-Copy the last output produced by `ielm' to the kill ring.
-
-With argument N > 0, instead copy the Nth last output.
-With argument N < 0, copy the Nth output since last clear.
-With argument N = 0, do nothing.
-
-Return the newly copied string, or nil if nothing was
-copied (e.g., if the argument is greater than the number of
-uncleared outputs).
-
-\(fn &optional ARG)" t nil)
-
-;;;***
-
 ;;;### (autoloads nil "aph-info" "aph-info.el" (22028 30124 325364
 ;;;;;;  500000))
 ;;; Generated autoloads from aph-info.el
@@ -211,9 +192,14 @@ Run the shell command \"hg status\".
 
 ;;;***
 
-;;;### (autoloads nil "aph-simple" "aph-simple.el" (22100 60334 515250
-;;;;;;  300000))
+;;;### (autoloads nil "aph-simple" "aph-simple.el" (22111 27527 912419
+;;;;;;  700000))
 ;;; Generated autoloads from aph-simple.el
+
+(autoload 'aph/eval-expression-toggle-clean-output "aph-simple" "\
+Toggle the variable `aph/eval-expression-clean-output'.
+
+\(fn)" t nil)
 
 (autoload 'aph/truncate-lines-on "aph-simple" "\
 Cause current buffer to truncate long lines.
@@ -278,14 +264,14 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-files.el"
-;;;;;;  "aph-font-lock.el" "aph-framewin.el" "aph-hooks.el" "aph-keypad.el"
-;;;;;;  "aph-keys.el" "aph-latex.el" "aph-lib.el" "aph-mode-tag.el"
-;;;;;;  "aph-org-agenda.el" "aph-org-capture.el" "aph-rect.el" "aph-require.el"
-;;;;;;  "aph-shr.el" "aph-symbol.el" "aph-w32.el" "init-core.el"
-;;;;;;  "init-draft.el" "init-elfeed.el" "init-ido.el" "init-keys.el"
-;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "init-package.el" "init-startup.el") (22107 42264 279266
-;;;;;;  700000))
+;;;;;;  "aph-font-lock.el" "aph-framewin.el" "aph-hooks.el" "aph-ielm.el"
+;;;;;;  "aph-keypad.el" "aph-keys.el" "aph-latex.el" "aph-lib.el"
+;;;;;;  "aph-mode-tag.el" "aph-org-agenda.el" "aph-org-capture.el"
+;;;;;;  "aph-rect.el" "aph-require.el" "aph-shr.el" "aph-symbol.el"
+;;;;;;  "aph-w32.el" "init-core.el" "init-draft.el" "init-elfeed.el"
+;;;;;;  "init-ido.el" "init-keys.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "init-package.el" "init-startup.el") (22111
+;;;;;;  27536 906797 800000))
 
 ;;;***
 

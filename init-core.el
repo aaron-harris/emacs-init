@@ -347,7 +347,11 @@
 (use-package ielm
   :defer t
   :config
-  (aph/mode-tag-add 'ielm-mode 'lisp))
+  (use-package aph-ielm)
+  (bind-keys :map ielm-map
+             ("C-c C-t" . aph/eval-expression-toggle-clean-output)
+             ("C-c M-w" . aph/ielm-copy-last-output))
+  (aph/mode-tag-add 'ielm-mode 'lisp)) 
 
 (use-package info
   :defer t
@@ -496,14 +500,16 @@
     "Run the hook for the `lisp' mode tag."
     (run-hooks 'lisp-tag-hook))
   (add-hook 'eval-expression-minibuffer-setup-hook
-            #'aph/mode-tag-run-hook--lisp) 
+            #'aph/mode-tag-run-hook--lisp)
   (setq eval-expression-print-length nil
-        eval-expression-print-level  nil)) 
+        eval-expression-print-level  nil))
 
 (use-package aph-simple
   :after simple
   :bind ([remap open-line] . aph/open-line) ; C-o
   :config
+  (advice-add #'eval-expression-print-format
+              :around #'aph/eval-expression-mute-print-format)
   (when (eq aph/machine 'mpc)
     (setq aph/eval-expression-clean-output t)))
 
