@@ -100,6 +100,17 @@
 (use-package aph-theme
   :bind ("s-n" . aph/theme-cycle))
 
+(use-package avoid
+  :init
+  (mouse-avoidance-mode 'banish)
+  :config
+  (setq mouse-avoidance-banish-position
+        '((frame-or-window . frame)
+          (side . right)
+          (side-pos . -50)
+          (top-or-bottom . bottom)
+          (top-or-bottom-pos . -50))))
+
 (use-package avy
   :ensure t
   :defer t
