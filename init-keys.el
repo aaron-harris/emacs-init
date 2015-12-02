@@ -10,10 +10,7 @@
 
 ;;; Programming Keybindings
 ;;;========================
-;; Elisp
-(aph/global-set-keys-safely
-  ((kbd "C-x M-l")    #'find-library)
-  ((kbd "C-:")        #'pp-eval-expression))
+;; Elisp 
 (with-eval-after-load 'ielm
   (aph/define-keys-safely ielm-map
     ((kbd "C-c M-w")  #'aph/ielm-copy-last-output)
