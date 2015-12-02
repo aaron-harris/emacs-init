@@ -65,6 +65,7 @@
 
 ;; UI Configuration
 (setq-default cursor-type                     'box
+              frame-resize-pixelwise          t
               indent-tabs-mode                nil
               indicate-buffer-boundaries      'right
               resize-mini-windows             t
