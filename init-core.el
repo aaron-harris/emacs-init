@@ -113,7 +113,12 @@
 
 (use-package avy
   :ensure t
-  :defer t
+  :bind (("M-g M-q" . avy-goto-char-2)
+         ("M-g q"   . avy-goto-char)
+         ("M-g M-g" . avy-goto-line)
+         ("M-g M-w" . avy-goto-word-or-subword-1))
+  :bind (:map isearch-mode-map
+              ("M-g" . avy-isearch))
   :config
   (setq avy-all-windows     nil
         avy-background      t

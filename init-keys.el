@@ -10,15 +10,6 @@
 
 ;;; Other Keybindings
 ;;;==================
-;; Avy
-(aph/global-set-keys-safely
-  ((kbd "M-g M-q")  #'avy-goto-char-2)
-  ((kbd "M-g q")    #'avy-goto-char)
-  ((kbd "M-g M-g")  #'avy-goto-line :rebind) ; `goto-line'
-  ((kbd "M-g M-w")  #'avy-goto-word-or-subword-1))
-(aph/define-keys-safely isearch-mode-map
-  ((kbd "M-g")      #'avy-isearch))
-
 ;; Calc
 (aph/global-set-keys-safely
   ((kbd "C-z C-c")  #'calc)
