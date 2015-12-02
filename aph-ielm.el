@@ -36,8 +36,6 @@ outputs in the ielm buffer, return nil."
 
 ;;; Commands
 ;;;=========
-
-;;;###autoload
 (defun aph/ielm-copy-last-output (&optional arg)
   "Copy the last output produced by `ielm' to the kill ring.
 
