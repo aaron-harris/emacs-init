@@ -8,17 +8,6 @@
 (require 'aph-keys)                     ; For `aph/define-keys-safely', etc. 
 
 
-;;; Programming Keybindings
-;;;========================
-;; Clojure and Cider
-(aph/global-set-keys-safely
-  ((kbd "C-c M-c")  #'cider-connect))
-(with-eval-after-load 'cider
-  (aph/define-keys-safely cider-mode-map
-    ((kbd "C-h A")  #'cider-apropos)
-    ((kbd "C-h D")  #'cider-apropos-documentation)))
-
-
 ;;; Other Keybindings
 ;;;==================
 ;; Avy
