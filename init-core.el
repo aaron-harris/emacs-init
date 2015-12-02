@@ -218,6 +218,9 @@
           '("C:/Program Files (Portable)/Emacs/share/emacs")))
   (aph/emacs-source-make-read-only))
 
+(use-package find-func
+  :bind ("C-x M-l" . find-library))
+
 (use-package font-lock
   :defer t
   :config
@@ -407,6 +410,9 @@
 (use-package paren
   :config
   (show-paren-mode))
+
+(use-package pp
+  :bind ("C-:" . pp-eval-expression))
 
 (use-package projectile
   :after helm
