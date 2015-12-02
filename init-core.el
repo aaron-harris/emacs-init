@@ -260,7 +260,7 @@
          ("C-h C-f"                . helm-colors)
          ([remap manual-entry]     . helm-man-woman)
          ("C-h C-i"                . helm-info-at-point)
-         ([remap apropos]          . helm-apropos)) 
+         ([remap apropos-command]  . helm-apropos))
   :bind (:map aph/launch-map
               ("C-s" . helm-google-suggest))
   :bind (:map helm-map
