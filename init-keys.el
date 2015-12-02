@@ -8,38 +8,6 @@
 (require 'aph-keys)                     ; For `aph/define-keys-safely', etc. 
 
 
-;;; Org Mode Keybindings
-;;;=====================
-(aph/global-set-keys-safely
-  ;; Agenda Commands
-  ((kbd "C-c a")         #'aph/org-agenda)
-  ((kbd "<f1>")          #'aph/org-agenda-display-smart-agenda :rebind)
-  ;; Capture and Refile Commands
-  ((kbd "C-c c")         #'aph/org-capture-in-popout-frame)
-  ;; Link Commands
-  ((kbd "C-c l")         #'org-store-link))
-(with-eval-after-load 'org
-  (aph/global-set-keys-safely
-    ;; Capture and Refile Commands
-    ((kbd "C-c w")       #'aph/org-goto-last-refile)
-    ;; Clocking Commands
-    ((kbd "C-c t j")     #'org-clock-goto)
-    ((kbd "C-c t o")     #'org-clock-out)
-    ((kbd "C-c t x")     #'org-clock-cancel)
-    ((kbd "C-c t r")     #'org-clock-in-last))
-  (aph/define-keys-safely org-mode-map
-    ;; Unbinding
-    ((kbd "C-c [")       nil :rebind)
-    ((kbd "C-c ]")       nil :rebind)
-    ;; Buffer Navigation
-    ((kbd "C-c C-j")     #'helm-semantic-or-imenu :rebind) ; `org-goto'
-    ;; Clocking Commands
-    ((kbd "C-c t i")     #'org-clock-in)
-    ;; Spinner Commands
-    ((kbd "C-c s SPC")   #'aph/org-spin-basic)
-    ((kbd "C-c s M-SPC") #'aph/org-spin-weighted)))
-
-
 ;;; Programming Keybindings
 ;;;========================
 ;; Elisp

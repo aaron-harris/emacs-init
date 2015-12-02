@@ -369,15 +369,32 @@
   (setq completion-auto-help 'lazy)) 
 
 (use-package org 
-  :ensure t 
+  :ensure t
+  :bind (("C-c a"   . aph/org-agenda)
+         ("<f1>"    . aph/org-agenda-display-smart-agenda)
+         ("C-c c"   . aph/org-capture-in-popout-frame)
+         ("C-c l"   . org-store-link)
+         ("C-c w"   . aph/org-goto-last-refile) 
+         ("C-c t j" . org-clock-goto)
+         ("C-c t o" . org-clock-out)
+         ("C-c t x" . org-clock-cancel)
+         ("C-c t r" . org-clock-in-last))
+  :demand t
   :config
+  (unbind-key "C-c [" org-mode-map)
+  (unbind-key "C-c ]" org-mode-map)
+  (bind-keys :map org-mode-map
+             ([remap org-goto] . helm-semantic-or-imenu)
+             ("C-c t i"        . org-clock-in)
+             ("C-c s SPC"      . aph/org-spin-basic)
+             ("C-c s M-SPC"    . aph/org-spin-weighted))
   (use-package init-org))
 
 (use-package org-mobile
   :disabled t
   :config
-  (setq org-mobile-directory       "~/sync/mobile"
-      org-mobile-inbox-for-pull (concat org-directory "/capture.org"))
+  (setq org-mobile-directory      "~/sync/mobile"
+        org-mobile-inbox-for-pull (concat org-directory "/capture.org"))
   (when (eq aph/machine 'mpc)
     (setq org-mobile-checksum-binary
           "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe")))
