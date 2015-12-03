@@ -137,6 +137,10 @@
 (use-package browse-url
   :bind ("C-c C-o" . browse-url))
 
+(use-package calc
+  :bind (:map aph/launch-map
+              ("C-c" . calc)))
+
 (use-package cider
   :ensure t
   :defer t
@@ -270,7 +274,8 @@
          ("C-h C-i"                . helm-info-at-point)
          ([remap apropos-command]  . helm-apropos))
   :bind (:map aph/launch-map
-              ("C-s" . helm-google-suggest))
+              ("C-s" . helm-google-suggest)
+              ("M-c" . helm-calcul-expression))
   :bind (:map helm-map
               ("<tab>"    . helm-execute-persistent-action)
               ("C-j"      . nil)
