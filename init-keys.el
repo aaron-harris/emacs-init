@@ -10,13 +10,6 @@
 
 ;;; Other Keybindings
 ;;;==================
-;; Company Mode
-(with-eval-after-load 'company
-  (aph/define-keys-safely company-mode-map
-    ((kbd "<tab>")  #'company-indent-or-complete-common))
-  (aph/define-keys-safely company-active-map
-    ((kbd "<tab>")  #'company-complete-common-or-cycle :rebind)))
-
 ;; Elfeed
 (aph/global-set-keys-safely
     ((kbd "C-z C-f")   #'elfeed))

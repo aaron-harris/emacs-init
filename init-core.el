@@ -195,6 +195,10 @@
   :init
   (add-hook 'lisp-tag-hook #'company-mode)
   :config
+  (bind-keys :map company-mode-map
+             ("<tab>" . company-indent-or-complete-common))
+  (bind-keys :map company-active-map
+             ("<tab>" . company-complete-common-or-cycle))
   (setq company-idle-delay nil))
 
 (use-package doc-view
