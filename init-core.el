@@ -235,7 +235,20 @@
              ("'"        . aph/elfeed-search-next-favorite-filter))
   (bind-keys :map elfeed-show-mode-map
              ("p" . aph/elfeed-show-prev)
-             ("n" . aph/elfeed-show-next)))
+             ("n" . aph/elfeed-show-next))
+  (with-eval-after-load 'eww
+    (bind-keys :map eww-mode-map
+      ("p" . aph/elfeed-show-prev)
+      ("n" . aph/elfeed-show-next))))
+
+(use-package eww
+  :bind (:map aph/launch-map ("C-w" . eww))
+  :config
+  (bind-keys :map eww-mode-map
+             ("S-<tab>" . shr-previous-link) 
+             ("["       . eww-previous-url)
+             ("]"       . eww-next-url)
+             ("z"       . shr-zoom-image)))
 
 (use-package files
   :defer t
