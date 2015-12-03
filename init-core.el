@@ -217,15 +217,25 @@
 
 (use-package elfeed
   :ensure t
-  :defer t
-  :config
-  (use-package aph-elfeed)
+  :bind (:map aph/launch-map
+              ("C-f" . elfeed))
+  :config 
   (setq elfeed-sort-order            'ascending
         aph/elfeed-favorite-filters  '("@6-months-ago +unread" "+todo"))
   (setq url-queue-parallel-processes 1
         url-queue-timeout            30)
   (setq elfeed-db-directory "~/sync/elfeed")
-  (use-package init-elfeed)) 
+  (use-package init-elfeed))
+
+(use-package aph-elfeed
+  :after elfeed
+  :config
+  (bind-keys :map elfeed-search-mode-map
+             ("<return>" . aph/elfeed-search-show-entry)
+             ("'"        . aph/elfeed-search-next-favorite-filter))
+  (bind-keys :map elfeed-show-mode-map
+             ("p" . aph/elfeed-show-prev)
+             ("n" . aph/elfeed-show-next)))
 
 (use-package files
   :defer t
