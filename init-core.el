@@ -408,7 +408,12 @@
   :defer t
   :config
   ;; Improves functionality of `C-h F' for Org commands.
-  (add-to-list 'Info-file-list-for-emacs "org")) 
+  (add-to-list 'Info-file-list-for-emacs "org"))
+
+(use-package aph-info
+  :after info
+  :bind ("C-h i" . aph/info-mode-or-clone-buffer)
+  :bind (:map Info-mode-map ("0" . aph/Info-final-menu-item)))
 
 (use-package aph-keypad
   :bind ("C-<kp-enter>" . aph/keypad-enter-toggle-newline))

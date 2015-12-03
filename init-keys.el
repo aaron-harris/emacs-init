@@ -10,13 +10,6 @@
 
 ;;; Other Keybindings
 ;;;==================
-;; Info
-(aph/global-set-keys-safely
-  ((kbd "C-h i")  #'aph/info-mode-or-clone-buffer :rebind)) ; `info'
-(with-eval-after-load 'info
-  (aph/define-keys-safely Info-mode-map
-    ((kbd "0")    #'aph/Info-final-menu-item :rebind)))
-
 ;; Packages
 (aph/global-set-keys-safely
   ((kbd "C-z C-p")  #'helm-list-elisp-packages))

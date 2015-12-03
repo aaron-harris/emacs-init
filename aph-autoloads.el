@@ -23,60 +23,6 @@ An argument of -N calls `join-line' N times.
 
 ;;;***
 
-;;;### (autoloads nil "aph-elfeed" "aph-elfeed.el" (22071 58266 146543
-;;;;;;  500000))
-;;; Generated autoloads from aph-elfeed.el
-
-(autoload 'aph/elfeed-search-show-entry "aph-elfeed" "\
-As `elfeed-search-show-entry', but intelligently follow links.
-
-If ENTRY is tagged with the 'link tag, presume that the text of
-ENTRY will be incomplete and open the url in ENTRY's link field.
-If the optional parameter EXTERNAL is supplied (interactively, with a
-prefix argument), use an external browser; otherwise, use `eww'.
-
-If ENTRY doesn't have the \"link\" tag, call `elfeed-show-entry'.
-In this case, ignore the EXTERNAL parameter.
-
-\(fn ENTRY &optional EXTERNAL)" t nil)
-
-(autoload 'aph/elfeed-show-next "aph-elfeed" "\
-As `elfeed-show-next', but intelligently follow links.
-See `aph/elfeed-search-show-entry' for details.
-
-\(fn &optional EXTERNAL)" t nil)
-
-(autoload 'aph/elfeed-show-prev "aph-elfeed" "\
-As `elfeed-show-prev', but intelligently follow links.
-See `aph/elfeed-search-show-entry' for details.
-
-\(fn &optional EXTERNAL)" t nil)
-
-;;;***
-
-;;;### (autoloads nil "aph-info" "aph-info.el" (22028 30124 325364
-;;;;;;  500000))
-;;; Generated autoloads from aph-info.el
-
-(autoload 'aph/info-mode-or-clone-buffer "aph-info" "\
-Enter info mode or clone info buffer.
-
-In an info buffer when no prefix argument has been supplied,
-clone the buffer (as `clone-buffer').  Otherwise, enter info
-mode (as `info').
-
-\(fn PREFIX)" t nil)
-
-(autoload 'aph/Info-final-menu-item "aph-info" "\
-Go to the node of the last menu item.
-
-This command duplicates the functionality of the 0 key in the
-standalone info application.
-
-\(fn)" t nil)
-
-;;;***
-
 ;;;### (autoloads nil "aph-mpc" "aph-mpc.el" (22008 32806 532682
 ;;;;;;  400000))
 ;;; Generated autoloads from aph-mpc.el
@@ -263,15 +209,15 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 
 ;;;***
 
-;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-files.el"
-;;;;;;  "aph-font-lock.el" "aph-framewin.el" "aph-hooks.el" "aph-ielm.el"
-;;;;;;  "aph-keypad.el" "aph-keys.el" "aph-latex.el" "aph-lib.el"
-;;;;;;  "aph-mode-tag.el" "aph-org-agenda.el" "aph-org-capture.el"
-;;;;;;  "aph-rect.el" "aph-require.el" "aph-shr.el" "aph-symbol.el"
-;;;;;;  "aph-w32.el" "init-core.el" "init-draft.el" "init-elfeed.el"
-;;;;;;  "init-ido.el" "init-keys.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "init-package.el" "init-startup.el") (22111
-;;;;;;  27536 906797 800000))
+;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-elfeed.el"
+;;;;;;  "aph-files.el" "aph-font-lock.el" "aph-framewin.el" "aph-hooks.el"
+;;;;;;  "aph-ielm.el" "aph-info.el" "aph-keypad.el" "aph-keys.el"
+;;;;;;  "aph-latex.el" "aph-lib.el" "aph-mode-tag.el" "aph-org-agenda.el"
+;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-require.el" "aph-shr.el"
+;;;;;;  "aph-symbol.el" "aph-w32.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-elfeed.el" "init-ido.el" "init-keys.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-startup.el")
+;;;;;;  (22112 52849 14455 900000))
 
 ;;;***
 
