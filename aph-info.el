@@ -6,7 +6,6 @@
 
 ;; This file contains commands for use in `Info-mode'.
 
-;;;###autoload
 (defun aph/info-mode-or-clone-buffer (prefix)
   "Enter info mode or clone info buffer.
 
@@ -19,7 +18,6 @@ mode (as `info')."
     (setq prefix-arg prefix)
     (call-interactively #'info)))
 
-;;;###autoload
 (defun aph/Info-final-menu-item ()
   "Go to the node of the last menu item.
 
@@ -27,3 +25,5 @@ This command duplicates the functionality of the 0 key in the
 standalone info application."
   (interactive)
   (Info-goto-node (Info-extract-menu-counting nil)))
+
+(provide 'aph-info)
