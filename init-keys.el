@@ -10,11 +10,6 @@
 
 ;;; Other Keybindings
 ;;;==================
-;; Calc
-(aph/global-set-keys-safely
-  ((kbd "C-z C-c")  #'calc)
-  ((kbd "C-z M-c")  #'helm-calcul-expression))
-
 ;; Company Mode
 (with-eval-after-load 'company
   (aph/define-keys-safely company-mode-map
