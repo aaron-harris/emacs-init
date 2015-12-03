@@ -11,8 +11,6 @@
 ;;;==========
 ;; Functions in this section cause entries tagged with the 'link tag
 ;; to bypass the entry text and open the linked URL in a browser.
-
-;;;###autoload
 (defun aph/elfeed-search-show-entry (entry &optional external)
   "As `elfeed-search-show-entry', but intelligently follow links.
 
@@ -37,7 +35,6 @@ In this case, ignore the EXTERNAL parameter."
        (aph/browse-url-prefer-eww external (elfeed-entry-link entry)))))
   (elfeed-search-show-entry entry))
 
-;;;###autoload
 (defun aph/elfeed-show-next (&optional external)
   "As `elfeed-show-next', but intelligently follow links.
 See `aph/elfeed-search-show-entry' for details."
@@ -46,7 +43,6 @@ See `aph/elfeed-search-show-entry' for details."
                    :override #'aph/elfeed-search-show-entry) 
   (elfeed-show-next))
 
-;;;###autoload
 (defun aph/elfeed-show-prev (&optional external)
   "As `elfeed-show-prev', but intelligently follow links.
 See `aph/elfeed-search-show-entry' for details."

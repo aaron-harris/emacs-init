@@ -10,17 +10,6 @@
 
 ;;; Other Keybindings
 ;;;==================
-;; Elfeed
-(aph/global-set-keys-safely
-    ((kbd "C-z C-f")   #'elfeed))
-(with-eval-after-load 'elfeed
-  (aph/define-keys-safely elfeed-search-mode-map
-    ((kbd "<return>")  #'aph/elfeed-search-show-entry :rebind)
-    ((kbd "'")         #'aph/elfeed-search-next-favorite-filter))
-  (aph/define-keys-safely elfeed-show-mode-map
-    ((kbd "p")         #'aph/elfeed-show-prev :rebind)
-    ((kbd "n")         #'aph/elfeed-show-next :rebind)))
-
 ;; Eww
 (aph/global-set-keys-safely
     ((kbd "C-z C-w")  #'eww))
