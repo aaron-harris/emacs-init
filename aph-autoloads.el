@@ -3,26 +3,6 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-commands" "aph-commands.el" (22107 42214
-;;;;;;  438722 0))
-;;; Generated autoloads from aph-commands.el
-
-(autoload 'aph/apropos-function "aph-commands" "\
-As `apropos-command', but show all functions by default.
-The behavior of a prefix argument is inverted, so supplying a
-prefix argument will show only commands (and override a non-nil
-value for `apropos-do-all')
-
-\(fn PATTERN &optional COMMANDS-ONLY VAR-PREDICATE)" t nil)
-
-(autoload 'aph/newline "aph-commands" "\
-As `newline', with support for negative argument.
-An argument of -N calls `join-line' N times.
-
-\(fn N)" t nil)
-
-;;;***
-
 ;;;### (autoloads nil "aph-mpc" "aph-mpc.el" (22112 53514 667623
 ;;;;;;  800000))
 ;;; Generated autoloads from aph-mpc.el
@@ -200,8 +180,7 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 ;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-require.el" "aph-shr.el"
 ;;;;;;  "aph-symbol.el" "aph-w32.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-elfeed.el" "init-ido.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "init-package.el" "init-startup.el") (22112
-;;;;;;  57054 114366 300000))
+;;;;;;  "init-org.el" "init-package.el") (22114 5206 351439 700000))
 
 ;;;***
 
