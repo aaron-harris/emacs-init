@@ -12,8 +12,6 @@
 
 ;;; Commands
 ;;;=========
-
-;;;###autoload
 (defun aph/yank-access-inline ()
   "Yank the most recent kill, cleaning up MS Access formatting.
 

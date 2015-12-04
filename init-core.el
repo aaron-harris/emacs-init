@@ -97,6 +97,10 @@
 
 ;;; Package Configuration
 ;;;======================
+(use-package aph-mpc
+  :if (eq aph/machine 'mpc)
+  :bind ("C-x C-y" . aph/yank-access-inline))
+
 (use-package aph-theme
   :bind ("s-n" . aph/theme-cycle))
 
@@ -302,7 +306,8 @@
          ([remap apropos-command]  . helm-apropos))
   :bind (:map aph/launch-map
               ("C-s" . helm-google-suggest)
-              ("M-c" . helm-calcul-expression))
+              ("M-c" . helm-calcul-expression)
+              ("C-p" . helm-list-elisp-packages))
   :bind (:map helm-map
               ("<tab>"    . helm-execute-persistent-action)
               ("C-j"      . nil)
@@ -730,7 +735,6 @@
 
 ;;; Not-Yet Refactored
 ;;;===================
-(aph/require-softly 'init-keys)
 (aph/require-softly 'init-startup)
 
 ;; Remember to sort out aph-geog.el. Need to do this at work.

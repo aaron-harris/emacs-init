@@ -23,25 +23,9 @@ An argument of -N calls `join-line' N times.
 
 ;;;***
 
-;;;### (autoloads nil "aph-mpc" "aph-mpc.el" (22008 32806 532682
-;;;;;;  400000))
+;;;### (autoloads nil "aph-mpc" "aph-mpc.el" (22112 53514 667623
+;;;;;;  800000))
 ;;; Generated autoloads from aph-mpc.el
-
-(autoload 'aph/yank-access-inline "aph-mpc" "\
-Yank the most recent kill, cleaning up MS Access formatting.
-
-Specifically, collapse all whitespace in the most recent kill to
-spaces, remove the first word of the kill entirely, then
-yank. Also push the result back onto the kill ring (not replacing
-the original).
-
-This function is designed to clean up text copied as a rectangle
-from a Microsoft Access datasheet. In these circumstances, the
-cell contents are delimited by newlines and the field name is
-inserted at the top, which can make doing calculations on the
-data awkward.
-
-\(fn)" t nil)
 
 (autoload 'cde "aph-mpc" "\
 Count the numbers in RANGES.
@@ -215,9 +199,9 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 ;;;;;;  "aph-latex.el" "aph-lib.el" "aph-mode-tag.el" "aph-org-agenda.el"
 ;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-require.el" "aph-shr.el"
 ;;;;;;  "aph-symbol.el" "aph-w32.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-elfeed.el" "init-ido.el" "init-keys.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "init-package.el" "init-startup.el")
-;;;;;;  (22112 52849 14455 900000))
+;;;;;;  "init-elfeed.el" "init-ido.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "init-package.el" "init-startup.el") (22112
+;;;;;;  57054 114366 300000))
 
 ;;;***
 
