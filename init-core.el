@@ -30,8 +30,8 @@
 (add-to-list 'load-path (expand-file-name aph/init-path))
 
 (require 'aph-require)                  ; For `aph/require-softly', etc.
-(aph/require-softly 'aph-autoloads)
 (aph/require-softly 'init-package)
+(use-package aph-autoloads)
 
 
 ;;; Mode Tags
