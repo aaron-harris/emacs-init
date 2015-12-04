@@ -455,7 +455,6 @@
          ("C-c t o" . org-clock-out)
          ("C-c t x" . org-clock-cancel)
          ("C-c t r" . org-clock-in-last))
-  :demand t
   :config
   (unbind-key "C-c [" org-mode-map)
   (unbind-key "C-c ]" org-mode-map)
