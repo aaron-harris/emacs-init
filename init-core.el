@@ -437,7 +437,15 @@
   ;; Mode tags
   (aph/mode-tag-add 'lisp-mode             'lisp)
   (aph/mode-tag-add 'emacs-lisp-mode       'lisp)
-  (aph/mode-tag-add 'lisp-interaction-mode 'lisp))
+  (aph/mode-tag-add 'lisp-interaction-mode 'lisp)
+  ;; Add `use-package' blocks to Imenu
+  (defun aph/emacs-lisp-mode-setup-imenu ()
+    "Set up Imenu for `emacs-lisp-mode'."
+    (add-to-list 'imenu-generic-expression
+                 '("*Packages*"
+                   "^(use-package\\s-+\\(\\_<.+?\\_>\\)"
+                   1)))
+  (add-hook 'emacs-lisp-mode-hook #'aph/emacs-lisp-mode-setup-imenu))
 
 (use-package minibuffer
   :defer t
