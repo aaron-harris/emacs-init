@@ -31,7 +31,7 @@
 
 (require 'aph-require)                  ; For `aph/require-softly', etc.
 (aph/require-softly 'aph-autoloads)
-(aph/require-softly 'init-package) 
+(aph/require-softly 'init-package)
 
 
 ;;; Mode Tags
@@ -68,20 +68,21 @@
               frame-resize-pixelwise          t
               indent-tabs-mode                nil
               indicate-buffer-boundaries      'right
+              inhibit-startup-screen          t
               resize-mini-windows             t
               ring-bell-function              #'ignore
               scroll-conservatively           1000
               scroll-margin                   1
-              scroll-preserve-screen-position :always) 
+              scroll-preserve-screen-position :always)
 
 ;; Use Windows keys for super modifier.
 (setq w32-lwindow-modifier       'super
-      w32-pass-lwindow-to-system nil 
+      w32-pass-lwindow-to-system nil
       w32-rwindow-modifier       'super
       w32-pass-rwindow-to-system nil)
 
 ;; Enable some disabled commands
-(put 'downcase-region 'disabled nil) 
+(put 'downcase-region 'disabled nil)
 (put 'upcase-region   'disabled nil)
 
 ;; Keybindings for source-defined commands
@@ -102,7 +103,14 @@
   :bind ("C-x C-y" . aph/yank-access-inline))
 
 (use-package aph-theme
-  :bind ("s-n" . aph/theme-cycle))
+  :bind ("s-n" . aph/theme-cycle)
+  :demand t
+  :config
+  ;; Treat 'aph theme as safe:
+  (add-to-list
+   'custom-safe-themes
+   "416ef2f2057400db7cab91aeacb583b4b539c549f4713260282a903d79344312") 
+  (load-theme 'aph :noconfirm))
 
 (use-package avoid
   :init
@@ -167,7 +175,7 @@
 
 (use-package clojure-mode
   :ensure t
-  :defer t 
+  :defer t
   :config
   (aph/mode-tag-add 'clojure-mode 'lisp)
   (aph/mode-tag-add 'clojure-mode 'clojure)
@@ -179,18 +187,18 @@
   :diminish color-identifiers-mode
   :init
   (add-hook 'lisp-tag-hook #'color-identifiers-mode)
-  :config 
+  :config
   (setq color-identifiers:num-colors      12
         color-identifiers:color-luminance 0.65)
 
   (use-package aph-font-lock)
   (add-hook 'color-identifiers-mode-hook #'aph/font-lock-decolorize)
-  
+
   ;; In the function `color-identifiers:clojure-declarations-in-sexp',
   ;; there is a call to `evenp', which is not defined; presumably, the
   ;; package maintainers are expecting use to be using `cl' rather
   ;; than `cl-lib'.  As a stopgap, I'm aliasing just `evenp' globally.
-  (defalias #'evenp #'cl-evenp)) 
+  (defalias #'evenp #'cl-evenp))
 
 (use-package company
   :ensure t
@@ -223,7 +231,7 @@
   :ensure t
   :bind (:map aph/launch-map
               ("C-f" . elfeed))
-  :config 
+  :config
   (setq elfeed-sort-order            'ascending
         aph/elfeed-favorite-filters  '("@6-months-ago +unread" "+todo"))
   (setq url-queue-parallel-processes 1
@@ -249,14 +257,14 @@
   :bind (:map aph/launch-map ("C-w" . eww))
   :config
   (bind-keys :map eww-mode-map
-             ("S-<tab>" . shr-previous-link) 
+             ("S-<tab>" . shr-previous-link)
              ("["       . eww-previous-url)
              ("]"       . eww-next-url)
              ("z"       . shr-zoom-image)))
 
 (use-package files
   :defer t
-  :config 
+  :config
   ;; Backup file location
   (setq backup-directory-alist
         `(("." . ,(concat user-emacs-directory "backups")))))
@@ -282,7 +290,7 @@
   (eval-after-load 'aph-require #'aph/require-enable-font-lock))
 
 (use-package frame
-  :bind (("C-z" . aph/launch-prefix))) 
+  :bind (("C-z" . aph/launch-prefix)))
 
 (use-package helm
   :ensure t
@@ -314,7 +322,7 @@
               ("C-z"      . nil)
               ("s-<apps>" . helm-select-action)))
 
-(use-package helm-config 
+(use-package helm-config
   :after helm
   :diminish helm-mode
   :bind (("C-x c" . nil)
@@ -407,7 +415,7 @@
   (bind-keys :map ielm-map
              ("C-c C-t" . aph/eval-expression-toggle-clean-output)
              ("C-c M-w" . aph/ielm-copy-last-output))
-  (aph/mode-tag-add 'ielm-mode 'lisp)) 
+  (aph/mode-tag-add 'ielm-mode 'lisp))
 
 (use-package info
   :defer t
@@ -424,7 +432,7 @@
   :bind ("C-<kp-enter>" . aph/keypad-enter-toggle-newline))
 
 (use-package lisp-mode
-  :defer t 
+  :defer t
   :config
   ;; Mode tags
   (aph/mode-tag-add 'lisp-mode             'lisp)
@@ -434,15 +442,15 @@
 (use-package minibuffer
   :defer t
   :config
-  (setq completion-auto-help 'lazy)) 
+  (setq completion-auto-help 'lazy))
 
-(use-package org 
+(use-package org
   :ensure t
   :bind (("C-c a"   . aph/org-agenda)
          ("<f1>"    . aph/org-agenda-display-smart-agenda)
          ("C-c c"   . aph/org-capture-in-popout-frame)
          ("C-c l"   . org-store-link)
-         ("C-c w"   . aph/org-goto-last-refile) 
+         ("C-c w"   . aph/org-goto-last-refile)
          ("C-c t j" . org-clock-goto)
          ("C-c t o" . org-clock-out)
          ("C-c t x" . org-clock-cancel)
@@ -526,7 +534,7 @@
 
 (use-package saveplace
   :config
-  (setq-default save-place t) 
+  (setq-default save-place t)
   (setq save-place-file (concat user-emacs-directory "places")))
 
 (use-package server
@@ -587,7 +595,7 @@
                          smart-tab-completion-functions-alist)))
 
 (use-package smartparens-config
-  :ensure smartparens 
+  :ensure smartparens
   :init
   (smartparens-global-mode)
   (add-hook 'lisp-tag-hook #'smartparens-strict-mode)
@@ -624,7 +632,7 @@
              ;; Narrowing
              ("C-x n ("                . sp-narrow-to-sexp))
   (bind-keys :map smartparens-strict-mode-map
-             (")" . sp-up-sexp)) 
+             (")" . sp-up-sexp))
   ;; String handling
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'lisp-mode)
@@ -690,7 +698,7 @@
 
 (use-package tooltip
   :config
-  (tooltip-mode -1)) 
+  (tooltip-mode -1))
 
 (use-package uniquify
   :config
@@ -708,14 +716,14 @@
   (defface aph/visible-mark-top
     '((t (:underline "light salmon")))
     "Face for the most recent inactive mark."
-    :group 'visible-mark) 
+    :group 'visible-mark)
   (defface aph/visible-mark-other
     '((t (:underline "light goldenrod")))
     "Face for marks other than the most recent."
     :group 'visible-mark)
   (setq visible-mark-max   2
         visible-mark-faces '(aph/visible-mark-top
-                             aph/visible-mark-other))) 
+                             aph/visible-mark-other)))
 
 (use-package aph-window
   :bind (("s-["    . aph/other-window-backward)
@@ -727,20 +735,10 @@
 
 (use-package winner
   :config
-  (winner-mode)) 
+  (winner-mode))
 
 (use-package xahk-mode
   :mode "\\.ahk\\'") 
-
-
-;;; Not-Yet Refactored
-;;;===================
-(aph/require-softly 'init-startup)
-
-;; Remember to sort out aph-geog.el. Need to do this at work.
-
-(message "Initialization complete!")
-(message "-----------------------------------")
 
 (provide 'init-core)
 (provide 'init)
