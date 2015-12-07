@@ -95,10 +95,7 @@
 
 ;;; Capture
 ;;;========
-(setq org-default-notes-file (concat org-directory "/capture.org"))
-
-;; Load capture templates:
-(require 'init-org-capture)
+(setq org-default-notes-file (concat org-directory "/capture.org")) 
 
 ;; Support for `aph/org-capture-in-popout-frame':
 (add-hook 'org-capture-after-finalize-hook

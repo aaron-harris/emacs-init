@@ -494,6 +494,11 @@ The return value depends only on `aph/machine'."
   :after org-agenda
   :bind (("<f1>" . aph/org-agenda-display-smart-agenda)))
 
+(use-package org-capture
+  :defer t
+  :config
+  (require 'init-org-capture))
+
 (use-package org-clock
   :bind (("C-c t j" . org-clock-goto)
          ("C-c t o" . org-clock-out)
