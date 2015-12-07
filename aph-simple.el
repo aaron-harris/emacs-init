@@ -38,7 +38,6 @@ When this variable is non-nil, all output from
 `eval-expression-print-format' is silenced (so the previous
 example would just return 2.")
 
-;;;###autoload
 (defun aph/eval-expression-toggle-clean-output ()
   "Toggle the variable `aph/eval-expression-clean-output'."
   (interactive)

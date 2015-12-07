@@ -26,7 +26,6 @@ base.
 Be aware that 'aph will treat all of these themes as safe
 regardless of the value of `custom-safe-themes'.")
 
-;;;###autoload
 (defun aph/theme-cycle ()
   "Cycle between the themes in `aph/theme-list'.
 If none of these themes is currently active, instead load the
