@@ -4,8 +4,6 @@
 ;;;; ORG-MODE CONFIGURATION
 ;;;;============================================================================
 
-(require 'aph-advice) ; For `aph/with-advice'
-
 (require 'aph-org)
 
 ;; The `provide' statement needs to be at the beginning because
