@@ -4,7 +4,6 @@
 ;;;; ORG-MODE CONFIGURATION
 ;;;;============================================================================
 
-(require 'aph-lib)    ; For `aph/preserving-text-scale'
 (require 'aph-advice) ; For `aph/with-advice'
 
 (require 'aph-org)
@@ -155,6 +154,7 @@
 ;; (The `with-eval-after-load' is because the advice isn't necessary
 ;; unless the text scale has been adjusted.)
 (with-eval-after-load 'face-remap
+  (require 'aph-face-remap)
   (advice-add #'org-agenda-redo :around #'aph/preserving-text-scale))
 
 ;; Load custom agenda commands:

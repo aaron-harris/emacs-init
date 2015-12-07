@@ -472,7 +472,7 @@ The return value depends only on `aph/machine'."
 
 (use-package org
   :ensure t
-  :bind (("C-c l"   . org-store-link))
+  :bind (("C-c l" . org-store-link))
   :config
   (unbind-key "C-c [" org-mode-map)
   (unbind-key "C-c ]" org-mode-map)
@@ -492,7 +492,7 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-org-agenda
   :after org-agenda
-  :bind (("<f1>"  . aph/org-agenda-display-smart-agenda)))
+  :bind (("<f1>" . aph/org-agenda-display-smart-agenda)))
 
 (use-package org-clock
   :bind (("C-c t j" . org-clock-goto)
