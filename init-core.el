@@ -472,11 +472,7 @@ The return value depends only on `aph/machine'."
 
 (use-package org
   :ensure t
-  :bind (("C-c a"   . aph/org-agenda)
-         ("<f1>"    . aph/org-agenda-display-smart-agenda)
-         ("C-c c"   . aph/org-capture-in-popout-frame)
-         ("C-c l"   . org-store-link)
-         ("C-c w"   . aph/org-goto-last-refile)
+  :bind (("C-c l"   . org-store-link)
          ("C-c t j" . org-clock-goto)
          ("C-c t o" . org-clock-out)
          ("C-c t x" . org-clock-cancel)
@@ -486,10 +482,22 @@ The return value depends only on `aph/machine'."
   (unbind-key "C-c ]" org-mode-map)
   (bind-keys :map org-mode-map
              ([remap org-goto] . helm-semantic-or-imenu)
-             ("C-c t i"        . org-clock-in)
-             ("C-c s SPC"      . aph/org-spin-basic)
-             ("C-c s M-SPC"    . aph/org-spin-weighted))
+             ("C-c t i"        . org-clock-in))
   (use-package init-org))
+
+(use-package aph-org
+  :after org
+  :bind (("C-c a" . aph/org-agenda) 
+         ("C-c c" . aph/org-capture-in-popout-frame)
+         ("C-c w" . aph/org-goto-last-refile))
+  :config 
+  (bind-keys :map org-mode-map 
+             ("C-c s SPC"      . aph/org-spin-basic)
+             ("C-c s M-SPC"    . aph/org-spin-weighted)))
+
+(use-package aph-org-agenda
+  :after org
+  :bind (("<f1>"  . aph/org-agenda-display-smart-agenda)))
 
 (use-package org-mobile
   :disabled t
