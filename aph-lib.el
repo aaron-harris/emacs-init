@@ -19,17 +19,7 @@ A function defined in this way ignores the value of
   (declare (debug defun)
            (indent defun)
            (doc-string 3))
-  `(eval '(defun ,@def) nil))
-
-
-;;; General Advice
-;;;===============
-(defun aph/preserving-text-scale (fn &rest args)
-  "Call FN with ARGS, preserving current text scaling."
-  (require 'face-remap)                 ; For `text-scale-mode-amount'
-  (let ((scale text-scale-mode-amount))
-    (apply fn args)
-    (text-scale-set scale)))
+  `(eval '(defun ,@def) nil)) 
 
 
 ;;; Utility Functions
