@@ -61,7 +61,7 @@
 
 ;;; Tags
 ;;;=====
-(setq org-tag-alist
+(setq org-tag-persistent-alist
       '(("home"     . ?h)               ; Can be done only at home
         ("work"     . ?w)               ; Appears in work agenda
         ("calendar" . ?d)               ; Appears in calendar block
@@ -79,10 +79,7 @@
         ("audio"    . ?a)               ; Audio media
         (:newline   . nil)
         ("leisure"  . ?l)               ; Non-productive "tasks"
-        ("flag"     . ?F)))             ; Generic "mark for action"
-
-(advice-add #'org-set-regexps-and-options-for-tags :after
-            #'aph/org-reset-tag-alist)
+        ("flag"     . ?F)))             ; Generic "mark for action" 
 
 
 ;;; Priorities
