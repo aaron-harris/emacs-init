@@ -97,10 +97,6 @@
 ;;;========
 (setq org-default-notes-file (concat org-directory "/capture.org")) 
 
-;; Support for `aph/org-capture-in-popout-frame':
-(add-hook 'org-capture-after-finalize-hook
-          #'aph/org-capture-delete-capture-frame)
-
 
 ;;; Refile
 ;;;=======

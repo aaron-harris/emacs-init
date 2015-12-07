@@ -4,9 +4,7 @@
 ;;;; ORG-MODE CUSTOM CAPTURE TEMPLATES
 ;;;;============================================================================
 
-(require 'cl-lib)                       ; For `cl-defun'
 (require 'dash)                         ; For `->'
-
 (require 'aph-org-capture)
 
 

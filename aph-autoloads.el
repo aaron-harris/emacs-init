@@ -19,8 +19,7 @@ cde will return 14.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22085 11309 492504
-;;;;;;  800000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22118 5281 156747 200000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-spin-basic "aph-org" "\
@@ -41,22 +40,6 @@ When called interactively or if WEIGHT-PROP is
 omitted,`aph/org-spin-weight-property' is used.
 
 \(fn &optional WEIGHT-PROP)" t nil)
-
-(autoload 'aph/org-capture-in-popout-frame "aph-org" "\
-As `org-capture', but do all work in a new frame.
-
-This function by itself doesn't clean up the frame following
-capture.  To do that, add `aph/org-capture-delete-capture-frame'
-to `org-capture-after-finalize-hook'.
-
-\(fn &optional GOTO KEYS)" t nil)
-
-(autoload 'aph/org-capture-delete-capture-frame "aph-org" "\
-Delete a frame named \"Capture\".
-For use in `org-capture-after-finalize-hook' to clean up after
-`aph/org-capture-in-popout-frame'.
-
-\(fn)" nil nil)
 
 (autoload 'aph/org-goto-last-refile "aph-org" "\
 Goto last Org-mode item refiled.
@@ -89,14 +72,14 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-elfeed.el"
-;;;;;;  "aph-files.el" "aph-font-lock.el" "aph-framewin.el" "aph-hooks.el"
+;;;;;;  "aph-face-remap.el" "aph-files.el" "aph-font-lock.el" "aph-framewin.el"
 ;;;;;;  "aph-ielm.el" "aph-info.el" "aph-keypad.el" "aph-keys.el"
 ;;;;;;  "aph-latex.el" "aph-lib.el" "aph-mode-tag.el" "aph-org-agenda.el"
 ;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-shr.el" "aph-simple.el"
 ;;;;;;  "aph-symbol.el" "aph-theme.el" "aph-w32.el" "aph-web.el"
 ;;;;;;  "init-core.el" "init-draft.el" "init-elfeed.el" "init-ido.el"
 ;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el")
-;;;;;;  (22117 55776 641691 100000))
+;;;;;;  (22118 5937 266494 600000))
 
 ;;;***
 

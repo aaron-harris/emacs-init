@@ -483,7 +483,6 @@ The return value depends only on `aph/machine'."
 (use-package aph-org
   :after org
   :bind (("C-c a" . aph/org-agenda) 
-         ("C-c c" . aph/org-capture-in-popout-frame)
          ("C-c w" . aph/org-goto-last-refile))
   :config 
   (bind-keys :map org-mode-map 
@@ -498,6 +497,14 @@ The return value depends only on `aph/machine'."
   :defer t
   :config
   (require 'init-org-capture))
+
+(use-package aph-org-capture
+  :after org-capture
+  :bind ("C-c c" . aph/org-capture-in-popout-frame)
+  :config
+  ;; Support for `aph/org-capture-in-popout-frame':
+  (add-hook 'org-capture-after-finalize-hook
+            #'aph/org-capture-delete-capture-frame))
 
 (use-package org-clock
   :bind (("C-c t j" . org-clock-goto)
