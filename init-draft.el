@@ -238,11 +238,11 @@ Here NUMS may be a comma- or whitespace-delimited string, or a list."
                   (split-string nums "[, \f\t\n\r\v]" :omit-nulls "\s-+"))))
   (mapcar (apply-partially #'aph/number-lines-open beg end) nums))
 
-(aph/global-set-keys-safely
-  ((kbd "s-<apps> n")       #'aph/number-lines)
-  ((kbd "s-<apps> C-n")     #'aph/number-lines-alpha)
-  ((kbd "s-<apps> M-n o")   #'aph/number-lines-open)
-  ((kbd "s-<apps> M-n M-o") #'aph/number-lines-open-multiple))
+(bind-keys
+  ("s-<apps> n"       . aph/number-lines)
+  ("s-<apps> C-n"     . aph/number-lines-alpha)
+  ("s-<apps> M-n o"   . aph/number-lines-open)
+  ("s-<apps> M-n M-o" . aph/number-lines-open-multiple))
 
 (ert-deftest aph/test-number-lines ()
   "Test basic functionality of `aph/number-lines'."
