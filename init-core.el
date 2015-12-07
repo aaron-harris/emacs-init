@@ -305,8 +305,7 @@ The return value depends only on `aph/machine'."
 (use-package font-lock
   :defer t
   :config
-  (eval-after-load 'dash        #'dash-enable-font-lock)
-  (eval-after-load 'aph-require #'aph/require-enable-font-lock))
+  (eval-after-load 'dash        #'dash-enable-font-lock))
 
 (use-package frame
   :bind (("C-z" . aph/launch-prefix)))
