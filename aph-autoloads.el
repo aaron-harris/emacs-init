@@ -136,34 +136,6 @@ first element of `aph/theme-list'.
 
 ;;;***
 
-;;;### (autoloads nil "aph-web" "aph-web.el" (22071 58050 230079
-;;;;;;  700000))
-;;; Generated autoloads from aph-web.el
-
-(autoload 'aph/browse-url-prefer-eww "aph-web" "\
-Browse URL in `eww', or in an external browser.
-
-If a prefix argument is supplied, browse URL in an external
-browser; otherwise, use `eww'.
-
-Interactively, prompt the user for URL, using any URL at point as
-a default.
-
-\(fn EXTERNAL URL &rest ARGS)" t nil)
-
-(autoload 'aph/browse-url-prefer-external "aph-web" "\
-Browse URL in an external browser, or in `eww'.
-
-If a prefix argument is supplied, browse URL in `eww'; otherwise,
-use an external browser.
-
-Interactively, prompt the user for URL, using any URL at point as
-a default.
-
-\(fn EWW URL &rest ARGS)" t nil)
-
-;;;***
-
 ;;;### (autoloads nil "aph-window" "aph-window.el" (22107 19482 83804
 ;;;;;;  400000))
 ;;; Generated autoloads from aph-window.el
@@ -177,10 +149,10 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 ;;;;;;  "aph-files.el" "aph-font-lock.el" "aph-framewin.el" "aph-hooks.el"
 ;;;;;;  "aph-ielm.el" "aph-info.el" "aph-keypad.el" "aph-keys.el"
 ;;;;;;  "aph-latex.el" "aph-lib.el" "aph-mode-tag.el" "aph-org-agenda.el"
-;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-require.el" "aph-shr.el"
-;;;;;;  "aph-symbol.el" "aph-w32.el" "init-core.el" "init-draft.el"
+;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-shr.el" "aph-symbol.el"
+;;;;;;  "aph-w32.el" "aph-web.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-elfeed.el" "init-ido.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "init-package.el") (22114 5206 351439 700000))
+;;;;;;  "init-org.el") (22117 50385 491212 0))
 
 ;;;***
 
