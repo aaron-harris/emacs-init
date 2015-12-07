@@ -7,7 +7,6 @@
 ;;; This file contains functions interacting with web browsing in one
 ;;; way or another.
 
-;;;###autoload
 (defun aph/browse-url-prefer-eww (external url &rest args)
   "Browse URL in `eww', or in an external browser.
 
@@ -23,7 +22,6 @@ a default."
     (message "Sending URL to external browser.") 
     (apply #'browse-url (cons url args))))
 
-;;;###autoload
 (defun aph/browse-url-prefer-external (eww url &rest args)
   "Browse URL in an external browser, or in `eww'.
 
