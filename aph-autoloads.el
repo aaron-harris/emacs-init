@@ -79,29 +79,6 @@ Store the current eww url as an Org-Mode link.
 
 ;;;***
 
-;;;### (autoloads nil "aph-shell" "aph-shell.el" (22008 32355 370444
-;;;;;;  300000))
-;;; Generated autoloads from aph-shell.el
-
-(autoload 'aph/hg-commit "aph-shell" "\
-Run the shell command \"hg commit\" asynchronously.
-With a prefix argument, prompt for additional flags.
-
-\(fn &optional FLAGS)" t nil)
-
-(autoload 'aph/hg-log "aph-shell" "\
-Run the shell command \"hg log\".
-If an argument N is provided, instead run \"hg log -l N\".
-
-\(fn &optional N)" t nil)
-
-(autoload 'aph/hg-status "aph-shell" "\
-Run the shell command \"hg status\".
-
-\(fn)" t nil)
-
-;;;***
-
 ;;;### (autoloads nil "aph-simple" "aph-simple.el" (22111 27527 912419
 ;;;;;;  700000))
 ;;; Generated autoloads from aph-simple.el
@@ -152,7 +129,7 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 ;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-shr.el" "aph-symbol.el"
 ;;;;;;  "aph-w32.el" "aph-web.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-elfeed.el" "init-ido.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el") (22117 50385 491212 0))
+;;;;;;  "init-org.el") (22117 50757 28256 100000))
 
 ;;;***
 
