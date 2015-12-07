@@ -4,7 +4,6 @@
 ;;;; ORG-MODE CONFIGURATION
 ;;;;============================================================================
 
-(require 'aph-hooks)  ; For `aph/add-hook-safely', and some hook code.
 (require 'aph-lib)    ; For `aph/preserving-text-scale'
 (require 'aph-advice) ; For `aph/with-advice'
 
@@ -31,7 +30,7 @@
       org-special-ctrl-a/e       t
       org-use-speed-commands     t)
 
-(aph/add-hook-safely 'org-mode-hook #'visual-line-mode)
+(add-hook 'org-mode-hook #'visual-line-mode)
 
 
 ;;; Tree Structure
@@ -105,8 +104,8 @@
 (require 'init-org-capture)
 
 ;; Support for `aph/org-capture-in-popout-frame':
-(aph/add-hook-safely 'org-capture-after-finalize-hook
-                     #'aph/org-capture-delete-capture-frame)
+(add-hook 'org-capture-after-finalize-hook
+          #'aph/org-capture-delete-capture-frame)
 
 
 ;;; Refile
@@ -123,7 +122,7 @@
 
 ;;; Links
 ;;;======
-(aph/add-hook-safely 'org-store-link-functions #'aph/org-eww-store-link)
+(add-hook 'org-store-link-functions #'aph/org-eww-store-link)
 
 
 ;;; Agenda
