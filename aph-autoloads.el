@@ -79,24 +79,14 @@ Store the current eww url as an Org-Mode link.
 
 ;;;***
 
-;;;### (autoloads nil "aph-simple" "aph-simple.el" (22111 27527 912419
-;;;;;;  700000))
+;;;### (autoloads nil "aph-simple" "aph-simple.el" (22117 55035 147891
+;;;;;;  300000))
 ;;; Generated autoloads from aph-simple.el
 
 (autoload 'aph/eval-expression-toggle-clean-output "aph-simple" "\
 Toggle the variable `aph/eval-expression-clean-output'.
 
 \(fn)" t nil)
-
-(autoload 'aph/truncate-lines-on "aph-simple" "\
-Cause current buffer to truncate long lines.
-
-\(fn)" nil nil)
-
-(autoload 'aph/truncate-lines-off "aph-simple" "\
-Cause current buffer to fold long lines.
-
-\(fn)" nil nil)
 
 ;;;***
 
@@ -129,7 +119,7 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 ;;;;;;  "aph-org-capture.el" "aph-rect.el" "aph-shr.el" "aph-symbol.el"
 ;;;;;;  "aph-w32.el" "aph-web.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-elfeed.el" "init-ido.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el") (22117 50757 28256 100000))
+;;;;;;  "init-org.el") (22117 55045 975513 700000))
 
 ;;;***
 

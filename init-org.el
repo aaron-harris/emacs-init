@@ -31,7 +31,7 @@
       org-special-ctrl-a/e       t
       org-use-speed-commands     t)
 
-(aph/add-hook-safely 'org-mode-hook #'aph/truncate-lines-off)
+(aph/add-hook-safely 'org-mode-hook #'visual-line-mode)
 
 
 ;;; Tree Structure
