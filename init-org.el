@@ -5,6 +5,7 @@
 ;;;;============================================================================
 
 (require 'aph-org)
+(require 'aph-subr)                     ; For `aph/assoc-delete-all'
 
 ;; The `provide' statement needs to be at the beginning because
 ;; `aph/org-emphasis-alist-update' calls `org-reload', and this file
