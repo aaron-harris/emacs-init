@@ -232,6 +232,10 @@ The return value depends only on `aph/machine'."
              ("<tab>" . company-complete-common-or-cycle))
   (setq company-idle-delay nil))
 
+(use-package dash
+  :ensure t
+  :defer t)
+
 (use-package doc-view
   :defer t
   :config

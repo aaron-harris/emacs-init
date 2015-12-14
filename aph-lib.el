@@ -41,34 +41,5 @@ t."
          (f (let ((,var t)) (lambda () ,var))))
      (funcall f)))
 
-(defun aph/reduce (fn seq)
-  "As `-reduce', but accept all sequences, not just lists."
-  (require 'dash)                       ; For `-reduce'
-  (if (listp seq)
-      (-reduce fn seq)
-    (-reduce fn (append seq nil))))
-
-(defun aph/reductions (fn seq)
-  "As `aph/reduce', but return intermediate results.
-These results are returned as a list."
-  (->> seq
-       (aph/reduce (lambda (acc val) 
-                     (let ((acc (if (listp acc) acc (list acc))))
-                       (cons (funcall fn (car acc) val) acc))))
-       (reverse)))
-
-(defun aph/successor-in-list (list elt &optional cycle)
-  "Return the element in LIST following ELT.
-If ELT is not an element of LIST, return nil.
-
-If ELT is the last element in LIST, return (car LIST) if the
-optional parameter CYCLE is non-nil; otherwise, return nil."
-  (require 'dash)                       ; For `-drop-while'
-  (let ((found  (-drop-while (lambda (x) (not (equal x elt)))
-                             list)))
-    (cond
-     ((null found)                   nil)
-     ((or (cdr found) (null cycle))  (cadr found))
-     (:else                          (car list)))))
 
 (provide 'aph-lib)

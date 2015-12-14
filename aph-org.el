@@ -7,7 +7,7 @@
 (require 'org)
 (require 'aph-advice)             ; For `aph/with-advice'
 (require 'aph-lib)                ; For `aph/defun-dyn'
-(require 'dash)                   ; For `->>'
+(require 'aph-dash)               ; For `->>', `aph/reductions'
 
 
 ;;; Heading Structure
@@ -122,8 +122,7 @@ as zero.
 
 When called interactively or if WEIGHT-PROP is
 omitted,`aph/org-spin-weight-property' is used."
-  (interactive)
-  (require 'aph-lib)                    ; For `aph/reductions'
+  (interactive) 
   (if (org-before-first-heading-p)
       (message "Point not on heading.")
     (org-back-to-heading))
