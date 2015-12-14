@@ -711,7 +711,7 @@ The return value depends only on `aph/machine'."
 (use-package sort
   :bind (:map aph/region-manip-map
               ("d" . delete-duplicate-lines)
-              ("s" . sort-lines)))
+              ("s" . sort-lines))) 
 
 (use-package tex-site
   :ensure auctex

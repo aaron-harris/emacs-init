@@ -24,11 +24,6 @@ A function defined in this way ignores the value of
 
 ;;; Utility Functions
 ;;;==================
-(defun aph/assoc-delete-all (key alist)
-  "As `assq-delete-all', but use `equal' rather than `eq'."
-  (require 'cl-lib)                       ; For `cl-delete'
-  (cl-delete key alist :test #'equal :key #'car))
-
 (defun aph/canary (&rest args)
   "Print a message containing ARGS."
   (message "Canary called with args %s" args))
