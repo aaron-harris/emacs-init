@@ -486,8 +486,7 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-org
   :after org
-  :bind (("C-c a" . aph/org-agenda) 
-         ("C-c w" . aph/org-goto-last-refile))
+  :bind (("C-c w" . aph/org-goto-last-refile))
   :config 
   (bind-keys :map org-mode-map 
              ("C-c s SPC"   . aph/org-spin-basic)
@@ -495,7 +494,8 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-org-agenda
   :after org-agenda
-  :bind (("<f1>" . aph/org-agenda-display-smart-agenda)))
+  :bind (("C-c a" . aph/org-agenda)
+         ("<f1>" . aph/org-agenda-display-smart-agenda)))
 
 (use-package org-capture
   :defer t
