@@ -430,6 +430,29 @@ The return value depends only on `aph/machine'."
 (use-package ibuffer
   :bind ([remap list-buffers] . ibuffer))
 
+(use-package ido
+  :defer t
+  :config
+  (setq ido-auto-merge-work-directories-length -1
+        ido-enable-flex-matching               t
+        ido-use-filename-at-point              'guess)
+  ;; If more than one extension appears on a line, it means that I
+  ;; expect files of those extensions might appear together, and I care
+  ;; which order they're sorted in.  Otherwise, I just care about
+  ;; sorting relative to the t symbol, which represents files with
+  ;; extensions not appearing in this list.
+  (setq ido-file-extensions-order '(".ahk"
+                                    ".clj"
+                                    ".el"
+                                    ".org"
+                                    ".tex" ".pdf"
+                                    ".txt"
+                                    t
+                                    ".log"))
+  ;; Extensions to ignore (mostly byproducts of LaTeX compilation)
+  (nconc completion-ignored-extensions
+         '(".tex.swp" "_.log" ".prv/" "_.tex" ".rip")))
+
 (use-package ielm
   :defer t
   :config
