@@ -6,7 +6,7 @@
 
 (require 'org)
 (require 'aph-advice)             ; For `aph/with-advice'
-(require 'aph-lib)                ; For `aph/defun-dyn'
+(require 'aph-lexical)            ; For `aph/defun-dyn'
 (require 'aph-dash)               ; For `->>', `aph/reductions'
 
 
