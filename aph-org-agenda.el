@@ -10,6 +10,16 @@
 ;; Some functions in this file require the 'aph-comparators library at runtime.
 
 
+;;; Basic Extensions
+;;;=================
+(defun aph/org-agenda (&optional arg org-keys restriction)
+  "As `org-agenda', and automatically refresh sticky agendas." 
+  (interactive "P") 
+  (when (equal (org-agenda arg org-keys restriction)
+               "Sticky Agenda buffer, use `r' to refresh")
+    (org-agenda-redo)))
+
+
 ;;; Information Extraction
 ;;;=======================
 ;; Functions in this section extract useful information from agenda

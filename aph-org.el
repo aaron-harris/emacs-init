@@ -154,17 +154,6 @@ keybinding for that function is not appropriate."
   (interactive)
   (org-agenda-refile '(16)))
 
-
-;;; Agenda
-;;;=======
-
-;;;###autoload
-(defun aph/org-agenda (&optional arg org-keys restriction)
-  "As `org-agenda', and automatically refresh sticky agendas." 
-  (interactive "P") 
-  (when (equal (org-agenda arg org-keys restriction)
-               "Sticky Agenda buffer, use `r' to refresh")
-    (org-agenda-redo)))
 
 
 ;;; Links
