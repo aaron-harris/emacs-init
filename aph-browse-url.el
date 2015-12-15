@@ -4,8 +4,7 @@
 ;;;; WEB BROWSING FUNCTIONS
 ;;;;============================================================================
 
-;;; This file contains functions interacting with web browsing in one
-;;; way or another.
+;;; This file contains extensions to the module `browse-url'
 
 (defun aph/browse-url-prefer-eww (external url &rest args)
   "Browse URL in `eww', or in an external browser.
@@ -34,4 +33,5 @@ a default."
                      (browse-url-interactive-arg "URL: ")))
   (apply #'aph/browse-url-prefer-eww (not eww) url args))
 
-(provide 'aph-web)
+
+(provide 'aph-browse-url)
