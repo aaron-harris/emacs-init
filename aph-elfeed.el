@@ -25,7 +25,7 @@ In this case, ignore the EXTERNAL parameter."
   (interactive (list (elfeed-search-selected :ignore-region)
                      current-prefix-arg)) 
   (require 'aph-advice)              ; For `aph/advice-once'
-  (require 'aph-web)                 ; For `aph/browse-url-prefer-eww'
+  (require 'aph-browse-url)          ; For `aph/browse-url-prefer-eww'
   ;; We want to copy all behavior of `elfeed-search-show-entry',
   ;; except possibly the call to `elfeed-show-entry', which we
   ;; override using advice: 
