@@ -1,11 +1,11 @@
 ;;; -*- lexical-binding: t -*-
 
 ;;;; The Emacs init file of Aaron Harris.
-;;;; CUSTOM FUNCTIONS
+;;;; LEXICAL EXTENSIONS
 ;;;;============================================================================ 
 
-(require 'dash)                         ; For `->>'
-;; Some functions in this file also require 'cl-lib at runtime.
+;; Functions dealing directly with issues of dynamic vs. lexical
+;; binding.
 
 
 ;;; Macros
@@ -24,10 +24,6 @@ A function defined in this way ignores the value of
 
 ;;; Utility Functions
 ;;;==================
-(defun aph/canary (&rest args)
-  "Print a message containing ARGS."
-  (message "Canary called with args %s" args))
-
 ;; Taken from the Yoo Box article
 ;; "Emacs Lisp lexical binding gotchas and related best practices" 
 (defmacro aph/lexical-scope-p (var)
@@ -42,4 +38,4 @@ t."
      (funcall f)))
 
 
-(provide 'aph-lib)
+(provide 'aph-lexical)
