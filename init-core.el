@@ -614,6 +614,7 @@ The return value depends only on `aph/machine'."
   (setq save-place-file (concat user-emacs-directory "places")))
 
 (use-package server
+  :disabled t
   :config
   (unless (server-running-p) (server-start))
   (setq server-window 'pop-to-buffer))
