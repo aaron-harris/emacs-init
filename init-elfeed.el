@@ -81,6 +81,7 @@
    ("https://aphyr.com/posts.atom" programming)
    ("https://yoo2080.wordpress.com/feed/" programming)
    ("http://kranglefant.tumblr.com/rss" programming)
+   ("http://mbork.pl/?action=rss;days=30;all=0;showedit=0;full=1" programming)
    ;; Stackexchange
    ("http://stackoverflow.com/feeds/tag/clojure" programming stackexchange)
    ("http://stackoverflow.com/feeds/tag/emacs" programming stackexchange)
