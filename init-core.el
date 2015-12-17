@@ -454,7 +454,8 @@ The return value depends only on `aph/machine'."
          '(".tex.swp" "_.log" ".prv/" "_.tex" ".rip")))
 
 (use-package ielm
-  :defer t
+  :bind (:map aph/launch-map
+              ("C-r" . ielm))
   :config
   (use-package aph-ielm)
   (bind-keys :map ielm-map
