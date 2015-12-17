@@ -504,7 +504,7 @@ The return value depends only on `aph/machine'."
   (unbind-key "C-c [" org-mode-map)
   (unbind-key "C-c ]" org-mode-map)
   (bind-keys :map org-mode-map
-             ([remap org-goto] . helm-semantic-or-imenu))
+             ([remap org-goto] . helm-semantic-or-imenu)) 
   (use-package init-org))
 
 (use-package aph-org
@@ -514,6 +514,16 @@ The return value depends only on `aph/machine'."
   (bind-keys :map org-mode-map 
              ("C-c s SPC"   . aph/org-spin-basic)
              ("C-c s M-SPC" . aph/org-spin-weighted)))
+
+(use-package org-agenda
+  :defer t
+  :config 
+  (bind-keys :map org-agenda-mode-map
+             ;; `org-agenda-quit' is bugged, as of Emacs 24.5.1 and
+             ;; Org 8.3.2.  This might be a bug in `bury-buffer'?
+             ;; Anyway, `quit-window' still works, so let's just use
+             ;; that for the time being.
+             ([remap org-agenda-quit] . quit-window)))
 
 (use-package aph-org-agenda
   :after org-agenda
