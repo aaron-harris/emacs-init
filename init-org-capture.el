@@ -17,19 +17,19 @@
 (add-to-list 'org-capture-templates
              `("np" "Plain note" entry
               (file+headline org-default-notes-file "Notes")
-              ,(aph/org-capture-add-logbook "* %?")
+              "* %?"
               :kill-buffer))
 
 (add-to-list 'org-capture-templates
              `("nl" "Link" entry
               (file+headline org-default-notes-file "Notes")
-              ,(aph/org-capture-add-logbook "* %^L%?")
+              "* %^L%?"
               :kill-buffer))
 
 (add-to-list 'org-capture-templates
              `("nL" "Link to here" entry
               (file+headline org-default-notes-file "Notes")
-              ,(aph/org-capture-add-logbook "* %A%?")
+              "* %A%?"
               :kill-buffer))
 
 (add-to-list 'org-capture-templates '("t" "Task"))
@@ -37,25 +37,19 @@
 (add-to-list 'org-capture-templates
              `("tp" "Plain task" entry
                (file+headline org-default-notes-file "Tasks")
-               ,(-> "* TODO %?"
-                    aph/org-capture-add-logbook
-                    aph/org-capture-add-properties)
+               "* TODO %?"
                :kill-buffer))
 
 (add-to-list 'org-capture-templates
              `("tl" "Link" entry
                (file+headline org-default-notes-file "Tasks")
-               ,(-> "* TODO %^L%?"
-                    aph/org-capture-add-logbook
-                    aph/org-capture-add-properties)
+               "* TODO %^L%?"
                :kill-buffer))
 
 (add-to-list 'org-capture-templates
              `("tL" "Link to here" entry
               (file+headline org-default-notes-file "Tasks")
-              ,(-> "* TODO %A%?"
-                   aph/org-capture-add-logbook
-                   aph/org-capture-add-properties)
+              "* TODO %A%?"
               :kill-buffer))
 
 (add-to-list 'org-capture-templates
