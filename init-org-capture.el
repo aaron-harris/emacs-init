@@ -37,7 +37,7 @@
 (add-to-list 'org-capture-templates
              `("tp" "Plain task" entry
                (file+headline org-default-notes-file "Tasks")
-               ,(-> "* TODO %^{Effort}p%?"
+               ,(-> "* TODO %?"
                     aph/org-capture-add-logbook
                     aph/org-capture-add-properties)
                :kill-buffer))
@@ -45,7 +45,7 @@
 (add-to-list 'org-capture-templates
              `("tl" "Link" entry
                (file+headline org-default-notes-file "Tasks")
-               ,(-> "* TODO %^L%^{Effort}p%?"
+               ,(-> "* TODO %^L%?"
                     aph/org-capture-add-logbook
                     aph/org-capture-add-properties)
                :kill-buffer))
@@ -53,7 +53,7 @@
 (add-to-list 'org-capture-templates
              `("tL" "Link to here" entry
               (file+headline org-default-notes-file "Tasks")
-              ,(-> "* TODO %A%^{Effort}p%?"
+              ,(-> "* TODO %A%?"
                    aph/org-capture-add-logbook
                    aph/org-capture-add-properties)
               :kill-buffer))
