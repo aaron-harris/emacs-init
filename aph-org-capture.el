@@ -12,16 +12,6 @@
 
 ;;; Capture Template Builders
 ;;;==========================
-(defun aph/org-capture-add-logbook (template)
-  "Append a logbook drawer to the capture TEMPLATE.
-
-The logbook drawer will contain a 'Captured' timestamp using the
-capture escape '%U'."
-  (concat template
-          "\n:LOGBOOK:\n- Captured"
-          (make-string 29 ? )           ; A string of 29 spaces.
-          "%U\n:END:"))
-
 (defun aph/org-capture-add-properties (template &optional props)
   "Append a property drawer containing PROPS to the capture TEMPLATE.
 
@@ -29,12 +19,7 @@ PROPS is an alist associating property names (strings) to their
 desired values (also strings, which will typically include
 template escapes like '%^').
 
-If PROPS is omitted, the property drawer will be
-empty. Explicitly including an empty drawer can be useful in the
-situation where TEMPLATE already includes a logbook drawer;
-otherwise, when properties are added to the entry during capture,
-the resulting property drawer may be indented differently than
-the logbook drawer."
+If PROPS is omitted, the property drawer will be empty."
   (concat template
           "\n:PROPERTIES:"
           (mapconcat
