@@ -176,9 +176,9 @@ The return value depends only on `aph/machine'."
   :ensure t
   :defer t
   :config
-  (bind-keys (:map cider-mode-map
-                   ("C-h A" . cider-apropos)
-                   ("C-h D" . cider-apropos-documentation)))
+  (bind-keys :map cider-mode-map
+             ("C-h A" . cider-apropos)
+             ("C-h D" . cider-apropos-documentation))
   (setq cider-auto-select-error-buffer      nil
         cider-show-error-buffer             'except-in-repl
         cider-repl-pop-to-buffer-on-connect nil)
