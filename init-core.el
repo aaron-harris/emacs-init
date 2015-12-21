@@ -52,6 +52,12 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-autoloads)
 
+;; The package declaration for `hydra' appears early, so we can use
+;; hydras freely in subsequent declarations.
+(use-package hydra
+  :ensure t
+  :defer t)
+
 
 ;;; Mode Tags
 ;;;==========
