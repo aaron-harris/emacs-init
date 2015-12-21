@@ -127,6 +127,13 @@ The return value depends only on `aph/machine'."
   :if (eq aph/machine 'mpc)
   :bind ("C-x C-y" . aph/yank-access-inline))
 
+(use-package aph-number-lines
+  :bind (:map aph/region-manip-map
+         ("n"       . aph/number-lines)
+         ("C-n"     . aph/number-lines-alpha)
+         ("M-n o"   . aph/number-lines-open)
+         ("M-n M-o" . aph/number-lines-open-multiple)))
+
 (use-package aph-theme
   :bind ("s-n" . aph/theme-cycle)
   :demand t
