@@ -76,49 +76,7 @@ For other functions, an index search is attempted."
 
 ;;; Number Lines in Region
 ;;;=======================
-(defun aph/get-bol (&optional pos)
-  "Return position of first character on line containing POS.
-If POS is omitted, use position of point.
-
-Does not move point."
-  (save-excursion
-    (let ((pos (or pos (point))))
-      (goto-char pos)
-      (point-at-bol))))
-
-(defun aph/get-eol (&optional pos)
-  "Return position of last character on line containing POS.
-If POS is omitted, use position of point.
-
-Does not move point."
-  (save-excursion
-    (let ((pos (or pos (point))))
-      (goto-char pos)
-      (point-at-eol))))
-
-(ert-deftest aph/test-get-bol/-eol ()
-  "Test functions `aph/get-bol' and `aph/get-eol'."
-  (with-temp-buffer
-    (should (= (aph/get-bol) (aph/get-bol (point))
-               (aph/get-eol) (aph/get-eol (point))
-               (point) (point-min) (point-max)))
-    (insert "A")
-    (should (= (aph/get-bol) (aph/get-bol (point)) 1))
-    (should (= (aph/get-eol) (aph/get-eol (point)) 2 (point)))
-    (insert "B") 
-    (should (= (aph/get-bol) (aph/get-bol (point)) 1))
-    (should (= (aph/get-eol) (aph/get-eol (point)) 3 (point)))
-    (insert "\n")
-    (should (= (aph/get-bol 1) (aph/get-bol 3) 1))
-    (should (= (aph/get-eol 1) (aph/get-eol 3) 3)) 
-    (should (= (aph/get-bol) (aph/get-bol (point))
-               (aph/get-eol) (aph/get-eol (point)) 4 (point)))
-    (insert "foo\n\nbar")
-    (should (= (aph/get-bol 4) (aph/get-bol 6) 4))
-    (should (= (aph/get-eol 4) (aph/get-eol 6) 7))
-    (should (= (aph/get-bol 8) (aph/get-eol 8) 8))
-    (should (= (aph/get-bol 9) (aph/get-bol) 9))
-    (should (= (aph/get-eol 9) (aph/get-eol) 12 (point)))))
+(require 'aph-subr)                 ; For `aph/get-bol', `aph/get-eol'
 
 (defun aph/number-lines (beg end &optional offset eol sep format-string)
   "Insert a number for each line in the region.
