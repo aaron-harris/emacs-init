@@ -493,6 +493,11 @@ The return value depends only on `aph/machine'."
 (use-package lisp-mode
   :defer t
   :config
+  (bind-keys :map emacs-lisp-mode-map
+             ("C-c e b" . eval-buffer)
+             ("C-c e d" . eval-defun)
+             ("C-c e r" . eval-region)
+             ("C-c e e" . eval-last-sexp))
   ;; Mode tags
   (aph/mode-tag-add 'lisp-mode             'lisp)
   (aph/mode-tag-add 'emacs-lisp-mode       'lisp)
