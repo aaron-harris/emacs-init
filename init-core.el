@@ -610,7 +610,7 @@ The return value depends only on `aph/machine'."
          ("C-x r r" . nil)
          ("C-x r t" . nil)
          ("C-x r y" . nil)
-         ("C-c r N" . rectangle-number-lines)
+         ("C-c r n" . rectangle-number-lines)
          ("C-c r c" . clear-rectangle)
          ("C-c r d" . delete-rectangle)
          ("C-c r k" . kill-rectangle)
