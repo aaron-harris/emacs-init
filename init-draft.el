@@ -72,3 +72,45 @@ For other functions, an index search is attempted."
 ;;; Freeing `C-[' and `C-i'
 ;;;========================
 (define-key input-decode-map [?\C-\[] (kbd "<C-[>"))
+
+
+;;; Suspend updates for `helm-projectile-grep'
+;;;===========================================
+(defun aph/helm-suspend-update-initially ()
+  "Suspend helm updates, and remove self from `helm-update-hook'.
+
+This function can be added to `helm-update-hook' immediately
+before a helm command is called.  Doing so will suspend updates
+for that command."
+  (helm-toggle-suspend-update)
+  (remove-hook 'helm-update-hook #'aph/helm-suspend-update-initially))
+
+(defun aph/helm-with-suspended-updates (fun &rest args)
+  "Call FUN with ARGS, suspending helm updates."
+  (unwind-protect
+      (progn
+        (add-hook 'helm-update-hook #'aph/helm-suspend-update-initially)
+        (apply fun args))
+    (remove-hook 'helm-update-hook #'aph/helm-suspend-update-initially)))
+
+(ert-deftest aph/helm-test-suspend-updates ()
+  "Test `aph/helm-with-suspended-updates' and related functions."
+  (let* ((source    (helm-build-async-source "Foo"))
+         (helm-call (lambda (&rest args)
+                      (helm :sources source
+                            :candidates args)))
+         (helm-update-hook nil))
+    (aph/helm-with-suspended-updates helm-call 'foo)
+    (should (null helm-update-hook))))
+
+(defun aph/helm-projectile-grep (&optional dir)
+  "As `helm-projectile-grep', with updates suspended."
+  (interactive)
+  (aph/helm-with-suspended-updates #'helm-projectile-grep dir))
+
+(defun aph/foo ()
+  "Test constructing helm commands."
+  (interactive)
+  (helm :sources (helm-build-async-source "Foo")))
+
+(remove-hook 'helm-update-hook #'aph/canary)
