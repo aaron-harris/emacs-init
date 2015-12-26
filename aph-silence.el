@@ -68,13 +68,16 @@ This function is intended as :around advice for `message'.  As
 seem to be any way to achieve this kind of message suppression
 otherwise.  Because `message' is a primitive, not all messages
 can be silenced; calls from C code may avoid being silenced." 
-  (let ((msg (apply #'format args)))
-    (if (aph/silence-message-p msg)
-        msg
-      (apply fun args))))
+  (let ((msg  (and (first args) (apply #'format args))))
+    (cond
+     ((null msg)                   (apply fun args))
+     ((equal msg "")               (apply fun args))
+     ((aph/silence-message-p msg)  msg)
+     (:else                        (apply fun args)))))
 
 ;; Note that, with the default settings, this advice does nothing.
 (advice-add #'message :around #'aph/silence-advice)
+(advice-remove #'message #'aph/silence-advice)
 
 
 (provide 'aph-silence)

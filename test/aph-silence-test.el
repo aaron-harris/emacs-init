@@ -45,7 +45,7 @@
   "Test the function `aph/silence-advice'."
   (require 'aph-advice)                 ; For `aph/with-advice'
   (aph/with-advice ((:genname #'message :around #'aph/silence-advice))
-    (let ((aph/silence-list '("foo"))
+    (let ((aph/silence-list    '("foo"))
           (aph/silence-enabled t))
       (should (equal (message "bar") (current-message)))
       (should-not (equal (message "foo") (current-message)))
@@ -54,6 +54,23 @@
         (should (equal (message "foo") (current-message))))
       (let ((aph/silence-list nil))
         (should (equal (message "foobar") (current-message)))))))
+
+(ert-deftest aph/silence-test-nil-message ()
+  "Test `aph/silence-advice' on nil and empty messages."
+  (aph/with-advice ((:genname #'message :around #'aph/silence-advice))
+    (let ((aph/silence-list    (list #'null))
+          (aph/silence-enabled t))
+      ;; nil and "" are not silenced
+      (message "foo")
+      (should (equal (message nil) nil))
+      (should (equal (message "")  ""))
+      (should (null (current-message)))
+      ;; If "" is not a direct argument, it is not treated specially
+      (let ((aph/silence-list '("^$")))
+        (message "bar")
+        (should (equal (message "%s" "") ""))
+        (should (equal (current-message) "bar"))))))
+
 
       
 (provide 'aph-advice-test)
