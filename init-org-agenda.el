@@ -119,6 +119,13 @@ tasks will be displayed."
                   "Random Tasks" "+computer/TODO" 10))))
 
 (add-to-list 'org-agenda-custom-commands
+             `("e" "Emacs Agenda"
+               (,(aph/org-agenda-block-scheduled-tasks
+                  "Scheduled Tasks" "+CATEGORY=\"Emacs\"/TODO|ACTIVE")
+                ,(aph/org-agenda-block-random-tasks
+                  "Random Tasks" "+CATEGORY=\"Emacs\"/TODO" 10))))
+
+(add-to-list 'org-agenda-custom-commands
              `("r" "Review Agenda"
                (,(aph/org-agenda-block-scheduled-tasks
                   "Scheduled for Review" "+review/TODO|ACTIVE"))))
