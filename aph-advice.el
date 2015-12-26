@@ -80,7 +80,7 @@ will be removed even in the event of an error or nonlocal exit."
 
                  ((eq option :once)
                   (push `(advice-remove ,symbol ,function) removal-list)
-                  (cons 'aph/advice-once (cdr adform)))
+                  (cons 'aph/advice-once adform))
 
                  ((eq option :genname)
                   (let* ((props  (aph/advice-genname props))

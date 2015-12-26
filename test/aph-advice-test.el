@@ -79,6 +79,20 @@
                (should (equal (aph/advice-test-foo) :foo)))
       (unintern 'aph/advice-test-foo))))
 
+(ert-deftest aph/advice-test-option-once ()
+  "Test :once keyword in `aph/with-advice'."
+  (defun aph/advice-test-foo () :foo)
+  (let ((bar (lambda () :bar)))
+    (unwind-protect
+        (progn (aph/with-advice
+                   ((:once #'aph/advice-test-foo :override bar))
+                 (should (advice-member-p bar #'aph/advice-test-foo))
+                 (should (equal (aph/advice-test-foo) :bar))
+                 (should (equal (aph/advice-test-foo) :foo)))
+               (should-not (advice-member-p bar #'aph/advice-test-foo))
+               (should (equal (aph/advice-test-foo) :foo)))
+      (unintern 'aph/advice-test-foo))))
+
 (ert-deftest aph/advice-test-option-genname ()
   "Test :genname keyword in `aph/with-advice'."
   (defun aph/advice-test-foo () :foo)
