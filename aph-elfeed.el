@@ -29,7 +29,7 @@ In this case, ignore the EXTERNAL parameter."
   ;; We want to copy all behavior of `elfeed-search-show-entry',
   ;; except possibly the call to `elfeed-show-entry', which we
   ;; override using advice: 
-  (when (elfeed-tagged-p 'link entry)
+  (when (and entry (elfeed-tagged-p 'link entry))
     (aph/advice-once
      #'elfeed-show-entry :override
      (lambda (entry) 
