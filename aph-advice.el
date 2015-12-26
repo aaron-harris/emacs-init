@@ -7,6 +7,8 @@
 ;;; This file contains functions interacting with the Emacs advice
 ;;; facility.
 
+(require 'cl-lib)           ; For `cl-destructuring-bind', `cl-gensym'
+
 
 ;;; Adform Manipulation
 ;;;====================
