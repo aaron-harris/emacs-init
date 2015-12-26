@@ -91,7 +91,7 @@ will be removed even in the event of an error or nonlocal exit."
                     `(advice-add ,symbol ,where ,function ',props)))))))
           adlist) 
        (unwind-protect (progn ,@body)
-         ,@(reverse removal-list)))))
+         ,@removal-list))))
 
 
 ;;; Utility Functions
