@@ -71,23 +71,5 @@
         (should (equal (message "%s" "") ""))
         (should (equal (current-message) "bar"))))))
 
-
-;;; Load Message Suppression
-;;;=========================
-(ert-deftest aph/silence-test-load-messages ()
-  "Test `aph/silence-load-messages'."
-  ;; Mock `load' for testing:
-  (cl-letf (((symbol-function 'load) 
-             (lambda (file &optional noerror nomessage nosuffix must-suffix)
-               nomessage)))
-    ;; Check that above replacement function is working.
-    (should-not (load "foo"))
-    (should (load "foo" nil t))
-    (aph/silence-load-messages
-      ;; Check that loading messages are suppressed.
-      (should (load "foo")))
-    ;; Check cleanup
-    (should-not (load "foo"))))
-
       
 (provide 'aph-advice-test)
