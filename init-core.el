@@ -345,7 +345,6 @@ The return value depends only on `aph/machine'."
          ("C-c SPC"                . helm-all-mark-rings)
          ([remap switch-to-buffer] . helm-mini)
          ([remap find-file]        . helm-find-files)
-         ("C-x M-p"                . helm-browse-project)
          ("M-s g"                  . helm-do-grep)
          ("C-h C-f"                . helm-colors)
          ([remap manual-entry]     . helm-man-woman)
@@ -362,6 +361,7 @@ The return value depends only on `aph/machine'."
               ("s-<apps>" . helm-select-action)))
 
 (use-package aph-helm
+  :bind ("C-x M-p" . aph/helm-browse-project)
   :bind (:map helm-map
               ("<RET>" . aph/helm-resume-update-or-exit-minibuffer)))
 
@@ -399,10 +399,11 @@ The return value depends only on `aph/machine'."
 
 (use-package helm-projectile
   :ensure t
-  :bind (("C-x p"   . helm-projectile)))
+  :defer t)
 
 (use-package aph-helm-projectile
-  :bind ("M-s M-g" . aph/helm-projectile-grep))
+  :bind (("C-x p"   . aph/helm-projectile)
+         ("M-s M-g" . aph/helm-projectile-grep)))
 
 (use-package help
   :bind (("C-h C-h" . nil)))
