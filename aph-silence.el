@@ -71,12 +71,25 @@ can be silenced; calls from C code may avoid being silenced."
   (let ((msg  (and (car args) (apply #'format args))))
     (cond
      ((null msg)                   (apply fun args))
-     ((equal msg "")               (apply fun args))
+     ((equal (car args) "")        (apply fun args))
      ((aph/silence-message-p msg)  msg)
      (:else                        (apply fun args)))))
 
 ;; Note that, with the default settings, this advice does nothing.
 (advice-add #'message :around #'aph/silence-advice)
+
+(defmacro aph/silence (msg-list &rest body)
+  "Execute BODY silencing messages matching MSG-LIST.
+
+Here MSG-LIST is a list of the same format as `aph/silence-list'.
+Its elements will be added to `aph/silence-list' for the duration
+of BODY, and `aph/silence-enabled' will be treated as non-nil."
+  (declare (debug  ((&rest &or stringp function-form) body))
+           (indent 1))
+  `(let ((aph/silence-list (append aph/silence-list
+                                   (list ,@msg-list)))
+         (aph/silence-enabled t))
+     ,@body))
 
 
 (provide 'aph-silence)
