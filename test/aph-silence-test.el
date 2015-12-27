@@ -83,5 +83,26 @@
     (setq aph/silence-enabled t)
     (should-not (equal (message "foo") (current-message)))
     (should (equal (message "bar") (current-message)))))
+
+
+;;; Load Message Suppression
+;;;=========================
+(ert-deftest aph/silence-test-loading ()
+  "Test `aph/silence-loading' macro."
+  ;; Mock `load' function for testing.
+  ;; This version returns t if a load message would be printed.
+  (cl-letf (((symbol-function 'load)
+             (lambda (file &optional noerror nomessage nosuffix must-suffix)
+               (unless (stringp file) (error "file not a string"))
+               (not nomessage))))
+    ;; Test mock function.
+    (should (load "file"))
+    (should-not (load "file" nil t))
+    (should-error (load 'file))
+    ;; Test macro.
+    (aph/silence-loading
+      (should-not (load "file")))
+    ;; Test cleanup.
+    (should (load "file"))))
       
 (provide 'aph-advice-test)

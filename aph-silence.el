@@ -83,12 +83,35 @@ can be silenced; calls from C code may avoid being silenced."
 
 Here MSG-LIST is a list of the same format as `aph/silence-list'.
 Its elements will be added to `aph/silence-list' for the duration
-of BODY, and `aph/silence-enabled' will be treated as non-nil."
+of BODY, and `aph/silence-enabled' will be treated as non-nil.
+
+This is accomplished by advising `message'.  As `message' is a
+primitive, not all messages can be silenced; calls from C code
+may avoid being silenced."
   (declare (debug  ((&rest &or stringp function-form) body))
            (indent 1))
   `(let ((aph/silence-list (append aph/silence-list
                                    (list ,@msg-list)))
          (aph/silence-enabled t))
+     ,@body))
+
+
+;;; Load Message Suppression
+;;;=========================
+(defmacro aph/silence-loading (&rest body)
+  "Execute BODY silencing `load' messages.
+
+Note that the mechanism used is unrelated to that used by
+`aph/silence'.  Instead, we advise `load'.  As `load' is also a
+primitive, the same caveat regarding C calls applies."
+  (declare (debug t)
+           (indent 0))
+  `(aph/with-advice
+       ((:genname
+         #'load
+         :filter-args
+         (-lambda ((file noerror nomessage nosuffix must-suffix))
+           (list file noerror t nosuffix must-suffix))))
      ,@body))
 
 
