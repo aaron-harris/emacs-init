@@ -317,7 +317,11 @@ The return value depends only on `aph/machine'."
   (aph/emacs-source-make-read-only))
 
 (use-package find-func
-  :bind ("C-x M-l" . find-library))
+  :bind (("C-h C-M-f" . find-function)
+         ("C-h C-M-k" . find-function-on-key)
+         ("C-h C-M-v" . find-variable)
+         ("C-h M-F"   . find-face-definition)
+         ("C-h C-M-l" . find-library)))
 
 (use-package font-lock
   :defer t
