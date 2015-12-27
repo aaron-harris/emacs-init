@@ -68,7 +68,7 @@ This function is intended as :around advice for `message'.  As
 seem to be any way to achieve this kind of message suppression
 otherwise.  Because `message' is a primitive, not all messages
 can be silenced; calls from C code may avoid being silenced." 
-  (let ((msg  (and (first args) (apply #'format args))))
+  (let ((msg  (and (car args) (apply #'format args))))
     (cond
      ((null msg)                   (apply fun args))
      ((equal msg "")               (apply fun args))
