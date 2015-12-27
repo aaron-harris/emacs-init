@@ -357,6 +357,10 @@ The return value depends only on `aph/machine'."
               ("C-z"      . nil)
               ("s-<apps>" . helm-select-action)))
 
+(use-package aph-helm
+  :bind (:map helm-map
+              ("<RET>" . aph/helm-resume-update-or-exit-minibuffer)))
+
 (use-package helm-config
   :after helm
   :diminish helm-mode
@@ -391,8 +395,10 @@ The return value depends only on `aph/machine'."
 
 (use-package helm-projectile
   :ensure t
-  :bind (("C-x p"   . helm-projectile)
-         ("M-s M-g" . helm-projectile-grep)))
+  :bind (("C-x p"   . helm-projectile)))
+
+(use-package aph-helm-projectile
+  :bind ("M-s M-g" . aph/helm-projectile-grep))
 
 (use-package help
   :bind (("C-h C-h" . nil)))
