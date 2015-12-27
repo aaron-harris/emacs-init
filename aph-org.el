@@ -214,6 +214,7 @@ the :config block of a `use-package' declaration), you should use
 loaded twice.  This does not apply if you are using
 `with-eval-after-load' instead of `use-package', as this macro
 evaluates its body only once."
+  (require 'aph-silence)
   (let ((sym  (or (cadr (assoc old aph/org-emphasis-alist-dict))
                   (error "Emphasis char %S not recognized" old)))
         (adv  (lambda (oldfn)
@@ -230,7 +231,8 @@ evaluates its body only once."
                        (signal (car err) (cdr err))))))))
         (name (intern (format "aph/org-emphasis-alist-update[%s]" new))))
     (setcar (assoc old org-emphasis-alist) new)
-    (org-reload)
+    (aph/silence ("^Loading org" "^Successfully reloaded Org$")
+      (aph/silence-loading (org-reload)))
     (advice-add 'org-element-text-markup-successor :around
                 adv `((name . ,name)))))
 
