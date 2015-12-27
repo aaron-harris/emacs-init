@@ -68,8 +68,20 @@
       ;; If "" is not a direct argument, it is not treated specially
       (let ((aph/silence-list '("^$")))
         (message "bar")
-        (should (equal (message "%s" "") ""))
+        (message "%s" "")
         (should (equal (current-message) "bar"))))))
 
+(ert-deftest aph/silence-test-wrapper ()
+  "Test `aph/silence' wrapper macro."
+  (let ((aph/silence-list    (list "foo"))
+        (aph/silence-enabled nil))
+    (should (equal (message "foo") (current-message)))
+    (aph/silence ("bar")
+      (message nil)
+      (should-not (equal (message "foo") (current-message)))
+      (should-not (equal (message "bar") (current-message))))
+    (setq aph/silence-enabled t)
+    (should-not (equal (message "foo") (current-message)))
+    (should (equal (message "bar") (current-message)))))
       
 (provide 'aph-advice-test)
