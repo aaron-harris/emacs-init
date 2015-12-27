@@ -523,10 +523,11 @@ The return value depends only on `aph/machine'."
   :ensure t
   :bind (("C-c l" . org-store-link))
   :config
+  (message "Loading org...")            ; Because this may take a while.
   (unbind-key "C-c [" org-mode-map)
   (unbind-key "C-c ]" org-mode-map)
   (bind-keys :map org-mode-map
-             ([remap org-goto] . helm-semantic-or-imenu)) 
+             ([remap org-goto] . helm-semantic-or-imenu))
   (use-package init-org))
 
 (use-package aph-org

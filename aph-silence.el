@@ -106,6 +106,8 @@ Note that the mechanism used is unrelated to that used by
 primitive, the same caveat regarding C calls applies."
   (declare (debug t)
            (indent 0))
+  (require 'aph-advice)                 ; For `aph/with-advice'
+  (require 'dash)                       ; For `-lambda'
   `(aph/with-advice
        ((:genname
          #'load
