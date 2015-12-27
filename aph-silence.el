@@ -77,7 +77,6 @@ can be silenced; calls from C code may avoid being silenced."
 
 ;; Note that, with the default settings, this advice does nothing.
 (advice-add #'message :around #'aph/silence-advice)
-(advice-remove #'message #'aph/silence-advice)
 
 
 (provide 'aph-silence)
