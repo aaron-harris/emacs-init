@@ -11,10 +11,16 @@
 
 ;;; Helm Commands
 ;;;==============
+(defun aph/helm-projectile (&optional arg)
+  "As `helm-projectile', but truncate lines."
+  (interactive "P")
+  (aph/helm-append-keyword :truncate-lines t)
+  (helm-projectile arg))
+
 (defun aph/helm-projectile-grep (&optional dir)
   "As `helm-projectile-grep', but suspend updates initially."
-  (interactive) 
-  (add-hook 'helm-after-initialize-hook #'aph/helm-suspend-initial-update)
+  (interactive)
+  (add-hook 'helm-after-initialize-hook #'aph/helm-suspend-update-initially)
   (helm-projectile-grep dir))
 
 

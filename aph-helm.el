@@ -10,16 +10,27 @@
 
 ;;; Subroutines
 ;;;============
-(defun aph/helm-suspend-initial-update ()
+(defun aph/helm-append-keyword (keyword value)
+  "Add KEYWORD and VALUE as args to next `helm' invocation." 
+  (aph/advice-once #'helm :filter-args
+                   (lambda (args) 
+                     (append args (list keyword value)))))
+
+(defun aph/helm-suspend-update-initially ()
   "Suspend updates; remove self from `helm-after-initialize-hook'.
 
 Add to `helm-after-initialize-hook' to cause the next `helm'
-command invoked to start with updates suspended."
+command invoked to start with updates suspended.
+
+If that `helm' command specified that updates should start
+suspended, this will instead reenable updates."
   (require 'aph-silence)
-  (let ((aph/silence-list    '("^Helm update suspended!$"))
-        (aph/silence-enabled t))
-    (helm-toggle-suspend-update))
-  (remove-hook 'helm-after-initialize-hook #'aph/helm-suspend-initial-update))
+  (unwind-protect
+      (let ((aph/silence-list    '("^Helm update suspended!$"))
+            (aph/silence-enabled t))
+        (helm-toggle-suspend-update))
+    (remove-hook 'helm-after-initialize-hook
+                 #'aph/helm-suspend-update-initially)))
 
 
 ;;; In-Session Commands
@@ -33,6 +44,15 @@ command invoked to start with updates suspended."
             (aph/silence-enabled t))
         (helm-toggle-suspend-update))
     (helm-maybe-exit-minibuffer)))
+
+
+;;; Session-Starting Commands
+;;;==========================
+(defun aph/helm-browse-project (arg)
+  "As `helm-browse-project', but truncate lines."
+  (interactive "P")
+  (aph/helm-append-keyword :truncate-lines t)
+  (helm-browse-project arg))
 
 
 (provide 'aph-helm)
