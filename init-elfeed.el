@@ -80,7 +80,7 @@
    ("http://programming-puzzler.blogspot.com/feeds/posts/default" programming)
    ("http://simblob.blogspot.com/feeds/posts/default" programming)
    ("http://swannodette.github.io/atom.xml" programming)
-   ("http://www.lispcast.com/feed" programming)
+   ("http://www.lispcast.com/feed" programming link)
    ("http://www.spacjer.com/feed.xml" programming)
    ("https://aphyr.com/posts.atom" programming)
    ("https://yoo2080.wordpress.com/feed/" programming)
