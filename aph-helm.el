@@ -11,7 +11,8 @@
 ;;; Subroutines
 ;;;============
 (defun aph/helm-append-keyword (keyword value)
-  "Add KEYWORD and VALUE as args to next `helm' invocation." 
+  "Add KEYWORD and VALUE as args to next `helm' invocation."
+  (require 'aph-advice)
   (aph/advice-once #'helm :filter-args
                    (lambda (args) 
                      (append args (list keyword value)))))
