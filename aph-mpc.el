@@ -10,8 +10,8 @@
 (require 'dash)                         ; For -->
 
 
-;;; Commands
-;;;=========
+;;; MS Access Interoperability
+;;;===========================
 (defun aph/yank-access-inline ()
   "Yank the most recent kill, cleaning up MS Access formatting.
 
@@ -72,5 +72,55 @@ cde will return 14."
   (cond
    ((listp ranges)    (cde--list ranges))
    ((stringp ranges)  (cde--string ranges))))
+
+
+;;; Calc Bar
+;;;=========
+(defvar aph/mpc-calc-bar-height 143
+  "The height in pixels for `aph/mpc-calc-bar'.")
+
+(defun aph/mpc-calc-bar--geometry (frame)
+  "Set FRAME's size and position for `aph/mpc-calc-bar'.
+The buffers displayed in FRAME are not affected."
+  (require 'aph-frame)
+  (w32-send-sys-command #xf120 frame)   ; De-maximize frame
+  (set-frame-parameter frame 'left `(+ ,aph/frame-offset)) 
+  (set-frame-width frame (aph/frame-fullscreen-width) (not :pretend) :pixels)
+  (set-frame-height frame aph/mpc-calc-bar-height (not :pretend) :pixels)
+  (set-frame-parameter frame 'top `(- ,aph/frame-w32-taskbar-height)))
+
+(defun aph/mpc-calc-bar--buffers (frame)
+  "Set the buffers displayed in FRAME for `aph/mpc-calc-bar'.
+The size and position of FRAME are not affected.
+
+Note that this function selects FRAME as a side effect."
+  (select-frame frame)
+  (calc)
+  (delete-other-windows)
+  (split-window-right)
+  (other-window 1)
+  (ielm)
+  (other-window -1))
+
+(defun aph/mpc-calc-bar (&optional new-frame)
+  "Set up the current frame as a \"calc bar\".
+This is a short, full-width frame with two windows.  The
+left-hand window should have a `calc' buffer and the right an
+`ielm' buffer.
+
+With a prefix argument, open the calc bar as a new frame.
+
+In either case, the return value is the calc bar frame."
+  (interactive "P")
+  (let* ((params '((name          . "Calc Bar")
+                   (maximized     . nil)
+                   (user-size     . t)
+                   (user-position . t)))
+         (frame  (if new-frame (make-frame params)
+                   (modify-frame-parameters nil params)
+                   (selected-frame))))
+    (aph/mpc-calc-bar--geometry frame)
+    (aph/mpc-calc-bar--buffers frame)
+    frame))
 
 (provide 'aph-mpc)

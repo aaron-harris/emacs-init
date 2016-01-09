@@ -125,7 +125,9 @@ The return value depends only on `aph/machine'."
 ;;;======================
 (use-package aph-mpc
   :if (eq aph/machine 'mpc)
-  :bind ("C-x C-y" . aph/yank-access-inline))
+  :bind ("C-x C-y" . aph/yank-access-inline)
+  :bind (:map aph/launch-map
+              ("C-=" . aph/mpc-calc-bar)))
 
 (use-package aph-number-lines
   :bind (:map aph/region-manip-map
@@ -330,6 +332,14 @@ The return value depends only on `aph/machine'."
 
 (use-package frame
   :bind (("C-z" . aph/launch-prefix)))
+
+(use-package aph-frame
+  :config
+  ;; Machine-specific geometry
+  (if (eq aph/machine 'mpc)
+      (setq aph/frame-margin-width 16)
+    (setq aph/frame-margin-width 4
+          aph/frame-offset       -8)))
 
 (use-package helm
   :ensure t
