@@ -19,6 +19,21 @@ standard `kill-buffer')."
       (call-interactively #'kill-buffer)
     (kill-buffer)))
 
+(defun aph/kill-buffer-nowarn (&optional buffer-or-name)
+  "Kill buffer specified by BUFFER-OR-NAME, without asking.
+
+As `kill-buffer', but do not ask for confirmation before killing
+a modified buffer.  Also bypass all the functions named in
+`kill-buffer-query-functions'.  (With the default value, this
+will bypass confirmation before killing buffers with running
+processes.)"
+  (setq buffer-or-name (or buffer-or-name (current-buffer)))
+  (when (buffer-live-p buffer-or-name)
+    (with-current-buffer buffer-or-name
+      (restore-buffer-modified-p nil)
+      (let ((kill-buffer-query-functions nil))
+        (kill-buffer buffer-or-name)))))
+
 
 ;;; Extensions to `save-buffers-kill-terminal'
 ;;;===========================================
