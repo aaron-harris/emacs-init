@@ -330,6 +330,9 @@ The return value depends only on `aph/machine'."
   :config
   (eval-after-load 'dash        #'dash-enable-font-lock))
 
+(use-package aph-forms
+  :after forms)
+
 (use-package frame
   :bind (("C-z" . aph/launch-prefix)))
 
