@@ -497,6 +497,12 @@ The return value depends only on `aph/machine'."
              ("C-c M-w" . aph/ielm-copy-last-output))
   (aph/mode-tag-add 'ielm-mode 'lisp))
 
+(use-package aph-iimage
+  :after iimage
+  :config
+  (bind-keys :map iimage-mode-map
+             ("C-c i" . aph/iimage-refresh)))
+
 (use-package info
   :defer t
   :config
