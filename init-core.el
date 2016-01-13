@@ -344,6 +344,16 @@ The return value depends only on `aph/machine'."
     (setq aph/frame-margin-width 4
           aph/frame-offset       -8)))
 
+(use-package haskell-mode
+  :ensure t
+  :config
+  (bind-keys :map haskell-mode-map
+             ("C-c C-c" . haskell-compile))
+  ;; Stack setup
+  (setq haskell-compile-cabal-build-command "stack build")
+  ;; REPL setup
+  (setq haskell-process-show-debug-tips nil))
+
 (use-package helm
   :ensure t
   :demand t
