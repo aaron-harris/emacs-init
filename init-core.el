@@ -439,6 +439,9 @@ The return value depends only on `aph/machine'."
 (use-package help
   :bind (("C-h C-h" . nil)))
 
+(use-package aph-help
+  :bind (("C-h h" . aph/call-logging-hooks)))
+
 (use-package help+
   :ensure t
   :after help)
