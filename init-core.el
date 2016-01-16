@@ -348,11 +348,19 @@ The return value depends only on `aph/machine'."
   :ensure t
   :config
   (bind-keys :map haskell-mode-map
-             ("C-c C-c" . haskell-compile))
+             ("C-c C-c" . haskell-compile)
+             ("C-c C-z" . haskell-interactive-switch))
   ;; Stack setup
   (setq haskell-compile-cabal-build-command "stack build")
+  (add-to-list 'process-coding-system-alist '("stack" . utf-8-dos))
   ;; REPL setup
-  (setq haskell-process-show-debug-tips nil))
+  (setq haskell-process-show-debug-tips nil
+        haskell-process-log t))
+
+(use-package aph-haskell
+  :after haskell-mode
+  :bind (:map haskell-mode-map
+              ("C-c C-l" . aph/haskell-process-load-file-cygwin)))
 
 (use-package helm
   :ensure t
