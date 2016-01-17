@@ -792,6 +792,7 @@ The return value depends only on `aph/machine'."
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'lisp-mode)
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'clojure-mode)
+  (setq sp-cancel-autoskip-on-backward-movement nil)
   ;; Disable '' pair in minibuffer for `eval-expression'
   (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
   ;; Use `` instead of `' in Clojure mode
