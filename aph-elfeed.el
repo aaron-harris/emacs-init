@@ -79,6 +79,7 @@ Return the filter applied.  When called interactive or the
 optional VERBOSE parameter is non-nil, also print a message
 informing the user of the newly applied filter."
   (interactive "p")
+  (require 'aph-dash)                   ; For `aph/successor-in-list'
   (let ((new-filter
          (aph/successor-in-list aph/elfeed-favorite-filters
                                 elfeed-search-filter :cyclical)))
