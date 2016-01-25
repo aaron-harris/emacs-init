@@ -697,6 +697,15 @@ The return value depends only on `aph/machine'."
   (unless (server-running-p) (server-start))
   (setq server-window 'pop-to-buffer))
 
+(use-package shm
+  :ensure t
+  :init
+  (add-hook 'haskell-mode-hook #'structured-haskell-mode)
+  :config
+  (add-hook 'structured-haskell-mode-hook
+            #'aph/haskell-indentation-mode:off)
+  (add-hook 'structured-haskell-mode-hook #'turn-off-smartparens-mode))
+
 (use-package shr
   :defer t
   :config
@@ -818,7 +827,7 @@ The return value depends only on `aph/machine'."
 (use-package sort
   :bind (:map aph/region-manip-map
               ("d" . delete-duplicate-lines)
-              ("s" . sort-lines))) 
+              ("s" . sort-lines)))
 
 (use-package tex-site
   :ensure auctex

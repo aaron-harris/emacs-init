@@ -7,6 +7,18 @@
 ;; Functions extending Haskell mode and related packages.
 
 
+;;; Indentation
+;;;============
+;; Functions in this section deal with indentation modes within
+;; Haskell mode.
+(defun aph/haskell-indentation-mode:off ()
+  "Turn off `haskell-indentation-mode'.
+This is equivalent to calling `haskell-indentation-mode' with an
+argument of -1 and is intended for use in hooks (where using a
+`lambda' can be problematic)."
+  (haskell-indentation-mode -1))
+
+
 ;;; Compatability
 ;;;==============
 ;; Functions in this section implement compatability for my setup.
