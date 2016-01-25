@@ -7,6 +7,17 @@
 ;; Extensions for `subr' module.
 
 
+;;; String Conversion Functions
+;;;============================
+(defun aph/string-to-integer (string)
+  "Composition of `string-to-number' and `truncate'."
+  (truncate (string-to-number string)))
+
+(defun aph/string-to-natural (string)
+  "Composition of `string-to-number', `abs', `truncate'."
+  (truncate (abs (string-to-number string))))
+
+
 ;;; Buffer Position Functions
 ;;;==========================
 (defun aph/get-bol (&optional pos)
