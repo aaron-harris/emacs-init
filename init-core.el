@@ -704,7 +704,8 @@ The return value depends only on `aph/machine'."
   :config
   (add-hook 'structured-haskell-mode-hook
             #'aph/haskell-indentation-mode:off)
-  (add-hook 'structured-haskell-mode-hook #'turn-off-smartparens-mode))
+  (add-hook 'structured-haskell-mode-hook #'turn-off-smartparens-mode)
+  (add-hook 'structured-haskell-mode-hook #'electric-indent-local-mode))
 
 (use-package shr
   :defer t
