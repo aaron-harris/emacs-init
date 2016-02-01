@@ -52,8 +52,17 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-autoloads)
 
-;; The package declaration for `hydra' appears early, so we can use
-;; hydras freely in subsequent declarations.
+
+;;; Metaconfiguration Packages
+;;;===========================
+;; Packages in this section are loaded early so we can use them in
+;; subsequent package declarations.
+
+(use-package aph-keys
+  :config
+  (aph/keys-liberate-escape)
+  (add-hook 'after-make-frame-functions #'aph/keys-liberate-escape))
+
 (use-package hydra
   :ensure t
   :defer t)
