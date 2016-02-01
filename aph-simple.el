@@ -8,7 +8,7 @@
 (require 'simple)
 
 
-;;; Editing Commands
+;;; Newline Commands
 ;;;=================
 (defun aph/open-line (n)
   "As `open-line', with support for negative argument.
@@ -51,5 +51,27 @@ This is intended as :around advice for
   (if aph/eval-expression-clean-output
       ""
     (funcall orig-fun value)))
+
+
+;;; Motion Commands
+;;;================
+(defun aph/move-beginning-of-line (&optional arg)
+  "Combine `move-beginning-of-line' and `back-to-indentation'.
+
+Behave as `move-beginning-of-line', unless point is already at
+beginning of line, in which case call `back-to-indentation'.
+
+If ARG is supplied, then it is interpreted as in
+`move-beginning-of-line' and `back-to-indentation' is not
+called.
+
+Return the new value of point."
+  (interactive "^P")
+  (cond
+   (arg     (move-beginning-of-line (prefix-numeric-value arg)))
+   ((bolp)  (back-to-indentation))
+   (:else   (move-beginning-of-line 1)))
+  (point))
+
 
 (provide 'aph-simple)
