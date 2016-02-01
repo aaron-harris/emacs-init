@@ -8,9 +8,24 @@
 ;; automatically loaded on initialization.
 
 
-;;; Freeing `C-[' and `C-i'
-;;;========================
-(define-key input-decode-map [?\C-\[] (kbd "<C-[>"))
+;;; Key Binding Overhaul
+;;;=====================
+(defvar aph-keys-mode-map
+  (let ((m (make-sparse-keymap)))
+    (define-key m (kbd "<tab>") #'aph/foo)
+    (define-key m (kbd "C-i") #'aph/bar)
+    m)
+  "Keymap for `aph-keys-mode'.")
+
+(setq aph-keys-mode-map
+  (let ((m (make-sparse-keymap)))
+    (define-key m (kbd "<C-[>") #'aph/bar) 
+    m))
+
+(define-minor-mode aph-keys-mode
+  "Mode for the personal keybindings of Aaron Harris."
+  :global  t
+  :lighter " #")
 
 
 (provide 'init-draft)
