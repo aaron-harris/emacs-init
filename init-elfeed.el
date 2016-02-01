@@ -72,6 +72,7 @@
    ("http://feeds.feedburner.com/Rik0TechTemple" programming)
    ("http://feeds.feedburner.com/StuartSierra" programming)
    ("http://feeds.feedburner.com/davesquared" programming)
+   ("http://kitchingroup.cheme.cmu.edu/blog/category/emacs/feed/" programming)
    ("http://kotka.de/blog/index.rss" programming)
    ("http://kranglefant.tumblr.com/rss" programming)
    ("http://mbork.pl/?action=rss;days=30;all=0;showedit=0;full=1" programming)
