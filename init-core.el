@@ -60,8 +60,11 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-keys
   :config
+  ;; Key liberation
   (aph/keys-liberate-escape)
-  (add-hook 'after-make-frame-functions #'aph/keys-liberate-escape))
+  (add-hook 'after-make-frame-functions #'aph/keys-liberate-escape)
+  ;; Personal keybinding mode
+  (aph-keys-mode))
 
 (use-package hydra
   :ensure t
