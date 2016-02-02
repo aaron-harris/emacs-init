@@ -8,6 +8,18 @@
 ;; some other utilities related to keybindings.
 
 
+;;; Personal Keybinding Mode
+;;;=========================
+(defvar aph-keys-mode-map 
+  (make-sparse-keymap)
+  "Keymap for `aph-keys-mode'.")
+
+(define-minor-mode aph-keys-mode
+  "Mode for the personal keybindings of Aaron Harris."
+  :global  t
+  :lighter " #")
+
+
 ;;; Key Translation
 ;;;================
 ;; Functions in this section deal with translation keymaps.
