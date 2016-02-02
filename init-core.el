@@ -753,6 +753,8 @@ The return value depends only on `aph/machine'."
 (use-package aph-simple
   :after simple
   :bind ([remap open-line] . aph/open-line) ; C-o
+  :bind (:map aph-keys-mode-map
+              ("C-a" . aph/move-beginning-of-line))
   :config
   (advice-add #'eval-expression-print-format
               :around #'aph/eval-expression-mute-print-format)
