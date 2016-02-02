@@ -59,6 +59,8 @@ The return value depends only on `aph/machine'."
 ;; subsequent package declarations.
 
 (use-package aph-keys
+  :bind ("C-x C-#" . aph-keys-mode)
+  :demand t
   :config
   ;; Key liberation
   (aph/keys-liberate-escape)
