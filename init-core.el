@@ -95,7 +95,7 @@ The return value depends only on `aph/machine'."
 (defvar aph/region-manip-map (make-sparse-keymap)
   "Keymap for commands manipulating the region.")
 (defalias 'aph/region-manip-prefix aph/region-manip-map)
-(bind-key "s-<apps>" #'aph/region-manip-prefix)
+(bind-key "s-<apps>" #'aph/region-manip-prefix aph-keys-mode-map)
 
 
 ;;; Configuration: Source-Level
@@ -125,11 +125,11 @@ The return value depends only on `aph/machine'."
 (put 'upcase-region   'disabled nil)
 
 ;; Keybindings for source-defined commands
-(bind-keys
- ("<up>"   . scroll-down-line)
- ("<down>" . scroll-up-line)
- ("s-]"    . other-window)
- ("C-S-t"  . transpose-paragraphs))
+(bind-keys :map aph-keys-mode-map
+           ("<up>"   . scroll-down-line)
+           ("<down>" . scroll-up-line)
+           ("s-]"    . other-window)
+           ("C-S-t"  . transpose-paragraphs))
 (bind-keys :map aph/region-manip-map
            ("k" .   flush-lines)
            ("M-k" . keep-lines))
@@ -139,7 +139,8 @@ The return value depends only on `aph/machine'."
 ;;;======================
 (use-package aph-mpc
   :if (eq aph/machine 'mpc)
-  :bind ("C-x C-y" . aph/yank-access-inline)
+  :bind (:map aph-keys-mode-map
+              ("C-x C-y" . aph/yank-access-inline))
   :bind (:map aph/launch-map
               ("C-=" . aph/mpc-calc-bar)))
 
@@ -151,7 +152,8 @@ The return value depends only on `aph/machine'."
          ("M-n M-o" . aph/number-lines-open-multiple)))
 
 (use-package aph-theme
-  :bind ("s-n" . aph/theme-cycle)
+  :bind (:map aph-keys-mode-map
+              ("s-n" . aph/theme-cycle))
   :demand t
   :config
   ;; Treat 'aph theme as safe:
@@ -173,10 +175,11 @@ The return value depends only on `aph/machine'."
 
 (use-package avy
   :ensure t
-  :bind (("M-g M-q" . avy-goto-char-2)
-         ("M-g q"   . avy-goto-char)
-         ("M-g M-g" . avy-goto-line)
-         ("M-g M-w" . avy-goto-word-or-subword-1))
+  :bind (:map aph-keys-mode-map
+              ("M-g M-q" . avy-goto-char-2)
+              ("M-g q"   . avy-goto-char)
+              ("M-g M-g" . avy-goto-line)
+              ("M-g M-w" . avy-goto-word-or-subword-1))
   :bind (:map isearch-mode-map
               ("M-g" . avy-isearch))
   :config
@@ -187,15 +190,17 @@ The return value depends only on `aph/machine'."
 
 (use-package bookmark
   ;; Move from "C-x r" prefix to "C-c b"
-  :bind (("C-x r b" . nil)
-         ("C-x r l" . nil)
-         ("C-x r m" . nil)
-         ("C-c b b" . bookmark-jump)
-         ("C-c b l" . bookmark-bmenu-list)
-         ("C-c b m" . bookmark-set)))
+  :bind (:map aph-keys-mode-map
+              ("C-x r b" . undefined)
+              ("C-x r l" . undefined)
+              ("C-x r m" . undefined)
+              ("C-c b b" . bookmark-jump)
+              ("C-c b l" . bookmark-bmenu-list)
+              ("C-c b m" . bookmark-set)))
 
 (use-package browse-url
-  :bind ("C-c C-o" . browse-url))
+  :bind (:map aph/launch-map
+              ("<return>" . browse-url)))
 
 (use-package calc
   :bind (:map aph/launch-map
@@ -323,8 +328,9 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-files
   :after files
-  :bind (("C-x k"   . aph/kill-active-buffer)
-         ("C-x C-c" . aph/delete-frame-or-exit))
+  :bind (:map aph-keys-mode-map
+              ("C-x k"   . aph/kill-active-buffer)
+              ("C-x C-c" . aph/delete-frame-or-exit))
   :config
   ;; Make Emacs source read-only
   (when (eq aph/machine 'mpc)
@@ -333,11 +339,12 @@ The return value depends only on `aph/machine'."
   (aph/emacs-source-make-read-only))
 
 (use-package find-func
-  :bind (("C-h C-M-f" . find-function)
-         ("C-h C-M-k" . find-function-on-key)
-         ("C-h C-M-v" . find-variable)
-         ("C-h M-F"   . find-face-definition)
-         ("C-h C-M-l" . find-library)))
+  :bind (:map aph-keys-mode-map
+              ("C-h C-M-f" . find-function)
+              ("C-h C-M-k" . find-function-on-key)
+              ("C-h C-M-v" . find-variable)
+              ("C-h M-F"   . find-face-definition)
+              ("C-h C-M-l" . find-library)))
 
 (use-package font-lock
   :defer t
@@ -348,7 +355,8 @@ The return value depends only on `aph/machine'."
   :after forms)
 
 (use-package frame
-  :bind (("C-z" . aph/launch-prefix)))
+  :bind (:map aph-keys-mode-map
+              ("C-z" . aph/launch-prefix)))
 
 (use-package aph-frame
   :config
@@ -379,22 +387,21 @@ The return value depends only on `aph/machine'."
 (use-package helm
   :ensure t
   :demand t
-  :bind (("M-x"                    . helm-M-x)
-         ("C-M-:"                  . helm-eval-expression-with-eldoc)
-         ("M-y"                    . helm-show-kill-ring)
-         ("C-x r i"                . helm-register)
-         ("C-c b b"                . helm-filtered-bookmarks)
-         ("C-c ,"                  . helm-semantic-or-imenu)
-         ("M-s o"                  . helm-occur)
-         ("M-s r"                  . helm-regexp)
-         ("C-c SPC"                . helm-all-mark-rings)
-         ([remap switch-to-buffer] . helm-mini)
-         ([remap find-file]        . helm-find-files)
-         ("M-s g"                  . helm-do-grep)
-         ("C-h C-f"                . helm-colors)
-         ([remap manual-entry]     . helm-man-woman)
-         ("C-h C-i"                . helm-info-at-point)
-         ([remap apropos-command]  . helm-apropos))
+  :bind (:map aph-keys-mode-map
+              ("M-x"                    . helm-M-x) 
+              ("M-y"                    . helm-show-kill-ring)
+              ("M-m"                    . helm-register)
+              ("C-c b b"                . helm-filtered-bookmarks)
+              ("M-."                    . helm-semantic-or-imenu)
+              ("M-s o"                  . helm-occur) 
+              ("C-c SPC"                . helm-all-mark-rings)
+              ([remap switch-to-buffer] . helm-mini)
+              ([remap find-file]        . helm-find-files)
+              ("M-s g"                  . helm-do-grep)
+              ("C-h C-f"                . helm-colors)
+              ([remap manual-entry]     . helm-man-woman)
+              ("C-h C-i"                . helm-info-at-point)
+              ([remap apropos-command]  . helm-apropos))
   :bind (:map aph/launch-map
               ("C-s" . helm-google-suggest)
               ("M-c" . helm-calcul-expression)
@@ -406,15 +413,17 @@ The return value depends only on `aph/machine'."
               ("s-<apps>" . helm-select-action)))
 
 (use-package aph-helm
-  :bind ("C-x M-p" . aph/helm-browse-project)
+  :bind (:map aph-keys-mode-map
+              ("C-x M-p" . aph/helm-browse-project))
   :bind (:map helm-map
-              ("<RET>" . aph/helm-resume-update-or-exit-minibuffer)))
+              ("<return>" . aph/helm-resume-update-or-exit-minibuffer)))
 
 (use-package helm-config
   :after helm
   :diminish helm-mode
-  :bind (("C-x c" . nil)
-         ("C-x x" . helm-command-prefix))
+  :bind (:map aph-keys-mode-map
+              ("C-x c" . undefined)
+              ("C-x x" . helm-command-prefix))
   :bind (:map helm-command-map
               ("C-u" . helm-resume))
   :config
@@ -447,14 +456,17 @@ The return value depends only on `aph/machine'."
   :defer t)
 
 (use-package aph-helm-projectile
-  :bind (("C-x p"   . aph/helm-projectile)
+  :bind (:map aph-keys-mode-map
+         ("C-x p"   . aph/helm-projectile)
          ("M-s M-g" . aph/helm-projectile-grep)))
 
 (use-package help
-  :bind (("C-h C-h" . nil)))
+  :bind (:map aph-keys-mode-map
+              ("C-h C-h" . undefined)))
 
 (use-package aph-help
-  :bind (("C-h h" . aph/call-logging-hooks)))
+  :bind (:map aph-keys-mode-map
+              ("C-h h" . aph/call-logging-hooks)))
 
 (use-package help+
   :ensure t
@@ -466,19 +478,20 @@ The return value depends only on `aph/machine'."
 
 (use-package help-fns+
   :after help-fns
-  :bind ("C-h M-b" . describe-buffer)
+  :bind (:map aph-keys-mode-map
+              ("C-h c"   . describe-key-briefly)
+              ("C-h M-b" . describe-buffer))
   :bind (:map aph/buffer-info-map       ; M-=
               ("b" . describe-buffer))
   :config
-  ;; Undo binding changes at C-h c.
-  (bind-key "C-h c" 'describe-key-briefly)
   ;; Add Org manual to list of manuals to include links for in help.
   ;; This is a stopgap measure.  In the long run, keying in to
   ;; `Info-file-list-for-emacs' is probably the way to go.
   (setq help-cross-reference-manuals '(("emacs" "elisp" "org"))))
 
 (use-package hippie-exp
-  :bind ([remap dabbrev-expand] . hippie-expand) ; M-/
+  :bind (:map aph-keys-mode-map
+              ([remap dabbrev-expand] . hippie-expand))
   :init
   (defun aph/hippie-expand-config-lisp ()
     "Configure `hippie-expand-try-functions-list' for Lisps."
@@ -497,10 +510,12 @@ The return value depends only on `aph/machine'."
   (add-hook 'lisp-tag-hook #'aph/hippie-expand-config-lisp))
 
 (use-package hl-line
-  :bind ("C-c h l" . hl-line-mode))
+  :bind (:map aph-keys-mode-map
+              ("C-c h l" . hl-line-mode)))
 
 (use-package ibuffer
-  :bind ([remap list-buffers] . ibuffer))
+  :bind (:map aph-keys-mode-map
+              ([remap list-buffers] . ibuffer)))
 
 (use-package ido
   :defer t
@@ -549,11 +564,13 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-info
   :after info
-  :bind ("C-h i" . aph/info-mode-or-clone-buffer)
+  :bind (:map aph-keys-mode-map
+              ("C-h i" . aph/info-mode-or-clone-buffer))
   :bind (:map Info-mode-map ("0" . aph/Info-final-menu-item)))
 
 (use-package aph-keypad
-  :bind ("C-<kp-enter>" . aph/keypad-enter-toggle-newline))
+  :bind (:map aph-keys-mode-map 
+              ("C-<kp-enter>" . aph/keypad-enter-toggle-newline)))
 
 (use-package lisp-mode
   :defer t
@@ -580,9 +597,10 @@ The return value depends only on `aph/machine'."
 
 (use-package org
   :ensure t
-  :bind (("C-c l" . org-store-link))
+  :bind (:map aph-keys-mode-map
+              ("C-c l" . org-store-link))
   :config
-  (message "Loading org...")            ; Because this may take a while.
+  (message "Loading org...")          ; Because this may take a while.
   (unbind-key "C-c [" org-mode-map)
   (unbind-key "C-c ]" org-mode-map)
   (bind-keys :map org-mode-map
@@ -591,7 +609,8 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-org
   :after org
-  :bind (("C-c w" . aph/org-goto-last-refile))
+  :bind (:map aph-keys-mode-map
+              ("C-c w" . aph/org-goto-last-refile))
   :config 
   (bind-keys :map org-mode-map 
              ("C-c s SPC"   . aph/org-spin-basic)
@@ -609,8 +628,9 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-org-agenda
   :after org-agenda
-  :bind (("C-c a" . aph/org-agenda)
-         ("<f1>" . aph/org-agenda-display-smart-agenda)))
+  :bind (:map aph-keys-mode-map
+              ("C-c a" . aph/org-agenda)
+              ("<f1>" . aph/org-agenda-display-smart-agenda)))
 
 (use-package org-capture
   :defer t
@@ -619,17 +639,19 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-org-capture
   :after org-capture
-  :bind ("C-c c" . aph/org-capture-in-popout-frame)
+  :bind (:map aph-keys-mode-map
+              ("C-c c" . aph/org-capture-in-popout-frame))
   :config
   ;; Support for `aph/org-capture-in-popout-frame':
   (add-hook 'org-capture-after-finalize-hook
             #'aph/org-capture-delete-capture-frame))
 
 (use-package org-clock
-  :bind (("C-c t j" . org-clock-goto)
-         ("C-c t o" . org-clock-out)
-         ("C-c t x" . org-clock-cancel)
-         ("C-c t r" . org-clock-in-last))
+  :bind (:map aph-keys-mode-map
+              ("C-c t j" . org-clock-goto)
+              ("C-c t o" . org-clock-out)
+              ("C-c t x" . org-clock-cancel)
+              ("C-c t r" . org-clock-in-last))
   :config
   (bind-keys :map org-mode-map 
              ("C-c t i" . org-clock-in)))
@@ -653,7 +675,8 @@ The return value depends only on `aph/machine'."
   (show-paren-mode))
 
 (use-package pp
-  :bind ("C-:" . pp-eval-expression))
+  :bind (:map aph-keys-mode-map
+              ("C-:" . pp-eval-expression)))
 
 (use-package projectile
   :after helm
@@ -673,32 +696,35 @@ The return value depends only on `aph/machine'."
 
 (use-package rect
   ;; Move from "C-x r" prefix to "C-c r"
-  :bind (("C-x r N" . nil)
-         ("C-x r c" . nil)
-         ("C-x r d" . nil)
-         ("C-x r k" . nil)
-         ("C-x r o" . nil)
-         ("C-x r r" . nil)
-         ("C-x r t" . nil)
-         ("C-x r y" . nil)
-         ("C-c r n" . rectangle-number-lines)
-         ("C-c r c" . clear-rectangle)
-         ("C-c r d" . delete-rectangle)
-         ("C-c r k" . kill-rectangle)
-         ("C-c r o" . open-rectangle)
-         ("C-c r r" . copy-rectangle-to-register)
-         ("C-c r t" . string-rectangle)
-         ("C-c r y" . yank-rectangle)))
+  :bind (:map aph-keys-mode-map
+              ("C-x r N" . undefined)
+              ("C-x r c" . undefined)
+              ("C-x r d" . undefined)
+              ("C-x r k" . undefined)
+              ("C-x r o" . undefined)
+              ("C-x r r" . undefined)
+              ("C-x r t" . undefined)
+              ("C-x r y" . undefined)
+              ("C-c r n" . rectangle-number-lines)
+              ("C-c r c" . clear-rectangle)
+              ("C-c r d" . delete-rectangle)
+              ("C-c r k" . kill-rectangle)
+              ("C-c r o" . open-rectangle)
+              ("C-c r r" . copy-rectangle-to-register)
+              ("C-c r t" . string-rectangle)
+              ("C-c r y" . yank-rectangle)))
 
 (use-package aph-rect
   :after rect
-  :bind ("C-c r C-y" . aph/yank-rectangle-from-kill-ring)
+  :bind (:map aph-keys-mode-map
+              ("C-M-y" . aph/yank-rectangle-from-kill-ring))
   :config
   (when (>= emacs-major-version 25)
     (advice-add #'rectangle--*-char :around #'aph/rectangle-repetition-fix)))
 
 (use-package register
-  :bind (("C-x r a" . append-to-register)))
+  :bind (:map aph-keys-mode-map
+              ("C-x r a" . append-to-register)))
 
 (use-package saveplace
   :config
@@ -729,11 +755,12 @@ The return value depends only on `aph/machine'."
 
 (use-package simple
   :demand t
-  :bind (("C-S-o"   . join-line)
-         ("C-M-/"   . undo-only)
-         ("C-S-k"   . kill-whole-line)   ; Was at C-S-<backspace>
-         ("C-x M-k" . append-next-kill)  ; Was at C-M-w
-         ("M-="     . aph/buffer-info-prefix))
+  :bind (:map aph-keys-mode-map
+              ("M-o"     . join-line)
+              ("C-M-/"   . undo-only)
+              ("C-S-k"   . kill-whole-line)
+              ("C-x M-k" . append-next-kill)
+              ("M-="     . aph/buffer-info-prefix))
   :bind (:map aph/buffer-info-map
               ("w" . count-words)
               ("l" . what-line))
@@ -754,9 +781,9 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-simple
   :after simple
-  :bind ([remap open-line] . aph/open-line) ; C-o
   :bind (:map aph-keys-mode-map
-              ("C-a" . aph/move-beginning-of-line))
+              ("C-a"             . aph/move-beginning-of-line)
+              ([remap open-line] . aph/open-line))
   :config
   (advice-add #'eval-expression-print-format
               :around #'aph/eval-expression-mute-print-format)
@@ -908,12 +935,13 @@ The return value depends only on `aph/machine'."
                              aph/visible-mark-other)))
 
 (use-package aph-window
-  :bind (("s-["    . aph/other-window-backward)
-         ("s-{"    . aph/pull-buffer-backward)
-         ("s-}"    . aph/slide-buffer-forward)
-         ("s-\\"   . aph/swap-buffer-forward-and-ride)
-         ("s-|"    . aph/swap-buffer-forward)
-         ("C-c q"  . aph/quit-help-windows)))
+  :bind (:map aph-keys-mode-map
+              ("s-["    . aph/other-window-backward)
+              ("s-{"    . aph/pull-buffer-backward)
+              ("s-}"    . aph/slide-buffer-forward)
+              ("s-\\"   . aph/swap-buffer-forward-and-ride)
+              ("s-|"    . aph/swap-buffer-forward)
+              ("C-c q"  . aph/quit-help-windows)))
 
 (use-package winner
   :config
