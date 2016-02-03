@@ -70,7 +70,9 @@ The return value depends only on `aph/machine'."
 
 (use-package hydra
   :ensure t
-  :defer t)
+  :defer t
+  :config
+  (setq lv-use-separator t))
 
 
 ;;; Mode Tags
@@ -783,7 +785,10 @@ The return value depends only on `aph/machine'."
   :after simple
   :bind (:map aph-keys-mode-map
               ("C-a"             . aph/move-beginning-of-line)
-              ([remap open-line] . aph/open-line))
+              ([remap open-line] . aph/open-line)
+              ("M-c"             . aph/hydra-caps/body)
+              ("M-l"             . undefined)
+              ("M-u"             . undefined))
   :config
   (advice-add #'eval-expression-print-format
               :around #'aph/eval-expression-mute-print-format)
