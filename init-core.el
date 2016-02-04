@@ -142,7 +142,8 @@ The return value depends only on `aph/machine'."
 (use-package aph-mpc
   :if (eq aph/machine 'mpc)
   :bind (:map aph-keys-mode-map
-              ("C-x C-y" . aph/yank-access-inline))
+              ("C-x C-y"   . aph/mpc-yank-access-inline)
+              ("C-x C-S-y" . aph/mpc-yank-access-overfull))
   :bind (:map aph/launch-map
               ("C-=" . aph/mpc-calc-bar)))
 

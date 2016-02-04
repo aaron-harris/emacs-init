@@ -10,6 +10,45 @@
 (require 'aph-subr)                   ; For `aph/save-frame-excursion'
 
 
+;;; MS Access Interoperability Function Tests
+;;;==========================================
+(defun aph/mpc-test-yank-access (fun initial expected &rest args)
+  "Subroutine testing `aph/mpc-test-yank-access-*' functions.
+
+Call `aph/yank-command-on-string' on string INITIAL, command FUN,
+and ARGS.  Return t if all of these requirements are met:
+- The return value of the call is EXPECTED.
+- After the call, the top of the kill ring is EXPECTED.
+- The second entry of the kill ring is INITIAL.
+If any requirement is not met, signal an error with `should'.
+
+Do not change the kill ring or current buffer."
+  (require 'aph-dash)                   ; For `aph/equal'
+  (let ((kill-ring nil))
+    (should (aph/equal expected
+                       (apply #'aph/yank-command-on-string initial fun args)
+                       (pop kill-ring)))
+    (should (equal initial (pop kill-ring)))))
+
+(ert-deftest aph/mpc-test-yank-access-inline ()
+  "Test `aph/mpc-yank-access-inline'."
+  (require 'aph-dash)                   ; For `aph/equal'
+  (aph/mpc-test-yank-access #'aph/mpc-yank-access-inline
+                            "foo bar\nbaz"
+                            "bar baz"))
+
+(ert-deftest aph/mpc-test-yank-access-overfull ()
+  "Test `aph/mpc-yank-access-overfull'."
+  (require 'aph-dash)                  ; For `aph/equal'
+  (aph/mpc-test-yank-access #'aph/mpc-yank-access-overfull
+                            "57\t35 foo 75 -3"
+                            "0 0 25 0")
+  (aph/mpc-test-yank-access #'aph/mpc-yank-access-overfull
+                            "57\t35 foo 75 -3"
+                            "25 0 65 0"
+                            10))
+
+
 ;;; Calc Bar Tests
 ;;;===============
 (defun aph/mpc-test-calc-bar-frame (frame)
