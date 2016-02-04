@@ -8,6 +8,22 @@
 (require 'aph-simple)
 
 
+;;; Yank Commands
+;;;==============
+(ert-deftest aph/test-yank-command-on-string ()
+  "Test `aph/yank-command-on-string'." 
+  (let (kill-ring)
+    (with-temp-buffer
+      (should (equal "foo"
+                     (aph/yank-command-on-string "foo" #'yank)))
+      (should (equal "" (buffer-string)))
+      (should (equal "foo"
+                     (aph/yank-command-on-string "bar" #'yank 2)))
+      (should (equal "" (buffer-string)))
+      (should (equal "baz"
+                     (aph/yank-command-on-string "bar" #'insert "baz"))))))
+
+
 ;;; Motion Commands
 ;;;================
 (ert-deftest aph/simple-test-move-bol ()
