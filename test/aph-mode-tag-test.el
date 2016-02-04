@@ -85,13 +85,7 @@ anything (i.e., its body is empty).
 
 (ert-deftest aph/mode-tag-test-with-mode-tag--body ()
   "Test that body of `aph/with-test-mode-tag' is executed."
-  (let (foo)
-    ;; Return value
-    (should (= 7 (aph/with-test-mode-tag (tag) "doc"
-                   (setq foo 'bar)
-                   (+ 1 6))))
-    ;; Side effect
-    (should (eq foo 'bar))))
+  (aph/ert-macro-executes-body aph/with-test-mode-tag (tag)))
 
 (ert-deftest aph/mode-tag-test-with-mode-tag--bindings ()
   "Test that `aph/with-test-mode-tag' sets bindings correctly."
@@ -129,14 +123,8 @@ anything (i.e., its body is empty).
 ;; correctly.
 
 (ert-deftest aph/mode-tag-test-with-mode--body ()
-  "Test that body of `aph/with-test-mode' is executed." 
-  (let (foo)
-    ;; Return value
-    (should (= 7 (aph/with-test-mode (mode) 'text-mode
-                   (setq foo 'bar)
-                   (+ 1 6))))
-    ;; Side effects
-    (should (eq foo 'bar))))
+  "Test that body of `aph/with-test-mode' is executed."
+  (aph/ert-macro-executes-body aph/with-test-mode (mode) 'text-mode))
 
 (ert-deftest aph/mode-tag-test-with-mode--bindings ()
   "Test that `aph/with-test-mode' sets bindings correctly."
