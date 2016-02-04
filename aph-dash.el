@@ -42,5 +42,18 @@ optional parameter CYCLE is non-nil; otherwise, return nil."
      ((or (cdr found) (null cycle))  (cadr found))
      (:else                          (car list)))))
 
+
+;;; Equality Predicates
+;;;====================
+(defun aph/equal (&rest args)
+  "As `equal', but accept any number of args.
+Return t if all args are pairwise `equal', otherwise nil.
+When called with fewer than two args, return t.
+
+Transitivity of `equal' is assumed, so not all pairwise
+comparisons are made."
+  (or (null args)
+      (-all-p (-partial #'equal (car args)) (cdr args))))
+
 
 (provide 'aph-dash)
