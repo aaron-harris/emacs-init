@@ -49,6 +49,15 @@ Do not move point."
   (cl-delete key alist :test #'equal :key #'car))
 
 
+;;; Cryptographic Hash Functions
+;;;=============================
+(defun aph/md5-insert (string)
+  "Insert the MD5 hash of STRING into current buffer.
+Interactively, prompt for STRING."
+  (interactive "sString to hash: ")
+  (insert (md5 string)))
+
+
 ;;; Excursions
 ;;; ==========
 (defmacro aph/save-frame-excursion (&rest body)
@@ -58,5 +67,6 @@ Do not move point."
     `(let ((,frame-config (current-frame-configuration)))
        (unwind-protect (progn ,@body)
          (set-frame-configuration ,frame-config)))))
+
 
 (provide 'aph-subr)
