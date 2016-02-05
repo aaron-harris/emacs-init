@@ -51,8 +51,7 @@ initial record."
           (while (< forms--current-record forms--total-records)
             (setq acc (funcall fun acc))
             (forms-next-record 1))
-          (funcall fun acc)
-          acc)
+          (setq acc (funcall fun acc)))
       (run-hooks 'aph/forms-change-record-hook))))
 
 
