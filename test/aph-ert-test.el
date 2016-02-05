@@ -26,10 +26,12 @@
 (ert-deftest aph/ert-test-with-test-mode--bindings ()
   "Test that `aph/ert-with-test-mode' sets bindings correctly."
   ;; Intentional bindings
-  (aph/ert-with-test-mode (mode hook) 'text-mode
+  (aph/ert-with-test-mode (mode hook keymap) 'text-mode
     (should (fboundp mode))
     (should (eq hook (aph/symbol-concat mode "-hook")))
-    (should (boundp hook)))
+    (should (boundp hook))
+    (should (eq keymap (aph/symbol-concat mode "-map")))
+    (should (boundp keymap)))
   ;; No unintentional bindings
   (aph/ert-with-test-mode (mode) 'text-mode
     (should-error hook      :type 'void-variable)
@@ -45,16 +47,21 @@
 (ert-deftest aph/ert-test-with-test-mode--cleanup ()
   "Test that `aph/ert-with-test-mode' cleans up after itself."
   ;; Normal exit
-  (let (mode-x hook-x)
-    (aph/ert-with-test-mode (mode hook) 'text-mode
-      (setq mode-x mode
-            hook-x hook)))
+  (let (mode-x hook-x keymap-x)
+    (aph/ert-with-test-mode (mode hook keymap) 'text-mode
+      (setq mode-x   mode
+            hook-x   hook
+            keymap-x keymap))
+    (should-not (intern-soft mode-x))
+    (should-not (intern-soft hook-x))
+    (should-not (intern-soft keymap-x)))
   ;; Error
-  (let (mode-x hook-x)
+  (let (mode-x hook-x keymap-x)
     (ignore-errors
-      (aph/ert-with-test-mode (mode hook) 'text-mode
-        (setq mode-x mode
-              hook-x hook)
+      (aph/ert-with-test-mode (mode hook keymap) 'text-mode
+        (setq mode-x   mode
+              hook-x   hook
+              keymap-x keymap)
         (error "Triggered error")))
     (should-not (intern-soft mode-x))
     (should-not (intern-soft hook-x)))) 
