@@ -8,42 +8,48 @@
 ;; automatically loaded on initialization.
 
 
-;;; Augmented Keymaps
-;;;==================
-(bind-keys (:map (aph-keys-augment-major-mode-map 'org-mode)
-                 ("M-." . org-goto)))
+;;; Augmented Keymaps: Front End
+;;;=============================
+;; End goal forms.  These should all do the same thing, more or less.
+(define-key (aph-keys-augment 'org-mode) (kbd "C-a") #'ignore)
+(bind-key "C-a" #'ignore (aph-keys-augment 'org-mode))
+(bind-keys :augment org-mode
+           ("C-a" . ignore))
 
-(require 'aph-mode-tag-test)            ; For `aph/with-test-mode'
+;; Current status: `define-key' works, but we need more work for
+;; `bind-key' and `bind-keys'.
 
-(defun aph-keys-augment-major-mode-map (mode)
-  "Return the keymap for MODE augmented for `aph-keys-mode'.
+
+;;; Augmented Keymaps: `bind-key' Support
+;;;======================================
+;; TODO: Make `describe-personal-keybindings' work properly with this.
+;;   This will probably involve advice to `bind-key' to process the
+;;   form added to `personal-keybindings'.
 
-The parameter MODE should be a symbol representing a major mode.
-The returned keymap inherits from the keymap for MODE and may
-also include its own bindings.  It will be active only when both
-MODE (or a mode descended from MODE) and `aph-keys-mode' are
-active and provides a mechanism for mode-local keybindings that
-are still toggleable with `aph-keys-mode'.
+
+;;; Augmented Keymaps: `bind-keys' Support
+;;;=======================================
+(defun aph/bind-keys-augment-handler (&rest args)
+  "Process :augment key in ARGS for `bind-keys'.
+This function is intended as :filter-args advice for the macro
+`bind-keys'.  It adds support for the :augment keyword argument.
 
-Subsequent calls to this function for the same MODE return the
-same keymap, including any bindings that were made to that keymap
-after its construction.  That is, there is at most one augmented
-keymap for each mode, and this function returns that keymap,
-constructing it if necessary.
+To use this argument, supply the name of a major or minor mode
+keymap.  This is augmented using `aph-keys-augment' and the keys
+are bound to the augmented map."
+  (let ((mode  (plist-get args :augment)))
+    (if mode
+        ;; Note that we aren't removing the :augment key here.
+        ;; Instead we're relying on undocumented behavior of
+        ;; `bind-keys', specifically that it simply ignores keywords
+        ;; it does not recognize.
+        `(:map ,(aph-keys-augment-var mode) ,@args)
+      args)))
 
-Because the mechanism used to determine whether such an augmented
-keymap will be active uses mode hooks, an augmented keymap for
-`fundamental-mode' will not work as expected and should probably
-be avoided.")
+(advice-add #'bind-keys :filter-args #'aph/bind-keys-augment-handler)
+(advice-remove #'bind-keys #'aph/bind-keys-augment-handler)
 
-;; Thoughts:
-;; - How am I storing the augmented keymap?  Probably with a symbol
-;; property on MODE-map (e.g., the symbol `org-mode-map').
-;; - I think I probably need to tinker with `aph/with-test-mode'.  At
-;; the very least this should be renamed and moved out of
-;; `aph-mode-tag-test' (possibly rename to `aph/ert-with-test-mode'
-;; and move to `aph-ert'?).  Also I will probably need to add the
-;; possibility of a keymap binding.
+;; TODO: Write test for this advice.
 
 
 (provide 'init-draft)

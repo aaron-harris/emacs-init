@@ -19,6 +19,53 @@
   :global  t
   :lighter " #")
 
+(defmacro aph-keys-augment--define (mode)
+  "Define augmented keymap variable for MODE.
+Used by `aph-keys-augment'.  See that function for more
+details."
+  (declare (debug (symbolp))) 
+  (let ((augmap  (aph/symbol-concat 'aph-keys-mode-map
+                                    (format ":%s" mode))))
+    `(defvar ,augmap (make-sparse-keymap)
+       ,(format (concat "Augmented keymap for `%s'.\n"
+                        "See `aph-keys-augment' for more details.")
+                mode))))
+
+(defun aph-keys-augment-var (mode)
+  "As `aph-keys-augment', but return a variable.
+This variable contains the keymap that would be returned by
+`aph-keys-augment'."
+  (eval `(aph-keys-augment--define ,mode)))
+
+(defun aph-keys-augment (mode)
+  "Return augmented keymap corresponding to MODE for `aph-keys-mode'.
+
+The parameter MODE should be a symbol naming a major or minor
+mode (e.g., the symbol 'text-mode-map).  Other types of variables
+can be passed, but this serves no purpose, since augmented
+keymaps created in this way will not be automatically activated.
+
+The keymap returned will be active whenever both MODE (or a mode
+descended from MODE) and `aph-keys-mode' are active (once this
+feature, currently under construction, is complete).  This
+provides a mechanism for mode-local keybindings that are still
+toggleable with `aph-keys-mode'.
+
+Subsequent calls to this function with the same argument return
+the same keymap, including any bindings that were made to that
+keymap after its construction.  That is, there is at most one
+augmented keymap for each mode, and this function returns that
+keymap, constructing it if necessary.
+
+The variable holding an augmented keymap is named using the
+format 'aph-keys-mode-map:MODE', e.g. 'aph-keys-mode:text-mode'.
+
+Because the mechanism used to determine whether such an augmented
+keymap will be active uses mode hooks, an augmented keymap for
+`fundamental-mode' will not work as expected and should probably
+be avoided."
+  (symbol-value (aph-keys-augment-var mode)))
+
 
 ;;; Key Translation
 ;;;================
