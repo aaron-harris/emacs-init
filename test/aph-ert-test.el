@@ -30,8 +30,8 @@
     (should (fboundp mode))
     (should (eq hook (aph/symbol-concat mode "-hook")))
     (should (boundp hook))
-    (should (eq keymap (aph/symbol-concat mode "-map")))
-    (should (boundp keymap)))
+    (should (eq keymap (symbol-value (aph/symbol-concat mode "-map"))))
+    (should (keymapp keymap)))
   ;; No unintentional bindings
   (aph/ert-with-test-mode (mode) 'text-mode
     (should-error hook      :type 'void-variable)
@@ -49,9 +49,9 @@
   ;; Normal exit
   (let (mode-x hook-x keymap-x)
     (aph/ert-with-test-mode (mode hook keymap) 'text-mode
-      (setq mode-x   mode
-            hook-x   hook
-            keymap-x keymap))
+      (setq mode-x    mode
+            hook-x    hook
+            keymap-x  (aph/symbol-concat mode "-map")))
     (should-not (intern-soft mode-x))
     (should-not (intern-soft hook-x))
     (should-not (intern-soft keymap-x)))
