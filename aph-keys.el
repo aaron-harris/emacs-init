@@ -10,22 +10,46 @@
 
 ;;; Personal Keybinding Mode
 ;;;=========================
-(defvar aph-keys-mode-map 
+(defvar aph-keys-mode-global-map
   (make-sparse-keymap)
-  "Keymap for `aph-keys-mode'.")
+  "Global keymap for `aph-keys-mode'.")
+
+(defvar aph-keys-mode-map aph-keys-mode-global-map
+  "Keymap for `aph-keys-mode'.
+This keymap will usually consist of the augmented keymap for the
+current major mode (see `aph-keys-augment') inheriting from
+`aph-keys-mode-global-map', and you shouldn't interact with it
+directly.
+
+To bind a key in `aph-keys-mode' conditionally on a major or
+minor mode, use `aph-keys-augment'.  To bind a key
+unconditionally, use `aph-keys-mode-global-map'.")
 
 (define-minor-mode aph-keys-mode
   "Mode for the personal keybindings of Aaron Harris."
   :global  t
   :lighter " #")
 
+(defun aph-keys--augment-name (mode)
+  "Return the name of the augmented keymap for MODE.
+
+The returned symbol is the name of the variable that would
+contain the augmented keymap for MODE, if one exists.  See
+`aph-keys-augment' for more information."
+  (aph/symbol-concat 'aph-keys-mode-map (format ":%s" mode)))
+
+(defun aph-keys-augmented-p (mode)
+  "Return non-nil if MODE has an augmented keymap.
+See `aph-keys-augment' for more information."
+  (let ((augmap  (aph-keys--augment-name mode)))
+    (boundp augmap)))
+
 (defmacro aph-keys-augment--define (mode)
   "Define augmented keymap variable for MODE.
 Used by `aph-keys-augment'.  See that function for more
 details."
-  (declare (debug (symbolp))) 
-  (let ((augmap  (aph/symbol-concat 'aph-keys-mode-map
-                                    (format ":%s" mode))))
+  (declare (debug (symbolp)))
+  (let ((augmap (aph-keys--augment-name mode)))
     `(defvar ,augmap (make-sparse-keymap)
        ,(format (concat "Augmented keymap for `%s'.\n"
                         "See `aph-keys-augment' for more details.")
@@ -35,7 +59,9 @@ details."
   "As `aph-keys-augment', but return a variable.
 This variable contains the keymap that would be returned by
 `aph-keys-augment'."
-  (eval `(aph-keys-augment--define ,mode)))
+  (if (aph-keys-augmented-p mode)
+      (aph-keys--augment-name mode)
+    (eval `(aph-keys-augment--define ,mode))))
 
 (defun aph-keys-augment (mode)
   "Return augmented keymap corresponding to MODE for `aph-keys-mode'.
