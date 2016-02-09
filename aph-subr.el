@@ -48,6 +48,27 @@ Do not move point."
   (require 'cl-lib)                       ; For `cl-delete'
   (cl-delete key alist :test #'equal :key #'car))
 
+(defun aph/update-alist (alist key val)
+  "Update association in ALIST for KEY to VAL.
+If no association exists in ALIST for KEY, add a new one at the
+front of ALIST.  If multiple associations exist, only update the
+first.
+
+The return value is the new value of ALIST.  As with `delete',
+this is destructive, but you should assign the result back to an
+alist variable to be sure the changes are correctly made."
+  (let ((elt (assoc key alist)))
+    (if elt
+        (setf (cdr elt) val)
+      (setq alist (push `(,key . ,val) alist)))
+    alist))
+
+(defmacro aph/set-assoc (alist-var key val)
+  "Update association in value of ALIST-VAR for KEY to VAL.
+As `aph/update-alist', but there is no need for
+back-assignment."
+  `(setq ,alist-var (aph/update-alist ,alist-var ,key ,val)))
+
 
 ;;; Cryptographic Hash Functions
 ;;;=============================
