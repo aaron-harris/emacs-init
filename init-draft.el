@@ -51,5 +51,10 @@ are bound to the augmented map."
 
 ;; TODO: Write test for this advice.
 
+
+;;; Augmented Keymaps: Back End
+;;;============================
+;; TODO: Write support for minor modes
+
 
 (provide 'init-draft)

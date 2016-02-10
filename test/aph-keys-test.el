@@ -111,5 +111,20 @@ variable containing this map does not persist outside of BODY."
         (should (aph-keys-augmented-p mode))
       (unintern var))))
 
-      
+(ert-deftest aph-keys-test-augment--major ()
+  "Test `aph-keys-augment' with major modes."
+  (aph-keys-with-augmented-test-mode mode 'fundamental-mode
+    (let ((aph-keys-mode nil))
+      (with-temp-buffer
+        (funcall mode)
+        (should (eq (key-binding "a") #'self-insert-command))
+        (define-key mode-map "a" #'move-beginning-of-line)
+        (define-key (aph-keys-augment mode) "a" #'ignore)
+        (should (eq (key-binding "a") #'move-beginning-of-line))
+        (aph-keys-mode 1)
+        (should (eq (key-binding "a") #'ignore))
+        (text-mode)
+        (should (eq (key-binding "a") #'self-insert-command))))))
+
+
 (provide 'aph-keys-test)
