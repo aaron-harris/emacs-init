@@ -28,48 +28,43 @@ hold, and signal an error with `should' otherwise."
 
 ;;; Mode Testing Apparatus
 ;;;=======================
-(defmacro aph/ert-with-test-mode (names parent &rest body)
+(defmacro aph/ert-with-test-mode (name parent &rest body)
   "Execute BODY in an environment with a temporarily-defined major mode.
 
 More specifically:
 - Use `cl-gensym' to construct a name guaranteed not to already be in
   use, and create a major mode (using `define-derived-mode') with this
   name.  Evaluate PARENT to get the name of the parent mode.
-- Execute BODY, with the name of the new mode bound to MODE.  If HOOK
-  is supplied, bind it to the name of the hook variable associated
-  with the mode.  If KEYMAP is supplied, bind it to the keymap
-  associated with the mode.  Note that this is the actual keymap, not
-  the name of the variable holding that keymap.
+- Execute BODY, with the name of the new mode bound to NAME (a
+  symbol).  Also bind the hook variable associated with the mode to
+  the symbol NAME-hook, and the keymap to NAME-map.
 - Make sure the mode created does not persist outside this form, using
   `unwind-protect' to ensure it is deleted in the event of an error or
   nonlocal exit from BODY.
 
 Note that the major mode constructed in this block doesn't actually do
-anything (i.e., its body is empty).
-
-\(fn (MODE [HOOK [KEYMAP]]) PARENT &rest BODY)"
-  (declare (debug ((symbolp &optional symbolp symbolp) form body))
+anything (i.e., its body is empty)."
+  (declare (debug (symbolp form body))
            (indent 2))
-  (let ((mode        (car names))
-        (hook        (or (nth 1 names) (make-symbol "hook")))
+  (let ((hook        (aph/symbol-concat name "-hook"))
         (keymap-var  (make-symbol "keymap-var"))
-        (keymap      (or (nth 2 names) (make-symbol "keymap")))
+        (keymap      (aph/symbol-concat name "-map"))
         (make-mode   (make-symbol "make-mode")))
-    `(let* ((,mode        (cl-gensym "mode"))
-            (,hook        (aph/symbol-concat ,mode "-hook"))
-            (,keymap-var  (aph/symbol-concat ,mode "-map")) 
+    `(let* ((,name        (cl-gensym "mode"))
+            (,hook        (aph/symbol-concat ,name "-hook"))
+            (,keymap-var  (aph/symbol-concat ,name "-map")) 
             (,make-mode   (lambda (child parent)
                             (eval `(define-derived-mode
                                      ,child ,parent "Lighter"))))
             ,keymap)
        (unwind-protect
-           (progn (funcall ,make-mode ,mode ,parent)
+           (progn (funcall ,make-mode ,name ,parent)
                   (setq ,keymap (symbol-value ,keymap-var))
                   ,@body)
          (unintern ,hook)
          (unintern ,keymap-var)
-         (unintern (aph/symbol-concat ,mode "-syntax-table"))
-         (unintern (aph/symbol-concat ,mode "-abbrev-table"))))))
+         (unintern (aph/symbol-concat ,name "-syntax-table"))
+         (unintern (aph/symbol-concat ,name "-abbrev-table"))))))
 
 
 (provide 'aph-ert)
