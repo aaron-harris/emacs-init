@@ -10,20 +10,10 @@
 
 ;;; Personal Keybinding Mode
 ;;;=========================
-(defvar aph-keys-mode-global-map
-  (make-sparse-keymap)
-  "Global keymap for `aph-keys-mode'.")
-
-(defvar aph-keys-mode-map aph-keys-mode-global-map
-  "Keymap for `aph-keys-mode'.
-This keymap will usually consist of the augmented keymap for the
-current major mode (see `aph-keys-augment') inheriting from
-`aph-keys-mode-global-map', and you shouldn't interact with it
-directly.
-
+(defvar aph-keys-mode-map (make-sparse-keymap)
+  "Global keymap for `aph-keys-mode'.
 To bind a key in `aph-keys-mode' conditionally on a major or
-minor mode, use `aph-keys-augment'.  To bind a key
-unconditionally, use `aph-keys-mode-global-map'.")
+minor mode, use `aph-keys-augment'.")
 
 (define-minor-mode aph-keys-mode
   "Mode for the personal keybindings of Aaron Harris."
