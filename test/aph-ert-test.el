@@ -19,37 +19,37 @@
 
 ;;; Mode Testing Apparatus Tests
 ;;;=============================
-(ert-deftest aph/ert-test-with-test-mode--body ()
-  "Test that body of `aph/ert-with-test-mode' is executed."
-  (aph/ert-macro-executes-body aph/ert-with-test-mode mode 'text-mode))
+(ert-deftest aph/ert-test-with-major-mode--body ()
+  "Test that body of `aph/ert-with-major-mode' is executed."
+  (aph/ert-macro-executes-body aph/ert-with-major-mode mode 'text-mode))
 
-(ert-deftest aph/ert-test-with-test-mode--bindings ()
-  "Test that `aph/ert-with-test-mode' sets bindings correctly."
+(ert-deftest aph/ert-test-with-major-mode--bindings ()
+  "Test that `aph/ert-with-major-mode' sets bindings correctly."
   ;; Intentional bindings
-  (aph/ert-with-test-mode mode 'text-mode
+  (aph/ert-with-major-mode mode 'text-mode
     (should (fboundp mode))
     (should (eq mode-hook (aph/symbol-concat mode "-hook")))
     (should (boundp mode-hook))
     (should (eq mode-map (symbol-value (aph/symbol-concat mode "-map"))))
     (should (keymapp mode-map)))
   ;; No unintentional bindings
-  (aph/ert-with-test-mode mode 'text-mode
+  (aph/ert-with-major-mode mode 'text-mode
     (should-error hook       :type 'void-variable)
     (should-error keymap-var :type 'void-variable)
     (should-error make-mode  :type 'void-variable)))
 
-(ert-deftest aph/ert-test-with-test-mode--nesting ()
-  "Test that `aph/ert-with-test-mode' nests properly."
-  (aph/ert-with-test-mode mode1 'text-mode
-    (aph/ert-with-test-mode mode2 mode1
+(ert-deftest aph/ert-test-with-major-mode--nesting ()
+  "Test that `aph/ert-with-major-mode' nests properly."
+  (aph/ert-with-major-mode mode1 'text-mode
+    (aph/ert-with-major-mode mode2 mode1
       (should (eq 'text-mode (get mode1 'derived-mode-parent)))
       (should (eq mode1      (get mode2 'derived-mode-parent))))))
 
-(ert-deftest aph/ert-test-with-test-mode--cleanup ()
-  "Test that `aph/ert-with-test-mode' cleans up after itself."
+(ert-deftest aph/ert-test-with-major-mode--cleanup ()
+  "Test that `aph/ert-with-major-mode' cleans up after itself."
   ;; Normal exit
   (let (mode-x hook-x keymap-x)
-    (aph/ert-with-test-mode mode 'text-mode
+    (aph/ert-with-major-mode mode 'text-mode
       (setq mode-x    mode
             hook-x    mode-hook
             keymap-x  (aph/symbol-concat mode "-map")))
@@ -59,7 +59,7 @@
   ;; Error
   (let (mode-x hook-x keymap-x)
     (ignore-errors
-      (aph/ert-with-test-mode mode 'text-mode
+      (aph/ert-with-major-mode mode 'text-mode
         (setq mode-x    mode
               hook-x    mode-hook
               keymap-x  (aph/symbol-concat mode "-map"))
