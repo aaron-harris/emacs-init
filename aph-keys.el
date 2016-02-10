@@ -8,8 +8,8 @@
 ;; some other utilities related to keybindings.
 
 
-;;; Personal Keybinding Mode
-;;;=========================
+;;; `aph-keys-mode': Mode basics
+;;;=============================
 (defvar aph-keys-mode-map (make-sparse-keymap)
   "Global keymap for `aph-keys-mode'.
 To bind a key in `aph-keys-mode' conditionally on a major or
@@ -20,6 +20,9 @@ minor mode, use `aph-keys-augment'.")
   :global  t
   :lighter " #")
 
+
+;;; `aph-keys-mode': Augmented keymaps
+;;;===================================
 (defun aph-keys--augment-name (mode)
   "Return the name of the augmented keymap for MODE.
 
@@ -81,6 +84,29 @@ keymap will be active uses mode hooks, an augmented keymap for
 `fundamental-mode' will not work as expected and should probably
 be avoided."
   (symbol-value (aph-keys-augment-var mode)))
+
+
+;;; `aph-keys-mode': Mode-specific keybindings
+;;;===========================================
+(defun aph-keys--update-major-mode ()
+  "Update `aph-keys-mode-map' for current major mode.
+Set `aph-keys-mode-map' to the augmented keymap for the current
+major mode, if one exists, and `aph-keys-mode-global-map'
+otherwise.  See `aph-keys-augment' for more information.
+
+This function is suitable for use in
+`after-change-major-mode-hook'."
+  (let ((keymap 
+         (if (aph-keys-augmented-p major-mode)
+             (let ((augmap (aph-keys-augment major-mode))) 
+               (unless (keymap-parent augmap)
+                 (set-keymap-parent augmap aph-keys-mode-map))
+               augmap)
+           aph-keys-mode-map)))
+    (make-local-variable 'minor-mode-map-alist)
+    (push `(aph-keys-mode . ,keymap) minor-mode-map-alist)))
+
+(add-hook 'after-change-major-mode-hook #'aph-keys--update-major-mode)
 
 
 ;;; Key Translation
