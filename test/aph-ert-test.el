@@ -21,26 +21,27 @@
 ;;;=============================
 (ert-deftest aph/ert-test-with-test-mode--body ()
   "Test that body of `aph/ert-with-test-mode' is executed."
-  (aph/ert-macro-executes-body aph/ert-with-test-mode (mode) 'text-mode))
+  (aph/ert-macro-executes-body aph/ert-with-test-mode mode 'text-mode))
 
 (ert-deftest aph/ert-test-with-test-mode--bindings ()
   "Test that `aph/ert-with-test-mode' sets bindings correctly."
   ;; Intentional bindings
-  (aph/ert-with-test-mode (mode hook keymap) 'text-mode
+  (aph/ert-with-test-mode mode 'text-mode
     (should (fboundp mode))
-    (should (eq hook (aph/symbol-concat mode "-hook")))
-    (should (boundp hook))
-    (should (eq keymap (symbol-value (aph/symbol-concat mode "-map"))))
-    (should (keymapp keymap)))
+    (should (eq mode-hook (aph/symbol-concat mode "-hook")))
+    (should (boundp mode-hook))
+    (should (eq mode-map (symbol-value (aph/symbol-concat mode "-map"))))
+    (should (keymapp mode-map)))
   ;; No unintentional bindings
-  (aph/ert-with-test-mode (mode) 'text-mode
-    (should-error hook      :type 'void-variable)
-    (should-error make-mode :type 'void-variable)))
+  (aph/ert-with-test-mode mode 'text-mode
+    (should-error hook       :type 'void-variable)
+    (should-error keymap-var :type 'void-variable)
+    (should-error make-mode  :type 'void-variable)))
 
 (ert-deftest aph/ert-test-with-test-mode--nesting ()
   "Test that `aph/ert-with-test-mode' nests properly."
-  (aph/ert-with-test-mode (mode1) 'text-mode
-    (aph/ert-with-test-mode (mode2) mode1
+  (aph/ert-with-test-mode mode1 'text-mode
+    (aph/ert-with-test-mode mode2 mode1
       (should (eq 'text-mode (get mode1 'derived-mode-parent)))
       (should (eq mode1      (get mode2 'derived-mode-parent))))))
 
@@ -48,9 +49,9 @@
   "Test that `aph/ert-with-test-mode' cleans up after itself."
   ;; Normal exit
   (let (mode-x hook-x keymap-x)
-    (aph/ert-with-test-mode (mode hook keymap) 'text-mode
+    (aph/ert-with-test-mode mode 'text-mode
       (setq mode-x    mode
-            hook-x    hook
+            hook-x    mode-hook
             keymap-x  (aph/symbol-concat mode "-map")))
     (should-not (intern-soft mode-x))
     (should-not (intern-soft hook-x))
@@ -58,10 +59,9 @@
   ;; Error
   (let (mode-x hook-x keymap-x)
     (ignore-errors
-      (aph/ert-with-test-mode (mode hook keymap) 'text-mode
+      (aph/ert-with-test-mode mode 'text-mode
         (setq mode-x   mode
-              hook-x   hook
-              keymap-x keymap)
+              hook-x   mode-hook)
         (error "Triggered error")))
     (should-not (intern-soft mode-x))
     (should-not (intern-soft hook-x)))) 
