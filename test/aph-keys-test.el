@@ -11,17 +11,17 @@
 ;;; Testing Apparatus
 ;;;==================
 (defmacro aph-keys-with-augmented-test-mode (name parent &rest body)
-  "As `aph/ert-with-test-mode', but augmented for `aph-keys'.
+  "As `aph/ert-with-major-mode', but augmented for `aph-keys'.
 
-Instantiate a temporary mode, as in `aph/ert-with-test-mode'.
+Instantiate a temporary mode, as in `aph/ert-with-major-mode'.
 Additionally, augment the mode with `aph-keys-augment', bind the
 augmented keymap to NAME-augmented-map, and ensure that the
 variable containing this map does not persist outside of BODY."
-  (declare (debug aph/ert-with-test-mode)
+  (declare (debug aph/ert-with-major-mode)
            (indent 2))
   (let ((augmap      (aph/symbol-concat name "-augmented-map"))
         (augmap-var  (make-symbol "augmap-var")))
-    `(aph/ert-with-test-mode ,name ,parent
+    `(aph/ert-with-major-mode ,name ,parent
        (let ((,augmap-var  (aph-keys-augment-var ,name))
              (,augmap      (aph-keys-augment ,name)))
          (unwind-protect (progn ,@body)
@@ -42,7 +42,7 @@ variable containing this map does not persist outside of BODY."
     ;; Augmented bindings
     (should (aph-keys-augmented-p mode))
     (should (keymapp mode-augmented-map))
-    ;; Bindings from `aph/ert-with-test-mode'
+    ;; Bindings from `aph/ert-with-major-mode'
     (should (fboundp mode))
     (should (eq mode-hook (aph/symbol-concat mode "-hook")))
     (should (boundp mode-hook))

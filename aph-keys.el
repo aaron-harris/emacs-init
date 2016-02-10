@@ -23,6 +23,16 @@ minor mode, use `aph-keys-augment'.")
 
 ;;; `aph-keys-mode': Augmented keymaps
 ;;;===================================
+(defvar aph-keys-augment-map-alist nil
+  "Alist of augmented keymaps for `aph-keys-mode'.
+For use in `emulation-mode-map-alists'.
+
+Note that augmented keymaps for major modes will appear in this
+list, but their presence does nothing since there is no
+corresponding control variable for a major mode.  Major mode
+bindings are instead handled by the function
+`aph-keys--update-major-mode'.")
+
 (defun aph-keys--augment-name (mode)
   "Return the name of the augmented keymap for MODE.
 
@@ -48,13 +58,21 @@ details."
                         "See `aph-keys-augment' for more details.")
                 mode))))
 
+(defun aph-keys-augment--register (mode)
+  "Register augmented keymap for MODE.
+Add the augmented keymap for MODE (a symbol) to
+`aph-keys-augment-map-alist'."
+  (push (cons mode (aph-keys-augment mode))
+        aph-keys-augment-map-alist))
+
 (defun aph-keys-augment-var (mode)
   "As `aph-keys-augment', but return a variable.
 This variable contains the keymap that would be returned by
 `aph-keys-augment'."
   (if (aph-keys-augmented-p mode)
       (aph-keys--augment-name mode)
-    (eval `(aph-keys-augment--define ,mode))))
+    (eval `(aph-keys-augment--define ,mode))
+    (aph-keys-augment--register)))
 
 (defun aph-keys-augment (mode)
   "Return augmented keymap corresponding to MODE for `aph-keys-mode'.
@@ -86,8 +104,8 @@ be avoided."
   (symbol-value (aph-keys-augment-var mode)))
 
 
-;;; `aph-keys-mode': Mode-specific keybindings
-;;;===========================================
+;;; `aph-keys-mode': Major mode support
+;;;====================================
 (defun aph-keys--update-major-mode ()
   "Update `aph-keys-mode-map' for current major mode.
 Set `aph-keys-mode-map' to the augmented keymap for the current
