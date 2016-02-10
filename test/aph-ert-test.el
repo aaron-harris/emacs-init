@@ -60,8 +60,9 @@
   (let (mode-x hook-x keymap-x)
     (ignore-errors
       (aph/ert-with-test-mode mode 'text-mode
-        (setq mode-x   mode
-              hook-x   mode-hook)
+        (setq mode-x    mode
+              hook-x    mode-hook
+              keymap-x  (aph/symbol-concat mode "-map"))
         (error "Triggered error")))
     (should-not (intern-soft mode-x))
     (should-not (intern-soft hook-x)))) 
