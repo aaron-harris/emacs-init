@@ -60,21 +60,12 @@ should have a signature like
 Run a test confirming that the bindings do not persist after BODY
 exits.  If they do not, return t.  Otherwise, signal an error
 using `should'."
-  (let ((subtest
-         (lambda (wrap form)
-           `(let (mode-x hook-x keymap-x)
-                    (,wrap
-                     (,macro mode ,@other-args
-                             (setq mode-x    mode)
-                             (setq hook-x    mode-hook)
-                             (setq keymap-x  (aph/symbol-concat mode "-map"))
-                             ,form)
-                     (should-not (intern-soft mode-x))
-                     (should-not (intern-soft hook-x))
-                     (should-not (intern-soft keymap-x)))))))
-    (eval (funcall subtest 'progn         '(ignore)))
-    (eval (funcall subtest 'ignore-errors '(error "Triggered error")))
-    t))
+  (let ((args      (cons 'mode other-args))
+        (var-forms '(mode
+                     mode-hook
+                     (aph/symbol-concat mode "-map"))))
+    (dolist (v var-forms t)
+      (should (aph/ert-macro-does-not-leak-p macro v args)))))
 
 
 ;;; Mode Testing Apparatus Tests: `aph/ert-with-major-mode'
@@ -120,12 +111,7 @@ using `should'."
 (ert-deftest aph/ert-test-with-minor-mode--cleanup ()
   "Test that `aph/ert-with-minor-mode' cleans up after itself."
   (should (aph/ert-test-mode-wrapper--cleanup
-           'aph/ert-with-minor-mode))
-  ;; Test cleanup for minor mode control variable, too:
-  (let (mode-x)
-    (aph/ert-with-minor-mode mode
-        (setq mode-x mode))
-    (should-not (intern-soft mode-x))))
+           'aph/ert-with-minor-mode)))
 
 
 (provide 'aph-ert-test)
