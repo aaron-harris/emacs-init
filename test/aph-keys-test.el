@@ -32,8 +32,8 @@ variable containing this map does not persist outside of BODY."
 ;;;================
 (ert-deftest aph-keys-test-with-augmented-test-mode--body ()
   "Test that `aph-keys-with-augmented-test-mode' executes body."
-  (aph/ert-macro-executes-body-p aph-keys-with-augmented-test-mode
-                                 mode 'text-mode))
+  (should (aph/ert-macro-executes-body-p
+           'aph-keys-with-augmented-test-mode '(mode 'text-mode))))
 
 (ert-deftest aph-keys-test-with-augmented-test-mode--bindings ()
   "Test bindings of `aph-keys-with-augmented-test-mode'."

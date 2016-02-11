@@ -12,9 +12,9 @@
 ;;;==============================
 (ert-deftest aph/ert-test-macro-executes-body-p ()
   "Test `aph/ert-macro-executes-body-p'." 
-  (should (aph/ert-macro-executes-body-p with-temp-buffer))
-  (should (aph/ert-macro-executes-body-p let (canary)))
-  (should-error (aph/ert-macro-executes-body-p ignore)))
+  (should (aph/ert-macro-executes-body-p 'with-temp-buffer))
+  (should (aph/ert-macro-executes-body-p 'let '((canary))))
+  (should-error (aph/ert-macro-executes-body-p 'ignore)))
 
 
 ;;; Mode Testing Apparatus Tests: Parametrizations
@@ -80,7 +80,7 @@ Otherwise, it signals an error using `should'."
 (ert-deftest aph/ert-test-with-major-mode--body ()
   "Test that body of `aph/ert-with-major-mode' is executed."
   (should (aph/ert-macro-executes-body-p
-           aph/ert-with-major-mode mode 'fundamental-mode)))
+           'aph/ert-with-major-mode '(mode 'fundamental-mode))))
 
 (ert-deftest aph/ert-test-with-major-mode--bindings ()
   "Test that `aph/ert-with-major-mode' sets bindings correctly."
