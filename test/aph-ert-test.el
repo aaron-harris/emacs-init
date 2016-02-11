@@ -101,5 +101,31 @@ using `should'."
       (should (eq 'text-mode (get mode1 'derived-mode-parent)))
       (should (eq mode1      (get mode2 'derived-mode-parent))))))
 
+
+;;; Mode Testing Apparatus Tests: `aph/ert-with-minor-mode'
+;;;========================================================
+(ert-deftest aph/ert-test-with-minor-mode--body ()
+  "Test that body of `aph/ert-with-minor-mode' is executed."
+  (should (aph/ert-macro-executes-body-p
+           'aph/ert-with-minor-mode '(mode))))
+
+(ert-deftest aph/ert-test-with-minor-mode--bindings ()
+  "Test that `aph/ert-with-minor-mode' sets bindings correctly."
+  (should (aph/ert-test-mode-wrapper--bindings
+           'aph/ert-with-minor-mode))
+  ;; Check binding for minor mode control variable:
+  (aph/ert-with-minor-mode mode
+      (should (boundp mode))))
+
+(ert-deftest aph/ert-test-with-minor-mode--cleanup ()
+  "Test that `aph/ert-with-minor-mode' cleans up after itself."
+  (should (aph/ert-test-mode-wrapper--cleanup
+           'aph/ert-with-minor-mode))
+  ;; Test cleanup for minor mode control variable, too:
+  (let (mode-x)
+    (aph/ert-with-minor-mode mode
+        (setq mode-x mode))
+    (should-not (intern-soft mode-x))))
+
 
 (provide 'aph-ert-test)
