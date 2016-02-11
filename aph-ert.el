@@ -103,7 +103,8 @@ anything (i.e., its body is empty)."
            (indent 2))
   `(aph/ert--with-test-mode ,name
        (lambda (mode)
-         (eval `(define-minor-mode ,mode "Doc")))
+         (eval `(define-minor-mode ,mode "Doc"
+                  :keymap (make-sparse-keymap))))
      ,@body))
 
 
