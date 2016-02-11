@@ -26,6 +26,24 @@ hold, and signal an error with `should' otherwise."
                      (should ,canary))))
     (eval test)))
 
+(defun aph/ert-macro-does-not-leak-p (macro var-form &optional other-args)
+  "Test to ensure that MACRO does not leak binding for VAR-FORM.
+
+Apply MACRO to a body form, prepending any OTHER-ARGS, and check
+that the symbol whose name is given by VAR-FORM inside BODY does
+not remain intered after BODY exits."
+  (let* ((var-x  (make-symbol "var-x"))
+         (subtest (lambda (wrap form)
+                    `(let (,var-x)
+                       (,wrap
+                        (,macro ,@other-args
+                                (setq ,var-x ,var-form)
+                                ,form)
+                        (should-not (intern-soft ,var-x)))))))
+    (eval (funcall subtest 'progn         '(ignore)))
+    (eval (funcall subtest 'ignore-errors '(error "Triggered error"))) 
+    t))
+
 
 ;;; Mode Testing Apparatus
 ;;;=======================
