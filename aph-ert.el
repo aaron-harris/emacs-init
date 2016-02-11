@@ -11,13 +11,14 @@
 
 ;;; Macro Testing Apparatus
 ;;;========================
-(defmacro aph/ert-macro-executes-body (macro &rest other-args)
+(defmacro aph/ert-macro-executes-body-p (macro &rest other-args)
   "Execute a standard test to check that MACRO executes a body.
 
-Apply MACRO to a body form, prepending any OTHER-ARGS, and check
-both that this body was executed, and that the value returned is
-the return value of its last form.  Return t if both conditions
-hold, and signal an error with `should' otherwise."
+Expand to code that applies MACRO to a body form, prepending any
+OTHER-ARGS, and checks both that this body was executed, and that
+the value returned is the return value of its last form.  Returns
+t if both conditions hold, and signals an error with `should'
+otherwise."
   (let ((canary  (make-symbol "canary")))
     `(let (,canary)
        (should (= 7 (,macro ,@other-args
