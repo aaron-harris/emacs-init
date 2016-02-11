@@ -30,8 +30,11 @@ hold, and signal an error with `should' otherwise."
   "Test to ensure that MACRO does not leak binding for VAR-FORM.
 
 Apply MACRO to a body form, prepending any OTHER-ARGS, and check
-that the symbol whose name is given by VAR-FORM inside BODY does
-not remain intered after BODY exits."
+that the symbol whose name is given by VAR-FORM inside BODY is
+not defined as either a variable or a function after BODY exits.
+
+Note that it is acceptable for VAR-FORM to name a symbol that is
+either `boundp' or `fboundp', so long as it is not interned."
   (let* ((var-x  (make-symbol "var-x"))
          (subtest (lambda (wrap form)
                     `(let (,var-x)
@@ -39,7 +42,9 @@ not remain intered after BODY exits."
                         (,macro ,@other-args
                                 (setq ,var-x ,var-form)
                                 ,form)
-                        (should-not (intern-soft ,var-x)))))))
+                        (should-not (and (intern-soft ,var-x)
+                                         (or (boundp ,var-x)
+                                             (fboundp ,var-x)))))))))
     (eval (funcall subtest 'progn         '(ignore)))
     (eval (funcall subtest 'ignore-errors '(error "Triggered error"))) 
     t))

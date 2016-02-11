@@ -16,6 +16,12 @@
   (should (aph/ert-macro-executes-body-p 'let '((canary))))
   (should-error (aph/ert-macro-executes-body-p 'ignore)))
 
+(ert-deftest aph/ert-test-macro-does-not-leak-p ()
+  "Test `aph/ert-macro-does-not-leak-p'."
+  (should (aph/ert-macro-does-not-leak-p 'let 'var-x '((var-x))))
+  (should-error (aph/ert-macro-does-not-leak-p
+                 'let ''emacs-version '((var-x)))))
+
 
 ;;; Mode Testing Apparatus Tests: Parametrizations
 ;;;===============================================
