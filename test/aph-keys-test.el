@@ -53,7 +53,20 @@ variable containing this map does not persist outside of BODY."
            '(aph-keys--augment-name mode) '(mode 'fundamental-mode))))
 
 
-;;; Personal Keybindings Mode Tests
+;;; Tests for `emulation-mode-map-alists' setup
+;;;============================================
+(ert-deftest aph-keys-test-emma-setup ()
+  "Test `emulation-mode-map-alists' setup for `aph-keys-mode'."
+  (require 'dash)
+  ;; Both of the symbols `aph-keys-augment-map-alist' and
+  ;; `aph-keys-local-map-alist' should appear in
+  ;; `emulation-mode-map-alists', and they should occur in that order.
+  (should (member 'aph-keys-local-map-alist
+                  (should (member 'aph-keys-augment-map-alist
+                                  emulation-mode-map-alists)))))
+
+
+;;; Augmented Keymap Tests
 ;;;================================
 (ert-deftest aph-keys-test-augment ()
   "Test `aph-keys-augment'."
