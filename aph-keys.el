@@ -51,8 +51,10 @@ be buffer-local and thus vary with the buffer's major mode.
 The association between this variable and the major mode is
 maintained by the function `aph-keys--update-major-mode'.")
 
-(add-to-list 'emulation-mode-map-alists 'aph-keys-augment-map-alist :append #'eq)
-(add-to-list 'emulation-mode-map-alists 'aph-keys-local-map-alist :append #'eq)
+(add-to-list 'emulation-mode-map-alists
+             'aph-keys-augment-map-alist :append #'eq)
+(add-to-list 'emulation-mode-map-alists
+             'aph-keys-local-map-alist :append #'eq)
 
 
 ;;; `aph-keys-mode': Augmented keymaps
