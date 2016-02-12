@@ -11,18 +11,26 @@
 
 ;;; Testing Apparatus
 ;;;==================
-(defmacro aph-keys-with-augmented-test-mode (name parent &rest body)
-  "As `aph/ert-with-major-mode', but augmented for `aph-keys'.
+(defmacro aph-keys-with-augmented-mode (name parent-or-type &rest body)
+  "Execute BODY with temporarily-defined augmented mode.
 
-Instantiate a temporary mode, as in `aph/ert-with-major-mode'.
-Additionally, augment the mode with `aph-keys-augment', bind the
+The temporary mode is instantiated either with
+`aph/ert-with-major-mode' or `aph/ert-with-minor-mode'.  If
+PARENT-OR-TYPE is the special keyword :minor, this is a minor
+mode; otherwise, it is a major mode, and PARENT-OR-TYPE is the
+name of its parent mode.
+
+Also augment this mode with `aph/keys-augment', bind the
 augmented keymap to NAME-augmented-map, and ensure that the
-variable containing this map does not persist outside of BODY."
+variable containing this map does not persist when BODY exits."
   (declare (debug aph/ert-with-major-mode)
            (indent 2))
-  (let ((augmap      (aph/symbol-concat name "-augmented-map"))
+  (let ((macro-form  (if (eq parent-or-type :minor)
+                         `(aph/ert-with-minor-mode ,name)
+                       `(aph/ert-with-major-mode ,name ,parent-or-type)))
+        (augmap      (aph/symbol-concat name "-augmented-map"))
         (augmap-var  (make-symbol "augmap-var")))
-    `(aph/ert-with-major-mode ,name ,parent
+    `(,@macro-form
        (let ((,augmap-var  (aph-keys-augment-var ,name))
              (,augmap      (aph-keys-augment ,name)))
          (unwind-protect (progn ,@body)
@@ -31,26 +39,33 @@ variable containing this map does not persist outside of BODY."
 
 ;;; Apparatus Tests
 ;;;================
-(ert-deftest aph-keys-test-with-augmented-test-mode--body ()
-  "Test that `aph-keys-with-augmented-test-mode' executes body."
-  (should (aph/ert-macro-executes-body
-           'aph-keys-with-augmented-test-mode '(mode 'text-mode))))
+(ert-deftest aph-keys-test-with-augmented-mode--body ()
+  "Test that `aph-keys-with-augmented-mode' executes body."
+  (dolist (param '('fundamental-mode :minor))
+    (should (aph/ert-macro-executes-body
+             'aph-keys-with-augmented-mode
+             `(mode ,param)))))
 
-(ert-deftest aph-keys-test-with-augmented-test-mode--bindings ()
-  "Test bindings of `aph-keys-with-augmented-test-mode'."
-  (should (aph/ert-test-mode-wrapper--bindings
-           'aph-keys-with-augmented-test-mode '('fundamental-mode)))
-  (aph-keys-with-augmented-test-mode mode 'fundamental-mode
-    (should (aph-keys-augmented-p mode))
-    (should (keymapp mode-augmented-map))))
+(ert-deftest aph-keys-test-with-augmented-mode--bindings ()
+  "Test bindings of `aph-keys-with-augmented-mode'."
+  (dolist (param '('fundamental-mode :minor))
+    (should (aph/ert-test-mode-wrapper--bindings
+             'aph-keys-with-augmented-mode
+             `(,param)))
+    (aph-keys-with-augmented-mode mode param
+      (should (aph-keys-augmented-p mode))
+      (should (keymapp mode-augmented-map)))))
 
-(ert-deftest aph-keys-test-with-augmented-test-mode--cleanup ()
-  "Test cleanup for `aph-keys-with-augmented-test-mode'."
-  (should (aph/ert-test-mode-wrapper--cleanup
-           'aph-keys-with-augmented-test-mode '('fundamental-mode)))
-  (should (aph/ert-macro-does-not-leak
-           'aph-keys-with-augmented-test-mode
-           '(aph-keys--augment-name mode) '(mode 'fundamental-mode))))
+(ert-deftest aph-keys-test-with-augmented-mode--cleanup ()
+  "Test cleanup for `aph-keys-with-augmented-mode'."
+  (dolist (param '('fundamental-mode :minor))
+    (should (aph/ert-test-mode-wrapper--cleanup
+             'aph-keys-with-augmented-mode
+             `(,param)))
+    (should (aph/ert-macro-does-not-leak
+             'aph-keys-with-augmented-mode
+             ''mode-augmented-map
+             `(mode ,param)))))
 
 
 ;;; Tests for `emulation-mode-map-alists' setup
@@ -69,26 +84,21 @@ variable containing this map does not persist outside of BODY."
 ;;; Augmented Keymap Tests
 ;;;================================
 (ert-deftest aph-keys-test-augment ()
-  "Test `aph-keys-augment'."
-  (let* ((mode    'foo-mode)
-         (var     (aph-keys-augment-var mode))
-         (keymap  (aph-keys-augment mode)))
-    (unwind-protect 
-        (progn
-          ;; Basic type checks, and relationship verification
-          (should (boundp var))
-          (should (eq var (aph-keys--augment-name mode)))
-          (should (eq keymap (symbol-value var)))
-          (should (keymapp keymap))
-          ;; Test for idempotence, and preservation of bindings
-          (define-key keymap (kbd "a") #'ignore)
-          (should (eq keymap (aph-keys-augment mode)))
-          (should (eq var (aph-keys-augment-var mode)))
-          (should (eq (lookup-key keymap (kbd "a")) #'ignore)))
-      (unintern var))))
+  "Test `aph-keys-augment' and `aph-keys-augment-var'."
+  (require 'aph-dash)                   ; For `aph/eq'
+  (dolist (param '('fundamental-mode :minor))
+    (aph-keys-with-augmented-mode mode param
+      (should (aph/eq mode-augmented-map
+                      (aph-keys-augment mode)
+                      (symbol-value (aph-keys-augment-var mode))))
+      (should (equal (aph-keys-augment-var mode)
+                     (aph-keys--augment-name mode)))
+      (define-key mode-augmented-map (kbd "a") #'ignore)
+      (should (eq (lookup-key (aph-keys-augment mode) (kbd "a"))
+                  #'ignore)))))
 
 (ert-deftest aph-keys-test-augmented-p ()
-  "Test `aph-keys-augmented-p'."
+  "Test `aph-keys-augmented-p'." 
   (let* ((mode  'foo-mode)
          var)
     (should-not (aph-keys-augmented-p mode))
@@ -97,9 +107,9 @@ variable containing this map does not persist outside of BODY."
         (should (aph-keys-augmented-p mode))
       (unintern var))))
 
-(ert-deftest aph-keys-test-augment--major ()
-  "Test `aph-keys-augment' with major modes."
-  (aph-keys-with-augmented-test-mode mode 'fundamental-mode
+(ert-deftest aph-keys-test-major-mode-bindings ()
+  "Test major bindings in `aph-keys-mode'." 
+  (aph-keys-with-augmented-mode mode 'fundamental-mode
     (let ((aph-keys-mode nil))
       (with-temp-buffer
         (funcall mode)
