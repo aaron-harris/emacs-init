@@ -10,15 +10,15 @@
 
 ;;; Macro Testing Apparatus Tests
 ;;;==============================
-(ert-deftest aph/ert-test-macro-executes-body-p ()
+(ert-deftest aph/ert-test-macro-executes-body ()
   "Test `aph/ert-macro-executes-body-p'." 
-  (should (aph/ert-macro-executes-body-p 'with-temp-buffer))
-  (should (aph/ert-macro-executes-body-p 'let '((canary))))
-  (should-error (aph/ert-macro-executes-body-p 'ignore)))
+  (should (aph/ert-macro-executes-body 'with-temp-buffer))
+  (should (aph/ert-macro-executes-body 'let '((canary))))
+  (should-error (aph/ert-macro-executes-body 'ignore)))
 
-(ert-deftest aph/ert-test-macro-does-not-leak-p ()
+(ert-deftest aph/ert-test-macro-does-not-leak ()
   "Test `aph/ert-macro-does-not-leak-p'."
-  (should (aph/ert-macro-does-not-leak-p 'let 'var-x '((var-x))))
+  (should (aph/ert-macro-does-not-leak 'let 'var-x '((var-x))))
   (should-error (aph/ert-macro-does-not-leak-p
                  'let ''emacs-version '((var-x)))))
 
@@ -71,7 +71,7 @@ using `should'."
                      mode-hook
                      (aph/symbol-concat mode "-map"))))
     (dolist (v var-forms t)
-      (should (aph/ert-macro-does-not-leak-p macro v args)))))
+      (should (aph/ert-macro-does-not-leak macro v args)))))
 
 
 ;;; Mode Testing Apparatus Tests: `aph/ert-with-major-mode'

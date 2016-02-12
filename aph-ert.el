@@ -11,7 +11,7 @@
 
 ;;; Macro Testing Apparatus
 ;;;========================
-(defun aph/ert-macro-executes-body-p (macro &optional other-args)
+(defun aph/ert-macro-executes-body (macro &optional other-args)
   "Execute a standard test to check that MACRO executes a body.
 
 Apply MACRO to a body form, prepending any OTHER-ARGS, and check
@@ -26,7 +26,7 @@ hold, and signal an error with `should' otherwise."
                      (should ,canary))))
     (eval test)))
 
-(defun aph/ert-macro-does-not-leak-p (macro var-form &optional other-args)
+(defun aph/ert-macro-does-not-leak (macro var-form &optional other-args)
   "Test to ensure that MACRO does not leak binding for VAR-FORM.
 
 Apply MACRO to a body form, prepending any OTHER-ARGS, and check
