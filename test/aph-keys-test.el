@@ -6,6 +6,7 @@
 
 ;; Tests for the module `aph-keys'.
 (require 'aph-keys)
+(require 'aph-ert-test)
 
 
 ;;; Testing Apparatus
@@ -32,52 +33,24 @@ variable containing this map does not persist outside of BODY."
 ;;;================
 (ert-deftest aph-keys-test-with-augmented-test-mode--body ()
   "Test that `aph-keys-with-augmented-test-mode' executes body."
-  (should (aph/ert-macro-executes-body-p
+  (should (aph/ert-macro-executes-body
            'aph-keys-with-augmented-test-mode '(mode 'text-mode))))
 
 (ert-deftest aph-keys-test-with-augmented-test-mode--bindings ()
   "Test bindings of `aph-keys-with-augmented-test-mode'."
-  ;; Intentional bindings
-  (aph-keys-with-augmented-test-mode mode 'text-mode
-    ;; Augmented bindings
+  (should (aph/ert-test-mode-wrapper--bindings
+           'aph-keys-with-augmented-test-mode '('fundamental-mode)))
+  (aph-keys-with-augmented-test-mode mode 'fundamental-mode
     (should (aph-keys-augmented-p mode))
-    (should (keymapp mode-augmented-map))
-    ;; Bindings from `aph/ert-with-major-mode'
-    (should (fboundp mode))
-    (should (eq mode-hook (aph/symbol-concat mode "-hook")))
-    (should (boundp mode-hook))
-    (should (eq mode-map (symbol-value (aph/symbol-concat mode "-map"))))
-    (should (keymapp mode-map)))
-  ;; No unintentional bindings
-  (aph-keys-with-augmented-test-mode mode 'text-mode
-    (should-error augmap :type 'void-variable)))
+    (should (keymapp mode-augmented-map))))
 
 (ert-deftest aph-keys-test-with-augmented-test-mode--cleanup ()
   "Test cleanup for `aph-keys-with-augmented-test-mode'."
-  ;; Normal exit
-  (let (mode-x hook-x keymap-x augmap-x)
-    (aph-keys-with-augmented-test-mode mode 'text-mode
-      (setq mode-x     mode
-            hook-x     mode-hook
-            keymap-x   (aph/symbol-concat mode "-map")
-            augmap-x   (aph-keys--augment-name mode)))
-    (should-not (intern-soft mode-x))
-    (should-not (intern-soft hook-x))
-    (should-not (intern-soft keymap-x))
-    (should-not (intern-soft augmap-x)))
-  ;; Error
-  (let (mode-x hook-x)
-    (ignore-errors
-      (aph-keys-with-augmented-test-mode mode 'text-mode
-        (setq mode-x   mode
-            hook-x     mode-hook
-            keymap-x   (aph/symbol-concat mode "-map")
-            augmap-x   (aph-keys--augment-name mode))
-        (error "Triggered error")))
-    (should-not (intern-soft mode-x))
-    (should-not (intern-soft hook-x))
-    (should-not (intern-soft keymap-x))
-    (should-not (intern-soft augmap-x))))
+  (should (aph/ert-test-mode-wrapper--cleanup
+           'aph-keys-with-augmented-test-mode '('fundamental-mode)))
+  (should (aph/ert-macro-does-not-leak
+           'aph-keys-with-augmented-test-mode
+           '(aph-keys--augment-name mode) '(mode 'fundamental-mode))))
 
 
 ;;; Personal Keybindings Mode Tests
