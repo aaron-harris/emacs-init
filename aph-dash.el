@@ -45,15 +45,35 @@ optional parameter CYCLE is non-nil; otherwise, return nil."
 
 ;;; Equality Predicates
 ;;;====================
+(defun aph/equality (pred &rest args)
+  "Generic and variadic equality predicate.
+Return t if all ARGS pairwise satisfy PRED (a binary equality
+predicate, such as `eq' or `equal').  When called with fewer than
+two ARGS beyond PRED, return t.
+
+It is assumed that PRED is actually an equality predicate (i.e.,
+it is reflexive, symmetric, and transitive), so not all pairwise
+comparisons are made."
+  (or (null args)
+      (-all-p (-partial pred (car args)) (cdr args))))
+
+(defun aph/eq (&rest args)
+  "As `eq', but accept any number of ARGS.
+Return t if all ARGS are pairwise `eq', otherwise nil.  When
+called with fewer than two ARGS, return t.
+
+Transitivity of `eq' is assumed, so not all pairwise comparisons
+are made."
+  (apply #'aph/equality #'eq args))
+
 (defun aph/equal (&rest args)
-  "As `equal', but accept any number of args.
-Return t if all args are pairwise `equal', otherwise nil.
-When called with fewer than two args, return t.
+  "As `equal', but accept any number of ARGS.
+Return t if all ARGS are pairwise `equal', otherwise nil.
+When called with fewer than two ARGS, return t.
 
 Transitivity of `equal' is assumed, so not all pairwise
 comparisons are made."
-  (or (null args)
-      (-all-p (-partial #'equal (car args)) (cdr args))))
+  (apply #'aph/equality #'equal args))
 
 
 (provide 'aph-dash)
