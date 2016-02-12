@@ -7,6 +7,8 @@
 ;; A minor mode for implementing my personal keybindings, along with
 ;; some other utilities related to keybindings.
 
+(require 'cl-lib)                       ; For `cl-pushnew'
+
 
 ;;; `aph-keys-mode': Mode basics
 ;;;=============================
@@ -21,8 +23,8 @@ minor mode, use `aph-keys-augment'.")
   :lighter " #")
 
 
-;;; `aph-keys-mode': Augmented keymaps
-;;;===================================
+;;; `aph-keys-mode': Setup for `emulation-mode-map-alists'
+;;;=======================================================
 (defvar aph-keys-augment-map-alist nil
   "Alist of augmented keymaps for `aph-keys-mode'.
 For use in `emulation-mode-map-alists'.
@@ -32,6 +34,29 @@ list, but their presence does nothing since there is no
 corresponding control variable for a major mode.  Major mode
 bindings are instead handled by the function
 `aph-keys--update-major-mode'.")
+
+(defvar-local aph-keys-local-map-alist
+  '((aph-keys-mode . (make-sparse-keymap)))
+  "An alist holding augmented keymap for current major mode.
+
+This alist should contain a single element of the
+form ('aph-keys-mode . KEYMAP), where KEYMAP is the augmented
+keymap corresponding to the current major mode.  See
+`aph-keys-augment' for more information about augmented keymaps.
+
+This variable is intended for use in `emulation-mode-map-alists'.
+It is separate from `aph-keys-augment-map-alist' so that it can
+be buffer-local and thus vary with the buffer's major mode.
+
+The association between this variable and the major mode is
+maintained by the function `aph-keys--update-major-mode'.")
+
+(add-to-list 'emulation-mode-map-alists 'aph-keys-augment-map-alist :append #'eq)
+(add-to-list 'emulation-mode-map-alists 'aph-keys-local-map-alist :append #'eq)
+
+
+;;; `aph-keys-mode': Augmented keymaps
+;;;===================================
 
 (defun aph-keys--augment-name (mode)
   "Return the name of the augmented keymap for MODE.
@@ -69,10 +94,10 @@ Add the augmented keymap for MODE (a symbol) to
   "As `aph-keys-augment', but return a variable.
 This variable contains the keymap that would be returned by
 `aph-keys-augment'."
-  (if (aph-keys-augmented-p mode)
-      (aph-keys--augment-name mode)
-    (eval `(aph-keys-augment--define ,mode))
-    (aph-keys-augment--register)))
+  (unless (aph-keys-augmented-p mode) 
+      (eval `(aph-keys-augment--define ,mode))
+      (aph-keys-augment--register mode))
+  (aph-keys--augment-name mode))
 
 (defun aph-keys-augment (mode)
   "Return augmented keymap corresponding to MODE for `aph-keys-mode'.
@@ -121,8 +146,7 @@ This function is suitable for use in
                  (set-keymap-parent augmap aph-keys-mode-map))
                augmap)
            aph-keys-mode-map)))
-    (make-local-variable 'minor-mode-map-alist)
-    (push `(aph-keys-mode . ,keymap) minor-mode-map-alist)))
+    (setq aph-keys-local-map-alist `((aph-keys-mode . ,keymap)))))
 
 (add-hook 'after-change-major-mode-hook #'aph-keys--update-major-mode)
 
