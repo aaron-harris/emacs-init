@@ -36,7 +36,7 @@ bindings are instead handled by the function
 `aph-keys--update-major-mode'.")
 
 (defvar-local aph-keys-local-map-alist
-  '((aph-keys-mode . (make-sparse-keymap)))
+  `((aph-keys-mode . ,(make-sparse-keymap)))
   "An alist holding augmented keymap for current major mode.
 
 This alist should contain a single element of the
