@@ -124,11 +124,17 @@ Note that the minor mode constructed in this block doesn't actually do
 anything (i.e., its body is empty)."
   (declare (debug (symbolp body))
            (indent 1))
-  `(aph/ert--with-test-mode ,name
-       (lambda (mode)
-         (eval `(define-minor-mode ,mode "Doc"
-                  :keymap (make-sparse-keymap))))
-     ,@body))
+  (let ((mode-name  (make-symbol "mode-name")))
+    `(let (,mode-name)
+       (aph/ert--with-test-mode ,name
+           (lambda (mode)
+             (eval `(define-minor-mode ,mode "Doc"
+                      :keymap (make-sparse-keymap))))
+         (unwind-protect (progn (setq ,mode-name ,name)
+                                ,@body)
+           (setq minor-mode-map-alist
+                 (assq-delete-all ,mode-name
+                                  minor-mode-map-alist)))))))
 
 
 (provide 'aph-ert)
