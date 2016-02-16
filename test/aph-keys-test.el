@@ -29,12 +29,18 @@ variable containing this map does not persist when BODY exits."
                          `(aph/ert-with-minor-mode ,name)
                        `(aph/ert-with-major-mode ,name ,parent-or-type)))
         (augmap      (aph/symbol-concat name "-augmented-map"))
-        (augmap-var  (make-symbol "augmap-var")))
-    `(,@macro-form
-       (let ((,augmap-var  (aph-keys-augment-var ,name))
-             (,augmap      (aph-keys-augment ,name)))
-         (unwind-protect (progn ,@body)
-           (unintern ,augmap-var))))))
+        (augmap-var  (make-symbol "augmap-var"))
+        (mode-name   (make-symbol "mode-name")))
+    `(let (,mode-name)
+       (,@macro-form
+         (let ((,augmap-var  (aph-keys-augment-var ,name))
+               (,augmap      (aph-keys-augment ,name)))
+           (unwind-protect (progn (setq ,mode-name ,name)
+                                  ,@body)
+             (unintern ,augmap-var)
+             (setq aph-keys-augment-map-alist
+                   (assq-delete-all ,mode-name
+                                    aph-keys-augment-map-alist))))))))
 
 
 ;;; Apparatus Tests
@@ -65,7 +71,13 @@ variable containing this map does not persist when BODY exits."
     (should (aph/ert-macro-does-not-leak
              'aph-keys-with-augmented-mode
              ''mode-augmented-map
-             `(mode ,param)))))
+             `(mode ,param)))
+    ;; Clean up `aph-keys-augment-map-alist', too.
+    (let (mode-x)
+      (aph-keys-with-augmented-mode mode param
+        (setq mode-x mode)
+        (should (assoc mode-x aph-keys-augment-map-alist)))
+      (should-not (assoc mode-x aph-keys-augment-map-alist)))))
 
 
 ;;; Tests for `emulation-mode-map-alists' setup
@@ -73,11 +85,11 @@ variable containing this map does not persist when BODY exits."
 (ert-deftest aph-keys-test-emma-setup ()
   "Test `emulation-mode-map-alists' setup for `aph-keys-mode'."
   (require 'dash)
-  ;; Both of the symbols `aph-keys-augment-map-alist' and
+  ;; Both of the symbols `aph-keys-minor-map-alist' and
   ;; `aph-keys-local-map-alist' should appear in
   ;; `emulation-mode-map-alists', and they should occur in that order.
   (should (member 'aph-keys-local-map-alist
-                  (should (member 'aph-keys-augment-map-alist
+                  (should (member 'aph-keys-minor-map-alist
                                   emulation-mode-map-alists)))))
 
 
@@ -105,22 +117,36 @@ variable containing this map does not persist when BODY exits."
     (setq var (aph-keys-augment-var mode))
     (unwind-protect
         (should (aph-keys-augmented-p mode))
-      (unintern var))))
+      (unintern var)
+      (setq aph-keys-augment-map-alist
+            (assq-delete-all mode aph-keys-augment-map-alist)))))
 
-(ert-deftest aph-keys-test-major-mode-bindings ()
-  "Test major bindings in `aph-keys-mode'." 
-  (aph-keys-with-augmented-mode mode 'fundamental-mode
-    (let ((aph-keys-mode nil))
-      (with-temp-buffer
-        (funcall mode)
-        (should (eq (key-binding "a") #'self-insert-command))
-        (define-key mode-map "a" #'move-beginning-of-line)
-        (define-key (aph-keys-augment mode) "a" #'ignore)
-        (should (eq (key-binding "a") #'move-beginning-of-line))
-        (aph-keys-mode 1)
-        (should (eq (key-binding "a") #'ignore))
-        (text-mode)
-        (should (eq (key-binding "a") #'self-insert-command))))))
+(ert-deftest aph-keys-test-mode-bindings ()
+  "Test mode bindings in `aph-keys-mode'." 
+  (aph-keys-with-augmented-mode test-major-mode 'fundamental-mode
+    (aph-keys-with-augmented-mode test-minor-mode :minor
+      (let ((aph-keys-mode nil))
+        (with-temp-buffer
+          ;; Set up keybindings
+          (define-key test-major-mode-map (kbd "a") #'foo-major)
+          (define-key test-minor-mode-map (kbd "a") #'foo-minor)
+          (define-key test-major-mode-augmented-map (kbd "a") #'aug-major)
+          (define-key test-minor-mode-augmented-map (kbd "a") #'aug-minor)
+          ;; Test keybindings (in Gray code order) 
+          (should (eq (key-binding (kbd "a")) #'self-insert-command))
+          (aph-keys-mode 1)             ; 000 -> 001
+          (funcall test-minor-mode 1)   ; 001 -> 011
+          (should (eq (key-binding (kbd "a")) #'aug-minor))
+          (aph-keys-mode -1)            ; 011 -> 010
+          (should (eq (key-binding (kbd "a")) #'foo-minor))
+          (funcall test-major-mode)     ; 010 -> 110
+          (should (eq (key-binding (kbd "a")) #'foo-minor))
+          (aph-keys-mode 1)             ; 110 -> 111
+          (should (eq (key-binding (kbd "a")) #'aug-minor))
+          (funcall test-minor-mode -1)  ; 111 -> 101
+          (should (eq (key-binding (kbd "a")) #'aug-major))
+          (aph-keys-mode -1)
+          (should (eq (key-binding (kbd "a")) #'foo-major)))))))
 
 
 (provide 'aph-keys-test)
