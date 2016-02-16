@@ -123,7 +123,6 @@ variable containing this map does not persist when BODY exits."
 
 (ert-deftest aph-keys-test-mode-bindings ()
   "Test mode bindings in `aph-keys-mode'."
-  :expected-result :failed
   (aph-keys-with-augmented-mode test-major-mode 'fundamental-mode
     (aph-keys-with-augmented-mode test-minor-mode :minor
       (let ((aph-keys-mode nil))
@@ -141,12 +140,13 @@ variable containing this map does not persist when BODY exits."
           (aph-keys-mode -1)            ; 011 -> 010
           (should (eq (key-binding (kbd "a")) #'foo-minor))
           (funcall test-major-mode)     ; 010 -> 110
+          (funcall test-minor-mode 1)
           (should (eq (key-binding (kbd "a")) #'foo-minor))
           (aph-keys-mode 1)             ; 110 -> 111
           (should (eq (key-binding (kbd "a")) #'aug-minor))
           (funcall test-minor-mode -1)  ; 111 -> 101
           (should (eq (key-binding (kbd "a")) #'aug-major))
-          (aph-keys-mode -1)
+          (aph-keys-mode -1)            ; 101 -> 100
           (should (eq (key-binding (kbd "a")) #'foo-major)))))))
 
 

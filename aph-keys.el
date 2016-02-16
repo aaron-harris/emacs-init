@@ -18,19 +18,26 @@ This alist contains all keymaps augmented for use by
 `aph-keys-mode'.  See the function `aph-keys-augment' for more
 information.")
 
-(defvar-local aph-keys-minor-mode-map-alist nil
+(defvar aph-keys-minor-mode-map-alist nil
   "Alist of active minor mode keymaps for `aph-keys-mode'.
 For use in `emulation-mode-map-alists'.
 
-Note that augmented keymaps for major modes will appear in this
+Note that augmented keymaps for major modes may appear in this
 list, but their presence does nothing since there is no
-corresponding control variable for a major mode.  Major mode
-bindings are instead handled by the function
-`aph-keys--update-major-mode'.")
+corresponding control variable for a major mode.  See
+`aph-keys-local-map-alist' and `aph-keys--update-major-mode' for
+the mechanism that manages the augmented keymap for the current
+major mode.
+
+The value of this variable is managed by `aph-keys-mode', and
+changes made directly to it are liable to be overwritten.  The
+variable `aph-keys-augment-map-alist' usually holds the same
+data, but is more permanent.  But generally speaking, even
+modifying that variable directly should not be necessary.")
 
 (defvar-local aph-keys-local-map-alist
   `((aph-keys-mode . ,(make-sparse-keymap)))
-  "An alist holding augmented keymap for current major mode.
+  "An alist holding the augmented keymap for current major mode.
 
 This alist should contain a single element of the
 form ('aph-keys-mode . KEYMAP), where KEYMAP is the augmented
@@ -46,8 +53,12 @@ maintained by the function `aph-keys--update-major-mode'.")
 
 (defvar aph-keys-mode-map (make-sparse-keymap)
   "Global keymap for `aph-keys-mode'.
-To bind a key in `aph-keys-mode' conditionally on a major or
-minor mode, use `aph-keys-augment'.")
+
+This keymap is the equivalent of `global-map' for
+`aph-keys-mode', and its bindings will be active whenever
+`aph-keys-mode' is enabled, provided they are not shadowed by a
+higher-priority keymap, such as an augmented keymap obtained
+from `aph-keys-augment'.")
 
 (add-to-list 'emulation-mode-map-alists
              'aph-keys-minor-mode-map-alist :append #'eq)
@@ -55,7 +66,14 @@ minor mode, use `aph-keys-augment'.")
              'aph-keys-local-map-alist :append #'eq)
 
 (define-minor-mode aph-keys-mode
-  "Mode for the personal keybindings of Aaron Harris."
+  "Mode for the personal keybindings of Aaron Harris.
+
+To bind a key globally (in a way that shadows, rather than
+overwrites, the default binding), use `aph-keys-mode-map'.  To
+bind a key in the same way, but specific to a particular major or
+minor mode, pass the symbol naming the mode to the function
+`aph-keys-augment', and then bind the key in the resulting
+keymap."
   :global  t
   :lighter " #"
   ;; Control of whether augmented minor mode maps are active occurs
@@ -78,7 +96,7 @@ contain the augmented keymap for MODE, if one exists.  See
 (defun aph-keys-augmented-p (mode)
   "Return non-nil if MODE has an augmented keymap.
 See `aph-keys-augment' for more information."
-  (let ((augmap  (aph-keys--augment-name mode)))
+  (let ((augmap (aph-keys--augment-name mode)))
     (boundp augmap)))
 
 (defmacro aph-keys-augment--define (mode)
@@ -112,13 +130,11 @@ This variable contains the keymap that would be returned by
   "Return augmented keymap corresponding to MODE for `aph-keys-mode'.
 
 The parameter MODE should be a symbol naming a major or minor
-mode (e.g., the symbol 'text-mode-map).  Other types of variables
-can be passed, but this serves no purpose, since augmented
-keymaps created in this way will not be automatically activated.
+mode (e.g., the symbol 'text-mode).  Other symbols can be passed,
+but this may or may not work as expected.
 
 The keymap returned will be active whenever both MODE (or a mode
-descended from MODE) and `aph-keys-mode' are active (once this
-feature, currently under construction, is complete).  This
+descended from MODE) and `aph-keys-mode' are active.  This
 provides a mechanism for mode-local keybindings that are still
 toggleable with `aph-keys-mode'.
 
@@ -143,18 +159,13 @@ be avoided."
 (defun aph-keys--update-major-mode ()
   "Update `aph-keys-local-mode-map-alist' for current major mode.
 
-Update the keymap stored in the cdr of
+Update the keymap stored in the cddr of
 `aph-keys-local-mode-map-alist' so that it reflects the current
 major mode.  If the current major mode is augmented, this keymap
 should be that augmented keymap, inheriting from
 `aph-keys-mode-map'.  Otherwise, it should just be
 `aph-keys-mode-map'.  See `aph-keys-augment' for more information
 on augmented keymaps.
-
-Also delete any entry keyed off the current ajor mode from
-`aph-keys-minor-map-alist', as this can cause augmented bindings
-for the major mode to inappropriately shadow bindings for
-augmented minor modes.
 
 This function is suitable for use in
 `after-change-major-mode-hook'."
@@ -164,9 +175,7 @@ This function is suitable for use in
                (unless (keymap-parent augmap)
                  (set-keymap-parent augmap aph-keys-mode-map))
                augmap)
-           aph-keys-mode-map)))
-    (setq aph-keys-minor-mode-map-alist
-          (assq-delete-all major-mode aph-keys-minor-mode-map-alist))
+           aph-keys-mode-map))) 
     (setq aph-keys-local-map-alist `((aph-keys-mode . ,keymap)))))
 
 (add-hook 'after-change-major-mode-hook #'aph-keys--update-major-mode)
