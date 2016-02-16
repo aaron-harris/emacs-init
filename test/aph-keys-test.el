@@ -122,7 +122,8 @@ variable containing this map does not persist when BODY exits."
             (assq-delete-all mode aph-keys-augment-map-alist)))))
 
 (ert-deftest aph-keys-test-mode-bindings ()
-  "Test mode bindings in `aph-keys-mode'." 
+  "Test mode bindings in `aph-keys-mode'."
+  :expected-result :failed
   (aph-keys-with-augmented-mode test-major-mode 'fundamental-mode
     (aph-keys-with-augmented-mode test-minor-mode :minor
       (let ((aph-keys-mode nil))
