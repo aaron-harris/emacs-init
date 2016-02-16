@@ -85,11 +85,11 @@ variable containing this map does not persist when BODY exits."
 (ert-deftest aph-keys-test-emma-setup ()
   "Test `emulation-mode-map-alists' setup for `aph-keys-mode'."
   (require 'dash)
-  ;; Both of the symbols `aph-keys-minor-map-alist' and
+  ;; Both of the symbols `aph-keys-minor-mode-map-alist' and
   ;; `aph-keys-local-map-alist' should appear in
   ;; `emulation-mode-map-alists', and they should occur in that order.
   (should (member 'aph-keys-local-map-alist
-                  (should (member 'aph-keys-minor-map-alist
+                  (should (member 'aph-keys-minor-mode-map-alist
                                   emulation-mode-map-alists)))))
 
 

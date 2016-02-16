@@ -18,7 +18,7 @@ This alist contains all keymaps augmented for use by
 `aph-keys-mode'.  See the function `aph-keys-augment' for more
 information.")
 
-(defvar aph-keys-minor-map-alist nil
+(defvar-local aph-keys-minor-mode-map-alist nil
   "Alist of active minor mode keymaps for `aph-keys-mode'.
 For use in `emulation-mode-map-alists'.
 
@@ -50,7 +50,7 @@ To bind a key in `aph-keys-mode' conditionally on a major or
 minor mode, use `aph-keys-augment'.")
 
 (add-to-list 'emulation-mode-map-alists
-             'aph-keys-minor-map-alist :append #'eq)
+             'aph-keys-minor-mode-map-alist :append #'eq)
 (add-to-list 'emulation-mode-map-alists
              'aph-keys-local-map-alist :append #'eq)
 
@@ -60,7 +60,7 @@ minor mode, use `aph-keys-augment'.")
   :lighter " #"
   ;; Control of whether augmented minor mode maps are active occurs
   ;; here.  For major modes, see `aph-keys--update-major-mode'.
-  (setq aph-keys-minor-map-alist
+  (setq aph-keys-minor-mode-map-alist
         (if aph-keys-mode aph-keys-augment-map-alist nil)))
 
 
@@ -141,20 +141,32 @@ be avoided."
 ;;; `aph-keys-mode': Major mode support
 ;;;====================================
 (defun aph-keys--update-major-mode ()
-  "Update `aph-keys-mode-map' for current major mode.
-Set `aph-keys-mode-map' to the augmented keymap for the current
-major mode, if one exists, and `aph-keys-mode-global-map'
-otherwise.  See `aph-keys-augment' for more information.
+  "Update `aph-keys-local-mode-map-alist' for current major mode.
+
+Update the keymap stored in the cdr of
+`aph-keys-local-mode-map-alist' so that it reflects the current
+major mode.  If the current major mode is augmented, this keymap
+should be that augmented keymap, inheriting from
+`aph-keys-mode-map'.  Otherwise, it should just be
+`aph-keys-mode-map'.  See `aph-keys-augment' for more information
+on augmented keymaps.
+
+Also delete any entry keyed off the current ajor mode from
+`aph-keys-minor-map-alist', as this can cause augmented bindings
+for the major mode to inappropriately shadow bindings for
+augmented minor modes.
 
 This function is suitable for use in
 `after-change-major-mode-hook'."
-  (let ((keymap 
+  (let ((keymap
          (if (aph-keys-augmented-p major-mode)
-             (let ((augmap (aph-keys-augment major-mode))) 
+             (let ((augmap (aph-keys-augment major-mode)))
                (unless (keymap-parent augmap)
                  (set-keymap-parent augmap aph-keys-mode-map))
                augmap)
            aph-keys-mode-map)))
+    (setq aph-keys-minor-mode-map-alist
+          (assq-delete-all major-mode aph-keys-minor-mode-map-alist))
     (setq aph-keys-local-map-alist `((aph-keys-mode . ,keymap)))))
 
 (add-hook 'after-change-major-mode-hook #'aph-keys--update-major-mode)
