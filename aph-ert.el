@@ -123,7 +123,7 @@ More specifically:
 Note that the minor mode constructed in this block doesn't actually do
 anything (i.e., its body is empty)."
   (declare (debug (symbolp body))
-           (indent 2))
+           (indent 1))
   `(aph/ert--with-test-mode ,name
        (lambda (mode)
          (eval `(define-minor-mode ,mode "Doc"
