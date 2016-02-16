@@ -10,23 +10,16 @@
 (require 'cl-lib)                       ; For `cl-pushnew'
 
 
-;;; `aph-keys-mode': Mode basics
-;;;=============================
-(defvar aph-keys-mode-map (make-sparse-keymap)
-  "Global keymap for `aph-keys-mode'.
-To bind a key in `aph-keys-mode' conditionally on a major or
-minor mode, use `aph-keys-augment'.")
-
-(define-minor-mode aph-keys-mode
-  "Mode for the personal keybindings of Aaron Harris."
-  :global  t
-  :lighter " #")
-
-
-;;; `aph-keys-mode': Setup for `emulation-mode-map-alists'
-;;;=======================================================
+;;; `aph-keys-mode': Keymap Setup
+;;;==============================
 (defvar aph-keys-augment-map-alist nil
   "Alist of augmented keymaps for `aph-keys-mode'.
+This alist contains all keymaps augmented for use by
+`aph-keys-mode'.  See the function `aph-keys-augment' for more
+information.")
+
+(defvar aph-keys-minor-map-alist nil
+  "Alist of active minor mode keymaps for `aph-keys-mode'.
 For use in `emulation-mode-map-alists'.
 
 Note that augmented keymaps for major modes will appear in this
@@ -51,10 +44,24 @@ be buffer-local and thus vary with the buffer's major mode.
 The association between this variable and the major mode is
 maintained by the function `aph-keys--update-major-mode'.")
 
+(defvar aph-keys-mode-map (make-sparse-keymap)
+  "Global keymap for `aph-keys-mode'.
+To bind a key in `aph-keys-mode' conditionally on a major or
+minor mode, use `aph-keys-augment'.")
+
 (add-to-list 'emulation-mode-map-alists
-             'aph-keys-augment-map-alist :append #'eq)
+             'aph-keys-minor-map-alist :append #'eq)
 (add-to-list 'emulation-mode-map-alists
              'aph-keys-local-map-alist :append #'eq)
+
+(define-minor-mode aph-keys-mode
+  "Mode for the personal keybindings of Aaron Harris."
+  :global  t
+  :lighter " #"
+  ;; Control of whether augmented minor mode maps are active occurs
+  ;; here.  For major modes, see `aph-keys--update-major-mode'.
+  (setq aph-keys-minor-map-alist
+        (if aph-keys-mode aph-keys-augment-map-alist nil)))
 
 
 ;;; `aph-keys-mode': Augmented keymaps

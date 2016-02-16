@@ -50,7 +50,7 @@ More specifically:
 
 (ert-deftest aph/mode-tag-test-with-mode-tag--body ()
   "Test that body of `aph/with-test-mode-tag' is executed."
-  (aph/ert-macro-executes-body aph/with-test-mode-tag (tag)))
+  (aph/ert-macro-executes-body 'aph/with-test-mode-tag '('tag)))
 
 (ert-deftest aph/mode-tag-test-with-mode-tag--bindings ()
   "Test that `aph/with-test-mode-tag' sets bindings correctly."
