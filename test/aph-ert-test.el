@@ -117,7 +117,13 @@ using `should'."
 (ert-deftest aph/ert-test-with-minor-mode--cleanup ()
   "Test that `aph/ert-with-minor-mode' cleans up after itself."
   (should (aph/ert-test-mode-wrapper--cleanup
-           'aph/ert-with-minor-mode)))
+           'aph/ert-with-minor-mode))
+  ;; Clean up `minor-mode-map-alist', too.
+  (let (mode-x)
+    (aph/ert-with-minor-mode mode
+      (setq mode-x mode)
+      (should (assoc mode-x minor-mode-map-alist)))
+    (should-not (assoc mode-x minor-mode-map-alist))))
 
 
 (provide 'aph-ert-test)
