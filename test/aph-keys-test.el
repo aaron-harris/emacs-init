@@ -174,15 +174,15 @@ variable containing this map does not persist when BODY exits."
 (ert-deftest aph-keys-test-bind-keys ()
   "Test functionality of `aph/bind-keys'"
   (let ((test (lambda (mode)
-                (eval `(aph/bind-keys :augment ,mode
-                                      ("a" . foo))) 
+                (eval `(bind-keys :augment ,mode
+                                  ("a" . foo))) 
                 (should (eq (lookup-key (aph-keys-augment mode) (kbd "a"))
                             #'foo))
                 (should (assoc `("a" . ,(aph-keys-augment-name mode))
                                personal-keybindings))))
         (personal-keybindings nil))
-    (dolist (param '('fundamental-mode :minor))
-      ;; With mode already augmented
+    ;; With mode already augmented
+    (dolist (param '('fundamental-mode :minor)) 
       (aph-keys-with-augmented-mode foo-mode param
         (funcall test foo-mode)))
     ;; With mode not previously augmented
