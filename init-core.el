@@ -183,8 +183,8 @@ The return value depends only on `aph/machine'."
               ("M-g q"   . avy-goto-char)
               ("M-g M-g" . avy-goto-line)
               ("M-g M-w" . avy-goto-word-or-subword-1))
-  :bind (:map isearch-mode-map
-              ("M-g" . avy-isearch))
+  :bind (:augment isearch-mode
+                  ("M-g" . avy-isearch))
   :config
   (setq avy-all-windows     nil
         avy-background      t
@@ -213,7 +213,7 @@ The return value depends only on `aph/machine'."
   :ensure t
   :defer t
   :config
-  (bind-keys :map cider-mode-map
+  (bind-keys :augment cider-mode
              ("C-h A" . cider-apropos)
              ("C-h D" . cider-apropos-documentation))
   (setq cider-auto-select-error-buffer      nil
@@ -263,7 +263,7 @@ The return value depends only on `aph/machine'."
   :init
   (add-hook 'lisp-tag-hook #'company-mode)
   :config
-  (bind-keys :map company-mode-map
+  (bind-keys :augment company-mode
              ("<tab>" . company-indent-or-complete-common))
   (bind-keys :map company-active-map
              ("<tab>" . company-complete-common-or-cycle))
@@ -302,21 +302,21 @@ The return value depends only on `aph/machine'."
 (use-package aph-elfeed
   :after elfeed
   :config
-  (bind-keys :map elfeed-search-mode-map
+  (bind-keys :augment elfeed-search-mode
              ("<return>" . aph/elfeed-search-show-entry)
              ("'"        . aph/elfeed-search-next-favorite-filter))
-  (bind-keys :map elfeed-show-mode-map
+  (bind-keys :augment elfeed-show-mode
              ("p" . aph/elfeed-show-prev)
              ("n" . aph/elfeed-show-next))
   (with-eval-after-load 'eww
-    (bind-keys :map eww-mode-map
-      ("p" . aph/elfeed-show-prev)
-      ("n" . aph/elfeed-show-next))))
+    (bind-keys :augment eww-mode
+               ("p" . aph/elfeed-show-prev)
+               ("n" . aph/elfeed-show-next))))
 
 (use-package eww
   :bind (:map aph/launch-map ("C-w" . eww))
   :config
-  (bind-keys :map eww-mode-map
+  (bind-keys :augment eww-mode
              ("S-<tab>" . shr-previous-link)
              ("["       . eww-previous-url)
              ("]"       . eww-next-url)
@@ -372,7 +372,7 @@ The return value depends only on `aph/machine'."
 (use-package haskell-mode
   :ensure t
   :config
-  (bind-keys :map haskell-mode-map
+  (bind-keys :augment haskell-mode
              ("C-c C-c" . haskell-compile)
              ("C-c C-z" . haskell-interactive-switch))
   ;; Stack setup
@@ -384,8 +384,8 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-haskell
   :after haskell-mode
-  :bind (:map haskell-mode-map
-              ("C-c C-l" . aph/haskell-process-load-file-cygwin)))
+  :bind (:augment haskell-mode
+                  ("C-c C-l" . aph/haskell-process-load-file-cygwin)))
 
 (use-package helm
   :ensure t
@@ -548,7 +548,7 @@ The return value depends only on `aph/machine'."
               ("C-r" . ielm))
   :config
   (use-package aph-ielm)
-  (bind-keys :map ielm-map
+  (bind-keys :augment inferior-emacs-lisp-mode
              ("C-c C-t" . aph/eval-expression-toggle-clean-output)
              ("C-c M-w" . aph/ielm-copy-last-output))
   (aph/mode-tag-add 'ielm-mode 'lisp))
@@ -556,7 +556,7 @@ The return value depends only on `aph/machine'."
 (use-package aph-iimage
   :after iimage
   :config
-  (bind-keys :map iimage-mode-map
+  (bind-keys :augment iimage-mode
              ("C-c i" . aph/iimage-refresh)))
 
 (use-package info
@@ -569,7 +569,8 @@ The return value depends only on `aph/machine'."
   :after info
   :bind (:map aph-keys-mode-map
               ("C-h i" . aph/info-mode-or-clone-buffer))
-  :bind (:map Info-mode-map ("0" . aph/Info-final-menu-item)))
+  :bind (:augment Info-mode
+                  ("0" . aph/Info-final-menu-item)))
 
 (use-package aph-keypad
   :bind (:map aph-keys-mode-map 
@@ -578,7 +579,7 @@ The return value depends only on `aph/machine'."
 (use-package lisp-mode
   :defer t
   :config
-  (bind-keys :map emacs-lisp-mode-map
+  (bind-keys :augment emacs-lisp-mode
              ("C-c e b" . eval-buffer)
              ("C-c e d" . eval-defun)
              ("C-c e r" . eval-region)
@@ -589,9 +590,9 @@ The return value depends only on `aph/machine'."
   (aph/mode-tag-add 'lisp-interaction-mode 'lisp)
   ;; Add `use-package' blocks to Imenu
   (add-to-list 'lisp-imenu-generic-expression
-                 '("Packages"
-                   "^(use-package\\s-+\\(\\_<.+?\\_>\\)"
-                   1)))
+               '("Packages"
+                 "^(use-package\\s-+\\(\\_<.+?\\_>\\)"
+                 1)))
 
 (use-package minibuffer
   :defer t
@@ -603,10 +604,10 @@ The return value depends only on `aph/machine'."
   :bind (:map aph-keys-mode-map
               ("C-c l" . org-store-link))
   :config
-  (message "Loading org...")          ; Because this may take a while.
-  (unbind-key "C-c [" org-mode-map)
-  (unbind-key "C-c ]" org-mode-map)
-  (bind-keys :map org-mode-map
+  (message "Loading org...")          ; Because this may take a while. 
+  (bind-keys :augment org-mode
+             ("C-c [" . undefined)
+             ("C-c ]" . undefined)
              ([remap org-goto] . helm-semantic-or-imenu))
   (use-package init-org))
 
@@ -615,14 +616,14 @@ The return value depends only on `aph/machine'."
   :bind (:map aph-keys-mode-map
               ("C-c w" . aph/org-goto-last-refile))
   :config 
-  (bind-keys :map org-mode-map 
+  (bind-keys :augment org-mode
              ("C-c s SPC"   . aph/org-spin-basic)
              ("C-c s M-SPC" . aph/org-spin-weighted)))
 
 (use-package org-agenda
   :defer t
   :config 
-  (bind-keys :map org-agenda-mode-map
+  (bind-keys :augment org-agenda-mode
              ;; `org-agenda-quit' is bugged, as of Emacs 24.5.1 and
              ;; Org 8.3.2.  This might be a bug in `bury-buffer'?
              ;; Anyway, `quit-window' still works, so let's just use
@@ -656,7 +657,7 @@ The return value depends only on `aph/machine'."
               ("C-c t x" . org-clock-cancel)
               ("C-c t r" . org-clock-in-last))
   :config
-  (bind-keys :map org-mode-map 
+  (bind-keys :augment org-mode
              ("C-c t i" . org-clock-in)))
 
 (use-package org-mobile
@@ -814,7 +815,7 @@ The return value depends only on `aph/machine'."
   (smartparens-global-mode)
   (add-hook 'lisp-tag-hook #'smartparens-strict-mode)
   :config
-  (bind-keys :map smartparens-mode-map
+  (bind-keys :augment smartparens-mode
              ;; Movement
              ([remap backward-sexp]    . sp-backward-sexp)
              ([remap forward-sexp]     . sp-forward-sexp)
@@ -845,7 +846,7 @@ The return value depends only on `aph/machine'."
              ("M-)"                    . sp-up-sexp)
              ;; Narrowing
              ("C-x n ("                . sp-narrow-to-sexp))
-  (bind-keys :map smartparens-strict-mode-map
+  (bind-keys :augment smartparens-strict-mode
              (")" . sp-up-sexp))
   ;; String handling
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
@@ -860,11 +861,11 @@ The return value depends only on `aph/machine'."
 
 (use-package smartscan
   :ensure t
-  :bind (:map smartscan-map
-              ("M-p"   . nil)
-              ("M-n"   . nil)
-              ("C-M-r" . smartscan-symbol-go-backward)
-              ("C-M-s" . smartscan-symbol-go-forward))
+  :bind (:augment smartscan-mode
+                  ("M-p"   . nil)
+                  ("M-n"   . nil)
+                  ("C-M-r" . smartscan-symbol-go-backward)
+                  ("C-M-s" . smartscan-symbol-go-forward))
   :init
   (global-smartscan-mode 1))
 
