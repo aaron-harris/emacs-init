@@ -104,7 +104,7 @@ variable containing this map does not persist when BODY exits."
                       (aph-keys-augment mode)
                       (symbol-value (aph-keys-augment-var mode))))
       (should (equal (aph-keys-augment-var mode)
-                     (aph-keys--augment-name mode)))
+                     (aph-keys-augment-name mode)))
       (define-key mode-augmented-map (kbd "a") #'ignore)
       (should (eq (lookup-key (aph-keys-augment mode) (kbd "a"))
                   #'ignore)))))
@@ -149,5 +149,22 @@ variable containing this map does not persist when BODY exits."
           (aph-keys-mode -1)            ; 101 -> 100
           (should (eq (key-binding (kbd "a")) #'foo-major)))))))
 
+(ert-deftest aph-keys-test-mode-parentage ()
+  "Test that mode parentage is correct in `aph-keys-mode'."
+  (aph-keys-with-augmented-mode mode1 'fundamental-mode
+    (let (mode2-name)
+      (aph/ert-with-major-mode mode2 mode1
+        (setq mode2-name mode2)
+        (unwind-protect
+            (with-temp-buffer
+              (define-key mode1-augmented-map (kbd "a") #'foo)
+              (funcall mode2)
+              (should (eq (key-binding (kbd "a")) #'foo)))
+          (unintern (aph-keys-augment-name mode2-name))
+          (setq aph-keys-augment-map-alist
+                (assq-delete-all mode2-name
+                                 aph-keys-augment-map-alist)))))))
+        
+        
 
 (provide 'aph-keys-test)

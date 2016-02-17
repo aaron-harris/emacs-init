@@ -85,8 +85,9 @@ keymap."
 ;;; `aph-keys-mode': Augmented keymaps
 ;;;===================================
 
-(defun aph-keys--augment-name (mode)
+(defun aph-keys-augment-name (mode)
   "Return the name of the augmented keymap for MODE.
+Do not augment MODE if it is not already.
 
 The returned symbol is the name of the variable that would
 contain the augmented keymap for MODE, if one exists.  See
@@ -96,7 +97,7 @@ contain the augmented keymap for MODE, if one exists.  See
 (defun aph-keys-augmented-p (mode)
   "Return non-nil if MODE has an augmented keymap.
 See `aph-keys-augment' for more information."
-  (let ((augmap (aph-keys--augment-name mode)))
+  (let ((augmap (aph-keys-augment-name mode)))
     (boundp augmap)))
 
 (defmacro aph-keys-augment--define (mode)
@@ -104,7 +105,7 @@ See `aph-keys-augment' for more information."
 Used by `aph-keys-augment'.  See that function for more
 details."
   (declare (debug (symbolp)))
-  (let ((augmap (aph-keys--augment-name mode)))
+  (let ((augmap (aph-keys-augment-name mode)))
     `(defvar ,augmap (make-sparse-keymap)
        ,(format (concat "Augmented keymap for `%s'.\n"
                         "See `aph-keys-augment' for more details.")
@@ -118,13 +119,11 @@ Add the augmented keymap for MODE (a symbol) to
         aph-keys-augment-map-alist))
 
 (defun aph-keys-augment-var (mode)
-  "As `aph-keys-augment', but return a variable.
-This variable contains the keymap that would be returned by
-`aph-keys-augment'."
+  "As `aph-keys-augment-name', but augment MODE."
   (unless (aph-keys-augmented-p mode) 
       (eval `(aph-keys-augment--define ,mode))
       (aph-keys-augment--register mode))
-  (aph-keys--augment-name mode))
+  (aph-keys-augment-name mode))
 
 (defun aph-keys-augment (mode)
   "Return augmented keymap corresponding to MODE for `aph-keys-mode'.
@@ -156,26 +155,48 @@ be avoided."
 
 ;;; `aph-keys-mode': Major mode support
 ;;;====================================
+(defun aph-keys--set-major-mode-parentage (mode)
+  "Set parentage of augmented keymap for MODE.
+
+Set the parentage of the augmented keymap for MODE to reflect the
+parentage of MODE as a derived major mode, augmenting ancestral
+modes as necessary.  The augmented keymap for a non-derived mode
+inherits from `aph-keys-mode-map'.  Return the modified keymap.
+
+For example, suppose that MODE is a mode foo-mode that derives
+from bar-mode, and bar-mode in turn derives from `text-mode'.
+Then
+* First, bar-mode and `text-mode' would be augmented (if they weren't
+  already).
+* The parent for the keymap (aph-keys-augment foo-mode) would be set
+  to (aph-keys-augment bar-mode).
+* The parent for (aph-keys-augment bar-mode) would be
+  (aph-keys-augment text-mode).
+* The parent for (aph-keys-augment text-mode) would be
+  `aph-keys-mode-map'.
+* Finally, (aph-keys-augment foo-mode) would be returned.
+
+Do not pass minor modes to this function, as it will likely
+disrupt precedence of augmented keymaps."
+  (let ((keymap  (aph-keys-augment mode))
+        (parent  (get-mode-local-parent mode)))
+    (set-keymap-parent keymap
+                       (if parent
+                           (aph-keys--set-major-mode-parentage parent)
+                         aph-keys-mode-map))
+    keymap))
+
 (defun aph-keys--update-major-mode ()
   "Update `aph-keys-local-mode-map-alist' for current major mode.
 
 Update the keymap stored in the cddr of
 `aph-keys-local-mode-map-alist' so that it reflects the current
-major mode.  If the current major mode is augmented, this keymap
-should be that augmented keymap, inheriting from
-`aph-keys-mode-map'.  Otherwise, it should just be
-`aph-keys-mode-map'.  See `aph-keys-augment' for more information
-on augmented keymaps.
+major mode.  This will call `aph-keys--set-major-mode-parentage'
+to update the parentage of the augmented map for that mode.
 
 This function is suitable for use in
 `after-change-major-mode-hook'."
-  (let ((keymap
-         (if (aph-keys-augmented-p major-mode)
-             (let ((augmap (aph-keys-augment major-mode)))
-               (unless (keymap-parent augmap)
-                 (set-keymap-parent augmap aph-keys-mode-map))
-               augmap)
-           aph-keys-mode-map))) 
+  (let ((keymap (aph-keys--set-major-mode-parentage major-mode)))
     (setq aph-keys-local-map-alist `((aph-keys-mode . ,keymap)))))
 
 (add-hook 'after-change-major-mode-hook #'aph-keys--update-major-mode)
