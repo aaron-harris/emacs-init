@@ -75,11 +75,11 @@ minor mode, pass the symbol naming the mode to the function
 `aph-keys-augment', and then bind the key in the resulting
 keymap."
   :global  t
-  :lighter " #"
-  ;; Control of whether augmented minor mode maps are active occurs
-  ;; here.  For major modes, see `aph-keys--update-major-mode'.
+  :lighter " #" 
+  ;; Make sure the appropriate major and minor mode maps are active.
   (setq aph-keys-minor-mode-map-alist
-        (if aph-keys-mode aph-keys-augment-map-alist nil)))
+        (if aph-keys-mode aph-keys-augment-map-alist nil))
+  (when aph-keys-mode (aph-keys--update-major-mode)))
 
 
 ;;; `aph-keys-mode': Augmented keymaps
