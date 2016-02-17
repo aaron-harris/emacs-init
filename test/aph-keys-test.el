@@ -121,6 +121,9 @@ variable containing this map does not persist when BODY exits."
       (setq aph-keys-augment-map-alist
             (assq-delete-all mode aph-keys-augment-map-alist)))))
 
+
+;;; Keybinding Precedence Tests
+;;;============================
 (ert-deftest aph-keys-test-mode-bindings ()
   "Test mode bindings in `aph-keys-mode'."
   (aph-keys-with-augmented-mode test-major-mode 'fundamental-mode
@@ -164,6 +167,31 @@ variable containing this map does not persist when BODY exits."
           (setq aph-keys-augment-map-alist
                 (assq-delete-all mode2-name
                                  aph-keys-augment-map-alist)))))))
+
+
+;;; `bind-keys' Support Machinery Tests
+;;;====================================
+(ert-deftest aph-keys-test-bind-keys ()
+  "Test functionality of `aph/bind-keys'"
+  (let ((test (lambda (mode)
+                (eval `(aph/bind-keys :augment ,mode
+                                      ("a" . foo))) 
+                (should (eq (lookup-key (aph-keys-augment mode) (kbd "a"))
+                            #'foo))
+                (should (assoc `("a" . ,(aph-keys-augment-name mode))
+                               personal-keybindings))))
+        (personal-keybindings nil))
+    (dolist (param '('fundamental-mode :minor))
+      ;; With mode already augmented
+      (aph-keys-with-augmented-mode foo-mode param
+        (funcall test foo-mode)))
+    ;; With mode not previously augmented
+    (aph/ert-with-minor-mode foo-mode
+      (setq var (aph-keys-augment-name foo-mode))
+      (unwind-protect (funcall test foo-mode) 
+        (unintern var)
+        (setq aph-keys-augment-map-alist
+              (assq-delete-all foo-mode aph-keys-augment-map-alist))))))
         
         
 

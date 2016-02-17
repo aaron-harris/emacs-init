@@ -7,7 +7,7 @@
 ;; A minor mode for implementing my personal keybindings, along with
 ;; some other utilities related to keybindings.
 
-(require 'cl-lib)                       ; For `cl-pushnew'
+(require 'bind-keys)                    ; For `bind-keys'
 
 
 ;;; `aph-keys-mode': Keymap Setup
@@ -200,6 +200,26 @@ This function is suitable for use in
     (setq aph-keys-local-map-alist `((aph-keys-mode . ,keymap)))))
 
 (add-hook 'after-change-major-mode-hook #'aph-keys--update-major-mode)
+
+
+;;; `aph-keys-mode': `bind-keys' Support
+;;;=====================================
+(defmacro aph/bind-keys (&rest args)
+  "As `bind-keys', with :augment keyword.
+
+The :augment keyword takes the name of a major or minor mode and
+binds the specified keys in the augmented keymap associated with
+that mode, for use with `aph-keys-mode'.  See `aph-keys-augment'
+for more information." 
+  (let ((augment  (plist-get args :augment)))
+    (if augment
+        ;; Note that we aren't removing the :augment key here.
+        ;; Instead we're relying on undocumented behavior of
+        ;; `bind-keys', specifically that it simply ignores
+        ;; keywords it does not recognize.
+        `(progn (aph-keys-augment ',augment) 
+                (bind-keys :map ,(aph-keys-augment-name augment) ,@args))
+      `(bind-keys ,@args))))
 
 
 ;;; Key Translation
