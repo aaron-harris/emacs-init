@@ -300,12 +300,13 @@ The return value depends only on `aph/machine'."
   (setq elfeed-db-directory "~/sync/elfeed")
 
   ;; Bugfixes
-  ;; `elfeed-search-mode' does not follow the convention of using
-  ;; `run-mode-hooks' and thus does not run
+  ;; The various elfeed modes do not follow the convention of using
+  ;; `run-mode-hooks' and thus do not run
   ;; `after-change-major-mode-hook'.  This can probably be fixed
   ;; through advice; in the meantime, the following line is an easy
   ;; stopgap fix for the immediate problem this causes for me.
   (add-hook 'elfeed-search-mode-hook #'aph-keys--update-major-mode)
+  (add-hook 'elfeed-show-mode-hook   #'aph-keys--update-major-mode) 
 
   ;; Load the feed list
   (use-package init-elfeed))

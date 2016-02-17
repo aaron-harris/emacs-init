@@ -7,6 +7,7 @@
 ;; A minor mode for implementing my personal keybindings, along with
 ;; some other utilities related to keybindings.
 
+(require 'aph-symbol)                   ; For `aph/symbol-concat'
 (require 'bind-key)                     ; For `bind-keys'
 
 
