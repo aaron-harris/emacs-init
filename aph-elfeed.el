@@ -6,6 +6,7 @@
 
 ;;; This file contains functions extending `elfeed'.
 (require 'elfeed)
+(require 'aph-advice)                   ; For `aph/advice-once'
 
 
 ;;; Link Tags
@@ -24,7 +25,6 @@ If ENTRY doesn't have the \"link\" tag, call `elfeed-show-entry'.
 In this case, ignore the EXTERNAL parameter."
   (interactive (list (elfeed-search-selected :ignore-region)
                      current-prefix-arg)) 
-  (require 'aph-advice)              ; For `aph/advice-once'
   (require 'aph-browse-url)          ; For `aph/browse-url-prefer-eww'
   ;; We want to copy all behavior of `elfeed-search-show-entry',
   ;; except possibly the call to `elfeed-show-entry', which we
@@ -39,7 +39,7 @@ In this case, ignore the EXTERNAL parameter."
 (defun aph/elfeed-show-next (&optional external)
   "As `elfeed-show-next', but intelligently follow links.
 See `aph/elfeed-search-show-entry' for details."
-  (interactive)
+  (interactive) 
   (aph/advice-once #'elfeed-search-show-entry
                    :override #'aph/elfeed-search-show-entry) 
   (elfeed-show-next))
