@@ -292,11 +292,22 @@ The return value depends only on `aph/machine'."
   :bind (:map aph/launch-map
               ("C-f" . elfeed))
   :config
+  ;; Basic config
   (setq elfeed-sort-order            'ascending
         aph/elfeed-favorite-filters  '("@6-months-ago +unread" "+todo"))
   (setq url-queue-parallel-processes 1
         url-queue-timeout            30)
   (setq elfeed-db-directory "~/sync/elfeed")
+
+  ;; Bugfixes
+  ;; `elfeed-search-mode' does not follow the convention of using
+  ;; `run-mode-hooks' and thus does not run
+  ;; `after-change-major-mode-hook'.  This can probably be fixed
+  ;; through advice; in the meantime, the following line is an easy
+  ;; stopgap fix for the immediate problem this causes for me.
+  (add-hook 'elfeed-search-mode-hook #'aph-keys--update-major-mode)
+
+  ;; Load the feed list
   (use-package init-elfeed))
 
 (use-package aph-elfeed
