@@ -179,7 +179,7 @@ Then
 Do not pass minor modes to this function, as it will likely
 disrupt precedence of augmented keymaps."
   (let ((keymap  (aph-keys-augment mode))
-        (parent  (get-mode-local-parent mode)))
+        (parent  (get mode 'derived-mode-parent)))
     (set-keymap-parent keymap
                        (if parent
                            (aph-keys--set-major-mode-parentage parent)
