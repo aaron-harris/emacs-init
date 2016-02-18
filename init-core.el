@@ -116,8 +116,8 @@ The return value depends only on `aph/machine'."
            ("<down>"       . scroll-up-line)
            ("s-]"          . other-window)
            ("C-S-t"        . transpose-paragraphs)
-           ("<s-apps> k"   .   flush-lines)
-           ("<s-apps> M-k" . keep-lines)) 
+           ("s-<apps> k"   . flush-lines)
+           ("s-<apps> M-k" . keep-lines)) 
 
 
 ;;; Package Configuration
@@ -131,10 +131,10 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-number-lines
   :bind (:map aph-keys-mode-map
-         ("<s-apps> n"       . aph/number-lines)
-         ("<s-apps> C-n"     . aph/number-lines-alpha)
-         ("<s-apps> M-n o"   . aph/number-lines-open)
-         ("<s-apps> M-n M-o" . aph/number-lines-open-multiple)))
+         ("s-<apps> n"       . aph/number-lines)
+         ("s-<apps> C-n"     . aph/number-lines-alpha)
+         ("s-<apps> M-n o"   . aph/number-lines-open)
+         ("s-<apps> M-n M-o" . aph/number-lines-open-multiple)))
 
 (use-package aph-theme
   :bind (:map aph-keys-mode-map
@@ -392,7 +392,7 @@ The return value depends only on `aph/machine'."
               ([remap apropos-command]  . helm-apropos)
               ("C-z C-s"                . helm-google-suggest)
               ("C-z M-c"                . helm-calcul-expression)
-              ("C-z C-p"                . helm-list-elisp-packages))
+              ("C-z C-p"                . helm-list-elisp-packages)) 
   :bind (:map helm-map
               ("<tab>"    . helm-execute-persistent-action)
               ("C-j"      . nil)
@@ -853,8 +853,8 @@ The return value depends only on `aph/machine'."
 
 (use-package sort
   :bind (:map aph-keys-mode-map
-              ("<s-apps> d" . delete-duplicate-lines)
-              ("<s-apps> s" . sort-lines)))
+              ("s-<apps> d" . delete-duplicate-lines)
+              ("s-<apps> s" . sort-lines)))
 
 (use-package tex-site
   :ensure auctex
