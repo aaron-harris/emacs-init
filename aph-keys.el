@@ -117,7 +117,11 @@ details."
 Add the augmented keymap for MODE (a symbol) to
 `aph-keys-augment-map-alist'."
   (push (cons mode (aph-keys-augment mode))
-        aph-keys-augment-map-alist))
+        aph-keys-augment-map-alist)
+  ;; Also update `aph-keys-minor-mode-map-alist' so new keymap gets
+  ;; picked up immediately.
+  (when aph-keys-mode (setq aph-keys-minor-mode-map-alist
+                            aph-keys-augment-map-alist)))
 
 (defun aph-keys-augment-var (mode)
   "As `aph-keys-augment-name', but augment MODE."
