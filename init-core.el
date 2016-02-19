@@ -89,7 +89,7 @@ The return value depends only on `aph/machine'."
 
 
 ;;; Configuration: Source-Level
-;;;===========================
+;;;============================
 (prefer-coding-system 'utf-8-unix)
 
 ;; UI Configuration
@@ -123,7 +123,11 @@ The return value depends only on `aph/machine'."
            ("C-S-t"        . transpose-paragraphs)
            ("C-x \\"       . toggle-input-method)
            ("s-<apps> k"   . flush-lines)
-           ("s-<apps> M-k" . keep-lines)) 
+           ("s-<apps> M-k" . keep-lines)
+           ("M-p"          . backward-paragraph)
+           ("M-n"          . forward-paragraph)
+           ("C-'"          . query-replace)
+           ("M-'"          . query-replace-regexp))
 
 
 ;;; Package Configuration
@@ -755,7 +759,8 @@ The return value depends only on `aph/machine'."
               ("C-S-k"   . kill-whole-line)
               ("C-x M-k" . append-next-kill) 
               ("M-= w"   . count-words)
-              ("M-= l"   . what-line))
+              ("M-= l"   . what-line)
+              ("M-i"     . zap-to-char))
   :config
   ;; Global minor modes
   (column-number-mode)
@@ -850,10 +855,9 @@ The return value depends only on `aph/machine'."
 (use-package smartscan
   :ensure t
   :bind (:augment smartscan-mode
-                  ("M-p"   . nil)
-                  ("M-n"   . nil)
                   ("C-M-r" . smartscan-symbol-go-backward)
-                  ("C-M-s" . smartscan-symbol-go-forward))
+                  ("C-M-s" . smartscan-symbol-go-forward)
+                  ("C-M-'" . smartscan-symbol-replace))
   :init
   (global-smartscan-mode 1))
 
@@ -928,6 +932,10 @@ The return value depends only on `aph/machine'."
   (setq visible-mark-max   2
         visible-mark-faces '(aph/visible-mark-top
                              aph/visible-mark-other)))
+
+(use-package window
+  :bind (:map aph-keys-mode-map
+              ("M-l" . move-to-window-line-top-bottom)))
 
 (use-package aph-window
   :bind (:map aph-keys-mode-map
