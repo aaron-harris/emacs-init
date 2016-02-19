@@ -61,12 +61,14 @@ The return value depends only on `aph/machine'."
 (use-package aph-keys
   :bind (("C-x C-#" . aph-keys-mode))
   :bind (:map aph-keys-mode-map
-              ("<return>" . aph-keys-default-return-command))
+              ("<return>"   . aph-keys-default-return-command))
   :demand t
   :config
   ;; Key liberation
   (aph/keys-liberate-escape)
   (add-hook 'after-make-frame-functions #'aph/keys-liberate-escape)
+  ;; Map <kp-enter> to <return> rather than to RET (C-m) 
+  (define-key function-key-map (kbd "<kp-enter>") (kbd "<return>"))
   ;; Personal keybinding mode
   (aph-keys-mode))
 
