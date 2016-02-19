@@ -579,6 +579,11 @@ The return value depends only on `aph/machine'."
   (add-to-list 'lisp-imenu-generic-expression
                '("Packages"
                  "^(use-package\\s-+\\(\\_<.+?\\_>\\)"
+                 1))
+  ;; Add `defhydra's to Imenu
+  (add-to-list 'lisp-imenu-generic-expression
+               '("Hydras"
+                 "^(defhydra\\s-+\\(\\_<.+?\\_>\\)"
                  1)))
 
 (use-package minibuffer
