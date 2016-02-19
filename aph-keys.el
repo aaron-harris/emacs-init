@@ -231,6 +231,28 @@ Intended as :around advice for `bind-keys'."
 (advice-add #'bind-keys :around #'aph/bind-keys-augment-advice)
 
 
+;;; Compatibility Functions
+;;;========================
+(defun aph-keys-default-return-command ()
+  "Execute the command bound to RET without `aph-keys-mode'.
+
+Since `aph-keys-mode' shadows ordinary (non-augmented)
+mode-specific bindings, it can be difficult to bind
+C-m (a.k.a. RET) in `aph-keys-mode' separately from <return>.
+This command attempts to alleviate that difficulty by executing
+whatever command would be bound to RET if `aph-keys-mode' were
+not active.
+
+If you intend to bind C-m separately from <return> in
+`aph-keys-mode-map' or any augmented keymap, bind this command to
+<return> in `aph-keys-mode-map'."
+  (interactive)
+  (let ((aph-keys-mode                  nil)
+        (aph-keys-minor-mode-map-alist  nil))
+    (call-interactively
+     (or (key-binding (kbd "RET")) #'newline))))
+
+
 ;;; Key Translation
 ;;;================
 ;; Functions in this section deal with translation keymaps.

@@ -59,7 +59,9 @@ The return value depends only on `aph/machine'."
 ;; subsequent package declarations.
 
 (use-package aph-keys
-  :bind ("C-x C-#" . aph-keys-mode)
+  :bind (("C-x C-#" . aph-keys-mode))
+  :bind (:map aph-keys-mode-map
+              ("<return>" . aph-keys-default-return-command))
   :demand t
   :config
   ;; Key liberation
@@ -706,6 +708,7 @@ The return value depends only on `aph/machine'."
 
 (use-package register
   :bind (:map aph-keys-mode-map
+              ("C-m"     . copy-to-register)
               ("C-x r a" . append-to-register)))
 
 (use-package saveplace
