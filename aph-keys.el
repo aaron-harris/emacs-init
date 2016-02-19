@@ -249,8 +249,12 @@ If you intend to bind C-m separately from <return> in
   (interactive)
   (let ((aph-keys-mode                  nil)
         (aph-keys-minor-mode-map-alist  nil))
-    (call-interactively
-     (or (key-binding (kbd "RET")) #'newline))))
+    ;; Do everything possible to let the command called think it was
+    ;; called via its usual binding, as doing otherwise can confuse
+    ;; some commands.
+    (let ((last-command-event ?\C-m))
+      (call-interactively (or (key-binding (kbd "RET")) #'newline)
+                          nil [?\C-m]))))
 
 
 ;;; Key Translation
