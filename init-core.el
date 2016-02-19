@@ -717,8 +717,8 @@ The return value depends only on `aph/machine'."
 
 (use-package register
   :bind (:map aph-keys-mode-map
-              ("C-m"     . copy-to-register)
-              ("C-x r a" . append-to-register)))
+              ("C-m"     . copy-to-register) 
+              ("C-M-m"   . increment-register)))
 
 (use-package saveplace
   :config
