@@ -118,8 +118,10 @@ The return value depends only on `aph/machine'."
 (bind-keys :map aph-keys-mode-map
            ("<up>"         . scroll-down-line)
            ("<down>"       . scroll-up-line)
-           ("s-]"          . other-window)
+           ("C-]"          . other-window)
+           ("C-M-g"        . abort-recursive-edit)
            ("C-S-t"        . transpose-paragraphs)
+           ("C-x \\"       . toggle-input-method)
            ("s-<apps> k"   . flush-lines)
            ("s-<apps> M-k" . keep-lines)) 
 
@@ -924,12 +926,12 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-window
   :bind (:map aph-keys-mode-map
-              ("s-["    . aph/other-window-backward)
-              ("s-{"    . aph/pull-buffer-backward)
-              ("s-}"    . aph/slide-buffer-forward)
-              ("s-\\"   . aph/swap-buffer-forward-and-ride)
-              ("s-|"    . aph/swap-buffer-forward)
-              ("C-c q"  . aph/quit-help-windows)))
+              ("<C-[>" . aph/other-window-backward)
+              ("M-["   . aph/pull-buffer-backward)
+              ("M-]"   . aph/slide-buffer-forward)
+              ("C-\\"  . aph/swap-buffer-forward-and-ride)
+              ("M-\\"  . aph/swap-buffer-forward)
+              ("C-c q" . aph/quit-help-windows)))
 
 (use-package winner
   :config
