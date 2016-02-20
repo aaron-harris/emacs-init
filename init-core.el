@@ -61,7 +61,11 @@ The return value depends only on `aph/machine'."
 (use-package aph-keys
   :bind (("C-x C-#" . aph-keys-mode))
   :bind (:map aph-keys-mode-map
-              ("<return>"   . aph-keys-default-return-command))
+              ("<return>"                   . aph-keys-default-return-command)
+              ;; Liberating C-M-[ from legacy of escape
+              ("<escape> <escape> <escape>" . keyboard-escape-quit)
+              ("ESC ESC ESC"                . undefined)
+              ("M-ESC :"                    . undefined))
   :demand t
   :config
   ;; Key liberation
@@ -824,26 +828,43 @@ The return value depends only on `aph/machine'."
                   ;; Selection
                   ([remap mark-sexp]        . sp-select-next-thing-exchange)
                   ;; Barf and Slurp
-                  ("C-<left>"               . sp-forward-barf-sexp)
-                  ("C-<right>"              . sp-forward-slurp-sexp)
-                  ("C-S-<left>"             . sp-backward-slurp-sexp)
-                  ("C-S-<right>"            . sp-backward-barf-sexp)
+                  ("C-M-["                  . sp-forward-barf-sexp)
+                  ("C-M-]"                  . sp-forward-slurp-sexp)
+                  ("M-{"                    . sp-backward-slurp-sexp)
+                  ("M-}"                    . sp-backward-barf-sexp)
+                  ("C-{"                    . sp-absorb-sexp)
+                  ("C-}"                    . sp-emit-sexp)
+                  ("M-A"                    . sp-extract-before-sexp)
+                  ("M-E"                    . sp-extract-after-sexp)
                   ;; Kill and Copy
                   ([remap kill-sexp]        . sp-kill-sexp)
                   ("C-M-w"                  . sp-copy-sexp)
                   ("C-S-<backspace>"        . sp-splice-sexp-killing-around)
                   ;; Editing
                   ([remap transpose-sexps]  . sp-transpose-sexp)
+                  ("M-T"                    . sp-convolute-sexp)
                   ;; Unwrap and Splice
-                  ("C-<delete>"             . sp-unwrap-sexp)
-                  ("C-<backspace>"          . sp-backward-unwrap-sexp)
-                  ("M-D"                    . sp-splice-sexp)
+                  ("M-D"                    . sp-unwrap-sexp)
+                  ("M-S-<delete>"           . sp-unwrap-sexp)
+                  ("M-S-<backspace>"        . sp-backward-unwrap-sexp)
+                  ("M-U"                    . sp-splice-sexp)
+                  ("M-R"                    . sp-rewrap-sexp)
+                  ("M-S"                    . sp-split-sexp)
+                  ("M-J"                    . sp-join-sexp)
                   ;; Indentation
-                  ("M-)"                    . sp-up-sexp)
+                  ("C-M-q"                  . sp-indent-defun)
                   ;; Narrowing
-                  ("C-x n ("                . sp-narrow-to-sexp))
+                  ("C-x n ("                . sp-narrow-to-sexp)
+                  ;; Prefix Arguments
+                  ("M-u SPC"                . sp-prefix-save-excursion)
+                  ("M-u '"                  . sp-prefix-symbol-object)
+                  ("M-u ("                  . sp-prefix-pair-object)
+                  ("M-u ["                  . sp-prefix-pair-object)
+                  ("M-u ,"                  . sp-prefix-tag-object))
   :bind (:augment smartparens-strict-mode
-                  (")" . sp-up-sexp))
+                  (")" . sp-up-sexp)
+                  ("]" . sp-up-sexp)
+                  ("}" . sp-up-sexp))
   :config 
   ;; String handling
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
