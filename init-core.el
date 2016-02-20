@@ -123,9 +123,7 @@ The return value depends only on `aph/machine'."
            ("C-S-t"        . transpose-paragraphs)
            ("C-x \\"       . toggle-input-method)
            ("s-<apps> k"   . flush-lines)
-           ("s-<apps> M-k" . keep-lines)
-           ("M-p"          . backward-paragraph)
-           ("M-n"          . forward-paragraph)
+           ("s-<apps> M-k" . keep-lines) 
            ("C-'"          . query-replace)
            ("M-'"          . query-replace-regexp))
 
@@ -245,7 +243,7 @@ The return value depends only on `aph/machine'."
   ;; there is a call to `evenp', which is not defined; presumably, the
   ;; package maintainers are expecting use to be using `cl' rather
   ;; than `cl-lib'.  As a stopgap, I'm aliasing just `evenp' globally.
-  (defalias #'evenp #'cl-evenp))
+  (defalias #'evenp #'cl-evenp)) 
 
 (use-package company
   :ensure t
@@ -598,7 +596,8 @@ The return value depends only on `aph/machine'."
 (use-package org
   :ensure t
   :bind (:map aph-keys-mode-map
-              ("C-c l" . org-store-link))
+              ("C-c l" . org-store-link)
+              ("C-="   . org-increase-number-at-point))
   :bind (:augment org-mode
                   ("C-c ["          . undefined)
                   ("C-c ]"          . undefined)
@@ -674,6 +673,11 @@ The return value depends only on `aph/machine'."
 (use-package pp
   :bind (:map aph-keys-mode-map
               ("C-:" . pp-eval-expression)))
+
+(use-package prog-mode
+  :bind (:augment prog-mode
+                  ("M-p" . backward-paragraph)
+                  ("M-n" . forward-paragraph)))
 
 (use-package projectile
   :after helm
@@ -855,11 +859,14 @@ The return value depends only on `aph/machine'."
 (use-package smartscan
   :ensure t
   :bind (:augment smartscan-mode
+                  ("M-p"   . nil)
+                  ("M-n"   . nil)
                   ("C-M-r" . smartscan-symbol-go-backward)
                   ("C-M-s" . smartscan-symbol-go-forward)
                   ("C-M-'" . smartscan-symbol-replace))
   :init
-  (global-smartscan-mode 1))
+  (add-hook 'text-mode-hook #'smartscan-mode)
+  (add-hook 'prog-mode-hook #'smartscan-mode))
 
 (use-package solar
   :defer t
@@ -903,6 +910,11 @@ The return value depends only on `aph/machine'."
     "Apply my settings for `LaTeX-mode'."
     (setq fill-column 75))
   (add-hook 'LaTeX-mode-hook #'aph/LaTeX-mode-hook))
+
+(use-package text-mode
+  :bind (:augment tex-mode
+                  ("M-p" . backward-paragraph)
+                  ("M-n" . forward-paragraph)))
 
 (use-package tooltip
   :config
