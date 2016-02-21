@@ -669,7 +669,9 @@ The return value depends only on `aph/machine'."
           "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe")))
 
 (use-package page
-  :defer t
+  :bind (:map aph-keys-mode-map
+              ([remap forward-page]  . aph/hydra-page/forward-page)
+              ([remap backward-page] . aph/hydra-page/backward-page))
   :config
   (put 'narrow-to-page 'disabled nil))
 
