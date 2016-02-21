@@ -61,6 +61,18 @@ This keymap is the equivalent of `global-map' for
 higher-priority keymap, such as an augmented keymap obtained
 from `aph-keys-augment'.")
 
+(defvar aph-keys-mode-minibuffer-map
+  (let ((k (make-sparse-keymap)))
+    (set-keymap-parent k aph-keys-mode-map)
+    k)
+  "Minibuffer keymap for `aph-keys-mode'.
+
+This keymap is used in place of the augmented keymap for the
+current major mode inside a minibuffer.  Bind keys here if you
+wish them to override keys in any of the `minibuffer-local-*-map'
+keymaps.  Note that this keymap is used regardless of which of
+those keymaps is currently in use.")
+
 (add-to-list 'emulation-mode-map-alists
              'aph-keys-minor-mode-map-alist :append #'eq)
 (add-to-list 'emulation-mode-map-alists
@@ -201,7 +213,9 @@ to update the parentage of the augmented map for that mode.
 
 This function is suitable for use in
 `after-change-major-mode-hook'."
-  (let ((keymap (aph-keys--set-major-mode-parentage major-mode)))
+  (let ((keymap (if (minibufferp)
+                    aph-keys-mode-minibuffer-map
+                  (aph-keys--set-major-mode-parentage major-mode))))
     (setq aph-keys-local-map-alist `((aph-keys-mode . ,keymap)))))
 
 (add-hook 'after-change-major-mode-hook #'aph-keys--update-major-mode)
