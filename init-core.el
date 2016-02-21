@@ -967,17 +967,18 @@ The return value depends only on `aph/machine'."
         visible-mark-faces '(aph/visible-mark-top
                              aph/visible-mark-other)))
 
-(use-package window
-  :bind (:map aph-keys-mode-map
-              ("M-l" . move-to-window-line-top-bottom)))
-
 (use-package aph-window
   :bind (:map aph-keys-mode-map
+              ;; Scrolling and Positioning
+              ("M-l"   . move-to-window-line-top-bottom)
+              ("C-M-v" . aph/hydra-scroll-other/body)
+              ;; Sliding windows
               ("<C-[>" . aph/other-window-backward)
               ("M-["   . aph/pull-buffer-backward)
               ("M-]"   . aph/slide-buffer-forward)
               ("C-\\"  . aph/swap-buffer-forward-and-ride)
               ("M-\\"  . aph/swap-buffer-forward)
+              ;; Other commands
               ("C-c q" . aph/quit-help-windows)))
 
 (use-package winner
