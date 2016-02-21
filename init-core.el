@@ -810,11 +810,8 @@ The return value depends only on `aph/machine'."
         (assq-delete-all 'emacs-lisp-mode
                          smart-tab-completion-functions-alist)))
 
-(use-package smartparens-config
-  :ensure smartparens
-  :init
-  (smartparens-global-mode)
-  (add-hook 'lisp-tag-hook #'smartparens-strict-mode)
+(use-package smartparens
+  :ensure t 
   :bind (:augment smartparens-mode
                   ;; Movement
                   ([remap backward-sexp]    . sp-backward-sexp)
@@ -865,6 +862,10 @@ The return value depends only on `aph/machine'."
                   (")" . sp-up-sexp)
                   ("]" . sp-up-sexp)
                   ("}" . sp-up-sexp))
+  :init
+  (require 'smartparens-config)
+  (smartparens-global-mode)
+  (add-hook 'lisp-tag-hook #'smartparens-strict-mode)
   :config 
   ;; String handling
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
