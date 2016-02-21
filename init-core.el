@@ -120,16 +120,17 @@ The return value depends only on `aph/machine'."
 
 ;; Keybindings for source-defined commands
 (bind-keys :map aph-keys-mode-map
-           ("<up>"         . scroll-down-line)
-           ("<down>"       . scroll-up-line)
-           ("C-]"          . other-window)
-           ("C-M-g"        . abort-recursive-edit)
-           ("C-S-t"        . transpose-paragraphs)
-           ("C-x \\"       . toggle-input-method)
-           ("s-<apps> k"   . flush-lines)
-           ("s-<apps> M-k" . keep-lines) 
-           ("C-'"          . query-replace)
-           ("M-'"          . query-replace-regexp))
+           ("<up>"           . scroll-down-line)
+           ("<down>"         . scroll-up-line)
+           ("C-]"            . other-window)
+           ("C-M-g"          . abort-recursive-edit)
+           ("C-S-t"          . transpose-paragraphs)
+           ("C-M-\\"         . toggle-input-method)
+           ("s-<apps> k"     . flush-lines)
+           ("s-<apps> M-k"   . keep-lines) 
+           ("C-'"            . query-replace)
+           ("M-'"            . query-replace-regexp)
+           ("s-<apps> <tab>" . indent-region))
 
 
 ;;; Package Configuration
@@ -252,7 +253,8 @@ The return value depends only on `aph/machine'."
 (use-package company
   :ensure t
   :bind (:augment company-mode
-                  ("<tab>" . company-indent-or-complete-common)) 
+                  ("<tab>"   . company-indent-or-complete-common)
+                  ("C-<tab>" . company-complete-common))
   :diminish company-mode
   :init
   (add-hook 'lisp-tag-hook #'company-mode)
@@ -394,7 +396,7 @@ The return value depends only on `aph/machine'."
               ("C-c b b"                . helm-filtered-bookmarks)
               ("M-."                    . helm-semantic-or-imenu)
               ("M-s o"                  . helm-occur) 
-              ("C-c SPC"                . helm-all-mark-rings)
+              ("M-,"                    . helm-all-mark-rings)
               ([remap switch-to-buffer] . helm-mini)
               ([remap find-file]        . helm-find-files)
               ("M-s g"                  . helm-do-grep)
@@ -593,7 +595,8 @@ The return value depends only on `aph/machine'."
                  1)))
 
 (use-package minibuffer
-  :defer t
+  :bind (:map aph-keys-mode-map
+              ("C-<tab>" . completion-at-point))
   :config
   (setq completion-auto-help 'lazy))
 
@@ -762,13 +765,16 @@ The return value depends only on `aph/machine'."
 (use-package simple
   :demand t
   :bind (:map aph-keys-mode-map
-              ("M-o"     . join-line)
-              ("C-M-/"   . undo-only)
-              ("C-S-k"   . kill-whole-line)
-              ("C-x M-k" . append-next-kill) 
-              ("M-= w"   . count-words)
-              ("M-= l"   . what-line)
-              ("M-i"     . zap-to-char))
+              ("M-o"        . join-line)
+              ("C-M-/"      . undo-only)
+              ("C-S-k"      . kill-whole-line)
+              ("C-x M-k"    . append-next-kill)
+              ("S-<return>" . delete-blank-lines)
+              ("S-SPC"      . cycle-spacing)
+              ("M-= w"      . count-words)
+              ("M-SPC"      . mark-word)
+              ("M-= l"      . what-line)
+              ("M-i"        . zap-to-char))
   :config
   ;; Global minor modes
   (column-number-mode)
@@ -835,8 +841,9 @@ The return value depends only on `aph/machine'."
                   ("M-E"                    . sp-extract-after-sexp)
                   ;; Kill and Copy
                   ([remap kill-sexp]        . sp-kill-sexp)
+                  ("C-M-<backspace>"        . sp-backward-kill-sexp)
                   ("C-M-w"                  . sp-copy-sexp)
-                  ("C-S-<backspace>"        . sp-splice-sexp-killing-around)
+                  ("M-K"                    . sp-splice-sexp-killing-around)
                   ;; Editing
                   ([remap transpose-sexps]  . sp-transpose-sexp)
                   ("M-T"                    . sp-convolute-sexp)
