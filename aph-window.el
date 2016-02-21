@@ -4,7 +4,8 @@
 ;;;; WINDOW EXTENSIONS
 ;;;;============================================================================
 
-;; Extensions to the `window' module. 
+;; Extensions to the `window' module.
+(require 'hydra)
 
 
 ;;; Extensions to `get-window-with-predicate'
@@ -213,5 +214,15 @@ you want to quit windows on all frames."
     (dolist (buffer aph/help-window-names)
       (ignore-errors
         (quit-windows-on buffer kill frame)))))
+
+
+;;; Scrolling Commands
+;;;===================
+(defhydra aph/hydra-scroll-other (:color pink)
+  "Scroll other"
+  ("C-v" scroll-other-window      "fwd")
+  ("M-v" (scroll-other-window '-) "back") 
+  ("C-g" nil                      "quit" :color blue))
+
 
 (provide 'aph-window)
