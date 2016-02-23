@@ -677,12 +677,17 @@ The return value depends only on `aph/machine'."
     (setq org-mobile-checksum-binary
           "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe")))
 
-(use-package page
-  :bind (:map aph-keys-mode-map
-              ([remap forward-page]  . aph/hydra-page/forward-page)
-              ([remap backward-page] . aph/hydra-page/backward-page))
+(use-package page 
   :config
   (put 'narrow-to-page 'disabled nil))
+
+(use-package aph-page
+  :commands (aph/hydra-page/forward-page
+             aph/hydra-page-backward-page)
+  :init
+  (bind-keys :map aph-keys-mode-map
+              ([remap forward-page]  . aph/hydra-page/forward-page)
+              ([remap backward-page] . aph/hydra-page/backward-page)))
 
 (use-package paren
   :config
