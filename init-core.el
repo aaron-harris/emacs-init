@@ -606,9 +606,10 @@ The return value depends only on `aph/machine'."
               ("C-c l" . org-store-link)
               ("C-="   . org-increase-number-at-point))
   :bind (:augment org-mode
-                  ("C-c ["          . undefined)
-                  ("C-c ]"          . undefined)
-                  ([remap org-goto] . helm-semantic-or-imenu))
+                  ("C-c ["            . undefined)
+                  ("C-c ]"            . undefined)
+                  ([remap org-goto]   . helm-semantic-or-imenu)
+                  ([remap next-error] . org-cycle-agenda-files))
   :config
   (message "Loading org...")          ; Because this may take a while. 
   (use-package init-org))
