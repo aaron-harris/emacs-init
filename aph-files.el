@@ -19,6 +19,20 @@ standard `kill-buffer')."
       (call-interactively #'kill-buffer)
     (kill-buffer)))
 
+(defun aph/kill-active-buffer-delete-file (&optional choose noconfirm)
+  "As `aph/kill-active-buffer', and delete associated file.
+
+Ask the user for confirmation before deleting the file, unless
+the optional parameter NOCONFIRM is non-nil."
+  (interactive "P")
+  (let ((buf  (current-buffer))
+        (file (buffer-file-name)))
+    (aph/kill-active-buffer choose)
+    (when (and file
+               (not (buffer-live-p buf))
+               (y-or-n-p (format "Really delete file %s? " file)))
+      (delete-file file))))
+
 (defun aph/kill-buffer-nowarn (&optional buffer-or-name)
   "Kill buffer specified by BUFFER-OR-NAME, without asking.
 

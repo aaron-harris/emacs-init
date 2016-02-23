@@ -343,8 +343,9 @@ The return value depends only on `aph/machine'."
 (use-package aph-files
   :after files
   :bind (:map aph-keys-mode-map
-              ("C-x k"   . aph/kill-active-buffer)
-              ("C-x C-c" . aph/delete-frame-or-exit))
+              ("C-x k"        . aph/kill-active-buffer)
+              ("C-x C-c"      . aph/delete-frame-or-exit)
+              ("C-x <delete>" . aph/kill-active-buffer-delete-file))
   :config
   ;; Make Emacs source read-only
   (when (eq aph/machine 'mpc)
