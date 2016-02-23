@@ -135,6 +135,14 @@ The return value depends only on `aph/machine'."
 
 ;;; Package Configuration
 ;;;======================
+(use-package align
+  :bind (:map aph-keys-mode-map
+              ("C-M-i" . align-regexp)))
+
+(use-package aph-align
+  :bind (:map aph-keys-mode-map
+              ("C-i" . aph/align)))
+
 (use-package aph-mpc
   :if (eq aph/machine 'mpc)
   :bind (:map aph-keys-mode-map
@@ -776,8 +784,7 @@ The return value depends only on `aph/machine'."
               ("S-SPC"      . cycle-spacing)
               ("M-= w"      . count-words)
               ("M-SPC"      . mark-word)
-              ("M-= l"      . what-line)
-              ("M-i"        . zap-to-char))
+              ("M-= l"      . what-line))
   :config
   ;; Global minor modes
   (column-number-mode)
