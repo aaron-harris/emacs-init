@@ -799,7 +799,9 @@ The return value depends only on `aph/machine'."
               ([remap open-line] . aph/open-line)
               ("M-c"             . aph/hydra-caps/body)
               ("M-l"             . undefined)
-              ("M-u"             . undefined))
+              ("M-u"             . undefined)
+              ("C-`"             . next-error)
+              ("M-`"             . previous-error))
   :config
   (advice-add #'eval-expression-print-format
               :around #'aph/eval-expression-mute-print-format)
