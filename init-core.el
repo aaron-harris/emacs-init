@@ -62,6 +62,7 @@ The return value depends only on `aph/machine'."
   :bind (("C-x C-#" . aph-keys-mode))
   :bind (:map aph-keys-mode-map
               ("<return>"                   . aph-keys-default-return-command)
+              ("<tab>"                      . aph-keys-default-tab-command)
               ;; Liberating C-M-[ from legacy of escape
               ("<escape> <escape> <escape>" . keyboard-escape-quit)
               ("ESC ESC ESC"                . undefined)
@@ -130,7 +131,8 @@ The return value depends only on `aph/machine'."
            ("s-<apps> M-k"   . keep-lines) 
            ("C-'"            . query-replace)
            ("M-'"            . query-replace-regexp)
-           ("s-<apps> <tab>" . indent-region))
+           ("s-<apps> <tab>" . indent-region)
+           ("M-i"            . indent-relative))
 
 
 ;;; Package Configuration
