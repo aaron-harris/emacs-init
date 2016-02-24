@@ -138,12 +138,16 @@ The return value depends only on `aph/machine'."
 ;;; Package Configuration
 ;;;======================
 (use-package align
-  :bind (:map aph-keys-mode-map
-              ("C-M-i" . align-regexp)))
+  :bind (:augment text-mode
+                  ("C-M-i" . align-regexp))
+  :bind (:augment prog-mode
+                  ("C-M-i" . align-regexp)))
 
 (use-package aph-align
-  :bind (:map aph-keys-mode-map
-              ("C-i" . aph/align)))
+  :bind (:augment text-mode
+                  ("C-i" . aph/align))
+  :bind (:augment prog-mode
+                  ("C-i" . aph/align)))
 
 (use-package aph-mpc
   :if (eq aph/machine 'mpc)
