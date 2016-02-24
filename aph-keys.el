@@ -247,6 +247,28 @@ Intended as :around advice for `bind-keys'."
 
 ;;; Compatibility Functions
 ;;;========================
+(defun aph-keys-default-command (key &optional default)
+  "Execute the command bound to KEY without `aph-keys-mode'.
+
+Execute whatever command would be bound to KEY if `aph-keys-mode'
+were not active.  If DEFAULT is provided, use that instead if no
+command would normally be bound to KEY; otherwise, call
+`undefined'.
+
+This function serves as the back end for the commands
+`aph-keys-default-return-command' and
+`aph-keys-default-tab-command'." 
+  (let ((aph-keys-mode                  nil)
+        (aph-keys-minor-mode-map-alist  nil))
+    ;; Do everything possible to let the command called think it was
+    ;; called via its usual binding, as doing otherwise can confuse
+    ;; some commands.
+    (let* ((char               (string-to-char key))
+           (last-command-event char))
+      (call-interactively (or (key-binding key) default #'undefined)
+                          (not :record-flag)
+                          (vector (string-to-char key))))))
+
 (defun aph-keys-default-return-command ()
   "Execute the command bound to RET without `aph-keys-mode'.
 
@@ -261,14 +283,23 @@ If you intend to bind C-m separately from <return> in
 `aph-keys-mode-map' or any augmented keymap, bind this command to
 <return> in `aph-keys-mode-map'."
   (interactive)
-  (let ((aph-keys-mode                  nil)
-        (aph-keys-minor-mode-map-alist  nil))
-    ;; Do everything possible to let the command called think it was
-    ;; called via its usual binding, as doing otherwise can confuse
-    ;; some commands.
-    (let ((last-command-event ?\C-m))
-      (call-interactively (or (key-binding (kbd "RET")) #'newline)
-                          nil [?\C-m]))))
+  (aph-keys-default-command (kbd "RET") #'newline))
+
+(defun aph-keys-default-tab-command ()
+  "Execute the command bound to TAB without `aph-keys-mode'.
+
+Since `aph-keys-mode' shadows ordinary (non-augmented)
+mode-specific bindings, it can be difficult to bind
+C-i (a.k.a. TAB) in `aph-keys-mode' separately from <tab>.
+This command attempts to alleviate that difficulty by executing
+whatever command would be bound to TAB if `aph-keys-mode' were
+not active.
+
+If you intend to bind C-i separately from <tab> in
+`aph-keys-mode-map' or any augmented keymap, bind this command to
+<tab> in `aph-keys-mode-map'."
+  (interactive)
+  (aph-keys-default-command (kbd "TAB") #'indent-for-tab-command))
 
 
 ;;; Key Translation
