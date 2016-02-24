@@ -6,16 +6,17 @@
 
 ;; Tests for the module `aph-keys'.
 (require 'aph-keys)
+(require 'aph-ert)
 (require 'aph-ert-test)
 
 
 ;;; Testing Apparatus
 ;;;==================
 (defmacro aph-keys-with-augmented-mode (name parent-or-type &rest body)
-  "Execute BODY with temporarily-defined augmented mode.
+  "Execute BODY with temporarily-defined augmented mode. 
 
 The temporary mode is instantiated either with
-`aph/ert-with-major-mode' or `aph/ert-with-minor-mode'.  If
+`aph/ert-with-major-mode' or `aph/ert-with-minor-mode'  If
 PARENT-OR-TYPE is the special keyword :minor, this is a minor
 mode; otherwise, it is a major mode, and PARENT-OR-TYPE is the
 name of its parent mode.
@@ -41,6 +42,29 @@ variable containing this map does not persist when BODY exits."
              (setq aph-keys-augment-map-alist
                    (assq-delete-all ,mode-name
                                     aph-keys-augment-map-alist))))))))
+
+(defmacro aph-keys-with-overriding-mode (name parent &rest body)
+  "As `aph-keys-with-augmented-mode', but map is overriding.
+
+See `aph-keys-augment' for more details on overriding augmented
+maps.
+
+Note that, since overriding maps aren't useful for minor modes,
+the temporary mode created with this macro is always a major
+mode."
+  (declare (debug aph/ert-with-major-mode)
+           (indent 2))
+  (let ((macro-form  `(aph/ert-with-major-mode ,name ,parent))
+        (augmap      (aph/symbol-concat name "-overriding-map"))
+        (augmap-var  (make-symbol "augmap-var"))
+        (mode-name   (make-symbol "mode-name")))
+    `(let (,mode-name)
+       (,@macro-form
+         (let ((,augmap-var  (aph-keys-augment-var ,name :override))
+               (,augmap      (aph-keys-augment ,name :override)))
+           (unwind-protect (progn (setq ,mode-name ,name)
+                                  ,@body)
+             (unintern ,augmap-var)))))))
 
 
 ;;; Apparatus Tests
