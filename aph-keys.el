@@ -98,30 +98,44 @@ keymap."
 ;;; `aph-keys-mode': Augmented keymaps
 ;;;===================================
 
-(defun aph-keys-augment-name (mode)
+(defun aph-keys-augment-name (mode &optional override)
   "Return the name of the augmented keymap for MODE.
 Do not augment MODE if it is not already.
+
+If OVERRIDE is non-nil, return the name of the overriding augment
+map instead.
 
 The returned symbol is the name of the variable that would
 contain the augmented keymap for MODE, if one exists.  See
 `aph-keys-augment' for more information."
-  (aph/symbol-concat 'aph-keys-mode-map (format ":%s" mode)))
+  (aph/symbol-concat 'aph-keys (format "%s-mode-map:%s"
+                                       (if override "-overriding" "")
+                                       mode)))
 
-(defun aph-keys-augmented-p (mode)
+(defun aph-keys-augmented-p (mode &optional override)
   "Return non-nil if MODE has an augmented keymap.
+
+If OVERRIDE is non-nil, consider the overriding augment map
+instead of the ordinary one.
+
 See `aph-keys-augment' for more information."
-  (let ((augmap (aph-keys-augment-name mode)))
+  (let ((augmap (aph-keys-augment-name mode override)))
     (boundp augmap)))
 
-(defmacro aph-keys-augment--define (mode)
+(defmacro aph-keys-augment--define (mode &optional override)
   "Define augmented keymap variable for MODE.
+
+If OVERRIDE is non-nil, define the overriding augment map
+instead.
+
 Used by `aph-keys-augment'.  See that function for more
 details."
   (declare (debug (symbolp)))
-  (let ((augmap (aph-keys-augment-name mode)))
+  (let ((augmap (aph-keys-augment-name mode override)))
     `(defvar ,augmap (make-sparse-keymap)
-       ,(format (concat "Augmented keymap for `%s'.\n"
+       ,(format (concat "%s keymap for `%s'.\n"
                         "See `aph-keys-augment' for more details.")
+                (if override "Overriding augmented" "Augmented")
                 mode))))
 
 (defun aph-keys-augment--register (mode)
@@ -135,14 +149,14 @@ Add the augmented keymap for MODE (a symbol) to
   (when aph-keys-mode (setq aph-keys-minor-mode-map-alist
                             aph-keys-augment-map-alist)))
 
-(defun aph-keys-augment-var (mode)
+(defun aph-keys-augment-var (mode &optional override)
   "As `aph-keys-augment-name', but augment MODE."
-  (unless (aph-keys-augmented-p mode) 
-      (eval `(aph-keys-augment--define ,mode))
-      (aph-keys-augment--register mode))
-  (aph-keys-augment-name mode))
+  (unless (aph-keys-augmented-p mode override)
+      (eval `(aph-keys-augment--define ,mode ,override))
+      (unless override (aph-keys-augment--register mode)))
+  (aph-keys-augment-name mode override))
 
-(defun aph-keys-augment (mode)
+(defun aph-keys-augment (mode &optional override)
   "Return augmented keymap corresponding to MODE for `aph-keys-mode'.
 
 The parameter MODE should be a symbol naming a major or minor
@@ -154,20 +168,22 @@ descended from MODE) and `aph-keys-mode' are active.  This
 provides a mechanism for mode-local keybindings that are still
 toggleable with `aph-keys-mode'.
 
-Subsequent calls to this function with the same argument return
+If OVERRIDE is non-nil, then MODE should be a major mode, and the
+keymap returned takes precedence over all ordinary augmented
+maps.
+
+Subsequent calls to this function with the same arguments return
 the same keymap, including any bindings that were made to that
 keymap after its construction.  That is, there is at most one
-augmented keymap for each mode, and this function returns that
-keymap, constructing it if necessary.
+augmented keymap and one overriding keymap for each mode, and
+this function returns the appropriate such keymap, constructing
+it if necessary.
 
-The variable holding an augmented keymap is named using the
-format 'aph-keys-mode-map:MODE', e.g. 'aph-keys-mode:text-mode'.
-
-Because the mechanism used to determine whether such an augmented
-keymap will be active uses mode hooks, an augmented keymap for
-`fundamental-mode' will not work as expected and should probably
-be avoided."
-  (symbol-value (aph-keys-augment-var mode)))
+The variable holding a non-overriding augmented keymap is named
+using the format 'aph-keys-mode-map:MODE',
+e.g. 'aph-keys-mode-map:text-mode'.  Overriding keymaps are named
+using the format 'aph-keys-overriding-mode-map:MODE."
+  (symbol-value (aph-keys-augment-var mode override)))
 
 
 ;;; `aph-keys-mode': Major mode support
