@@ -11,7 +11,7 @@
 ;;; Macro Testing Apparatus Tests
 ;;;==============================
 (ert-deftest aph/ert-test-macro-executes-body ()
-  "Test `aph/ert-macro-executes-body-p'." 
+  "Test `aph/ert-macro-executes-body'." 
   (should (aph/ert-macro-executes-body 'with-temp-buffer))
   (should (aph/ert-macro-executes-body 'let '((canary))))
   (should-error (aph/ert-macro-executes-body 'ignore)))
@@ -78,7 +78,7 @@ using `should'."
 ;;;========================================================
 (ert-deftest aph/ert-test-with-major-mode--body ()
   "Test that body of `aph/ert-with-major-mode' is executed."
-  (should (aph/ert-macro-executes-body-p
+  (should (aph/ert-macro-executes-body
            'aph/ert-with-major-mode '(mode 'fundamental-mode))))
 
 (ert-deftest aph/ert-test-with-major-mode--bindings ()
@@ -103,7 +103,7 @@ using `should'."
 ;;;========================================================
 (ert-deftest aph/ert-test-with-minor-mode--body ()
   "Test that body of `aph/ert-with-minor-mode' is executed."
-  (should (aph/ert-macro-executes-body-p
+  (should (aph/ert-macro-executes-body
            'aph/ert-with-minor-mode '(mode))))
 
 (ert-deftest aph/ert-test-with-minor-mode--bindings ()
