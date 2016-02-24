@@ -78,17 +78,13 @@ tasks will be displayed."
              `("dm" "Morning Agenda"
                (,aph/org-agenda-block-calendar
                 ,(aph/org-agenda-block-scheduled-tasks
-                  "Morning Tasks" "+morning|all/TODO|ACTIVE")
-                ,(aph/org-agenda-block-random-tasks
-                  "Breakfast Reading" "+text/MEDIA" 5))))
+                  "Morning Tasks" "+morning|all/TODO|ACTIVE"))))
 
 (add-to-list 'org-agenda-custom-commands
              `("dw" "Work Agenda"
                (,aph/org-agenda-block-calendar
                 ,(aph/org-agenda-block-scheduled-tasks
-                  "Work Tasks" "+work|all/TODO|ACTIVE")
-                ,(aph/org-agenda-block-random-tasks
-                  "Listening" "+audio")
+                  "Work Tasks" "+work|all/TODO|ACTIVE") 
                 (tags
                  "+work+LEVEL=1+TODO=\"\""
                  ((org-agenda-overriding-header "Work Notes:"))))))
@@ -97,19 +93,13 @@ tasks will be displayed."
              `("de" "Evening Agenda"
                (,aph/org-agenda-block-calendar
                 ,(aph/org-agenda-block-scheduled-tasks
-                  "Evening Tasks" "+evening|all/TODO|ACTIVE")
-                ,(aph/org-agenda-block-random-tasks
-                  "Dinner Entertainment" "+video/MEDIA" 5)
-                ,(aph/org-agenda-block-random-tasks
-                  "Leisure" "+leisure/TODO" 5))))
+                  "Evening Tasks" "+evening|all/TODO|ACTIVE"))))
 
 (add-to-list 'org-agenda-custom-commands
              `("ds" "Weekend Agenda"
                (,aph/org-agenda-block-calendar
                 ,(aph/org-agenda-block-scheduled-tasks
-                  "Weekend Tasks" "+weekend|all/TODO|ACTIVE")
-                ,(aph/org-agenda-block-random-tasks
-                  "Leisure" "+leisure/TODO|MEDIA" 5))))
+                  "Weekend Tasks" "+weekend|all/TODO|ACTIVE"))))
 
 (add-to-list 'org-agenda-custom-commands
              `("c" "Computer Agenda"
