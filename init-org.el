@@ -40,8 +40,7 @@
 
 ;;; TODO Items
 ;;;===========
-(setq org-enforce-todo-dependencies       t 
-      org-track-ordered-property-with-tag t
+(setq org-track-ordered-property-with-tag t
       org-use-fast-todo-selection         t)
 
 ;; TODO keywords don't display very well in the fast selection buffer
@@ -120,7 +119,6 @@
 ;;;======= 
 (setq org-agenda-files (list org-directory))
 (setq org-agenda-block-separator   (make-string 80 ?=)
-      org-agenda-dim-blocked-tasks 'invisible
       org-agenda-remove-tags       t
       org-agenda-span              'day
       org-agenda-sticky            t
