@@ -69,12 +69,15 @@ mode."
 
 ;;; Apparatus Tests
 ;;;================
-(ert-deftest aph-keys-test-with-augmented-mode--body ()
-  "Test that `aph-keys-with-augmented-mode' executes body."
-  (dolist (param '('fundamental-mode :minor))
-    (should (aph/ert-macro-executes-body
-             'aph-keys-with-augmented-mode
-             `(mode ,param)))))
+(ert-deftest aph-keys-test-mode-wrappers--body ()
+  "Confirm that test macros execute their bodies.
+The macros in question are `aph-keys-with-augmented-mode' and
+`aph-keys-with-overriding-mode'."
+  (dolist (params
+           '((aph-keys-with-augmented-mode  (mode 'fundamental-mode))
+             (aph-keys-with-augmented-mode  (mode :minor))
+             (aph-keys-with-overriding-mode (mode 'fundamental-mode))))
+    (should (apply #'aph/ert-macro-executes-body params))))
 
 (ert-deftest aph-keys-test-with-augmented-mode--bindings ()
   "Test bindings of `aph-keys-with-augmented-mode'."
@@ -85,6 +88,15 @@ mode."
     (aph-keys-with-augmented-mode mode param
       (should (aph-keys-augmented-p mode))
       (should (keymapp mode-augmented-map)))))
+
+(ert-deftest aph-keys-test-with-overriding-mode--bindings ()
+  "Test bindings of `aph-keys-with-overriding-mode'."
+  (should (aph/ert-test-mode-wrapper--bindings
+           'aph-keys-with-overriding-mode
+           '('fundamental-mode)))
+  (aph-keys-with-overriding-mode mode 'fundamental-mode
+    (should (aph-keys-augmented-p mode :override))
+    (should (keymapp mode-overriding-map))))
 
 (ert-deftest aph-keys-test-with-augmented-mode--cleanup ()
   "Test cleanup for `aph-keys-with-augmented-mode'."
@@ -102,6 +114,16 @@ mode."
         (setq mode-x mode)
         (should (assoc mode-x aph-keys-augment-map-alist)))
       (should-not (assoc mode-x aph-keys-augment-map-alist)))))
+
+(ert-deftest aph-keys-test-with-overriding-mode--cleanup ()
+  "Test cleanup for `aph-keys-with-overriding-mode'."
+  (should (aph/ert-test-mode-wrapper--cleanup
+           'aph-keys-with-overriding-mode
+           '('fundamental-mode)))
+  (should (aph/ert-macro-does-not-leak
+           'aph-keys-with-overriding-mode
+           ''mode-overriding-map
+           '(mode 'fundamental-mode))))
 
 
 ;;; Tests for `emulation-mode-map-alists' setup
