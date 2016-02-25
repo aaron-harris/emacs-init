@@ -423,6 +423,7 @@ The return value depends only on `aph/machine'."
               ("C-z M-c"                . helm-calcul-expression)
               ("C-z C-p"                . helm-list-elisp-packages)) 
   :bind (:map helm-map
+              ("TAB"      . helm-execute-persistent-action)
               ("<tab>"    . helm-execute-persistent-action)
               ("C-j"      . nil)
               ("C-z"      . nil)
