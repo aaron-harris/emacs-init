@@ -690,7 +690,7 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-page
   :commands (aph/hydra-page/forward-page
-             aph/hydra-page-backward-page)
+             aph/hydra-page/backward-page)
   :init
   (bind-keys :map aph-keys-mode-map
               ([remap forward-page]  . aph/hydra-page/forward-page)
