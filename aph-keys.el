@@ -19,6 +19,18 @@ This alist contains all keymaps augmented for use by
 `aph-keys-mode'.  See the function `aph-keys-augment' for more
 information.")
 
+(defvar-local aph-keys-overriding-map-alist
+  `((aph-keys-mode . ,(make-sparse-keymap)))
+  "An alist holding the overriding keymap for current major mode.
+
+This variable uses the same format as `aph-keys-local-map-alist',
+but takes precedence over both the keymap stored there and all
+the keymaps in `aph-keys-minor-mode-map-alist'.
+
+Like `aph-keys-local-map-alist', the association between this
+variable and the major mode is maintained by the function
+`aph-keys--update-major-mode'.")
+
 (defvar aph-keys-minor-mode-map-alist nil
   "Alist of active minor mode keymaps for `aph-keys-mode'.
 For use in `emulation-mode-map-alists'.
@@ -61,6 +73,14 @@ This keymap is the equivalent of `global-map' for
 higher-priority keymap, such as an augmented keymap obtained
 from `aph-keys-augment'.")
 
+(defvar aph-keys-mode-overriding-map (make-sparse-keymap)
+  "Overriding keymap for `aph-keys-mode'.
+
+The bindings in this keymap are active only with `aph-keys-mode'
+and take precedence over all other bindings made by
+`aph-keys-mode', save those in the overriding augmented keymap
+for the current major mode (see `aph-keys-augment').")
+
 (defvar aph-keys-mode-minibuffer-map
   (let ((k (make-sparse-keymap)))
     (set-keymap-parent k aph-keys-mode-map)
@@ -71,8 +91,10 @@ This keymap is used in place of the augmented keymap for the
 current major mode inside a minibuffer.  Bind keys here if you
 wish them to override keys in any of the `minibuffer-local-*-map'
 keymaps.  Note that this keymap is used regardless of which of
-those keymaps is currently in use.")
+those keymaps is currently in use.") 
 
+(add-to-list 'emulation-mode-map-alists
+             'aph-keys-overriding-map-alist :append #'eq)
 (add-to-list 'emulation-mode-map-alists
              'aph-keys-minor-mode-map-alist :append #'eq)
 (add-to-list 'emulation-mode-map-alists
@@ -96,8 +118,7 @@ keymap."
 
 
 ;;; `aph-keys-mode': Augmented keymaps
-;;;===================================
-
+;;;=================================== 
 (defun aph-keys-augment-name (mode &optional override)
   "Return the name of the augmented keymap for MODE.
 Do not augment MODE if it is not already.
@@ -188,7 +209,7 @@ using the format 'aph-keys-overriding-mode-map:MODE."
 
 ;;; `aph-keys-mode': Major mode support
 ;;;====================================
-(defun aph-keys--set-major-mode-parentage (mode)
+(defun aph-keys--set-major-mode-parentage (mode &optional override)
   "Set parentage of augmented keymap for MODE.
 
 Set the parentage of the augmented keymap for MODE to reflect the
@@ -209,14 +230,20 @@ Then
   `aph-keys-mode-map'.
 * Finally, (aph-keys-augment foo-mode) would be returned.
 
+If the OVERRIDE parameter is non-nil, the keymap acted upon is
+the overriding keymap for MODE.  Its parentage is similar, but
+all of the keymaps in the chain are overriding keymaps.
+
 Do not pass minor modes to this function, as it will likely
 disrupt precedence of augmented keymaps."
-  (let ((keymap  (aph-keys-augment mode))
+  (let ((keymap  (aph-keys-augment mode override))
         (parent  (get mode 'derived-mode-parent)))
-    (set-keymap-parent keymap
-                       (if parent
-                           (aph-keys--set-major-mode-parentage parent)
-                         aph-keys-mode-map))
+    (set-keymap-parent
+     keymap
+     (cond
+      (parent    (aph-keys--set-major-mode-parentage parent override))
+      (override  aph-keys-mode-overriding-map)
+      (:else     aph-keys-mode-map)))
     keymap))
 
 (defun aph-keys--update-major-mode ()
@@ -229,10 +256,14 @@ to update the parentage of the augmented map for that mode.
 
 This function is suitable for use in
 `after-change-major-mode-hook'."
-  (let ((keymap (if (minibufferp)
-                    aph-keys-mode-minibuffer-map
-                  (aph-keys--set-major-mode-parentage major-mode))))
-    (setq aph-keys-local-map-alist `((aph-keys-mode . ,keymap)))))
+  (let ((local-map
+         (if (minibufferp) aph-keys-mode-minibuffer-map
+           (aph-keys--set-major-mode-parentage major-mode)))
+        (override-map
+         (if (minibufferp) aph-keys-mode-overriding-map
+           (aph-keys--set-major-mode-parentage major-mode :override))))
+    (setq aph-keys-local-map-alist      `((aph-keys-mode . ,local-map))
+          aph-keys-overriding-map-alist `((aph-keys-mode . ,override-map)))))
 
 (add-hook 'after-change-major-mode-hook #'aph-keys--update-major-mode)
 

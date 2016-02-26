@@ -24,7 +24,12 @@ instantiated is a minor mode; see `aph/ert-with-minor-mode'.
 
 If OVERRIDE is non-nil, the augmented keymap used is the
 overriding one (see `aph/keys-augment' for more details on this);
-otherwise, it is the ordinary, non-overriding keymap."
+otherwise, it is the ordinary, non-overriding keymap.
+
+Note that, even though only one keymap (either overriding or not)
+is bound, both keymap variables are uninterned during cleanup.
+This means that you can safely augment the mode again inside BODY
+to get the second keymap, without any additional cleanup."
   (declare (debug aph/ert-with-major-mode)
            (indent 3))
   (let ((macro-form  (if (eq parent :minor)
@@ -32,14 +37,17 @@ otherwise, it is the ordinary, non-overriding keymap."
                        `(aph/ert-with-major-mode ,name ,parent)))
         (augmap       (aph/symbol-concat name "-augmented-map"))
         (augmap-var   (make-symbol "augmap-var"))
+        (augmap-other (make-symbol "augmap-other"))
         (mode-name    (make-symbol "mode-name")))
     `(let (,mode-name)
        (,@macro-form
-        (let* ((,augmap-var  (aph-keys-augment-var ,name ,override))
-               (,augmap      (aph-keys-augment ,name ,override)))
+        (let* ((,augmap-var   (aph-keys-augment-var  ,name ,override))
+               (,augmap-other (aph-keys-augment-name ,name ,(not override)))
+               (,augmap       (aph-keys-augment ,name ,override)))
           (unwind-protect (progn (setq ,mode-name ,name)
                                  ,@body)
-            (unintern ,augmap-var) 
+            (unintern ,augmap-var)
+            (unintern ,augmap-other)
             (setq aph-keys-augment-map-alist
                   (assq-delete-all ,mode-name
                                    aph-keys-augment-map-alist))))))))
@@ -72,7 +80,9 @@ nil."
   (aph-keys-test-with-augmented-mode--all-params
     (should (aph/ert-test-mode-wrapper--bindings
              'aph-keys-with-augmented-mode
-             `(,parent ,override)))))
+             `(,parent ,override)))
+    (aph-keys-with-augmented-mode mode parent override
+      (should (aph-keys-augmented-p mode override)))))
 
 (ert-deftest aph-keys-test-with-augmented-mode--cleanup ()
   "Test cleanup for `aph-keys-with-augmented-mode'."
@@ -83,8 +93,7 @@ nil."
     (should (aph/ert-macro-does-not-leak
              'aph-keys-with-augmented-mode
              ''mode-augmented-map
-             `(mode ,parent ,override)))
-    ;; Clean up `aph-keys-augment-map-alist', too.
+             `(mode ,parent ,override))) 
     (let (mode-x)
       (aph-keys-with-augmented-mode mode parent override
         (setq mode-x mode)
@@ -92,22 +101,27 @@ nil."
         ;; `aph-keys-augment-map-alist', so this next test says that a
         ;; mode is registered there iff it is not an override map.
         (should (eq (not (null override))
-                    (null (assoc mode-x aph-keys-augment-map-alist)))))
-      ;; In any case, it should not be registered outside the macro.
-      (should-not (assoc mode-x aph-keys-augment-map-alist))))) 
+                    (null (assoc mode-x aph-keys-augment-map-alist))))) 
+      (should-not (assoc mode-x aph-keys-augment-map-alist))
+      ;; Finally, verify that both augmented keymaps are removed.
+      (should-not (aph-keys-augmented-p mode-x nil))
+      (should-not (aph-keys-augmented-p mode-x :override)))))
 
 
 ;;; Tests for `emulation-mode-map-alists' setup
 ;;;============================================
 (ert-deftest aph-keys-test-emma-setup ()
   "Test `emulation-mode-map-alists' setup for `aph-keys-mode'."
-  (require 'dash)
-  ;; Both of the symbols `aph-keys-minor-mode-map-alist' and
-  ;; `aph-keys-local-map-alist' should appear in
-  ;; `emulation-mode-map-alists', and they should occur in that order.
-  (should (member 'aph-keys-local-map-alist
-                  (should (member 'aph-keys-minor-mode-map-alist
-                                  emulation-mode-map-alists)))))
+  (require 'dash)      ; For `-is-infix-p'
+  ;; The symbols `aph-keys-overriding-map-alist',
+  ;; `aph-keys-minor-mode-map-alist', and `aph-keys-local-map-alist'
+  ;; should appear in `emulation-mode-map-alists', and they should
+  ;; appear in that order.  For the sake of simplicity, we also assume
+  ;; that they appear consecutively.
+  (should (-is-infix-p '(aph-keys-overriding-map-alist
+                         aph-keys-minor-mode-map-alist
+                         aph-keys-local-map-alist)
+                       emulation-mode-map-alists)))
 
 
 ;;; Augmented Keymap Tests
@@ -171,6 +185,26 @@ nil."
           (aph-keys-mode -1)            ; 101 -> 100
           (should (eq (key-binding (kbd "a")) #'foo-major)))))))
 
+(ert-deftest aph-keys-test-override ()
+  "Test overriding bindings in `aph-keys-mode'."
+  (aph-keys-with-augmented-mode test-major-mode 'fundamental-mode nil
+    (aph-keys-with-augmented-mode test-minor-mode :minor nil
+      (let ((test-major-mode-override-map
+             (aph-keys-augment test-major-mode :override))
+            (aph-keys-mode nil))
+        (with-temp-buffer
+          ;; Define keybindings
+          (define-key test-major-mode-augmented-map (kbd "a") #'major)
+          (define-key test-minor-mode-augmented-map (kbd "a") #'minor)
+          (define-key test-major-mode-override-map  (kbd "a") #'override)
+          ;; Test keybindings
+          (should (eq (key-binding (kbd "a")) #'self-insert-command))
+          (aph-keys-mode 1)
+          (funcall test-minor-mode 1)
+          (should (eq (key-binding (kbd "a")) #'minor))
+          (funcall test-major-mode)
+          (should (eq (key-binding (kbd "a")) #'override)))))))
+
 (ert-deftest aph-keys-test-mode-parentage ()
   "Test that mode parentage is correct in `aph-keys-mode'."
   (aph-keys-with-augmented-mode mode1 'fundamental-mode nil
@@ -182,7 +216,8 @@ nil."
               (define-key mode1-augmented-map (kbd "a") #'foo)
               (funcall mode2)
               (should (eq (key-binding (kbd "a")) #'foo)))
-          (unintern (aph-keys-augment-name mode2-name))
+          (dolist (override '(t nil))
+            (unintern (aph-keys-augment-name mode2-name override)))
           (setq aph-keys-augment-map-alist
                 (assq-delete-all mode2-name
                                  aph-keys-augment-map-alist)))))))
@@ -210,8 +245,7 @@ nil."
       (unwind-protect (funcall test foo-mode) 
         (unintern var)
         (setq aph-keys-augment-map-alist
-              (assq-delete-all foo-mode aph-keys-augment-map-alist))))))
-        
+              (assq-delete-all foo-mode aph-keys-augment-map-alist))))))        
         
 
 (provide 'aph-keys-test)
