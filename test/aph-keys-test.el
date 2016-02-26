@@ -12,118 +12,89 @@
 
 ;;; Testing Apparatus
 ;;;==================
-(defmacro aph-keys-with-augmented-mode (name parent-or-type &rest body)
-  "Execute BODY with temporarily-defined augmented mode. 
+(defmacro aph-keys-with-augmented-mode (name parent override &rest body)
+  "Execute BODY with temporarily-defined augmented mode.
 
-The temporary mode is instantiated either with
-`aph/ert-with-major-mode' or `aph/ert-with-minor-mode'  If
-PARENT-OR-TYPE is the special keyword :minor, this is a minor
-mode; otherwise, it is a major mode, and PARENT-OR-TYPE is the
-name of its parent mode.
+As `aph/ert-with-major-mode', but in addition mode is augmented
+using `aph/keys-augment', and inside body the variable
+NAME-augmented-map is bound to the mode's augmented keymap.
 
-Also augment this mode with `aph/keys-augment', bind the
-augmented keymap to NAME-augmented-map, and ensure that the
-variable containing this map does not persist when BODY exits."
+As a special case, if PARENT is the keyword :minor, then the mode
+instantiated is a minor mode; see `aph/ert-with-minor-mode'.
+
+If OVERRIDE is non-nil, the augmented keymap used is the
+overriding one (see `aph/keys-augment' for more details on this);
+otherwise, it is the ordinary, non-overriding keymap."
   (declare (debug aph/ert-with-major-mode)
-           (indent 2))
-  (let ((macro-form  (if (eq parent-or-type :minor)
+           (indent 3))
+  (let ((macro-form  (if (eq parent :minor)
                          `(aph/ert-with-minor-mode ,name)
-                       `(aph/ert-with-major-mode ,name ,parent-or-type)))
-        (augmap      (aph/symbol-concat name "-augmented-map"))
-        (augmap-var  (make-symbol "augmap-var"))
-        (mode-name   (make-symbol "mode-name")))
+                       `(aph/ert-with-major-mode ,name ,parent)))
+        (augmap       (aph/symbol-concat name "-augmented-map"))
+        (augmap-var   (make-symbol "augmap-var"))
+        (mode-name    (make-symbol "mode-name")))
     `(let (,mode-name)
        (,@macro-form
-         (let ((,augmap-var  (aph-keys-augment-var ,name))
-               (,augmap      (aph-keys-augment ,name)))
-           (unwind-protect (progn (setq ,mode-name ,name)
-                                  ,@body)
-             (unintern ,augmap-var)
-             (setq aph-keys-augment-map-alist
-                   (assq-delete-all ,mode-name
-                                    aph-keys-augment-map-alist))))))))
-
-(defmacro aph-keys-with-overriding-mode (name parent &rest body)
-  "As `aph-keys-with-augmented-mode', but map is overriding.
-
-See `aph-keys-augment' for more details on overriding augmented
-maps.
-
-Note that, since overriding maps aren't useful for minor modes,
-the temporary mode created with this macro is always a major
-mode."
-  (declare (debug aph/ert-with-major-mode)
-           (indent 2))
-  (let ((macro-form  `(aph/ert-with-major-mode ,name ,parent))
-        (augmap      (aph/symbol-concat name "-overriding-map"))
-        (augmap-var  (make-symbol "augmap-var"))
-        (mode-name   (make-symbol "mode-name")))
-    `(let (,mode-name)
-       (,@macro-form
-         (let ((,augmap-var  (aph-keys-augment-var ,name :override))
-               (,augmap      (aph-keys-augment ,name :override)))
-           (unwind-protect (progn (setq ,mode-name ,name)
-                                  ,@body)
-             (unintern ,augmap-var)))))))
+        (let* ((,augmap-var  (aph-keys-augment-var ,name ,override))
+               (,augmap      (aph-keys-augment ,name ,override)))
+          (unwind-protect (progn (setq ,mode-name ,name)
+                                 ,@body)
+            (unintern ,augmap-var) 
+            (setq aph-keys-augment-map-alist
+                  (assq-delete-all ,mode-name
+                                   aph-keys-augment-map-alist))))))))
 
 
 ;;; Apparatus Tests
 ;;;================
-(ert-deftest aph-keys-test-mode-wrappers--body ()
-  "Confirm that test macros execute their bodies.
-The macros in question are `aph-keys-with-augmented-mode' and
-`aph-keys-with-overriding-mode'."
-  (dolist (params
-           '((aph-keys-with-augmented-mode  (mode 'fundamental-mode))
-             (aph-keys-with-augmented-mode  (mode :minor))
-             (aph-keys-with-overriding-mode (mode 'fundamental-mode))))
-    (should (apply #'aph/ert-macro-executes-body params))))
+(defmacro aph-keys-test-with-augmented-mode--all-params (&rest body)
+  "Macro for testing `aph-keys-with-augmented-mode'.
+
+Execute BODY in an environment where the variables 'parent' and
+'override' are bound to all four combinations such that 'parent'
+is either the quoted symbol 'fundamental-mode or the
+keyword :minor and 'override' is either the keyword :override or
+nil."
+  (declare (indent 0) (debug body))
+  `(dolist (parent '('fundamental-mode :minor))
+     (dolist (override '(:override nil))
+       ,@body)))
+
+(ert-deftest aph-keys-test-with-augmented-mode--body ()
+  "Test that `aph-keys-with-augmented-mode' evaluates its body."
+  (aph-keys-test-with-augmented-mode--all-params
+    (should (aph/ert-macro-executes-body
+             'aph-keys-with-augmented-mode
+             `(mode ,parent ,override)))))
 
 (ert-deftest aph-keys-test-with-augmented-mode--bindings ()
   "Test bindings of `aph-keys-with-augmented-mode'."
-  (dolist (param '('fundamental-mode :minor))
+  (aph-keys-test-with-augmented-mode--all-params
     (should (aph/ert-test-mode-wrapper--bindings
              'aph-keys-with-augmented-mode
-             `(,param)))
-    (aph-keys-with-augmented-mode mode param
-      (should (aph-keys-augmented-p mode))
-      (should (keymapp mode-augmented-map)))))
-
-(ert-deftest aph-keys-test-with-overriding-mode--bindings ()
-  "Test bindings of `aph-keys-with-overriding-mode'."
-  (should (aph/ert-test-mode-wrapper--bindings
-           'aph-keys-with-overriding-mode
-           '('fundamental-mode)))
-  (aph-keys-with-overriding-mode mode 'fundamental-mode
-    (should (aph-keys-augmented-p mode :override))
-    (should (keymapp mode-overriding-map))))
+             `(,parent ,override)))))
 
 (ert-deftest aph-keys-test-with-augmented-mode--cleanup ()
   "Test cleanup for `aph-keys-with-augmented-mode'."
-  (dolist (param '('fundamental-mode :minor))
+  (aph-keys-test-with-augmented-mode--all-params
     (should (aph/ert-test-mode-wrapper--cleanup
              'aph-keys-with-augmented-mode
-             `(,param)))
+             `(,parent ,override)))
     (should (aph/ert-macro-does-not-leak
              'aph-keys-with-augmented-mode
              ''mode-augmented-map
-             `(mode ,param)))
+             `(mode ,parent ,override)))
     ;; Clean up `aph-keys-augment-map-alist', too.
     (let (mode-x)
-      (aph-keys-with-augmented-mode mode param
+      (aph-keys-with-augmented-mode mode parent override
         (setq mode-x mode)
-        (should (assoc mode-x aph-keys-augment-map-alist)))
-      (should-not (assoc mode-x aph-keys-augment-map-alist)))))
-
-(ert-deftest aph-keys-test-with-overriding-mode--cleanup ()
-  "Test cleanup for `aph-keys-with-overriding-mode'."
-  (should (aph/ert-test-mode-wrapper--cleanup
-           'aph-keys-with-overriding-mode
-           '('fundamental-mode)))
-  (should (aph/ert-macro-does-not-leak
-           'aph-keys-with-overriding-mode
-           ''mode-overriding-map
-           '(mode 'fundamental-mode))))
+        ;; Override maps are not registered in
+        ;; `aph-keys-augment-map-alist', so this next test says that a
+        ;; mode is registered there iff it is not an override map.
+        (should (eq (not (null override))
+                    (null (assoc mode-x aph-keys-augment-map-alist)))))
+      ;; In any case, it should not be registered outside the macro.
+      (should-not (assoc mode-x aph-keys-augment-map-alist))))) 
 
 
 ;;; Tests for `emulation-mode-map-alists' setup
@@ -144,36 +115,38 @@ The macros in question are `aph-keys-with-augmented-mode' and
 (ert-deftest aph-keys-test-augment ()
   "Test `aph-keys-augment' and `aph-keys-augment-var'."
   (require 'aph-dash)                   ; For `aph/eq'
-  (dolist (param '('fundamental-mode :minor))
-    (aph-keys-with-augmented-mode mode param
-      (should (aph/eq mode-augmented-map
-                      (aph-keys-augment mode)
-                      (symbol-value (aph-keys-augment-var mode))))
-      (should (equal (aph-keys-augment-var mode)
-                     (aph-keys-augment-name mode)))
-      (define-key mode-augmented-map (kbd "a") #'ignore)
-      (should (eq (lookup-key (aph-keys-augment mode) (kbd "a"))
-                  #'ignore)))))
+  (aph-keys-test-with-augmented-mode--all-params
+    (unless (and override (eq parent :minor))
+      (aph-keys-with-augmented-mode mode parent override
+        (should (aph/eq mode-augmented-map
+                        (aph-keys-augment mode override)
+                        (symbol-value (aph-keys-augment-var mode override))))
+        (should (equal (aph-keys-augment-var mode override)
+                       (aph-keys-augment-name mode override)))
+        (define-key mode-augmented-map (kbd "a") #'ignore)
+        (should (eq (lookup-key (aph-keys-augment mode override) (kbd "a"))
+                    #'ignore))))))
 
 (ert-deftest aph-keys-test-augmented-p ()
-  "Test `aph-keys-augmented-p'." 
-  (let* ((mode  'foo-mode)
-         var)
-    (should-not (aph-keys-augmented-p mode))
-    (setq var (aph-keys-augment-var mode))
-    (unwind-protect
-        (should (aph-keys-augmented-p mode))
-      (unintern var)
-      (setq aph-keys-augment-map-alist
-            (assq-delete-all mode aph-keys-augment-map-alist)))))
+  "Test `aph-keys-augmented-p'."
+  (dolist (override '(:override nil))
+    (let* ((mode  'foo-mode)
+           var)
+      (should-not (aph-keys-augmented-p mode override))
+      (setq var (aph-keys-augment-var mode override))
+      (unwind-protect
+          (should (aph-keys-augmented-p mode override))
+        (unintern var)
+        (setq aph-keys-augment-map-alist
+              (assq-delete-all mode aph-keys-augment-map-alist))))))
 
 
 ;;; Keybinding Precedence Tests
 ;;;============================
 (ert-deftest aph-keys-test-mode-bindings ()
   "Test mode bindings in `aph-keys-mode'."
-  (aph-keys-with-augmented-mode test-major-mode 'fundamental-mode
-    (aph-keys-with-augmented-mode test-minor-mode :minor
+  (aph-keys-with-augmented-mode test-major-mode 'fundamental-mode nil
+    (aph-keys-with-augmented-mode test-minor-mode :minor nil
       (let ((aph-keys-mode nil))
         (with-temp-buffer
           ;; Set up keybindings
@@ -200,7 +173,7 @@ The macros in question are `aph-keys-with-augmented-mode' and
 
 (ert-deftest aph-keys-test-mode-parentage ()
   "Test that mode parentage is correct in `aph-keys-mode'."
-  (aph-keys-with-augmented-mode mode1 'fundamental-mode
+  (aph-keys-with-augmented-mode mode1 'fundamental-mode nil
     (let (mode2-name)
       (aph/ert-with-major-mode mode2 mode1
         (setq mode2-name mode2)
