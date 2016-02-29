@@ -225,27 +225,49 @@ nil."
 
 ;;; `bind-keys' Support Machinery Tests
 ;;;====================================
-(ert-deftest aph-keys-test-bind-keys ()
-  "Test functionality of `aph/bind-keys'"
-  (let ((test (lambda (mode)
-                (eval `(bind-keys :augment ,mode
-                                  ("a" . foo))) 
-                (should (eq (lookup-key (aph-keys-augment mode) (kbd "a"))
+(ert-deftest aph-keys-test-bind-keys--basic ()
+  "Basic test for `bind-keys' keywords :augment and :override."
+  (let ((test (lambda (mode override)
+                (eval `(bind-keys ,(if override :override :augment) ,mode
+                                  ("a" . foo)))
+                (should (eq (lookup-key (aph-keys-augment mode override)
+                                        (kbd "a"))
                             #'foo))
-                (should (assoc `("a" . ,(aph-keys-augment-name mode))
+                (should (assoc `("a" . ,(aph-keys-augment-name mode override))
                                personal-keybindings))))
         (personal-keybindings nil))
-    ;; With mode already augmented
-    (dolist (param '('fundamental-mode :minor)) 
-      (aph-keys-with-augmented-mode foo-mode param
-        (funcall test foo-mode)))
-    ;; With mode not previously augmented
-    (aph/ert-with-minor-mode foo-mode
-      (setq var (aph-keys-augment-name foo-mode))
-      (unwind-protect (funcall test foo-mode) 
-        (unintern var)
-        (setq aph-keys-augment-map-alist
-              (assq-delete-all foo-mode aph-keys-augment-map-alist))))))        
+    (dolist (override '(t nil))
+      ;; With mode already augmented
+      (dolist (param '('fundamental-mode :minor)) 
+        (aph-keys-with-augmented-mode foo-mode param override
+                                      (funcall test foo-mode override)))
+      ;; With mode not previously augmented
+      (aph/ert-with-minor-mode foo-mode
+        (setq var (aph-keys-augment-name foo-mode override))
+        (unwind-protect (funcall test foo-mode override)
+          (unintern var)
+          (setq aph-keys-augment-map-alist
+                (assq-delete-all foo-mode aph-keys-augment-map-alist)))))))
+
+(ert-deftest aph-keys-test-bind-keys--multiple ()
+  "Test `bind-keys' keywords :augment and :override with multiple maps."
+    (aph-keys-with-augmented-mode foo-mode :minor nil
+      (aph-keys-with-augmented-mode bar-mode :minor :override
+        (aph/ert-with-minor-mode baz-mode
+          (aph/ert-with-minor-mode quux-mode
+            (let ((personal-keybindings nil)
+                  (baz-mode-map-var    (aph/symbol-concat baz-mode "-map"))
+                  (quux-mode-map-var   (aph/symbol-concat quux-mode "-map")))
+              (eval `(bind-keys :augment ,foo-mode
+                                :override ,bar-mode
+                                :map (,baz-mode-map-var ,quux-mode-map-var)
+                                ("a" . foo)))
+              (dolist (keymap (list foo-mode-augmented-map
+                                    bar-mode-augmented-map
+                                    baz-mode-map
+                                    quux-mode-map))
+                (should (eq (lookup-key keymap (kbd "a"))
+                            'foo))))))))))
         
 
 (provide 'aph-keys-test)
