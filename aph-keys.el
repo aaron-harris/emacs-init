@@ -271,23 +271,44 @@ This function is suitable for use in
 ;;; `bind-keys' Support
 ;;;====================
 (defun aph/bind-keys-augment-advice (orig &rest args)
-  "Advice to add support for :augment keyword to `bind-keys'.
+  "Advice to add :augment, :override keywords to `bind-keys'.
 
 The :augment keyword takes the name of a major or minor mode and
 binds the specified keys in the augmented keymap associated with
 that mode, for use with `aph-keys-mode'.  See `aph-keys-augment'
 for more information.
 
-Intended as :around advice for `bind-keys'." 
-  (let ((augment  (plist-get args :augment)))
-    (if augment
-        ;; Note that we aren't removing the :augment key here.
-        ;; Instead we're relying on undocumented behavior of
-        ;; `bind-keys', specifically that it simply ignores
-        ;; keyword arguments it does not recognize. 
-        `(progn (aph-keys-augment ',augment)
-                ,(apply orig :map (aph-keys-augment-name augment) args))
-      (apply orig args))))
+The :override keyword behaves similarly, but uses the overriding
+augment keymap.
+
+Both keywords accept lists, just like :map, and are compatible
+with :map; for example,
+
+    (bind-keys :augment foo-mode
+               :map (bar-mode-map
+                     baz-mode-map) ...)
+
+is more or less equivalent to
+
+    (bind-keys :map (aph-keys-mode-map:foo-mode
+                     bar-mode-map
+                     baz-mode-map) ...).
+
+Intended as :around advice for `bind-keys'."
+  (require 'aph-plist)                  ; For `aph/plist-get-as-list'
+  (let* ((augment   (aph/plist-get-as-list args :augment))
+         (override  (aph/plist-get-as-list args :override))
+         (maps      (aph/plist-get-as-list args :map)))
+    ;; Note that we don't remove our keys.  Instead we're relying on
+    ;; undocumented behavior of `bind-keys', specifically that it
+    ;; simply ignores keyword arguments it does not recognize.
+    `(progn ,@(cl-loop for mode in augment
+                       do (push (aph-keys-augment-name mode) maps)
+                       collect `(aph-keys-augment ',mode))
+            ,@(cl-loop for mode in override
+                       do (push (aph-keys-augment-name mode :override) maps)
+                       collect `(aph-keys-augment ',mode :override))
+            ,(apply orig (plist-put args :map maps)))))
 
 (advice-add #'bind-keys :around #'aph/bind-keys-augment-advice)
 
