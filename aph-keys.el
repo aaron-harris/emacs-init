@@ -301,14 +301,15 @@ Intended as :around advice for `bind-keys'."
          (maps      (aph/plist-get-as-list args :map)))
     ;; Note that we don't remove our keys.  Instead we're relying on
     ;; undocumented behavior of `bind-keys', specifically that it
-    ;; simply ignores keyword arguments it does not recognize.
+    ;; simply ignores keyword arguments it does not recognize (as well
+    ;; as any instances of a particular keyword after the first).
     `(progn ,@(cl-loop for mode in augment
                        do (push (aph-keys-augment-name mode) maps)
                        collect `(aph-keys-augment ',mode))
             ,@(cl-loop for mode in override
                        do (push (aph-keys-augment-name mode :override) maps)
                        collect `(aph-keys-augment ',mode :override))
-            ,(apply orig (plist-put args :map maps)))))
+            ,(apply orig `(:map ,maps ,@args)))))
 
 (advice-add #'bind-keys :around #'aph/bind-keys-augment-advice)
 
