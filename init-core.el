@@ -618,13 +618,7 @@ The return value depends only on `aph/machine'."
                   ("C-c ["            . undefined)
                   ("C-c ]"            . undefined)
                   ([remap org-goto]   . helm-semantic-or-imenu)
-                  ([remap next-error] . org-cycle-agenda-files))
-  :bind (:override org-mode
-                   ("C-M-b" . org-backward-heading-same-level)
-                   ("C-M-f" . org-forward-heading-same-level)
-                   ("C-M-n" . org-next-visible-heading)
-                   ("C-M-p" . org-previous-visible-heading)
-                   ("C-M-u" . outline-up-heading))
+                  ([remap next-error] . org-cycle-agenda-files)) 
   :config
   (message "Loading org...")         ; Because this may take a while. 
   (use-package init-org))
@@ -683,6 +677,14 @@ The return value depends only on `aph/machine'."
   (when (eq aph/machine 'mpc)
     (setq org-mobile-checksum-binary
           "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe")))
+
+(use-package outline
+  :bind (:override outline-mode
+                   ("C-M-b" . outline-backward-same-level)
+                   ("C-M-f" . outline-forward-same-level)
+                   ("C-M-n" . outline-next-visible-heading)
+                   ("C-M-p" . outline-previous-visible-heading)
+                   ("C-M-u" . outline-up-heading)))
 
 (use-package page 
   :config
