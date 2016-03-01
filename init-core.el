@@ -619,8 +619,14 @@ The return value depends only on `aph/machine'."
                   ("C-c ]"            . undefined)
                   ([remap org-goto]   . helm-semantic-or-imenu)
                   ([remap next-error] . org-cycle-agenda-files))
+  :bind (:override org-mode
+                   ("C-M-b" . org-backward-heading-same-level)
+                   ("C-M-f" . org-forward-heading-same-level)
+                   ("C-M-n" . org-next-visible-heading)
+                   ("C-M-p" . org-previous-visible-heading)
+                   ("C-M-u" . outline-up-heading))
   :config
-  (message "Loading org...")          ; Because this may take a while. 
+  (message "Loading org...")         ; Because this may take a while. 
   (use-package init-org))
 
 (use-package aph-org
