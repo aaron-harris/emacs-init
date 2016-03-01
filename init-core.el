@@ -138,15 +138,11 @@ The return value depends only on `aph/machine'."
 ;;; Package Configuration
 ;;;======================
 (use-package align
-  :bind (:augment text-mode
-                  ("C-M-i" . align-regexp))
-  :bind (:augment prog-mode
+  :bind (:augment (text-mode prog-mode)
                   ("C-M-i" . align-regexp)))
 
 (use-package aph-align
-  :bind (:augment text-mode
-                  ("C-i" . aph/align))
-  :bind (:augment prog-mode
+  :bind (:augment (text-mode prog-mode)
                   ("C-i" . aph/align)))
 
 (use-package aph-mpc
@@ -324,10 +320,7 @@ The return value depends only on `aph/machine'."
   :bind (:augment elfeed-search-mode
                   ("<return>" . aph/elfeed-search-show-entry)
                   ("'"        . aph/elfeed-search-next-favorite-filter))
-  :bind (:augment elfeed-show-mode
-                  ("p" . aph/elfeed-show-prev)
-                  ("n" . aph/elfeed-show-next))
-  :bind (:augment eww-mode
+  :bind (:augment (elfeed-show-mode eww-mode)
                   ("p" . aph/elfeed-show-prev)
                   ("n" . aph/elfeed-show-next)))
 
@@ -912,9 +905,7 @@ The return value depends only on `aph/machine'."
 
 (use-package smartscan
   :ensure t
-  :bind (:augment smartscan-mode
-                  ("M-p"   . nil)
-                  ("M-n"   . nil)
+  :bind (:augment smartscan-mode 
                   ("C-M-r" . smartscan-symbol-go-backward)
                   ("C-M-s" . smartscan-symbol-go-forward)
                   ("C-M-'" . smartscan-symbol-replace))
@@ -966,7 +957,7 @@ The return value depends only on `aph/machine'."
   (add-hook 'LaTeX-mode-hook #'aph/LaTeX-mode-hook))
 
 (use-package text-mode
-  :bind (:augment tex-mode
+  :bind (:augment text-mode
                   ("M-p" . backward-paragraph)
                   ("M-n" . forward-paragraph)))
 
