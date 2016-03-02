@@ -8,16 +8,28 @@
 (require 'aph-outline)
 
 
+;;; Testing Apparatus
+;;;==================
+(defmacro aph/outline-test (text &rest body)
+  "Execute BODY in `outline-mode' buffer containing TEXT."
+  (declare (indent 1)
+           (debug (stringp body)))
+  `(with-temp-buffer
+     (insert ,text)
+     (outline-mode)
+     (goto-char (point-min))
+     ,@body))
+
+
 ;;; Information Functions
 ;;;======================
 (ert-deftest aph/outline-test-before-first-heading-p ()
-  "Test `aph/outline-before-first-heading-p'."
-  (with-temp-buffer
-    (insert "Test contents
+  "Test `aph/outline-before-first-heading-p'." 
+  (aph/outline-test
+    "
+Preamble
 * Heading 1
-More text")
-    (outline-mode)
-    (goto-char (point-min))
+More text" 
     (should (aph/outline-before-first-heading-p))
     (while (and (aph/outline-before-first-heading-p) (not (eobp)))
       (forward-char))
