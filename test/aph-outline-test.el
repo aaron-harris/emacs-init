@@ -23,18 +23,19 @@
 
 ;;; Information Functions
 ;;;======================
-(ert-deftest aph/outline-test-before-first-heading-p ()
-  "Test `aph/outline-before-first-heading-p'." 
+(ert-deftest aph/outline-test-before-first-heading ()
+  "Test `aph/outline-before-first-heading'."
   (aph/outline-test
     "
 Preamble
 * Heading 1
 More text" 
-    (should (aph/outline-before-first-heading-p))
-    (while (and (aph/outline-before-first-heading-p) (not (eobp)))
+    (should (aph/outline-before-first-heading))
+    (while (and (aph/outline-before-first-heading) (not (eobp)))
       (forward-char))
     (should (looking-at-p "* Heading 1"))
-    (while (not (or (aph/outline-before-first-heading-p) (eobp)))
+    (should (outline-level))            ; Check that match data is OK
+    (while (not (or (aph/outline-before-first-heading) (eobp)))
       (forward-char))
     (should (eobp))))
 
