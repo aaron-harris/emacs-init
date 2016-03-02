@@ -26,5 +26,21 @@ Set match data for `outline-level'."
   "As `aph/outline-before-first-heading', but save match data."
   (save-match-data (aph/outline-before-first-heading invisible-ok)))
 
+(defun aph/outline-level ()
+  "As function in variable `outline-level', but more flexible.
+
+- When called at the beginning of a heading, behave as
+  (funcall outline-level).
+- When called before the first heading of the buffer, return 0.
+- Otherwise, return the value (funcall outline-level) would return if
+  called at the beginning of current heading.
+
+In any case, do not assume that match data reflects
+`outline-regexp'."
+  (if (aph/outline-before-first-heading :invisible-ok) 0
+   (save-excursion
+     (outline-back-to-heading :invisible-ok)
+     (funcall outline-level))))
+
 
 (provide 'aph-outline)
