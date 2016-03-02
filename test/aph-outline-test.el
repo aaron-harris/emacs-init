@@ -39,5 +39,20 @@ More text"
       (forward-char))
     (should (eobp))))
 
+(ert-deftest aph/outline-test-level ()
+  "Test `aph/outline-level'."
+  (aph/outline-test
+      "
+Preamble
+* Heading 1
+Text in H1"
+    (should (zerop (aph/outline-level)))
+    (outline-next-heading)
+    (should (looking-at-p "* Heading 1"))
+    (should (= (aph/outline-level) (funcall outline-level))) 
+    (should (= (funcall outline-level)
+               (progn (forward-line)
+                      (aph/outline-level))))))
+
       
 (provide 'aph-outline-test)
