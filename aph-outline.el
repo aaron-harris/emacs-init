@@ -42,5 +42,39 @@ In any case, do not assume that match data reflects
      (outline-back-to-heading :invisible-ok)
      (funcall outline-level))))
 
+
+;;; Navigation Functions
+;;;=====================
+(defun aph/outline--*-heading (arg dir &optional invisible-ok)
+  "Used by `aph/outline-next-heading', `aph/outline-previous-heading'.
+If DIR is non-nil, behave as `aph/outline-next-heading';
+otherwise, behave as `aph/outline-previous-heading'."
+  (let ((univ-func  (if dir #'outline-next-heading
+                      #'outline-previous-heading))
+        (vis-func   (if dir #'outline-next-visible-heading
+                      #'outline-previous-visible-heading)))
+    (cond
+     ((< arg 0)           (aph/outline--*-heading
+                           (- arg) (not dir) invisible-ok))
+     ((not invisible-ok)  (funcall vis-func arg))
+     (:else               (dotimes (i arg (point))
+                            (funcall univ-func))))))
+
+(defun aph/outline-next-heading (arg &optional invisible-ok)
+  "As `outline-next-visible-heading', but maybe invisible too.
+If INVISIBLE-OK is non-nil, call `outline-next-heading' ARG
+times (or `outline-previous-heading' -ARG times if ARG is
+negative).  Otherwise, defer to `outline-next-visible-heading'."
+  (interactive "p")
+  (aph/outline--*-heading arg t invisible-ok))
+
+(defun aph/outline-previous-heading (arg &optional invisible-ok)
+  "As `outline-previous-visible-heading', but maybe invisible too.
+If INVISIBLE-OK is non-nil, call `outline-previous-heading' ARG
+times (or `outline-previous-heading' -ARG times if ARG is
+negative).  Otherwise, defer to `outline-previous-visible-heading'."
+  (interactive "p")
+  (aph/outline--*-heading arg nil invisible-ok))
+
 
 (provide 'aph-outline)

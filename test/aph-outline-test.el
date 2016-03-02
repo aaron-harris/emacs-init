@@ -25,8 +25,7 @@
 ;;;======================
 (ert-deftest aph/outline-test-before-first-heading ()
   "Test `aph/outline-before-first-heading'."
-  (aph/outline-test
-    "
+  (aph/outline-test "
 Preamble
 * Heading 1
 More text" 
@@ -41,8 +40,7 @@ More text"
 
 (ert-deftest aph/outline-test-level ()
   "Test `aph/outline-level'."
-  (aph/outline-test
-      "
+  (aph/outline-test "
 Preamble
 * Heading 1
 Text in H1"
@@ -53,6 +51,24 @@ Text in H1"
     (should (= (funcall outline-level)
                (progn (forward-line)
                       (aph/outline-level))))))
+
+
+;;; Navigation Functions
+;;;=====================
+(ert-deftest aph/outline-next/previous-heading ()
+  "Test `aph/outline-next-heading', `aph/outline-previous-heading'."
+  (dolist (invis '(nil t)) 
+    (aph/outline-test "
+Preamble
+* Heading 1
+** Subheading 1a
+* Heading 2"
+      (aph/outline-next-heading 1 invis)
+      (should (looking-at-p "* Heading 1"))
+      (aph/outline-next-heading 2 invis)
+      (should (looking-at-p "* Heading 2"))
+      (aph/outline-next-heading -1 invis)
+      (should (looking-at-p "** Subheading 1a")))))
 
       
 (provide 'aph-outline-test)
