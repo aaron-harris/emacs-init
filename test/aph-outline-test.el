@@ -76,5 +76,22 @@ Preamble
       (aph/outline-previous-heading 1 invis)
       (should (bobp)))))
 
+(ert-deftest aph/outline-down-heading ()
+  "Test `aph/outline-down-heading'."
+  (aph/outline-test "
+Preamble
+* Heading 1
+** Subheading 1a
+*** Subsubheading 1a.1
+** Subheading 1b"
+    (aph/outline-down-heading 1)
+    (should (looking-at-p "* Heading 1"))
+    (aph/outline-down-heading 2)
+    (should (looking-at-p "*** Subsubheading 1a.1"))
+    (aph/outline-down-heading -1)
+    (should (looking-at-p "** Subheading 1a"))
+    (aph/outline-down-heading 5)
+    (should (looking-at-p "*** Subsubheading 1a.1"))))
+
       
 (provide 'aph-outline-test)
