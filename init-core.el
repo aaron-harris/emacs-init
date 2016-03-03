@@ -686,6 +686,10 @@ The return value depends only on `aph/machine'."
                    ("C-M-p" . outline-previous-visible-heading)
                    ("C-M-u" . outline-up-heading)))
 
+(use-package aph-outline
+  :bind (:override outline-mode
+                   ("C-M-d" . aph/outline-down-heading-from-end)))
+
 (use-package page 
   :config
   (put 'narrow-to-page 'disabled nil))
