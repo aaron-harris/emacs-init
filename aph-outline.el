@@ -76,5 +76,37 @@ negative).  Otherwise, defer to `outline-previous-visible-heading'."
   (interactive "p")
   (aph/outline--*-heading arg nil invisible-ok))
 
+(defun aph/outline-get-first-child (&optional invisible-ok)
+  "Move to first visible child of the current heading, and return point.
+If no such heading, return nil and do not move point.
+
+If INVISIBLE-OK is non-nil, also consider invisible children." 
+  (if (aph/outline-before-first-heading-p invisible-ok)
+      (aph/outline-next-heading 1 invisible-ok) 
+    (let ((start  (point))
+          (level  (aph/outline-level)))
+      (aph/outline-next-heading 1 invisible-ok)
+      (if (and (outline-on-heading-p invisible-ok)
+               (> (aph/outline-level) level))
+          (point)
+        (goto-char start)
+        nil))))
+
+(defun aph/outline-down-heading (arg &optional invisible-ok)
+  "Move to the first visible child of the current heading.
+With argument, descend ARG levels.
+If INVISIBLE-OK is non-nil, also consider invisible lines.
+
+If ARG is negative, move up ARG levels instead; note that this is
+a departure from the behavior of `outline-up-heading'."
+  (interactive "p")
+  (and (eq this-command 'aph/outline-down-heading)
+       (or (eq last-command 'aph/outline-down-heading) (push-mark)))
+  (if (< arg 0)
+      (outline-up-heading (- arg) invisible-ok)
+    (while (and (> arg 0)
+                (aph/outline-get-first-child))
+      (setq arg (1- arg)))))
+
 
 (provide 'aph-outline)
