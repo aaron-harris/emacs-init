@@ -55,9 +55,9 @@ Text in H1"
 
 ;;; Navigation Functions
 ;;;=====================
-(ert-deftest aph/outline-next/previous-heading ()
+(ert-deftest aph/outline-*-heading ()
   "Test `aph/outline-next-heading', `aph/outline-previous-heading'."
-  (dolist (invis '(nil t)) 
+  (dolist (invis '(nil t))
     (aph/outline-test "
 Preamble
 * Heading 1
@@ -68,7 +68,13 @@ Preamble
       (aph/outline-next-heading 2 invis)
       (should (looking-at-p "* Heading 2"))
       (aph/outline-next-heading -1 invis)
-      (should (looking-at-p "** Subheading 1a")))))
+      (should (looking-at-p "** Subheading 1a"))
+      (aph/outline-previous-heading -1 invis)
+      (should (looking-at-p "* Heading 2"))
+      (aph/outline-previous-heading 2 invis)
+      (should (looking-at-p "* Heading 1"))
+      (aph/outline-previous-heading 1 invis)
+      (should (bobp)))))
 
       
 (provide 'aph-outline-test)
