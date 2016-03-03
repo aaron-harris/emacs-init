@@ -52,13 +52,15 @@ otherwise, behave as `aph/outline-previous-heading'."
   (let ((univ-func  (if dir #'outline-next-heading
                       #'outline-previous-heading))
         (vis-func   (if dir #'outline-next-visible-heading
-                      #'outline-previous-visible-heading)))
+                      #'outline-previous-visible-heading))
+        (start      (point)))
     (cond
      ((< arg 0)           (aph/outline--*-heading
                            (- arg) (not dir) invisible-ok))
      ((not invisible-ok)  (funcall vis-func arg))
      (:else               (dotimes (i arg (point))
-                            (funcall univ-func))))))
+                            (funcall univ-func))))
+    (unless (= start (point)) (point))))
 
 (defun aph/outline-next-heading (arg &optional invisible-ok)
   "As `outline-next-visible-heading', but maybe invisible too.
@@ -82,7 +84,7 @@ If no such heading, return nil and do not move point.
 
 If INVISIBLE-OK is non-nil, also consider invisible children." 
   (if (aph/outline-before-first-heading-p invisible-ok)
-      (aph/outline-next-heading 1 invisible-ok) 
+      (aph/outline-next-heading 1 invisible-ok)
     (let ((start  (point))
           (level  (aph/outline-level)))
       (aph/outline-next-heading 1 invisible-ok)
@@ -101,11 +103,49 @@ If ARG is negative, move up ARG levels instead; note that this is
 a departure from the behavior of `outline-up-heading'."
   (interactive "p")
   (and (eq this-command 'aph/outline-down-heading)
-       (or (eq last-command 'aph/outline-down-heading) (push-mark)))
+       (or (eq last-command 'aph/outline-down-heading)
+           (push-mark)))
   (if (< arg 0)
       (outline-up-heading (- arg) invisible-ok)
     (while (and (> arg 0)
                 (aph/outline-get-first-child))
+      (setq arg (1- arg)))))
+
+(defun aph/outline-get-next-sibling ()
+  "As `outline-get-next-sibling', with less state-dependence.
+
+The function `outline-get-next-sibling' requires that the current
+match data reflects `outline-regexp' and that point is currently
+at the beginning of a heading.  This function performs the same
+function without those requirements.
+
+If point is currently before the first heading in the buffer,
+then do not move point and return nil."
+  (unless (aph/outline-before-first-heading :invisible-ok)
+    (outline-get-next-sibling)))
+
+(defun aph/outline-get-last-child ()
+  "Move to last child of the current heading, and return point.
+If no such heading, return nil and do not move point."
+  (when (aph/outline-get-first-child)
+    (let ((pos (point)))
+      (while (aph/outline-get-next-sibling)
+        (setq pos (point)))
+      (goto-char pos))))
+
+(defun aph/outline-down-heading-from-end (arg)
+  "Move to the last child of the current heading.
+With argument, descend ARG levels in this way.
+
+If ARG is negative, move up ARG levels instead."
+  (interactive "p")
+  (and (eq this-command 'aph/outline-down-heading-from-end)
+       (or (eq last-command 'aph/outline-down-heading-from-end)
+           (push-mark)))
+  (if (< arg 0)
+      (outline-up-heading (- arg) :invisible-ok)
+    (while (and (> arg 0)
+                (aph/outline-get-last-child))
       (setq arg (1- arg)))))
 
 
