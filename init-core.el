@@ -618,7 +618,10 @@ The return value depends only on `aph/machine'."
                   ("C-c ["            . undefined)
                   ("C-c ]"            . undefined)
                   ([remap org-goto]   . helm-semantic-or-imenu)
-                  ([remap next-error] . org-cycle-agenda-files)) 
+                  ([remap next-error] . org-cycle-agenda-files)
+                  ;; Following bindings restore `org-mode' keys
+                  ;; unintentionally shadowed by `aph-keys-mode'
+                  ("C-o"              . org-open-line))
   :config
   (message "Loading org...")         ; Because this may take a while. 
   (use-package init-org))
