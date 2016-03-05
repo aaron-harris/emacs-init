@@ -617,7 +617,7 @@ The return value depends only on `aph/machine'."
   :bind (:augment org-mode
                   ("C-c ["            . undefined)
                   ("C-c ]"            . undefined)
-                  ([remap org-goto]   . helm-semantic-or-imenu)
+                  ("M-."              . helm-org-in-buffer-headings)
                   ([remap next-error] . org-cycle-agenda-files)
                   ;; Following bindings restore `org-mode' keys
                   ;; unintentionally shadowed by `aph-keys-mode'
