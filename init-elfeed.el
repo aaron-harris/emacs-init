@@ -47,8 +47,7 @@
    ("http://www.somethingpositive.net/sp.xml" comics link)
    ("http://www.useswordonmonster.com/?feed=rss2" comics link)
    ("http://xkcd.com/atom.xml" comics)
-   ("http://youdamnkid.com/?feed=rss2" comics link)
-   ("http://frivolesque.com/feed" comics link)
+   ("http://youdamnkid.com/?feed=rss2" comics link) 
    ;; Math
    ("http://blog.plover.com/index.rss" math)
    ("http://golem.ph.utexas.edu/category/atom10.xml" math link)
