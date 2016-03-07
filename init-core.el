@@ -295,6 +295,9 @@ The return value depends only on `aph/machine'."
   :ensure t
   :bind (:map aph-keys-mode-map
               ("C-z C-f" . elfeed))
+  :bind (:augment elfeed-show-mode
+                  ("M-p" . backward-paragraph)
+                  ("M-n" . forward-paragraph))
   :config
   ;; Basic config
   (setq elfeed-sort-order            'ascending
