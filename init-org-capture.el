@@ -15,19 +15,19 @@
 (add-to-list 'org-capture-templates '("n" "Note"))
 
 (add-to-list 'org-capture-templates
-             `("np" "Plain note" entry
+             '("np" "Plain note" entry
               (file+headline org-default-notes-file "Notes")
               "* %?"
               :kill-buffer))
 
 (add-to-list 'org-capture-templates
-             `("nl" "Link" entry
+             '("nl" "Link" entry
               (file+headline org-default-notes-file "Notes")
               "* %^L%?"
               :kill-buffer))
 
 (add-to-list 'org-capture-templates
-             `("nL" "Link to here" entry
+             '("nL" "Link to here" entry
               (file+headline org-default-notes-file "Notes")
               "* %A%?"
               :kill-buffer))
@@ -35,25 +35,39 @@
 (add-to-list 'org-capture-templates '("t" "Task"))
 
 (add-to-list 'org-capture-templates
-             `("tp" "Plain task" entry
+             '("tp" "Plain task" entry
                (file+headline org-default-notes-file "Tasks")
                "* TODO %?"
                :kill-buffer))
 
 (add-to-list 'org-capture-templates
-             `("tl" "Link" entry
+             '("tl" "Link" entry
                (file+headline org-default-notes-file "Tasks")
                "* TODO %^L%?"
                :kill-buffer))
 
 (add-to-list 'org-capture-templates
-             `("tL" "Link to here" entry
+             '("tL" "Link to here" entry
               (file+headline org-default-notes-file "Tasks")
               "* TODO %A%?"
               :kill-buffer))
 
 (add-to-list 'org-capture-templates
-             `("p" "Plain text" plain
+             `("te" "Emacs" entry
+               (file+olp ,(expand-file-name "computer.org" org-directory)
+                         "Emacs" "Emacs Config")
+               "* TODO %?"
+               :kill-buffer))
+
+(add-to-list 'org-capture-templates
+             `("ta" "AHK" entry
+               (file+olp ,(expand-file-name "computer.org" org-directory)
+                         "AutoHotkey" "AHK Config")
+               "* TODO %?"
+               :kill-buffer))
+
+(add-to-list 'org-capture-templates
+             '("p" "Plain text" plain
               (function aph/org-capture-choose-target)
               "%i%?"
               :empty-lines 1
