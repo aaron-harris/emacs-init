@@ -590,7 +590,6 @@ The return value depends only on `aph/machine'."
               ("C-<kp-enter>" . aph/keypad-enter-toggle-newline)))
 
 (use-package lisp-mode
-  :defer t
   :bind (:augment emacs-lisp-mode
                   ("C-c e b" . eval-buffer)
                   ("C-c e d" . eval-defun)
@@ -603,13 +602,18 @@ The return value depends only on `aph/machine'."
   (aph/mode-tag-add 'lisp-interaction-mode 'lisp)
   ;; Add `use-package' blocks to Imenu
   (add-to-list 'lisp-imenu-generic-expression
-               '("Packages"
+               '("Package"
                  "^(use-package\\s-+\\(\\_<.+?\\_>\\)"
                  1))
   ;; Add `defhydra's to Imenu
   (add-to-list 'lisp-imenu-generic-expression
-               '("Hydras"
+               '("Hydra"
                  "^(defhydra\\s-+\\(\\_<.+?\\_>\\)"
+                 1))
+  ;; Add `ert' tests to Imenu
+  (add-to-list 'lisp-imenu-generic-expression
+               '("Test"
+                 "^(ert-deftest\\s-+\\(\\_<.+?\\_>\\)"
                  1)))
 
 (use-package minibuffer
