@@ -267,7 +267,7 @@ nil."
                                     baz-mode-map
                                     quux-mode-map))
                 (should (eq (lookup-key keymap (kbd "a"))
-                            'foo))))))))))
-        
+                            'foo)))))))))
+
 
 (provide 'aph-keys-test)
