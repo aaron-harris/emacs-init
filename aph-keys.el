@@ -91,7 +91,18 @@ This keymap is used in place of the augmented keymap for the
 current major mode inside a minibuffer.  Bind keys here if you
 wish them to override keys in any of the `minibuffer-local-*-map'
 keymaps.  Note that this keymap is used regardless of which of
-those keymaps is currently in use.") 
+those keymaps is currently in use.")
+
+(defvar aph-keys-mode-helm-map
+  (let ((k (make-sparse-keymap)))
+    (set-keymap-parent k aph-keys-mode-minibuffer-map)
+    k)
+  "Keymap for use with `helm' in `aph-keys-mode'.
+Inherits from `aph-keys-mode-minibuffer-map'
+
+This keymap is used in place of the augmented keymap for the
+current major mode during a `helm' session.  Bind keys here if
+you wish them to override keys in `helm-map'.")
 
 (add-to-list 'emulation-mode-map-alists
              'aph-keys-overriding-map-alist :append #'eq)
@@ -256,12 +267,17 @@ to update the parentage of the augmented map for that mode.
 
 This function is suitable for use in
 `after-change-major-mode-hook'."
-  (let ((local-map
-         (if (minibufferp) aph-keys-mode-minibuffer-map
-           (aph-keys--set-major-mode-parentage major-mode)))
-        (override-map
-         (if (minibufferp) aph-keys-mode-overriding-map
-           (aph-keys--set-major-mode-parentage major-mode :override))))
+  (let* ((helm-p  (and (fboundp #'helm-alive-p) (helm-alive-p)))
+         (local-map
+          (cond
+           (helm-p         aph-keys-mode-helm-map)
+           ((minibufferp)  aph-keys-mode-minibuffer-map)
+           (:else  (aph-keys--set-major-mode-parentage major-mode))))
+         (override-map
+          (cond
+           (helm-p         aph-keys-mode-overriding-map)
+           ((minibufferp)  aph-keys-mode-overriding-map)
+           (:else  (aph-keys--set-major-mode-parentage major-mode :override))))) 
     (setq aph-keys-local-map-alist      `((aph-keys-mode . ,local-map))
           aph-keys-overriding-map-alist `((aph-keys-mode . ,override-map)))))
 
