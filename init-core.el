@@ -425,17 +425,16 @@ The return value depends only on `aph/machine'."
               ("C-z C-s"                . helm-google-suggest)
               ("C-z M-c"                . helm-calcul-expression)
               ("C-z C-p"                . helm-list-elisp-packages)) 
-  :bind (:map helm-map
-              ("TAB"      . helm-execute-persistent-action)
+  :bind (:map aph-keys-mode-helm-map
               ("<tab>"    . helm-execute-persistent-action)
-              ("C-j"      . nil)
-              ("C-z"      . nil)
+              ("C-j"      . undefined)
+              ("C-z"      . undefined)
               ("s-<apps>" . helm-select-action)))
 
 (use-package aph-helm
   :bind (:map aph-keys-mode-map
               ("C-x M-p" . aph/helm-browse-project))
-  :bind (:map helm-map
+  :bind (:map aph-keys-mode-helm-map
               ("<return>" . aph/helm-resume-update-or-exit-minibuffer)))
 
 (use-package helm-config
