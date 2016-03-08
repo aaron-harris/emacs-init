@@ -327,13 +327,20 @@ The return value depends only on `aph/machine'."
                   ("p" . aph/elfeed-show-prev)
                   ("n" . aph/elfeed-show-next)))
 
+(use-package ert
+  :defer t
+  :init 
+  (add-to-list 'load-path (expand-file-name (concat aph/init-path "/test"))))
+
 (use-package eww
   :bind (:map aph-keys-mode-map ("C-z C-w" . eww))
   :bind (:augment eww-mode
                   ("S-<tab>" . shr-previous-link)
                   ("["       . eww-previous-url)
                   ("]"       . eww-next-url)
-                  ("z"       . shr-zoom-image)))
+                  ("z"       . shr-zoom-image)
+                  ("M-p"     . backward-paragraph)
+                  ("M-n"     . forward-paragraph)))
 
 (use-package files
   :defer t
