@@ -663,7 +663,9 @@ The return value depends only on `aph/machine'."
                   ;; `bury-buffer'?  Anyway, `quit-window' still
                   ;; works, so let's just use that for the time being.
                   ([remap org-agenda-quit] . quit-window)
-                  ("C-o"                   . org-agenda-open-link)))
+                  ("C-o"                   . org-agenda-open-link)
+                  ("M-p"                   . org-agenda-backward-block)
+                  ("M-n"                   . org-agenda-forward-block)))
 
 (use-package aph-org-agenda
   :after org-agenda
