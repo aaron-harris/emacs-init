@@ -93,6 +93,40 @@ Preamble
     (should (null (aph/outline-get-first-child)))
     (should (looking-at-p "*** Subsubheading 1a.1"))))
 
+(ert-deftest aph/outline-test-forward-end-of-level ()
+  "Test `aph/outline-forward-end-of-level'.
+Also test the subroutine `aph/outline-get-final-sibling' in its
+own right."
+  (aph/outline-test "
+Preamble
+* Heading 1
+** Subheading 1a
+* Heading 2
+** Subheading 2a
+* Heading 3
+** Subheading 3a"
+    (let ((test
+           (lambda (f should-move)
+             (save-excursion
+               (let ((result (funcall f)))
+                 (if should-move
+                     (should (eq result (point)))
+                   (should (null result)))) 
+               (should (looking-at-p "* Heading 3"))))))
+      (should (null (aph/outline-get-final-sibling)))
+      (aph/outline-get-first-child)
+      (should (looking-at-p "* Heading 1"))
+      (funcall test #'aph/outline-get-final-sibling t)
+      (funcall test #'aph/outline-forward-end-of-level t)
+      (aph/outline-get-next-sibling)
+      (should (looking-at-p "* Heading 2"))
+      (funcall test 'aph/outline-get-final-sibling t)
+      (funcall test #'aph/outline-forward-end-of-level t)
+      (aph/outline-get-next-sibling)
+      (should (looking-at-p "* Heading 3"))
+      (funcall test 'aph/outline-get-final-sibling nil)
+      (should-error (aph/outline-forward-end-of-level)))))
+
 (ert-deftest aph/outline-test-down-heading ()
   "Test `aph/outline-down-heading'."
   (aph/outline-test "
