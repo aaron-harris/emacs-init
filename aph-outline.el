@@ -124,7 +124,28 @@ then do not move point and return nil."
   (unless (aph/outline-before-first-heading :invisible-ok)
     (outline-get-next-sibling)))
 
-(defun aph/outline-get-last-child ()
+(defun aph/outline-get-final-sibling ()
+  "Move to last sibling of current heading; return point.
+If already on the last sibling, return nil and do not move
+point." 
+  (let ((pos (save-excursion (aph/outline-get-next-sibling))))
+    (when pos
+      (while (outline-get-next-sibling)
+        (setq pos (point)))
+      (goto-char pos))))
+
+(defun aph/outline-forward-end-of-level ()
+  "Move to last sibling of current heading.
+
+This differs from the non-interactive function
+`aph/outline-get-final-sibling' only in that it signals an error
+if current heading is the last child of its parent."
+  (interactive)
+  (if (save-excursion (aph/outline-get-next-sibling))
+      (aph/outline-get-final-sibling)
+    (error "No following same-level heading")))
+
+(defun aph/outline-get-final-child ()
   "Move to last child of the current heading, and return point.
 If no such heading, return nil and do not move point."
   (when (aph/outline-get-first-child)
@@ -145,7 +166,7 @@ If ARG is negative, move up ARG levels instead."
   (if (< arg 0)
       (outline-up-heading (- arg) :invisible-ok)
     (while (and (> arg 0)
-                (aph/outline-get-last-child))
+                (aph/outline-get-final-child))
       (setq arg (1- arg)))))
 
 
