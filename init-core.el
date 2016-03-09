@@ -628,6 +628,11 @@ The return value depends only on `aph/machine'."
   :config
   (setq completion-auto-help 'lazy))
 
+(use-package ob-core
+  :defer t
+  :config
+  (setq org-confirm-babel-evaluate nil))
+
 (use-package org
   :ensure t
   :bind (:map aph-keys-mode-map
