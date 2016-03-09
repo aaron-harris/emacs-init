@@ -49,23 +49,27 @@ processes.)"
         (kill-buffer buffer-or-name)))))
 
 
-;;; Extensions to `save-buffers-kill-terminal'
-;;;===========================================
+;;; Extensions to `save-buffers-kill-emacs'
+;;;========================================
 (defun aph/delete-frame-or-exit (&optional arg)
   "Delete this frame.  With only one frame, exit Emacs.
 
-When there is more than one visible frame, run `delete-frame'.
-Otherwise, exit Emacs with `save-buffers-kill-terminal' after
-confirming this with user.
+When called from a non-emacsclient frame and there is more than
+one visible frame, delete the current frame (see `delete-frame').
+Otherwise, call `save-buffers-kill-terminal'.
 
-If a prefix ARG is supplied, ignore it in the multiple-frame
-case.  Otherwise, bypass confirmation and pass the argument to
-`save-buffers-kill-terminal'."
+With one prefix ARG (`C-u'), instead kill Emacs entirely with
+`save-buffers-kill-emacs'.
+
+With two prefix args (`C-u C-u'), save all buffers and kill
+Emacs, bypassing all normal confirmation prompts."
   (interactive "P")
   (cond
+   ((equal arg '(16))                    (let ((confirm-kill-emacs nil))
+                                           (save-buffers-kill-emacs arg)))
+   ((equal arg '(4))                     (save-buffers-kill-emacs)) 
    ((> (length (visible-frame-list)) 1)  (delete-frame))
-   ((or arg (y-or-n-p "Quit Emacs?"))    (save-buffers-kill-terminal arg))
-   (t                                    (message "Abort"))))
+   (:else                                (save-buffers-kill-terminal))))
 
 
 ;;; Make Emacs Source Read-Only

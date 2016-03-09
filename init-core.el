@@ -351,10 +351,10 @@ The return value depends only on `aph/machine'."
 
 (use-package files
   :defer t
-  :config
-  ;; Backup file location
+  :config 
   (setq backup-directory-alist
-        `(("." . ,(concat user-emacs-directory "backups")))))
+        `(("." . ,(concat user-emacs-directory "backups"))))
+  (setq confirm-kill-emacs #'y-or-n-p))
 
 (use-package aph-files
   :after files
@@ -601,7 +601,8 @@ The return value depends only on `aph/machine'."
                   ("C-c e b" . eval-buffer)
                   ("C-c e d" . eval-defun)
                   ("C-c e r" . eval-region)
-                  ("C-c e e" . eval-last-sexp))
+                  ("C-c e e" . eval-last-sexp)
+                  ("C-c C-c" . eval-buffer))
   :config 
   ;; Mode tags
   (aph/mode-tag-add 'lisp-mode             'lisp)
