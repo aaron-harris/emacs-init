@@ -138,11 +138,15 @@ The return value depends only on `aph/machine'."
 ;;; Package Configuration
 ;;;======================
 (use-package align
-  :bind (:augment (text-mode prog-mode)
+  :bind (:augment text-mode
+                  ("C-M-i" . align-regexp))
+  :bind (:augment prog-mode
                   ("C-M-i" . align-regexp)))
 
 (use-package aph-align
-  :bind (:augment (text-mode prog-mode)
+  :bind (:augment text-mode
+                  ("C-i" . aph/align))
+  :bind (:augment prog-mode
                   ("C-i" . aph/align)))
 
 (use-package aph-mpc
@@ -323,7 +327,10 @@ The return value depends only on `aph/machine'."
   :bind (:augment elfeed-search-mode
                   ("<return>" . aph/elfeed-search-show-entry)
                   ("'"        . aph/elfeed-search-next-favorite-filter))
-  :bind (:augment (elfeed-show-mode eww-mode)
+  :bind (:augment elfeed-show-mode
+                  ("p" . aph/elfeed-show-prev)
+                  ("n" . aph/elfeed-show-next))
+  :bind (:augment eww-mode
                   ("p" . aph/elfeed-show-prev)
                   ("n" . aph/elfeed-show-next)))
 
