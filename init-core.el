@@ -596,13 +596,7 @@ The return value depends only on `aph/machine'."
   :bind (:map aph-keys-mode-map 
               ("C-<kp-enter>" . aph/keypad-enter-toggle-newline)))
 
-(use-package lisp-mode
-  :bind (:augment emacs-lisp-mode
-                  ("C-c e b" . eval-buffer)
-                  ("C-c e d" . eval-defun)
-                  ("C-c e r" . eval-region)
-                  ("C-c e e" . eval-last-sexp)
-                  ("C-c C-c" . eval-buffer))
+(use-package lisp-mode 
   :config 
   ;; Mode tags
   (aph/mode-tag-add 'lisp-mode             'lisp)
@@ -623,6 +617,10 @@ The return value depends only on `aph/machine'."
                '("Test"
                  "^(ert-deftest\\s-+\\(\\_<.+?\\_>\\)"
                  1)))
+
+(use-package aph/lisp-mode
+  :bind (:augment emacs-lisp-mode 
+                  ("C-c C-c" . aph/eval-region-or-buffer)))
 
 (use-package minibuffer
   :bind (:map aph-keys-mode-map
