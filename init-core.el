@@ -719,7 +719,8 @@ The return value depends only on `aph/machine'."
 (use-package aph-outline
   :bind (:override outline-mode
                    ("C-M-d" . aph/outline-down-heading-from-end)
-                   ("C-M-e" . aph/outline-forward-end-of-level)))
+                   ("C-M-a" . aph/outline-get-first-sibling)
+                   ("C-M-e" . aph/outline-get-final-sibling)))
 
 (use-package page 
   :config
