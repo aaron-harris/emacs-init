@@ -76,6 +76,25 @@ Preamble
       (aph/outline-previous-heading 1 invis)
       (should (bobp)))))
 
+(ert-deftest aph/outline-test-top-heading ()
+  "Test `aph/outline-top-heading'."
+  (dolist (invis '(nil t))
+    (aph/outline-test "
+Preamble
+* Heading 1
+** Subheading 1a"
+      (let ((test
+             (lambda (start-hdg end-hdg)
+               (save-excursion
+                 (should (looking-at-p start-hdg))
+                 (should (eq (aph/outline-top-heading invis) (point)))
+                 (should (looking-at-p end-hdg))))))
+        (should-error (aph/outline-top-heading))
+        (aph/outline-next-heading 1 invis)
+        (should-error (aph/outline-top-heading)) 
+        (aph/outline-next-heading 1 invis)
+        (funcall test "** Subheading 1a" "* Heading 1")))))
+
 (ert-deftest aph/outline-test-get-first-child ()
   "Test `aph/outline-get-first-child'."
   (aph/outline-test "
@@ -91,6 +110,23 @@ Preamble
     (should (eq (aph/outline-get-first-child) (point)))
     (should (looking-at-p "*** Subsubheading 1a.1"))
     (should (null (aph/outline-get-first-child)))
+    (should (looking-at-p "*** Subsubheading 1a.1"))))
+
+(ert-deftest aph/outline-test-down-heading ()
+  "Test `aph/outline-down-heading'."
+  (aph/outline-test "
+Preamble
+* Heading 1
+** Subheading 1a
+*** Subsubheading 1a.1
+** Subheading 1b"
+    (aph/outline-down-heading 1)
+    (should (looking-at-p "* Heading 1"))
+    (aph/outline-down-heading 2)
+    (should (looking-at-p "*** Subsubheading 1a.1"))
+    (aph/outline-down-heading -1)
+    (should (looking-at-p "** Subheading 1a"))
+    (aph/outline-down-heading 5)
     (should (looking-at-p "*** Subsubheading 1a.1"))))
 
 (ert-deftest aph/outline-test-forward-end-of-level ()
@@ -126,23 +162,6 @@ Preamble
       (should (looking-at-p "* Heading 3"))
       (funcall test 'aph/outline-get-final-sibling nil)
       (should-error (aph/outline-forward-end-of-level)))))
-
-(ert-deftest aph/outline-test-down-heading ()
-  "Test `aph/outline-down-heading'."
-  (aph/outline-test "
-Preamble
-* Heading 1
-** Subheading 1a
-*** Subsubheading 1a.1
-** Subheading 1b"
-    (aph/outline-down-heading 1)
-    (should (looking-at-p "* Heading 1"))
-    (aph/outline-down-heading 2)
-    (should (looking-at-p "*** Subsubheading 1a.1"))
-    (aph/outline-down-heading -1)
-    (should (looking-at-p "** Subheading 1a"))
-    (aph/outline-down-heading 5)
-    (should (looking-at-p "*** Subsubheading 1a.1"))))
 
 (ert-deftest aph/outline-test-down-heading-from-end ()
   "Test `aph/outline-down-heading-from-end'."
