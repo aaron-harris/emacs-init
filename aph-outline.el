@@ -8,8 +8,12 @@
 (require 'outline)
 
 
-;;; Information Functions
-;;;======================
+;;; State Wrappers
+;;;===============
+;; Functions in this section wrap basic `outline-mode' functions so
+;; that they have less state-dependence, e.g. so they can be called
+;; anywhere on the line and without worrying about the match data.
+
 (defun aph/outline-before-first-heading (&optional invisible-ok)
   "Return non-nil if before first visible heading of buffer.
 If INVISIBLE-OK is non-nil, also consider invisible headings.
@@ -42,9 +46,20 @@ In any case, do not assume that match data reflects
      (outline-back-to-heading :invisible-ok)
      (funcall outline-level))))
 
+(defun aph/outline-call-safely (f &rest args)
+  "Call F with ARGS, unless before first `outline-mode' heading.
+Also set match data for `outline-level'.
+
+If before the first heading, return nil and do not move point."
+  (unless (aph/outline-before-first-heading :invisible-ok)
+    (apply f args)))
+
 
-;;; Navigation Functions
-;;;=====================
+;;; General Motion
+;;;===============
+;; Functions in this section extend `aph/outline-next-heading' and
+;; `aph/outline-previous-heading'.
+
 (defun aph/outline--*-heading (arg reverse &optional invisible-ok)
   "Used by `aph/outline-next-heading', `aph/outline-previous-heading'.
 If REVERSE is non-nil, behave as `aph/outline-previous-heading';
@@ -77,6 +92,79 @@ times (or `outline-previous-heading' -ARG times if ARG is
 negative).  Otherwise, defer to `outline-previous-visible-heading'."
   (interactive "p")
   (aph/outline--*-heading arg t invisible-ok))
+
+
+;;; Lateral Motion
+;;;===============
+;; Functions in this section move within a single level of the
+;; `outline-mode' hierarchy, extending `outline-forward-same-level'
+;; and `outline-backward-same-level'.
+
+(defun aph/outline-get-next-sibling ()
+  "As `outline-get-next-sibling', with less state-dependence.
+
+The function `outline-get-next-sibling' requires that the current
+match data reflects `outline-regexp' and that point is currently
+at the beginning of a heading.  This function performs the same
+function without those requirements.
+
+If point is currently before the first heading in the buffer,
+then do not move point and return nil."
+  (aph/outline-call-safely #'outline-get-next-sibling))
+
+(defun aph/outline-get-previous-sibling ()
+  "As `outline-get-last-sibling', with less state-dependence.
+
+The function `outline-get-last-sibling' requires that the current
+match data reflects `outline-regexp' and that point is currently
+at the beginning of a heading.  This function performs the same
+function without those requirements.
+
+If point is currently before the first heading in the buffer,
+then do not move point and return nil."
+  (aph/outline-call-safely #'outline-get-last-sibling))
+
+(defun aph/outline--get-*-sibling (reverse &optional loud)
+  "Used by `aph/outline-get-first-sibling', `aph/outline-get-final-sibling'.
+If REVERSE is non-nil, behave as `aph/outline-get-first-sibling';
+otherwise, behave as `aph/outline-get-final-sibling'.
+
+If LOUD is non-nil, signal an error if current heading is already
+the first or last child of its parent (that is, if point would
+not move); otherwise, return nil and do not move point."
+  (let* ((f    (if reverse #'outline-get-last-sibling
+                 #'outline-get-next-sibling))
+         (pos  (save-excursion (aph/outline-call-safely f))))
+    (cond
+     (pos   (while (funcall f)
+              (setq pos (point)))
+            (goto-char pos))
+     (loud  (error "No %s same-level heading"
+                   (if reverse "previous" "following"))))))
+
+(defun aph/outline-get-first-sibling (&optional loud)
+  "Move to first sibling of current heading; return point.
+
+If already on the first sibling, signal an error if called
+interactively or if LOUD is non-nil; otherwise, return nil and do
+not move point."
+  (interactive "p")
+  (aph/outline--get-*-sibling t loud))
+
+(defun aph/outline-get-final-sibling (&optional loud)
+  "Move to last sibling of current heading; return point.
+
+If already on the last sibling, signal an error if called
+interactively or if LOUD is non-nil; otherwise, return nil and do
+not move point."
+  (interactive "p")
+  (aph/outline--get-*-sibling nil loud))
+
+
+;;; Vertical Motion
+;;;================
+;; Functions in this section move upwards or downwards within the
+;; `outline-mode' hierarchy, extending `outline-up-heading'.
 
 (defun aph/outline-top-heading (&optional invisible-ok)
   "Move up to top-level visible heading above current, and return point.
@@ -126,41 +214,7 @@ a departure from the behavior of `outline-up-heading'."
       (outline-up-heading (- arg) invisible-ok)
     (while (and (> arg 0)
                 (aph/outline-get-first-child))
-      (setq arg (1- arg)))))
-
-(defun aph/outline-get-next-sibling ()
-  "As `outline-get-next-sibling', with less state-dependence.
-
-The function `outline-get-next-sibling' requires that the current
-match data reflects `outline-regexp' and that point is currently
-at the beginning of a heading.  This function performs the same
-function without those requirements.
-
-If point is currently before the first heading in the buffer,
-then do not move point and return nil."
-  (unless (aph/outline-before-first-heading :invisible-ok)
-    (outline-get-next-sibling)))
-
-(defun aph/outline-get-final-sibling ()
-  "Move to last sibling of current heading; return point.
-If already on the last sibling, return nil and do not move
-point." 
-  (let ((pos (save-excursion (aph/outline-get-next-sibling))))
-    (when pos
-      (while (outline-get-next-sibling)
-        (setq pos (point)))
-      (goto-char pos))))
-
-(defun aph/outline-forward-end-of-level ()
-  "Move to last sibling of current heading.
-
-This differs from the non-interactive function
-`aph/outline-get-final-sibling' only in that it signals an error
-if current heading is the last child of its parent."
-  (interactive)
-  (if (save-excursion (aph/outline-get-next-sibling))
-      (aph/outline-get-final-sibling)
-    (error "No following same-level heading")))
+      (setq arg (1- arg))))) 
 
 (defun aph/outline-get-final-child ()
   "Move to last child of the current heading, and return point.

@@ -21,8 +21,8 @@
      ,@body))
 
 
-;;; Information Functions
-;;;======================
+;;; State Wrappers
+;;;===============
 (ert-deftest aph/outline-test-before-first-heading ()
   "Test `aph/outline-before-first-heading'."
   (aph/outline-test "
@@ -53,8 +53,8 @@ Text in H1"
                       (aph/outline-level))))))
 
 
-;;; Navigation Functions
-;;;=====================
+;;; General Motion
+;;;===============
 (ert-deftest aph/outline-*-heading ()
   "Test `aph/outline-next-heading', `aph/outline-previous-heading'."
   (dolist (invis '(nil t))
@@ -76,6 +76,58 @@ Preamble
       (aph/outline-previous-heading 1 invis)
       (should (bobp)))))
 
+(ert-deftest aph/outline-test-get-*-sibling ()
+  "Test `aph/outline--get-*-sibling' and related commands.
+The specific commands tested are `aph/outline-get-first-sibling'
+and `aph/outline-get-final-sibling'."
+  (aph/outline-test "
+Preamble
+* Heading 1
+** Subheading 1a
+* Heading 2
+* Heading 3
+** Subheading 3a"
+    (let* ((subtest
+            (lambda (f expected)
+              (if expected
+                  (dolist (loud '(nil t))
+                    (save-excursion
+                      (should (eq (funcall f loud) (point)))
+                      (should (looking-at-p expected))))
+                (let ((pos (point)))
+                  (should (null (funcall f nil)))
+                  (should (eq pos (point)))
+                  (should-error (funcall f :loud))
+                  (should (eq pos (point)))))))
+           (test
+            (lambda (start-hdg back-hdg fwd-hdg)
+              (should (looking-at-p start-hdg))
+              (funcall subtest #'aph/outline-get-first-sibling back-hdg)
+              (funcall subtest #'aph/outline-get-final-sibling fwd-hdg))))
+      (funcall test
+               "\nPreamble"
+               nil
+               nil)
+      (aph/outline-next-heading 1 :invisible-ok)
+      (funcall test
+               "* Heading 1"
+               nil
+               "* Heading 3")
+      (aph/outline-get-next-sibling)
+      (message "Currently at: %d" (point))
+      (funcall test
+               "* Heading 2"
+               "* Heading 1"
+               "* Heading 3")
+      (aph/outline-get-next-sibling)
+      (funcall test
+               "* Heading 3"
+               "* Heading 1"
+               nil))))
+
+
+;;; Vertical Motion
+;;;================
 (ert-deftest aph/outline-test-top-heading ()
   "Test `aph/outline-top-heading'."
   (dolist (invis '(nil t))
@@ -128,40 +180,6 @@ Preamble
     (should (looking-at-p "** Subheading 1a"))
     (aph/outline-down-heading 5)
     (should (looking-at-p "*** Subsubheading 1a.1"))))
-
-(ert-deftest aph/outline-test-forward-end-of-level ()
-  "Test `aph/outline-forward-end-of-level'.
-Also test the subroutine `aph/outline-get-final-sibling' in its
-own right."
-  (aph/outline-test "
-Preamble
-* Heading 1
-** Subheading 1a
-* Heading 2
-** Subheading 2a
-* Heading 3
-** Subheading 3a"
-    (let ((test
-           (lambda (f should-move)
-             (save-excursion
-               (let ((result (funcall f)))
-                 (if should-move
-                     (should (eq result (point)))
-                   (should (null result)))) 
-               (should (looking-at-p "* Heading 3"))))))
-      (should (null (aph/outline-get-final-sibling)))
-      (aph/outline-get-first-child)
-      (should (looking-at-p "* Heading 1"))
-      (funcall test #'aph/outline-get-final-sibling t)
-      (funcall test #'aph/outline-forward-end-of-level t)
-      (aph/outline-get-next-sibling)
-      (should (looking-at-p "* Heading 2"))
-      (funcall test 'aph/outline-get-final-sibling t)
-      (funcall test #'aph/outline-forward-end-of-level t)
-      (aph/outline-get-next-sibling)
-      (should (looking-at-p "* Heading 3"))
-      (funcall test 'aph/outline-get-final-sibling nil)
-      (should-error (aph/outline-forward-end-of-level)))))
 
 (ert-deftest aph/outline-test-down-heading-from-end ()
   "Test `aph/outline-down-heading-from-end'."
