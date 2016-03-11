@@ -50,6 +50,39 @@ either `boundp' or `fboundp', so long as it is not interned."
     t))
 
 
+;;; Buffer Handling Apparatus
+;;;==========================
+(defmacro aph/ert-with-buffer (mode text &rest body)
+  "Execute BODY in temp buffer in MODE that contains TEXT.
+
+Create a temporary buffer, insert TEXT, and enable
+MODE (typically a major mode).  Move point to the beginning of
+this buffer and execute BODY.
+
+For convenience, if TEXT begins with a newline, that newline is
+not included in the buffer text.  This allows for the following
+sort of layout, which avoids both problematic indentation and the
+need to skip over the leading newline.
+
+  (aph/ert-with-buffer text-mode \"
+Buffer line 1
+Buffer line 2\"
+    (should (looking-at-p \"Buffer line 1\")))"
+  (declare (indent 2)
+           (debug t))
+  (let ((text-var         (make-symbol "text"))
+        (buffer-text-var  (make-symbol "buffer-text")))
+    `(let* ((,text-var         ,text)
+            (,buffer-text-var  (if (string-prefix-p "\n" ,text-var)
+                                   (substring ,text-var 1)
+                                 ,text-var)))
+       (with-temp-buffer
+         (insert ,buffer-text-var)
+         (funcall ,mode)
+         (goto-char (point-min))
+         ,@body))))
+
+
 ;;; Mode Testing Apparatus
 ;;;=======================
 (defmacro aph/ert--with-test-mode (name maker &rest body)

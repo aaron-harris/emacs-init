@@ -23,6 +23,18 @@
                  'let ''emacs-version '((var-x)))))
 
 
+;;; Buffer Handling Apparatus Tests
+;;;================================
+(ert-deftest aph/ert-test-with-buffer ()
+  "Test `aph/ert-with-buffer'."
+  (should (aph/ert-macro-executes-body 'aph/ert-with-buffer
+                                       '('text-mode "Foo")))
+  (dolist (text '("Foo" "\nFoo"))
+    (aph/ert-with-buffer 'text-mode text
+      (should (eq major-mode 'text-mode))
+      (should (looking-at-p "Foo")))))
+
+
 ;;; Mode Testing Apparatus Tests: Parametrizations
 ;;;===============================================
 (defun aph/ert-test-mode-wrapper--bindings (macro &optional other-args)
