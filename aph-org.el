@@ -94,6 +94,22 @@ match unless headline at point is a todo item."
     (eval (cdr (org-make-tags-matcher match)))))
 
 
+;;; Editing Commands
+;;;=================
+(defun aph/org-kill-line ()
+  "As `org-kill-line', but clear table rows.
+
+If point is inside an Org table, call
+`aph/org-table-clear-row-forward'; otherwise, defer to
+`org-kill-line'."
+  (interactive) 
+  (call-interactively
+   (if (org-table-p)
+       (progn (require 'aph-org-table)
+              #'aph/org-table-clear-row-forward)
+     #'org-kill-line)))
+
+
 ;;; Spinners
 ;;;=========
 
