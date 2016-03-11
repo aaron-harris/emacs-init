@@ -655,6 +655,7 @@ The return value depends only on `aph/machine'."
   :bind (:map aph-keys-mode-map
               ("C-c w" . aph/org-goto-last-refile))
   :bind (:augment org-mode
+                  ("C-k"         . aph/org-kill-line)
                   ("C-c s SPC"   . aph/org-spin-basic)
                   ("C-c s M-SPC" . aph/org-spin-weighted)))
 
