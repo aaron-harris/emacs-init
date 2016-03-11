@@ -26,6 +26,7 @@
       org-catch-invisible-edits  'smart
       org-cycle-emulate-tab      'exc-hl-bol
       org-special-ctrl-a/e       t
+      org-special-ctrl-k         t
       org-use-speed-commands     t)
 
 (add-hook 'org-mode-hook #'visual-line-mode)
