@@ -63,11 +63,11 @@
    ("http://www.goodmath.org/blog/feed/" math)
    ("http://www.scottaaronson.com/blog/?feed=rss2" math)
    ;; Programming
-   ("http://250bpm.com/feed/pages/pagename/start/category/blog/t/250bpm-blogs/h/"
-    programming)
+   ("http://250bpm.com/feed/pages/pagename/start/category/blog/t/250bpm-blogs/h/" programming)
    ("http://amitp.blogspot.com/feeds/posts/default" programming)
    ("http://blog.8thlight.com/feed/atom.xml" programming)
    ("http://blog.cleancoder.com/atom.xml" programming)
+   ("http://endlessparentheses.com/atom.xml" programming)
    ("http://feeds.feedburner.com/Rik0TechTemple" programming)
    ("http://feeds.feedburner.com/StuartSierra" programming)
    ("http://feeds.feedburner.com/davesquared" programming)
