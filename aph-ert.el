@@ -70,17 +70,12 @@ Buffer line 2\"
     (should (looking-at-p \"Buffer line 1\")))"
   (declare (indent 2)
            (debug t))
-  (let ((text-var         (make-symbol "text"))
-        (buffer-text-var  (make-symbol "buffer-text")))
-    `(let* ((,text-var         ,text)
-            (,buffer-text-var  (if (string-prefix-p "\n" ,text-var)
-                                   (substring ,text-var 1)
-                                 ,text-var)))
-       (with-temp-buffer
-         (insert ,buffer-text-var)
-         (funcall ,mode)
-         (goto-char (point-min))
-         ,@body))))
+  (require 'subr-x)                     ; For `string-remove-prefix'
+  `(with-temp-buffer
+    (insert (string-remove-prefix "\n" ,text))
+    (funcall ,mode)
+    (goto-char (point-min))
+    ,@body))
 
 
 ;;; Mode Testing Apparatus
