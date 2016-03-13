@@ -1035,6 +1035,15 @@ The return value depends only on `aph/machine'."
         visible-mark-faces '(aph/visible-mark-top
                              aph/visible-mark-other)))
 
+(use-package which-func
+  :init
+  (which-function-mode))
+
+(use-package aph-which-func
+  :after which-func
+  :config
+  (add-to-list 'which-func-functions #'aph/which-function-org))
+
 (use-package aph-window
   :bind (:map aph-keys-mode-map
               ;; Scrolling and Positioning
