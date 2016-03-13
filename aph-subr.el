@@ -48,6 +48,18 @@ Do not move point."
   (require 'cl-lib)                       ; For `cl-delete'
   (cl-delete key alist :test #'equal :key #'car))
 
+(defmacro aph/assoc-delete-in (alist-place key)
+  "Delete association in value of ALIST-PLACE for KEY.
+As `aph/assoc-delete-all', but there is no need for
+back-assignment."
+  (declare (debug (gv-place form)))
+  `(setf ,alist-place (aph/assoc-delete-all ,key ,alist-place)))
+
+(defmacro aph/assq-delete-in (alist-place key)
+  "As `aph/assoc-delete-in', but use `assq-delete-all'."
+  (declare (debug (gv-place form)))
+  `(setf ,alist-place (assq-delete-all ,key ,alist-place)))
+
 (defun aph/update-alist (alist key val &optional fun)
   "Update association in ALIST for KEY to VAL.
 If no association exists in ALIST for KEY, add a new one at the
