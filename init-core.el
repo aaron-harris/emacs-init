@@ -1042,6 +1042,7 @@ The return value depends only on `aph/machine'."
 (use-package aph-which-func
   :after which-func
   :config
+  (aph/which-func-use-header-line)
   (add-to-list 'which-func-functions #'aph/which-function-org))
 
 (use-package aph-window
