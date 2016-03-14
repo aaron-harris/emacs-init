@@ -200,6 +200,10 @@ The return value depends only on `aph/machine'."
         avy-highlight-first t
         avy-style           'pre))
 
+(use-package bind-key
+  :bind (:map aph-keys-mode-map
+              ("C-h C-b" . describe-personal-keybindings)))
+
 (use-package bookmark
   ;; Move from "C-x r" prefix to "C-c b"
   :bind (:map aph-keys-mode-map
