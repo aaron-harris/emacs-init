@@ -64,6 +64,35 @@ be used."
 
 ;;; Capture in New Frame
 ;;;=====================
+(defun aph/org-capture--closing-capture-frame (&optional goto keys)
+  "As `org-capture', but delete capture frame on abort.
+This is used as a subroutine by `aph/org-capture-in-whole-frame'
+and `aph/org-capture-in-popout-frame'."
+  (condition-case err
+        (org-capture goto keys)
+      (error (aph/org-capture-delete-capture-frame)
+             (signal (car err) (cdr err)))))
+
+(defun aph/org-capture-in-whole-frame (&optional goto keys)
+  "As `org-capture', but take over entire frame.
+
+This is designed to be used with the -e option for emacsclient,
+where a frame has just been created that has no useful content in
+it.  For normal usage, `aph/org-capture-in-popout-frame' probably
+makes more sense.
+
+To close the frame after capture, add
+`aph/org-capture-delete-capture-frame' to
+`org-capture-after-finalize-hook'."
+  (interactive "P")
+  (modify-frame-parameters nil '((name . "Capture")))
+  (if goto (org-capture goto keys)
+    (aph/with-advice
+        (('org-switch-to-buffer-other-window
+          :override
+          #'pop-to-buffer-same-window))
+      (aph/org-capture--closing-capture-frame goto keys))))
+
 (defun aph/org-capture-in-popout-frame (&optional goto keys)
   "As `org-capture', but do all work in a new frame.
 
@@ -72,22 +101,18 @@ capture.  To do that, add `aph/org-capture-delete-capture-frame'
 to `org-capture-after-finalize-hook'."
   (interactive "P")
   (require 'aph-framewin)  ; For `aph/display-buffer-in-named-frame'
-  (if goto
-      (org-capture goto keys)
+  (if goto (org-capture goto keys)
     (let ((override  '("\\*Org Select\\*\\|\\*Capture\\*\\|CAPTURE-.*"
                        aph/display-buffer-in-named-frame
                        (named-frame . "Capture"))))
       ;; Force all relevant buffers to open in a specific capture frame.
-      (add-to-list 'display-buffer-alist override)
-      (aph/with-advice 
+      (add-to-list 'display-buffer-alist override) 
+      (aph/with-advice
           (;; Make Org-mode respect `display-buffer-alist'.
            (#'org-switch-to-buffer-other-window :override #'pop-to-buffer)
            ;; And stop Org-mode from messing with our window configuration.
            (#'delete-other-windows :override #'ignore))
-        (unwind-protect (condition-case err
-                            (org-capture goto keys)
-                          (error (aph/org-capture-delete-capture-frame)
-                                 (signal (car err) (cdr err))))
+        (unwind-protect (aph/org-capture--closing-capture-frame goto keys)
           (setq display-buffer-alist
                 (delete override display-buffer-alist)))))))
 
