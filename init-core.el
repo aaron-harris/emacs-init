@@ -640,8 +640,7 @@ The return value depends only on `aph/machine'."
 (use-package org
   :ensure t
   :bind (:map aph-keys-mode-map
-              ("C-c l" . org-store-link)
-              ("C-="   . org-increase-number-at-point))
+              ("C-c l" . org-store-link))
   :bind (:augment org-mode
                   ("C-c ["            . undefined)
                   ("C-c ]"            . undefined)
@@ -657,6 +656,9 @@ The return value depends only on `aph/machine'."
 (use-package aph-org
   :after org
   :bind (:map aph-keys-mode-map
+              ("C-="   . aph/org-increase-number)
+              ("C-_"   . aph/org-decrease-number)
+              ("C-+"   . aph/org-increase-number)
               ("C-c w" . aph/org-goto-last-refile))
   :bind (:augment org-mode
                   ("C-k"         . aph/org-kill-line)
