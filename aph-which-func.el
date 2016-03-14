@@ -7,6 +7,8 @@
 ;; Functions extending module `which-func'
 (require 'which-func)
 
+(require 'aph-subr)                     ; For `aph/assoc-delete-in'
+
 
 ;;; Header Line Display
 ;;;====================
@@ -23,7 +25,7 @@ called.")
   "Advice making `which-function-mode' use the header line.
 Applied by `aph/which-func-use-header-line'.
 Intended as :after advice for `which-func-ff-hook'."
-  (when which-func-mode
+  (when which-func-mode 
     (aph/assoc-delete-in mode-line-misc-info 'which-func-mode)
     (setq header-line-format aph/which-func-header-line-format)))
 
