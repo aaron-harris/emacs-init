@@ -109,6 +109,27 @@ If point is inside an Org table, call
               #'aph/org-table-clear-row-forward)
      #'org-kill-line)))
 
+(defun aph/org-increase-number (&optional inc)
+  "As `org-increase-number-at-point', but more flexible.
+
+As `org-increase-number-at-point', but first reposition point
+within a table cell.  Specifically, when inside an Org table and
+not on a number, move to the end of the cell.  This handles the
+typical case where the cell contains only a right-justified
+number and point is at the beginning of the cell (on a leading
+space)."
+  (interactive "p")
+  (when (and (org-table-p)
+             (not (number-at-point)))
+    (org-table-end-of-field 1))
+  (org-increase-number-at-point inc))
+
+(defun aph/org-decrease-number (&optional inc)
+  "As `org-decrease-number-at-point', but more flexible.
+See `aph/org-increase-number' for more details."
+  (interactive "p")
+  (aph/org-increase-number (- (or inc 1))))
+
 
 ;;; Spinners
 ;;;=========
