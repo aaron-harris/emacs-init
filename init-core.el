@@ -740,8 +740,11 @@ The return value depends only on `aph/machine'."
   (show-paren-mode))
 
 (use-package pp
+  :bind (:augment emacs-lisp-mode
+                  ("C-c C-m" . pp-macroexpand-last-sexp))
   :bind (:map aph-keys-mode-map
-              ("C-:" . pp-eval-expression)))
+              ("C-:"   . pp-eval-expression)
+              ("C-M-:" . pp-macroexpand-expression)))
 
 (use-package prog-mode
   :bind (:augment prog-mode
