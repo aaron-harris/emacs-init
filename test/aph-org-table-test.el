@@ -17,7 +17,7 @@
 |---+-------+-------|
 | 1 | foo   | bar   |
 | 2 | alpha | bravo |"
-    (next-line 2)
+    (forward-line 2)
     (forward-char 3)
     (should (looking-at-p " | foo"))
     (aph/org-table-clear-row-forward)
