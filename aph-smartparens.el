@@ -21,15 +21,17 @@ delimiter.  Treat ARG in the same way as `kill-sentence'.
 Outside of strings and comments, this should generally behave as
 `kill-sentence', but no guarantees are made."
   (interactive "p")
-  (let ((context          (sp--get-context))
-        (end-of-sentence  (save-excursion (forward-sentence arg))))
+  (let* ((arg              (or arg 1))
+         (context          (sp--get-context))
+         (compare          (if (< arg 0) #'> #'<))
+         (end-of-sentence  (save-excursion (forward-sentence arg))))
     (kill-region (point)
                  (progn
-                   (while (and (< (point) end-of-sentence)
+                   (while (and (funcall compare (point) end-of-sentence)
                                (eq (sp--get-context) context))
-                     (forward-char))
+                     (forward-char (sp--signum arg)))
                    (unless (eq (sp--get-context) context)
-                     (backward-char))
+                     (backward-char (sp--signum arg)))
                    (point)))))
 
 
