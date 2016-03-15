@@ -494,8 +494,11 @@ The return value depends only on `aph/machine'."
               ("C-h C-h" . undefined)))
 
 (use-package aph-help
+  :after help
   :bind (:map aph-keys-mode-map
-              ("C-h h" . aph/call-logging-hooks)))
+              ("C-h h" . aph/call-logging-hooks))
+  :config
+  (setq aph/help-mode-confirm-reversion nil))
 
 (use-package help+
   :ensure t
