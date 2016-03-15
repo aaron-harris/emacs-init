@@ -649,6 +649,10 @@ The return value depends only on `aph/machine'."
                   ;; Following bindings restore `org-mode' keys
                   ;; unintentionally shadowed by `aph-keys-mode'
                   ("C-o"              . org-open-line))
+  :bind (:override org-mode
+                   ("C-M-[" . org-metaleft)
+                   ("C-M-]" . org-metaright)
+                   ("C-M-t" . org-metaup))
   :config
   (message "Loading org...")         ; Because this may take a while. 
   (use-package init-org))
