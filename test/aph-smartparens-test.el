@@ -11,18 +11,18 @@
 
 ;;; String Protection
 ;;;==================
-(defun aph/sp-test-kill-sentence-1 (lines words chars start desired)
+(defun aph/sp-test-kill-sentence-1 (lines words chars arg start desired)
   "Subroutine for `aph/sp-test-kill-sentence'.
 
 Move forward by LINES, WORDS, and CHARS; check that we're
-`looking-at-p' START (a string); call `aph/sp-kill-sentence'; and
-finally check that we're `looking-at-p' DESIRED."
-  (declare (indent 3))
+`looking-at-p' START (a string); call `aph/sp-kill-sentence' with
+ARG; and finally check that we're `looking-at-p' DESIRED."
+  (declare (indent 4))
   (unless (zerop lines) (forward-line lines))
   (forward-word words)
   (forward-char chars)
   (should (looking-at-p start))
-  (aph/sp-kill-sentence)
+  (aph/sp-kill-sentence arg)
   (should (looking-at-p desired)))
 
 (ert-deftest aph/sp-test-kill-sentence ()
@@ -33,13 +33,16 @@ finally check that we're `looking-at-p' DESIRED."
   (do-stuff-here)
   ;; This is a comment
   (and \"foo\" \"bar\"))"
-    (aph/sp-test-kill-sentence-1 1 1 0
+    (aph/sp-test-kill-sentence-1 1 1 0 -1
       " is a docstring."
-      "\"")
-    (aph/sp-test-kill-sentence-1 2 1 0
-      " is a comment" 
+      " is a docstring.")
+    (aph/sp-test-kill-sentence-1 0 0 0 1
+      " is a docstring."
+      "\"") 
+    (aph/sp-test-kill-sentence-1 2 1 0 1
+      " is a comment"
       "\n  (and \"foo\"")
-    (aph/sp-test-kill-sentence-1 1 1 2
+    (aph/sp-test-kill-sentence-1 1 1 2 1
       "foo\" \"bar\")" 
       "\" \"bar\")"))
   (aph/ert-with-buffer 'text-mode "
