@@ -964,6 +964,10 @@ The return value depends only on `aph/machine'."
   (sp-local-pair 'clojure-mode "`" "`"
                  :when '(sp-in-string-p sp-in-comment-p)))
 
+(use-package aph-smartparens
+  :bind (:augment smartparens-mode
+                  ("M-k" . aph/sp-kill-sentence)))
+
 (use-package smartscan
   :ensure t
   :bind (:augment smartscan-mode 
