@@ -625,7 +625,7 @@ The return value depends only on `aph/machine'."
                  "^(ert-deftest\\s-+\\(\\_<.+?\\_>\\)"
                  1)))
 
-(use-package aph/lisp-mode
+(use-package aph-lisp-mode
   :bind (:augment emacs-lisp-mode 
                   ("C-c C-c" . aph/eval-region-or-buffer)))
 
