@@ -8,7 +8,8 @@
 ;; some other utilities related to keybindings.
 
 (require 'aph-symbol)                   ; For `aph/symbol-concat'
-(require 'bind-key)                     ; For `bind-keys'
+(require 'aph-bind-key)                 ; For `bind-keys' and fixes
+(require 'cl-lib)                       ; For `cl-defun'
 
 
 ;;; `aph-keys-mode': Keymap Setup
@@ -410,6 +411,35 @@ To make the change effective when using emacsclient, add this
 function to `after-make-frame-functions'."
   (with-selected-frame (or frame (selected-frame))
     (define-key input-decode-map (kbd "C-[") (kbd "<C-[>"))))
+
+
+;;; Conditional Keybindings
+;;;========================
+;; Code in this section aims to establish conditional keybindings and
+;; is adapted from a macro found here:
+;;   http://endlessparentheses.com/define-context-aware-keys-in-emacs.html
+
+(defun aph/keys--construct-conditional-binding (def condition)
+  "Return a menu item defining a binding for DEF subject to CONDITION.
+
+The returned menu item can be used with `define-key' to define a
+binding for COMMAND that is made transparent whenever
+CONDITION (a single form) evaluates to nil."
+  `(menu-item
+    ,(format "maybe-%s" (or (car (cdr-safe def)) def))
+    nil
+    :filter (lambda (&optional _)
+              (when ,condition ,def))))
+
+(defmacro aph/keys-define-conditionally (keymap key def
+                                                 &rest body)
+  "In KEYMAP, define key sequence KEY as DEF conditionally.
+This is like `define-key', except the definition
+\"disappears\" whenever BODY evaluates to nil."
+  (declare (indent 3)
+           (debug (form form form &rest sexp)))
+  `(define-key ,keymap ,key
+     ',(aph/keys--construct-conditional-binding def `(progn ,@body))))
 
 
 (provide 'aph-keys)
