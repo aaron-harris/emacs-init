@@ -77,6 +77,25 @@ Buffer line 2\"
     (goto-char (point-min))
     ,@body))
 
+(defmacro aph/ert-protecting-buffer (buffer-name &rest body)
+  "Execute BODY protecting BUFFER-NAME.
+
+More specifically, if there exists a buffer named BUFFER-NAME,
+rename that buffer; execute BODY; then kill any new buffer with
+BUFFER-NAME and restore the old one."
+  (declare (indent 1)
+           (debug (form body)))
+  (let ((old-buffer   (make-symbol "old-buffer")))
+    `(let ((,old-buffer   (get-buffer ,buffer-name)))
+       (when ,old-buffer
+         (with-current-buffer ,old-buffer
+           (rename-buffer "ERT Temp Buffer" :unique)))
+       (unwind-protect (progn ,@body)
+         (aph/kill-buffer-if-any ,buffer-name :nowarn)
+         (when ,old-buffer
+           (with-current-buffer ,old-buffer
+             (rename-buffer ,buffer-name)))))))
+
 
 ;;; Mode Testing Apparatus
 ;;;=======================
