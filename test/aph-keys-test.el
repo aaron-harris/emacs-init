@@ -269,5 +269,33 @@ nil."
                 (should (eq (lookup-key keymap (kbd "a"))
                             'foo)))))))))
 
+
+;;; Conditional Keybinding Tests
+;;;=============================
+(ert-deftest aph/keys-test-conditional-binding-format ()
+  "Test that conditional bindings are constructed properly."
+  (let ((binding (aph/keys--construct-conditional-binding ''foo 'toggle))
+        filter)
+    (should (listp binding))
+    (should (eq (car binding) 'menu-item))
+    (should (equal (nth 1 binding) "maybe-foo"))
+    (should (null (nth 2 binding)))
+    (should (eq (nth 3 binding) :filter))
+    (setq filter (nth 4 binding))
+    (should (functionp filter))
+    ;; The `eval' indirection is necessary to escape lexical scoping.
+    (should (null (eval `(let ((toggle nil)) (funcall ,filter)))))
+    (should (eq 'foo (eval `(let ((toggle t)) (funcall ,filter)))))))
+
+(ert-deftest aph/keys-test-conditional-binding ()
+  "Test `aph/keys-define-conditionally'."
+  (aph-keys-with-augmented-mode foo-mode :minor nil
+    (let ((case-fold-search t))
+      (aph/keys-define-conditionally
+          foo-mode-augmented-map "a" #'foo (not case-fold-search)) 
+      (should-not (lookup-key foo-mode-augmented-map "a"))
+      (setq case-fold-search nil)
+      (should (eq 'foo (lookup-key foo-mode-augmented-map "a"))))))
+
 
 (provide 'aph-keys-test)
