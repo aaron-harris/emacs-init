@@ -287,15 +287,46 @@ nil."
     (should (null (eval `(let ((toggle nil)) (funcall ,filter)))))
     (should (eq 'foo (eval `(let ((toggle t)) (funcall ,filter)))))))
 
-(ert-deftest aph/keys-test-conditional-binding ()
+(ert-deftest aph/keys-test-conditional-definition ()
   "Test `aph/keys-define-conditionally'."
+  (let ((foo-map           (make-sparse-keymap))
+        (case-fold-search  t))
+    (aph/keys-define-conditionally foo-map (kbd "a") #'foo
+      (not case-fold-search))
+    (should-not (lookup-key foo-map (kbd "a")))
+    (setq case-fold-search nil)
+    (should (eq 'foo (lookup-key foo-map (kbd "a"))))))
+
+(ert-deftest aph/keys-test-conditional-binding ()
+  "Test `aph/keys-bind-key-conditionally'."
   (aph-keys-with-augmented-mode foo-mode :minor nil
-    (let ((case-fold-search t))
-      (aph/keys-define-conditionally
-          foo-mode-augmented-map "a" #'foo (not case-fold-search)) 
-      (should-not (lookup-key foo-mode-augmented-map "a"))
+    (let ((case-fold-search     t)
+          (personal-keybindings nil))
+      (aph/bind-key-conditionally "a" foo foo-mode-augmented-map
+        (not case-fold-search))
+      (should-not (lookup-key foo-mode-augmented-map (kbd "a")))
       (setq case-fold-search nil)
-      (should (eq 'foo (lookup-key foo-mode-augmented-map "a"))))))
+      (should (eq 'foo (lookup-key foo-mode-augmented-map (kbd "a")))))
+    (should (aph/ert-protecting-buffer "*Personal Keybindings*"
+              (describe-personal-keybindings)
+              :success))))
+
+(ert-deftest aph/keys-test-bind-keys--when ()
+  "Test `bind-keys' support for the :when keyword."
+  (aph-keys-with-augmented-mode foo-mode :minor nil
+    (let ((case-fold-search     t)
+          (personal-keybindings nil))
+      (bind-keys :map foo-mode-augmented-map
+                 ("a" . foo)
+                 :when (not case-fold-search)
+                 ("b" . bar))
+      (should (eq 'foo (lookup-key foo-mode-augmented-map (kbd "a"))))
+      (should-not (lookup-key foo-mode-augmented-map (kbd "b")))
+      (setq case-fold-search nil)
+      (should (eq 'bar (lookup-key foo-mode-augmented-map (kbd "b")))))
+    (should (aph/ert-protecting-buffer "*Personal Keybindings*"
+              (describe-personal-keybindings)
+              :success))))
 
 
 (provide 'aph-keys-test)
