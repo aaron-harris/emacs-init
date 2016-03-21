@@ -71,6 +71,7 @@
    ("http://feeds.feedburner.com/Rik0TechTemple" programming)
    ("http://feeds.feedburner.com/StuartSierra" programming)
    ("http://feeds.feedburner.com/davesquared" programming)
+   ("http://iansommerville.com/systems-software-and-technology/feed/" programming)
    ("http://kitchingroup.cheme.cmu.edu/blog/category/emacs/feed/" programming)
    ("http://kotka.de/blog/index.rss" programming)
    ("http://kranglefant.tumblr.com/rss" programming)
@@ -99,6 +100,7 @@
    ("http://what-if.xkcd.com/feed.atom" comics blog)
    ("http://www.weeklystorybook.com/comic_strip_of_the_daycom/atom.xml"
     comics blog link)
-   ("http://www.zachtronicsindustries.com/feed/" games blog)))
+   ("http://www.zachtronicsindustries.com/feed/" games blog)
+   ("https://www.facebook.com/feeds/notifications.php?id=100011540708381&viewer=100011540708381&key=AWhUDgkhNDmf6WgP&format=rss20" social)))
 
 (provide 'init-elfeed)
