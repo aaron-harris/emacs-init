@@ -7,6 +7,18 @@
 (require 'org-table)
 
 
+;;; Subroutines
+;;;============
+(defun aph/org-table-end-of-this-field ()
+  "As `org-table-end-of-field', but never change fields.
+If already at or after the end of the current field, do not move
+point."
+  (interactive)
+  (unless (and (org-table-p)
+               (looking-at-p " +|"))
+    (org-table-end-of-field 1)))
+
+
 ;;; Editing Functions
 ;;;==================
 (defun aph/org-table-clear-row-forward ()
