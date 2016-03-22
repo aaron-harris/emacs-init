@@ -137,6 +137,10 @@ The return value depends only on `aph/machine'."
 
 ;;; Package Configuration
 ;;;======================
+(use-package advice
+  :defer t
+  :config (setq ad-redefinition-action 'accept))
+
 (use-package align
   :bind (:augment text-mode
                   ("C-M-i" . align-regexp))
