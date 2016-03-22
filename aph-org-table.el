@@ -18,7 +18,8 @@ If point is not inside an Org table, signal an error."
     (error "Not in Org table"))
   (save-excursion
     (save-match-data
-      (replace-regexp "[^|]" " " nil (point) (point-at-eol)))))
+      (while (re-search-forward "[^|]" (point-at-eol) :noerror)
+        (replace-match " ")))))
 
 
 (provide 'aph-org-table)
