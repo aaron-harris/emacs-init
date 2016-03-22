@@ -121,7 +121,7 @@ space)."
   (interactive "p")
   (when (and (org-table-p)
              (not (number-at-point)))
-    (org-table-end-of-field 1))
+    (aph/org-table-end-of-this-field))
   (org-increase-number-at-point inc))
 
 (defun aph/org-decrease-number (&optional inc)

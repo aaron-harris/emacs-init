@@ -8,6 +8,22 @@
 (require 'aph-org-table)
 
 
+;;; Subroutines
+;;;============
+(ert-deftest aph/org-table-test-end-of-this-field ()
+  "Test `aph/org-table-end-of-this-field'."
+  (aph/ert-with-buffer 'org-mode "
+| A | B   |
+|---+-----|
+| 1 | foo |"
+    (forward-char 2)
+    (should (looking-at-p "A"))
+    (aph/org-table-end-of-this-field)
+    (should (looking-at-p " | B"))
+    (aph/org-table-end-of-this-field)
+    (should (looking-at-p " | B"))))
+
+
 ;;; Editing Functions
 ;;;==================
 (ert-deftest aph/org-table-test-clear-row-forward ()
