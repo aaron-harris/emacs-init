@@ -339,7 +339,8 @@ The return value depends only on `aph/machine'."
                   ("n" . aph/elfeed-show-next)))
 
 (use-package ert
-  :defer t
+  :bind (:augment emacs-lisp-mode
+                  ("C-c C-t" . ert))
   :init 
   (add-to-list 'load-path (expand-file-name (concat aph/init-path "/test"))))
 
