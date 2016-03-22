@@ -651,7 +651,9 @@ The return value depends only on `aph/machine'."
                   ([remap next-error] . org-cycle-agenda-files)
                   ;; Following bindings restore `org-mode' keys
                   ;; unintentionally shadowed by `aph-keys-mode'
-                  ("C-o"              . org-open-line))
+                  ("C-o"              . org-open-line)
+                  :when ((org-table-p))
+                  ("S-<return>"       . org-table-copy-down))
   :bind (:override org-mode
                    ("C-M-[" . org-metaleft)
                    ("C-M-]" . org-metaright)
