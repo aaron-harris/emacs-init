@@ -354,6 +354,12 @@ The return value depends only on `aph/machine'."
                   ("M-p"     . backward-paragraph)
                   ("M-n"     . forward-paragraph)))
 
+(use-package expand-region
+  :bind (:map aph-keys-mode-map ("C-;" . er/expand-region))
+  :config
+  (setq expand-region-contract-fast-key "'"
+        expand-region-reset-fast-key    " "))
+
 (use-package files
   :defer t
   :config 
