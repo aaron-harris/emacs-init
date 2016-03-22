@@ -435,7 +435,8 @@ The return value depends only on `aph/machine'."
               ([remap apropos-command]  . helm-apropos)
               ("C-z C-s"                . helm-google-suggest)
               ("C-z M-c"                . helm-calcul-expression)
-              ("C-z C-p"                . helm-list-elisp-packages)) 
+              ("C-z C-p"                . helm-list-elisp-packages)
+              ("C-x ,"                  . helm-resume))
   :bind (:map aph-keys-mode-helm-map
               ("<tab>"    . helm-execute-persistent-action)
               ("C-j"      . undefined)
@@ -453,8 +454,7 @@ The return value depends only on `aph/machine'."
   :diminish helm-mode
   :bind (:map aph-keys-mode-map
               ("C-x c"     . undefined)
-              ("C-x x"     . helm-command-prefix)
-              ("C-x x C-u" . helm-resume))
+              ("C-x x"     . helm-command-prefix))
   :config
   (helm-mode 1)
   (helm-autoresize-mode t)
