@@ -58,24 +58,15 @@ The return value depends only on `aph/machine'."
 ;; Packages in this section are loaded early so we can use them in
 ;; subsequent package declarations.
 
-(use-package aph-keys
-  :bind (("C-x C-#" . aph-keys-mode))
-  :bind (:map aph-keys-mode-map
-              ("<return>"                   . aph-keys-default-return-command)
-              ("<tab>"                      . aph-keys-default-tab-command)
-              ;; Liberating C-M-[ from legacy of escape
-              ("<escape> <escape> <escape>" . keyboard-escape-quit)
-              ("ESC ESC ESC"                . undefined)
-              ("M-ESC :"                    . undefined))
+(use-package umbra
+  :bind (("C-x C-#" . umbra-mode))
+  :bind (:map umbra-mode-map
+              ("<return>" . umbra-default-return-command)
+              ("<tab>"    . umbra-default-tab-command))
   :demand t
   :config
-  ;; Key liberation
-  (aph/keys-liberate-escape)
-  (add-hook 'after-make-frame-functions #'aph/keys-liberate-escape)
-  ;; Map <kp-enter> to <return> rather than to RET (C-m) 
-  (define-key function-key-map (kbd "<kp-enter>") (kbd "<return>"))
   ;; Personal keybinding mode
-  (aph-keys-mode))
+  (umbra-mode)) 
 
 (use-package hydra
   :ensure t
@@ -120,7 +111,7 @@ The return value depends only on `aph/machine'."
 (put 'upcase-region   'disabled nil)
 
 ;; Keybindings for source-defined commands
-(bind-keys :map aph-keys-mode-map
+(bind-keys :map umbra-mode-map
            ("<up>"           . scroll-down-line)
            ("<down>"         . scroll-up-line)
            ("C-]"            . other-window)
@@ -142,33 +133,47 @@ The return value depends only on `aph/machine'."
   :config (setq ad-redefinition-action 'accept))
 
 (use-package align
-  :bind (:augment text-mode
-                  ("C-M-i" . align-regexp))
-  :bind (:augment prog-mode
-                  ("C-M-i" . align-regexp)))
+  :bind (:umbra text-mode
+                ("C-M-i" . align-regexp))
+  :bind (:umbra prog-mode
+                ("C-M-i" . align-regexp)))
 
 (use-package aph-align
-  :bind (:augment text-mode
-                  ("C-i" . aph/align))
-  :bind (:augment prog-mode
-                  ("C-i" . aph/align)))
+  :bind (:umbra text-mode
+                ("C-i" . aph/align))
+  :bind (:umbra prog-mode
+                ("C-i" . aph/align)))
+
+(use-package aph-keys
+  :bind (:map umbra-mode-map
+              ;; Liberating C-M-[ from legacy of escape
+              ("<escape> <escape> <escape>" . keyboard-escape-quit)
+              ("ESC ESC ESC"                . undefined)
+              ("M-ESC :"                    . undefined)) 
+  :demand t
+  :config
+  ;; Key liberation
+  (aph/keys-liberate-escape)
+  (add-hook 'after-make-frame-functions #'aph/keys-liberate-escape)
+  ;; Map <kp-enter> to <return> rather than to RET (C-m) 
+  (define-key function-key-map (kbd "<kp-enter>") (kbd "<return>")))
 
 (use-package aph-mpc
   :if (eq aph/machine 'mpc)
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-x C-y"   . aph/mpc-yank-access-inline)
               ("C-x C-S-y" . aph/mpc-yank-access-overfull)
               ("C-z C-="   . aph/mpc-calc-bar)))
 
 (use-package aph-number-lines
-  :bind (:map aph-keys-mode-map
-         ("s-<apps> n"       . aph/number-lines)
-         ("s-<apps> C-n"     . aph/number-lines-alpha)
-         ("s-<apps> M-n o"   . aph/number-lines-open)
-         ("s-<apps> M-n M-o" . aph/number-lines-open-multiple)))
+  :bind (:map umbra-mode-map
+              ("s-<apps> n"       . aph/number-lines)
+              ("s-<apps> C-n"     . aph/number-lines-alpha)
+              ("s-<apps> M-n o"   . aph/number-lines-open)
+              ("s-<apps> M-n M-o" . aph/number-lines-open-multiple)))
 
 (use-package aph-theme
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("s-n" . aph/theme-cycle))
   :demand t
   :config
@@ -191,13 +196,13 @@ The return value depends only on `aph/machine'."
 
 (use-package avy
   :ensure t
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("M-g M-q" . avy-goto-char-2)
               ("M-g q"   . avy-goto-char)
               ("M-g M-g" . avy-goto-line)
               ("M-g M-w" . avy-goto-word-or-subword-1))
-  :bind (:augment isearch-mode
-                  ("M-g" . avy-isearch))
+  :bind (:umbra isearch-mode
+                ("M-g" . avy-isearch))
   :config
   (setq avy-all-windows     nil
         avy-background      t
@@ -205,12 +210,12 @@ The return value depends only on `aph/machine'."
         avy-style           'pre))
 
 (use-package bind-key
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-h C-b" . describe-personal-keybindings)))
 
 (use-package bookmark
   ;; Move from "C-x r" prefix to "C-c b"
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-x r b" . undefined)
               ("C-x r l" . undefined)
               ("C-x r m" . undefined)
@@ -219,18 +224,18 @@ The return value depends only on `aph/machine'."
               ("C-c b m" . bookmark-set)))
 
 (use-package browse-url
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-z <return>" . browse-url)))
 
 (use-package calc
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-z C-c" . calc)))
 
 (use-package cider
   :ensure t
-  :bind (:augment cider-mode
-                  ("C-h A" . cider-apropos)
-                  ("C-h D" . cider-apropos-documentation))
+  :bind (:umbra cider-mode
+                ("C-h A" . cider-apropos)
+                ("C-h D" . cider-apropos-documentation))
   :config 
   (setq cider-auto-select-error-buffer      nil
         cider-show-error-buffer             'except-in-repl
@@ -274,9 +279,9 @@ The return value depends only on `aph/machine'."
 
 (use-package company
   :ensure t
-  :bind (:augment company-mode
-                  ("<tab>"   . company-indent-or-complete-common)
-                  ("C-<tab>" . company-complete-common))
+  :bind (:umbra company-mode
+                ("<tab>"   . company-indent-or-complete-common)
+                ("C-<tab>" . company-complete-common))
   :diminish company-mode
   :init
   (add-hook 'lisp-tag-hook #'company-mode)
@@ -305,11 +310,11 @@ The return value depends only on `aph/machine'."
 
 (use-package elfeed
   :ensure t
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-z C-f" . elfeed))
-  :bind (:augment elfeed-show-mode
-                  ("M-p" . backward-paragraph)
-                  ("M-n" . forward-paragraph))
+  :bind (:umbra elfeed-show-mode
+                ("M-p" . backward-paragraph)
+                ("M-n" . forward-paragraph))
   :config
   ;; Basic config
   (setq elfeed-sort-order            'ascending
@@ -324,42 +329,42 @@ The return value depends only on `aph/machine'."
   ;; `after-change-major-mode-hook'.  This can probably be fixed
   ;; through advice; in the meantime, the following line is an easy
   ;; stopgap fix for the immediate problem this causes for me.
-  (add-hook 'elfeed-search-mode-hook #'aph-keys--update-major-mode)
-  (add-hook 'elfeed-show-mode-hook   #'aph-keys--update-major-mode) 
+  (add-hook 'elfeed-search-mode-hook #'umbra--update-major-mode)
+  (add-hook 'elfeed-show-mode-hook   #'umbra--update-major-mode) 
 
   ;; Load the feed list
   (use-package init-elfeed))
 
 (use-package aph-elfeed
   :after elfeed
-  :bind (:augment elfeed-search-mode
-                  ("<return>" . aph/elfeed-search-show-entry)
-                  ("'"        . aph/elfeed-search-next-favorite-filter))
-  :bind (:augment elfeed-show-mode
-                  ("p" . aph/elfeed-show-prev)
-                  ("n" . aph/elfeed-show-next))
-  :bind (:augment eww-mode
-                  ("p" . aph/elfeed-show-prev)
-                  ("n" . aph/elfeed-show-next)))
+  :bind (:umbra elfeed-search-mode
+                ("<return>" . aph/elfeed-search-show-entry)
+                ("'"        . aph/elfeed-search-next-favorite-filter))
+  :bind (:umbra elfeed-show-mode
+                ("p" . aph/elfeed-show-prev)
+                ("n" . aph/elfeed-show-next))
+  :bind (:umbra eww-mode
+                ("p" . aph/elfeed-show-prev)
+                ("n" . aph/elfeed-show-next)))
 
 (use-package ert
-  :bind (:augment emacs-lisp-mode
-                  ("C-c C-t" . ert))
+  :bind (:umbra emacs-lisp-mode
+                ("C-c C-t" . ert))
   :init 
   (add-to-list 'load-path (expand-file-name (concat aph/init-path "/test"))))
 
 (use-package eww
-  :bind (:map aph-keys-mode-map ("C-z C-w" . eww))
-  :bind (:augment eww-mode
-                  ("S-<tab>" . shr-previous-link)
-                  ("["       . eww-previous-url)
-                  ("]"       . eww-next-url)
-                  ("z"       . shr-zoom-image)
-                  ("M-p"     . backward-paragraph)
-                  ("M-n"     . forward-paragraph)))
+  :bind (:map umbra-mode-map ("C-z C-w" . eww))
+  :bind (:umbra eww-mode
+                ("S-<tab>" . shr-previous-link)
+                ("["       . eww-previous-url)
+                ("]"       . eww-next-url)
+                ("z"       . shr-zoom-image)
+                ("M-p"     . backward-paragraph)
+                ("M-n"     . forward-paragraph)))
 
 (use-package expand-region
-  :bind (:map aph-keys-mode-map ("C-;" . er/expand-region))
+  :bind (:map umbra-mode-map ("C-;" . er/expand-region))
   :config
   (setq expand-region-contract-fast-key "'"
         expand-region-reset-fast-key    " "))
@@ -373,7 +378,7 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-files
   :after files
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-x k"        . aph/kill-active-buffer)
               ("C-x C-c"      . aph/delete-frame-or-exit)
               ("C-x <delete>" . aph/kill-active-buffer-delete-file))
@@ -385,7 +390,7 @@ The return value depends only on `aph/machine'."
   (aph/emacs-source-make-read-only))
 
 (use-package find-func
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-h C-M-f" . find-function)
               ("C-h C-M-k" . find-function-on-key)
               ("C-h C-M-v" . find-variable)
@@ -410,9 +415,9 @@ The return value depends only on `aph/machine'."
 
 (use-package haskell-mode
   :ensure t
-  :bind (:augment haskell-mode
-                  ("C-c C-c" . haskell-compile)
-                  ("C-c C-z" . haskell-interactive-switch))
+  :bind (:umbra haskell-mode
+                ("C-c C-c" . haskell-compile)
+                ("C-c C-z" . haskell-interactive-switch))
   :config 
   ;; Stack setup
   (setq haskell-compile-cabal-build-command "stack build")
@@ -423,13 +428,13 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-haskell
   :after haskell-mode
-  :bind (:augment haskell-mode
-                  ("C-c C-l" . aph/haskell-process-load-file-cygwin)))
+  :bind (:umbra haskell-mode
+                ("C-c C-l" . aph/haskell-process-load-file-cygwin)))
 
 (use-package helm
   :ensure t
   :demand t
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("M-x"                    . helm-M-x) 
               ("M-y"                    . helm-show-kill-ring)
               ("M-m"                    . helm-register)
@@ -448,22 +453,22 @@ The return value depends only on `aph/machine'."
               ("C-z M-c"                . helm-calcul-expression)
               ("C-z C-p"                . helm-list-elisp-packages)
               ("C-x ,"                  . helm-resume))
-  :bind (:map aph-keys-mode-helm-map
+  :bind (:map umbra-mode-helm-map
               ("<tab>"    . helm-execute-persistent-action)
               ("C-j"      . undefined)
               ("C-z"      . undefined)
               ("s-<apps>" . helm-select-action)))
 
 (use-package aph-helm
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-x M-p" . aph/helm-browse-project))
-  :bind (:map aph-keys-mode-helm-map
+  :bind (:map umbra-mode-helm-map
               ("<return>" . aph/helm-resume-update-or-exit-minibuffer)))
 
 (use-package helm-config
   :after helm
   :diminish helm-mode
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-x c"     . undefined)
               ("C-x x"     . helm-command-prefix))
   :config
@@ -496,17 +501,17 @@ The return value depends only on `aph/machine'."
   :defer t)
 
 (use-package aph-helm-projectile
-  :bind (:map aph-keys-mode-map
-         ("C-x p"   . aph/helm-projectile)
-         ("M-s M-g" . aph/helm-projectile-grep)))
+  :bind (:map umbra-mode-map
+              ("C-x p"   . aph/helm-projectile)
+              ("M-s M-g" . aph/helm-projectile-grep)))
 
 (use-package help
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-h C-h" . undefined)))
 
 (use-package aph-help
   :after help
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-h h" . aph/call-logging-hooks))
   :config
   (setq aph/help-mode-confirm-reversion nil))
@@ -521,7 +526,7 @@ The return value depends only on `aph/machine'."
 
 (use-package help-fns+
   :after help-fns
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-h c"   . describe-key-briefly)
               ("C-h M-b" . describe-buffer)
               ("M-= b" . describe-buffer))
@@ -532,7 +537,7 @@ The return value depends only on `aph/machine'."
   (setq help-cross-reference-manuals '(("emacs" "elisp" "org"))))
 
 (use-package hippie-exp
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ([remap dabbrev-expand] . hippie-expand))
   :init
   (defun aph/hippie-expand-config-lisp ()
@@ -552,11 +557,11 @@ The return value depends only on `aph/machine'."
   (add-hook 'lisp-tag-hook #'aph/hippie-expand-config-lisp))
 
 (use-package hl-line
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-c h l" . hl-line-mode)))
 
 (use-package ibuffer
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ([remap list-buffers] . ibuffer)))
 
 (use-package ido
@@ -583,19 +588,19 @@ The return value depends only on `aph/machine'."
          '(".tex.swp" "_.log" ".prv/" "_.tex" ".rip")))
 
 (use-package ielm
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-z C-r" . ielm))
-  :bind (:augment inferior-emacs-lisp-mode
-                  ("C-c C-t" . aph/eval-expression-toggle-clean-output)
-                  ("C-c M-w" . aph/ielm-copy-last-output))
+  :bind (:umbra inferior-emacs-lisp-mode
+                ("C-c C-t" . aph/eval-expression-toggle-clean-output)
+                ("C-c M-w" . aph/ielm-copy-last-output))
   :config
   (use-package aph-ielm) 
   (aph/mode-tag-add 'ielm-mode 'lisp))
 
 (use-package aph-iimage
   :after iimage
-  :bind (:augment iimage-mode
-                  ("C-c i" . aph/iimage-refresh)))
+  :bind (:umbra iimage-mode
+                ("C-c i" . aph/iimage-refresh)))
 
 (use-package info
   :defer t
@@ -605,13 +610,13 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-info
   :after info
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-h i" . aph/info-mode-or-clone-buffer))
-  :bind (:augment Info-mode
-                  ("0" . aph/Info-final-menu-item)))
+  :bind (:umbra Info-mode
+                ("0" . aph/Info-final-menu-item)))
 
 (use-package aph-keypad
-  :bind (:map aph-keys-mode-map 
+  :bind (:map umbra-mode-map 
               ("C-<kp-enter>" . aph/keypad-enter-toggle-newline)))
 
 (use-package lisp-mode 
@@ -637,11 +642,11 @@ The return value depends only on `aph/machine'."
                  1)))
 
 (use-package aph-lisp-mode
-  :bind (:augment emacs-lisp-mode 
-                  ("C-c C-c" . aph/eval-region-or-buffer)))
+  :bind (:umbra emacs-lisp-mode 
+                ("C-c C-c" . aph/eval-region-or-buffer)))
 
 (use-package minibuffer
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-<tab>" . completion-at-point))
   :config
   (setq completion-auto-help 'lazy))
@@ -653,19 +658,19 @@ The return value depends only on `aph/machine'."
 
 (use-package org
   :ensure t
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-c l" . org-store-link))
-  :bind (:augment org-mode
-                  ("C-c ["            . undefined)
-                  ("C-c ]"            . undefined)
-                  ("M-."              . helm-org-in-buffer-headings)
-                  ([remap next-error] . org-cycle-agenda-files)
-                  ;; Following bindings restore `org-mode' keys
-                  ;; unintentionally shadowed by `aph-keys-mode'
-                  ("C-o"              . org-open-line)
-                  :when ((org-table-p))
-                  ("S-<return>"       . org-table-copy-down))
-  :bind (:override org-mode
+  :bind (:umbra org-mode
+                ("C-c ["            . undefined)
+                ("C-c ]"            . undefined)
+                ("M-."              . helm-org-in-buffer-headings)
+                ([remap next-error] . org-cycle-agenda-files)
+                ;; Following bindings restore `org-mode' keys
+                ;; unintentionally shadowed by `umbra-mode'
+                ("C-o"              . org-open-line)
+                :when ((org-table-p))
+                ("S-<return>"       . org-table-copy-down))
+  :bind (:penumbra org-mode
                    ("C-M-[" . org-metaleft)
                    ("C-M-]" . org-metaright)
                    ("C-M-t" . org-metaup))
@@ -675,31 +680,31 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-org
   :after org
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-="   . aph/org-increase-number)
               ("C-_"   . aph/org-decrease-number)
               ("C-+"   . aph/org-increase-number)
               ("C-c w" . aph/org-goto-last-refile))
-  :bind (:augment org-mode
-                  ("C-k"         . aph/org-kill-line)
-                  ("C-c s SPC"   . aph/org-spin-basic)
-                  ("C-c s M-SPC" . aph/org-spin-weighted)))
+  :bind (:umbra org-mode
+                ("C-k"         . aph/org-kill-line)
+                ("C-c s SPC"   . aph/org-spin-basic)
+                ("C-c s M-SPC" . aph/org-spin-weighted)))
 
 (use-package org-agenda
   :defer t
-  :bind (:augment org-agenda-mode
-                  ;; `org-agenda-quit' is bugged, as of Emacs 24.5.1
-                  ;; and Org 8.3.2.  This might be a bug in
-                  ;; `bury-buffer'?  Anyway, `quit-window' still
-                  ;; works, so let's just use that for the time being.
-                  ([remap org-agenda-quit] . quit-window)
-                  ("C-o"                   . org-agenda-open-link)
-                  ("M-p"                   . org-agenda-backward-block)
-                  ("M-n"                   . org-agenda-forward-block)))
+  :bind (:umbra org-agenda-mode
+                ;; `org-agenda-quit' is bugged, as of Emacs 24.5.1
+                ;; and Org 8.3.2.  This might be a bug in
+                ;; `bury-buffer'?  Anyway, `quit-window' still
+                ;; works, so let's just use that for the time being.
+                ([remap org-agenda-quit] . quit-window)
+                ("C-o"                   . org-agenda-open-link)
+                ("M-p"                   . org-agenda-backward-block)
+                ("M-n"                   . org-agenda-forward-block)))
 
 (use-package aph-org-agenda
   :after org-agenda
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-c a" . aph/org-agenda)
               ("<f1>" . aph/org-agenda-display-smart-agenda)))
 
@@ -710,7 +715,7 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-org-capture
   :after org-capture
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-c c" . aph/org-capture-in-popout-frame))
   :config
   ;; Support for `aph/org-capture-in-popout-frame':
@@ -718,13 +723,13 @@ The return value depends only on `aph/machine'."
             #'aph/org-capture-delete-capture-frame))
 
 (use-package org-clock
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-c t j" . org-clock-goto)
               ("C-c t o" . org-clock-out)
               ("C-c t x" . org-clock-cancel)
               ("C-c t r" . org-clock-in-last))
-  :bind (:augment org-mode
-                  ("C-c t i" . org-clock-in)))
+  :bind (:umbra org-mode
+                ("C-c t i" . org-clock-in)))
 
 (use-package org-mobile
   :disabled t
@@ -736,7 +741,7 @@ The return value depends only on `aph/machine'."
           "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe")))
 
 (use-package outline
-  :bind (:override outline-mode
+  :bind (:penumbra outline-mode
                    ("C-M-b" . outline-backward-same-level)
                    ("C-M-f" . outline-forward-same-level)
                    ("C-M-n" . outline-next-visible-heading)
@@ -744,7 +749,7 @@ The return value depends only on `aph/machine'."
                    ("C-M-u" . outline-up-heading)))
 
 (use-package aph-outline
-  :bind (:override outline-mode
+  :bind (:penumbra outline-mode
                    ("C-M-d" . aph/outline-down-heading-from-end)
                    ("C-M-a" . aph/outline-get-first-sibling)
                    ("C-M-e" . aph/outline-get-final-sibling)))
@@ -757,25 +762,25 @@ The return value depends only on `aph/machine'."
   :commands (aph/hydra-page/forward-page
              aph/hydra-page/backward-page)
   :init
-  (bind-keys :map aph-keys-mode-map
-              ([remap forward-page]  . aph/hydra-page/forward-page)
-              ([remap backward-page] . aph/hydra-page/backward-page)))
+  (bind-keys :map umbra-mode-map
+             ([remap forward-page]  . aph/hydra-page/forward-page)
+             ([remap backward-page] . aph/hydra-page/backward-page)))
 
 (use-package paren
   :config
   (show-paren-mode))
 
 (use-package pp
-  :bind (:augment emacs-lisp-mode
-                  ("C-c C-m" . pp-macroexpand-last-sexp))
-  :bind (:map aph-keys-mode-map
+  :bind (:umbra emacs-lisp-mode
+                ("C-c C-m" . pp-macroexpand-last-sexp))
+  :bind (:map umbra-mode-map
               ("C-:"   . pp-eval-expression)
               ("C-M-:" . pp-macroexpand-expression)))
 
 (use-package prog-mode
-  :bind (:augment prog-mode
-                  ("M-p" . backward-paragraph)
-                  ("M-n" . forward-paragraph)))
+  :bind (:umbra prog-mode
+                ("M-p" . backward-paragraph)
+                ("M-n" . forward-paragraph)))
 
 (use-package projectile
   :after helm
@@ -795,7 +800,7 @@ The return value depends only on `aph/machine'."
 
 (use-package rect
   ;; Move from "C-x r" prefix to "C-c r"
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-x r N" . undefined)
               ("C-x r c" . undefined)
               ("C-x r d" . undefined)
@@ -815,14 +820,14 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-rect
   :after rect
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-M-y" . aph/yank-rectangle-from-kill-ring))
   :config
   (when (>= emacs-major-version 25)
     (advice-add #'rectangle--*-char :around #'aph/rectangle-repetition-fix)))
 
 (use-package register
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-m"     . copy-to-register) 
               ("C-M-m"   . increment-register)))
 
@@ -855,7 +860,7 @@ The return value depends only on `aph/machine'."
 
 (use-package simple
   :demand t
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("M-o"        . join-line)
               ("C-M-/"      . undo-only)
               ("C-S-k"      . kill-whole-line)
@@ -882,7 +887,7 @@ The return value depends only on `aph/machine'."
 
 (use-package aph-simple
   :after simple
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("C-a"             . aph/move-beginning-of-line)
               ([remap open-line] . aph/open-line)
               ("M-c"             . aph/hydra-caps/body)
@@ -910,57 +915,57 @@ The return value depends only on `aph/machine'."
 
 (use-package smartparens
   :ensure t 
-  :bind (:augment smartparens-mode
-                  ;; Movement
-                  ([remap backward-sexp]    . sp-backward-sexp)
-                  ([remap forward-sexp]     . sp-forward-sexp)
-                  ([remap backward-up-list] . sp-backward-up-sexp)
-                  ([remap down-list]        . sp-down-sexp)
-                  ([remap forward-list]     . sp-next-sexp)
-                  ([remap backward-list]    . sp-previous-sexp)
-                  ("M-B"                    . sp-backward-symbol)
-                  ("M-F"                    . sp-forward-symbol)
-                  ;; Selection
-                  ([remap mark-sexp]        . sp-select-next-thing-exchange)
-                  ;; Barf and Slurp
-                  ("C-M-["                  . sp-forward-barf-sexp)
-                  ("C-M-]"                  . sp-forward-slurp-sexp)
-                  ("M-{"                    . sp-backward-slurp-sexp)
-                  ("M-}"                    . sp-backward-barf-sexp)
-                  ("C-{"                    . sp-absorb-sexp)
-                  ("C-}"                    . sp-emit-sexp)
-                  ("M-A"                    . sp-extract-before-sexp)
-                  ("M-E"                    . sp-extract-after-sexp)
-                  ;; Kill and Copy
-                  ([remap kill-sexp]        . sp-kill-sexp)
-                  ("C-M-<backspace>"        . sp-backward-kill-sexp)
-                  ("C-M-w"                  . sp-copy-sexp)
-                  ("M-K"                    . sp-splice-sexp-killing-around)
-                  ;; Editing
-                  ([remap transpose-sexps]  . sp-transpose-sexp)
-                  ("M-T"                    . sp-convolute-sexp)
-                  ;; Unwrap and Splice
-                  ("M-D"                    . sp-unwrap-sexp)
-                  ("M-S-<delete>"           . sp-unwrap-sexp)
-                  ("M-S-<backspace>"        . sp-backward-unwrap-sexp)
-                  ("M-U"                    . sp-splice-sexp)
-                  ("M-R"                    . sp-rewrap-sexp)
-                  ("M-S"                    . sp-split-sexp)
-                  ("M-J"                    . sp-join-sexp)
-                  ;; Indentation
-                  ("C-M-q"                  . sp-indent-defun)
-                  ;; Narrowing
-                  ("C-x n ("                . sp-narrow-to-sexp)
-                  ;; Prefix Arguments
-                  ("M-u SPC"                . sp-prefix-save-excursion)
-                  ("M-u '"                  . sp-prefix-symbol-object)
-                  ("M-u ("                  . sp-prefix-pair-object)
-                  ("M-u ["                  . sp-prefix-pair-object)
-                  ("M-u ,"                  . sp-prefix-tag-object))
-  :bind (:augment smartparens-strict-mode
-                  (")" . sp-up-sexp)
-                  ("]" . sp-up-sexp)
-                  ("}" . sp-up-sexp))
+  :bind (:umbra smartparens-mode
+                ;; Movement
+                ([remap backward-sexp]    . sp-backward-sexp)
+                ([remap forward-sexp]     . sp-forward-sexp)
+                ([remap backward-up-list] . sp-backward-up-sexp)
+                ([remap down-list]        . sp-down-sexp)
+                ([remap forward-list]     . sp-next-sexp)
+                ([remap backward-list]    . sp-previous-sexp)
+                ("M-B"                    . sp-backward-symbol)
+                ("M-F"                    . sp-forward-symbol)
+                ;; Selection
+                ([remap mark-sexp]        . sp-select-next-thing-exchange)
+                ;; Barf and Slurp
+                ("C-M-["                  . sp-forward-barf-sexp)
+                ("C-M-]"                  . sp-forward-slurp-sexp)
+                ("M-{"                    . sp-backward-slurp-sexp)
+                ("M-}"                    . sp-backward-barf-sexp)
+                ("C-{"                    . sp-absorb-sexp)
+                ("C-}"                    . sp-emit-sexp)
+                ("M-A"                    . sp-extract-before-sexp)
+                ("M-E"                    . sp-extract-after-sexp)
+                ;; Kill and Copy
+                ([remap kill-sexp]        . sp-kill-sexp)
+                ("C-M-<backspace>"        . sp-backward-kill-sexp)
+                ("C-M-w"                  . sp-copy-sexp)
+                ("M-K"                    . sp-splice-sexp-killing-around)
+                ;; Editing
+                ([remap transpose-sexps]  . sp-transpose-sexp)
+                ("M-T"                    . sp-convolute-sexp)
+                ;; Unwrap and Splice
+                ("M-D"                    . sp-unwrap-sexp)
+                ("M-S-<delete>"           . sp-unwrap-sexp)
+                ("M-S-<backspace>"        . sp-backward-unwrap-sexp)
+                ("M-U"                    . sp-splice-sexp)
+                ("M-R"                    . sp-rewrap-sexp)
+                ("M-S"                    . sp-split-sexp)
+                ("M-J"                    . sp-join-sexp)
+                ;; Indentation
+                ("C-M-q"                  . sp-indent-defun)
+                ;; Narrowing
+                ("C-x n ("                . sp-narrow-to-sexp)
+                ;; Prefix Arguments
+                ("M-u SPC"                . sp-prefix-save-excursion)
+                ("M-u '"                  . sp-prefix-symbol-object)
+                ("M-u ("                  . sp-prefix-pair-object)
+                ("M-u ["                  . sp-prefix-pair-object)
+                ("M-u ,"                  . sp-prefix-tag-object))
+  :bind (:umbra smartparens-strict-mode
+                (")" . sp-up-sexp)
+                ("]" . sp-up-sexp)
+                ("}" . sp-up-sexp))
   :init
   (require 'smartparens-config)
   (smartparens-global-mode)
@@ -978,15 +983,15 @@ The return value depends only on `aph/machine'."
                  :when '(sp-in-string-p sp-in-comment-p)))
 
 (use-package aph-smartparens
-  :bind (:augment smartparens-mode
-                  ("M-k" . aph/sp-kill-sentence)))
+  :bind (:umbra smartparens-mode
+                ("M-k" . aph/sp-kill-sentence)))
 
 (use-package smartscan
   :ensure t
-  :bind (:augment smartscan-mode 
-                  ("C-M-r" . smartscan-symbol-go-backward)
-                  ("C-M-s" . smartscan-symbol-go-forward)
-                  ("C-M-'" . smartscan-symbol-replace))
+  :bind (:umbra smartscan-mode 
+                ("C-M-r" . smartscan-symbol-go-backward)
+                ("C-M-s" . smartscan-symbol-go-forward)
+                ("C-M-'" . smartscan-symbol-replace))
   :init
   (add-hook 'text-mode-hook #'smartscan-mode)
   (add-hook 'prog-mode-hook #'smartscan-mode))
@@ -998,7 +1003,7 @@ The return value depends only on `aph/machine'."
         calendar-latitude   45.0))
 
 (use-package sort
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ("s-<apps> d" . delete-duplicate-lines)
               ("s-<apps> s" . sort-lines)))
 
@@ -1035,9 +1040,9 @@ The return value depends only on `aph/machine'."
   (add-hook 'LaTeX-mode-hook #'aph/LaTeX-mode-hook))
 
 (use-package text-mode
-  :bind (:augment text-mode
-                  ("M-p" . backward-paragraph)
-                  ("M-n" . forward-paragraph)))
+  :bind (:umbra text-mode
+                ("M-p" . backward-paragraph)
+                ("M-n" . forward-paragraph)))
 
 (use-package tooltip
   :config
@@ -1079,7 +1084,7 @@ The return value depends only on `aph/machine'."
   (add-to-list 'which-func-functions #'aph/which-function-org))
 
 (use-package aph-window
-  :bind (:map aph-keys-mode-map
+  :bind (:map umbra-mode-map
               ;; Scrolling and Positioning
               ("M-l"   . move-to-window-line-top-bottom)
               ("C-M-v" . aph/hydra-scroll-other/body)
