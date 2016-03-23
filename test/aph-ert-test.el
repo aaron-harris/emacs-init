@@ -35,17 +35,21 @@
       (should (looking-at-p "Foo")))))
 
 (ert-deftest aph/ert-test-protecting-buffer ()
-  "Test `aph/ert-protecting-buffer'." 
-  (with-current-buffer (generate-new-buffer "Foo")
-    (let ((name (buffer-name)))
-      (should (aph/ert-macro-executes-body 'aph/ert-protecting-buffer `(,name)))
-      (should (equal name (buffer-name)))
-      (insert "Foo")
-      (aph/ert-protecting-buffer name
-        (with-current-buffer (generate-new-buffer name)
-          (should (equal name (buffer-name)))
-          (should (equal "" (buffer-string)))))
-      (should (equal "Foo" (buffer-string))))))
+  "Test `aph/ert-protecting-buffer'."
+  (let ((buf (generate-new-buffer "Foo")))
+    (unwind-protect
+        (with-current-buffer buf
+          (let ((name (buffer-name)))
+            (should (aph/ert-macro-executes-body
+                     'aph/ert-protecting-buffer `(,name)))
+            (should (equal name (buffer-name)))
+            (insert "Foo")
+            (aph/ert-protecting-buffer name
+              (with-current-buffer (generate-new-buffer name)
+                (should (equal name (buffer-name)))
+                (should (equal "" (buffer-string)))))
+            (should (equal "Foo" (buffer-string)))))
+      (aph/kill-buffer-nowarn buf))))
 
 
 ;;; Mode Testing Apparatus Tests: Parametrizations
