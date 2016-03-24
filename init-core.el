@@ -88,6 +88,10 @@ The return value depends only on `aph/machine'."
 ;;;============================
 (prefer-coding-system 'utf-8-unix)
 
+;; Personal Information
+(setq user-full-name    "Aaron Harris"
+      user-mail-address "meerwolf@gmail.com")
+
 ;; UI Configuration
 (setq-default cursor-type                     'box
               frame-resize-pixelwise          t
@@ -182,6 +186,15 @@ The return value depends only on `aph/machine'."
    'custom-safe-themes
    "416ef2f2057400db7cab91aeacb583b4b539c549f4713260282a903d79344312") 
   (load-theme 'aph :noconfirm))
+
+(use-package autoinsert
+  :init
+  (auto-insert-mode)
+  :config
+  ;; Disable `helm' because it can't handle elisp keyword selection.
+  (with-eval-after-load 'helm-mode
+    (add-to-list 'helm-completing-read-handlers-alist
+                 '(auto-insert . nil))))
 
 (use-package avoid
   :init
