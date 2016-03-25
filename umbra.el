@@ -1,11 +1,93 @@
-;;; -*- lexical-binding: t -*-
+;;; umbra.el --- Minor mode for non-overriding keys -*- lexical-binding: t; -*-
 
-;;;; The Emacs init files of Aaron Harris:
-;;;; UMBRA MODE
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-;; A minor mode for implementing keybindings in a way that shadows,
-;; rather than overriding, existing keybindings.
+;; Author: Aaron Harris <meerwolf@gmail.com>
+;; Keywords: convenience keybinding
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; This module defines the minor mode `umbra-mode'.  This mode is
+;; designed to hold all of your personal keybindings, including
+;; mode-specific bindings.  Making your bindings in this way makes it
+;; easy to revert changes or temporarily disable all of your custom
+;; keybindings (e.g., to make use of a default binding you have
+;; inadvertently shadowed, or just to check what the default binding
+;; for a key is).
+;;
+;; To accomplish this, `umbra-mode' reimplements much of the standard
+;; keymap hierarchy on top of the existing heirarchy (within
+;; `emulation-mode-map-alists', specifically).
+;;
+;; To use `umbra-mode', just enable it in the usual way and add
+;; keybindings to one of these keymaps:
+;;
+;; * The keymap `umbra-mode-map' is the equivalent of `global-map';
+;; bindings made here will be active whenever `umbra-mode' is enabled
+;; and are shadowed by bindings in all other `umbra-mode' keymaps.
+;;
+;; * Each major and minor mode can be equipped with a so-called
+;; "umbra" map.  This is the equivalent of that mode's ordinary map
+;; within the `umbra-mode' heirarchy.  The usual keymap precedence
+;; rule is maintained: minor modes' umbra maps take precedence over
+;; the major mode's umbra map, which takes precedence over
+;; `umbra-mode-map'.
+;;
+;; To equip a mode with an umbra map, use the function `umbra-keymap'.
+;; This function takes a mode and returns the umbra keymap for that
+;; mode, creating it if necessary.  Then just make your keybindings in
+;; that keymap.
+;;
+;; * The keymap `umbra-mode-overriding-map' takes precedence over all
+;; umbra maps.  This is rarely used, but can be useful if you use
+;; conditional keybindings (i.e., menu items with :filter functions).
+;;
+;; * Each major mode can additionally be equipped with a "penumbra"
+;; map.  This is the equivalent of `overriding-local-map' and takes
+;; precedence over all umbra maps and over `umbra-mode-overriding-map'.
+;;
+;; To get the penumbra map for a major mode, pass a non-nil second
+;; parameter to `umbra-keymap' (e.g., (umbra-keymap 'org-mode t)).
+;;
+;; * Finally, there is `umbra-mode-minibuffer-map'.  This keymap is
+;; used in place of the major mode's umbra map during minibuffer
+;; input, and as such is the equivalent of the various
+;; `minibuffer-local-*-map' keymaps.
+;;
+;; If you use `helm', you can also use the keymap
+;; `umbra-mode-helm-map'.  This is the equivalent of `helm-map'; it
+;; inherits from `umbra-mode-minibuffer-map' and is used only inside a
+;; `helm' session.
+;;
+;;
+;; Finally, support is provided for the `bind-key' package in the form
+;; of two new keywords for the `bind-keys' macro, :umbra and
+;; :penumbra.  These are similar to the :map keyword, but take mode
+;; names rather than keymaps.  For example, the form
+;;
+;;    (bind-keys :umbra foo-mode
+;;               :penumbra (bar-mode baz-mode)
+;;               :map some-other-keymap
+;;               ("C-f" . frobnicate))
+;;
+;; binds the frobnicate command to `C-f' in the umbra map for
+;; foo-mode, the penumbra maps for bar-mode and baz-mode, and in
+;; some-other-keymap.
+
+;;; Code:
 
 (require 'aph-symbol)                   ; For `aph/symbol-concat'
 (require 'aph-bind-key)                 ; For `bind-keys' and fixes
@@ -382,3 +464,4 @@ If you intend to bind C-i separately from <tab> in
 
 
 (provide 'umbra)
+;;; umbra.el ends here
