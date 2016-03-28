@@ -5,6 +5,8 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience keybinding
 
+;; Required features: `aph-symbol', `aph-plist' (only with `bind-key')
+
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
@@ -89,9 +91,7 @@
 
 ;;; Code:
 
-(require 'aph-symbol)                   ; For `aph/symbol-concat'
-(require 'aph-bind-key)                 ; For `bind-keys' and fixes
-(require 'cl-lib)                       ; For `cl-defun'
+(require 'aph-symbol)
 
 
 ;;; Keymap Setup
