@@ -92,10 +92,53 @@
 ;;; Code:
 
 (require 'aph-symbol)
+(eval-when-compile (require 'cl-lib))
+(eval-when-compile (require 'aph-subr))
 
 
-;;; Keymap Setup
+;;; Base Keymaps
 ;;;=============
+(defvar umbra-mode-map (make-sparse-keymap)
+  "Global keymap for `umbra-mode'.
+
+This keymap is the equivalent of `global-map' for `umbra-mode',
+and its bindings will be active whenever `umbra-mode' is enabled,
+provided they are not shadowed by an umbra or penumbra keymap.")
+
+(defvar umbra-mode-overriding-map (make-sparse-keymap)
+  "Overriding keymap for `umbra-mode'.
+
+The bindings in this keymap are active only with `umbra-mode' and
+take precedence over all other bindings made by `umbra-mode',
+save those in the penumbra keymap for the current major mode (see
+`umbra-keymap').")
+
+(defvar umbra-mode-minibuffer-map
+  (let ((k (make-sparse-keymap)))
+    (set-keymap-parent k umbra-mode-map)
+    k)
+  "Minibuffer keymap for `umbra-mode'.
+
+This keymap is used in place of the umbra keymap for the current
+major mode inside a minibuffer.  Bind keys here if you wish them
+to override keys in any of the `minibuffer-local-*-map' keymaps.
+Note that this keymap is used regardless of which of those
+keymaps is currently in use.")
+
+(defvar umbra-mode-helm-map
+  (let ((k (make-sparse-keymap)))
+    (set-keymap-parent k umbra-mode-minibuffer-map)
+    k)
+  "Keymap for use with `helm' in `umbra-mode'.
+Inherits from `umbra-mode-minibuffer-map'
+
+This keymap is used in place of the umbra keymap for the current
+major mode during a `helm' session.  Bind keys here if you wish
+them to override keys in `helm-map'.")
+
+
+;;; Keymap Management
+;;;==================
 (defvar umbra-map-alist nil
   "Alist containing all augmented (\"umbra\") keymaps.
 
@@ -150,75 +193,12 @@ buffer-local and thus vary with the buffer's major mode.
 The association between this variable and the major mode is
 maintained by the function `umbra--update-major-mode'.")
 
-(defvar umbra-mode-map (make-sparse-keymap)
-  "Global keymap for `umbra-mode'.
-
-This keymap is the equivalent of `global-map' for `umbra-mode',
-and its bindings will be active whenever `umbra-mode' is enabled,
-provided they are not shadowed by an umbra or penumbra keymap.")
-
-(defvar umbra-mode-overriding-map (make-sparse-keymap)
-  "Overriding keymap for `umbra-mode'.
-
-The bindings in this keymap are active only with `umbra-mode' and
-take precedence over all other bindings made by `umbra-mode',
-save those in the penumbra keymap for the current major mode (see
-`umbra-keymap').")
-
-(defvar umbra-mode-minibuffer-map
-  (let ((k (make-sparse-keymap)))
-    (set-keymap-parent k umbra-mode-map)
-    k)
-  "Minibuffer keymap for `umbra-mode'.
-
-This keymap is used in place of the umbra keymap for the current
-major mode inside a minibuffer.  Bind keys here if you wish them
-to override keys in any of the `minibuffer-local-*-map' keymaps.
-Note that this keymap is used regardless of which of those
-keymaps is currently in use.")
-
-(defvar umbra-mode-helm-map
-  (let ((k (make-sparse-keymap)))
-    (set-keymap-parent k umbra-mode-minibuffer-map)
-    k)
-  "Keymap for use with `helm' in `umbra-mode'.
-Inherits from `umbra-mode-minibuffer-map'
-
-This keymap is used in place of the umbra keymap for the current
-major mode during a `helm' session.  Bind keys here if you wish
-them to override keys in `helm-map'.")
-
 (add-to-list 'emulation-mode-map-alists
              'umbra-overriding-map-alist :append #'eq)
 (add-to-list 'emulation-mode-map-alists
              'umbra-minor-mode-map-alist :append #'eq)
 (add-to-list 'emulation-mode-map-alists
              'umbra-local-map-alist :append #'eq)
-
-(define-minor-mode umbra-mode
-  "Mode for reversible keybindings.
-
-To bind a key globally (in a way that shadows, rather than
-overwrites, the default binding), use `umbra-mode-map'.  To bind
-a key in the same way, but specific to a particular major or
-minor mode, pass the symbol naming the mode to the function
-`umbra-keymap', and then bind the key in the resulting keymap.
-
-If you with to use the `bind-key' package with `umbra-mode', two
-additional keywords are provided for `bind-keys', :umbra
-and :penumbra.
-
-The :umbra keyword is similar to the existing :map keyword; it
-takes the symbol naming a mode, or a list of such symbols, and
-makes all bindings in the umbra map associated with that mode.
-
-The :penumbra keyword is analogous, but makes its bindings in the
-penumbra map instead."
-  :global t
-  :lighter " #"
-  (setq umbra-minor-mode-map-alist
-        (if umbra-mode umbra-map-alist nil))
-  (when umbra-mode (umbra--update-major-mode)))
 
 
 ;;; Augmented keymaps
@@ -302,8 +282,8 @@ keymaps are named like 'umbra-overriding-mode-map:MODE."
   (symbol-value (umbra-keymap-var mode penumbra)))
 
 
-;;; Major mode support
-;;;===================
+;;; Mode Definition
+;;;================ 
 (defun umbra--set-major-mode-parentage (mode &optional penumbra)
   "Set parentage of umbra keymap for MODE.
 
@@ -362,7 +342,32 @@ This function is suitable for use in `after-change-major-mode-hook'."
     (setq umbra-local-map-alist      `((umbra-mode . ,umbra-map))
           umbra-overriding-map-alist `((umbra-mode . ,penumbra-map)))))
 
-(add-hook 'after-change-major-mode-hook #'umbra--update-major-mode)
+(define-minor-mode umbra-mode
+  "Mode for reversible keybindings.
+
+To bind a key globally (in a way that shadows, rather than
+overwrites, the default binding), use `umbra-mode-map'.  To bind
+a key in the same way, but specific to a particular major or
+minor mode, pass the symbol naming the mode to the function
+`umbra-keymap', and then bind the key in the resulting keymap.
+
+If you with to use the `bind-key' package with `umbra-mode', two
+additional keywords are provided for `bind-keys', :umbra
+and :penumbra.
+
+The :umbra keyword is similar to the existing :map keyword; it
+takes the symbol naming a mode, or a list of such symbols, and
+makes all bindings in the umbra map associated with that mode.
+
+The :penumbra keyword is analogous, but makes its bindings in the
+penumbra map instead."
+  :global t
+  :lighter " #" 
+  (setq umbra-minor-mode-map-alist (if umbra-mode umbra-map-alist nil)) 
+  (if umbra-mode
+      (add-hook 'after-change-major-mode-hook #'umbra--update-major-mode)
+    (remove-hook 'after-change-major-mode-hook #'umbra--update-major-mode)) 
+  (when umbra-mode (umbra--update-major-mode)))
 
 
 ;;; `bind-keys' Support
@@ -462,6 +467,27 @@ If you intend to bind C-i separately from <tab> in
   (interactive)
   (umbra-default-command (kbd "TAB") #'indent-for-tab-command))
 
+
+;;; Unloading
+;;;==========
+(defun umbra-unload-function ()
+  "Undo changes made by `umbra'.
+
+Changes reversed:
+- Keymaps added to `emulation-mode-map-alists'
+- Advice for `bind-keys' adding support for :umbra and :penumbra
+
+Note that all umbra and penumbra keymaps remain
+defined.  (Ideally, these would be removed as well, but that has
+not yet been implemented.)"
+  (message "Unloading umbra...") 
+  (umbra-mode -1)
+  (dolist (elt '(umbra-overriding-map-alist
+                 umbra-minor-mode-map-alist
+                 umbra-local-map-alist))
+    (aph/assq-delete-in emulation-mode-map-alists elt))
+  (advice-remove 'bind-keys #'umbra--bind-keys-advice)
+  nil)
 
 (provide 'umbra)
 ;;; umbra.el ends here
