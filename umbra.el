@@ -474,7 +474,7 @@ If you intend to bind C-i separately from <tab> in
 ;;; Unloading
 ;;;==========
 (defun umbra-unload-function ()
-  "Undo changes made by `umbra'.
+  "Undo changes made to Emacs for `umbra-mode'.
 
 Changes reversed are as follows:
 - Addition of `umbra--update-major-mode' to `after-change-major-mode-hook'
