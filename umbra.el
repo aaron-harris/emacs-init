@@ -480,8 +480,7 @@ Changes reversed are as follows:
 - Addition of `umbra--update-major-mode' to `after-change-major-mode-hook'
 - Keymaps added to `emulation-mode-map-alists'
 - Advice for `bind-keys' adding support for :umbra and :penumbra
-- All umbra and penumbra keymaps"
-  (message "Unloading umbra...") 
+- All umbra and penumbra keymaps" 
   (remove-hook 'after-change-major-mode-hook #'umbra--update-major-mode)
   (dolist (elt '(umbra-overriding-map-alist
                  umbra-minor-mode-map-alist
@@ -493,7 +492,7 @@ Changes reversed are as follows:
                                 "umbra-overriding-mode-map:"))
                 (when (string-prefix-p prefix (symbol-name sym))
                   (unintern sym)))))
-  (message "Unloading umbra...done")
+  ;; Return nil so standard unloading continues
   nil)
 
 (provide 'umbra)
