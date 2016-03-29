@@ -203,6 +203,31 @@ maintained by the function `umbra--update-major-mode'.")
 
 ;;; Augmented keymaps
 ;;;==================
+(defmacro define-umbra-keymap (name mode &optional penumbra)
+  "Define umbra keymap variable with NAME for MODE.
+
+If PENUMBRA is non-nil, define the penumbra keymap instead.
+
+Note that NAME can be easily constructed from MODE using
+`umbra-keymap-name', but this is left to the caller so that this
+macro can meet the coding conventions detailed in the info
+node `(elisp) Coding Conventions'.
+
+Used by `umbra-keymap'.  See that function for more details."
+  (declare (debug (symbolp symbolp form)))
+  `(defvar ,name (make-sparse-keymap)
+     ,(format (concat "%s keymap for `%s'.\n"
+                      "See `umbra-keymap' for more details.")
+              (if penumbra "Overriding augmented" "Augmented")
+              mode)))
+
+(defun umbra-keymap--register (mode)
+  "Add the umbra keymap for MODE (a symbol) to `umbra-map-alist'."
+  (push `(,mode . ,(umbra-keymap mode)) umbra-map-alist)
+  ;; Also update `umbra-minor-mode-map-alist' so new keymap gets
+  ;; picked up immediately.
+  (when umbra-mode (setq umbra-minor-mode-map-alist umbra-map-alist)))
+
 (defun umbra-keymap-name (mode &optional penumbra)
   "Return the name of the umbra keymap for MODE.
 Do not create such a keymap if it does not already exist.
@@ -222,34 +247,13 @@ contain the umbra keymap for MODE, if one exists.  See
 If PENUMBRA is non-nil, consider the penumbra map instead.
 
 See `umbra-keymap' for more information."
-  (let ((augmap (umbra-keymap-name mode penumbra)))
-    (boundp augmap)))
-
-(defmacro umbra-keymap--define (mode &optional penumbra)
-  "Define umbra keymap variable for MODE.
-
-If PENUMBRA is non-nil, define the penumbra keymap instead.
-
-Used by `umbra-keymap'.  See that function for more details."
-  (declare (debug (symbolp)))
-  (let ((augmap (umbra-keymap-name mode penumbra)))
-    `(defvar ,augmap (make-sparse-keymap)
-       ,(format (concat "%s keymap for `%s'.\n"
-                        "See `umbra-keymap' for more details.")
-                (if penumbra "Overriding augmented" "Augmented")
-                mode))))
-
-(defun umbra-keymap--register (mode)
-  "Add the umbra keymap for MODE (a symbol) to `umbra-map-alist'."
-  (push `(,mode . ,(umbra-keymap mode)) umbra-map-alist)
-  ;; Also update `umbra-minor-mode-map-alist' so new keymap gets
-  ;; picked up immediately.
-  (when umbra-mode (setq umbra-minor-mode-map-alist umbra-map-alist)))
+  (boundp (umbra-keymap-name mode penumbra)))
 
 (defun umbra-keymap-var (mode &optional penumbra)
   "As `umbra-keymap-name', but create keymap if necessary."
   (unless (umbra-has-keymap-p mode penumbra)
-    (eval `(umbra-keymap--define ,mode ,penumbra))
+    (eval `(define-umbra-keymap ,(umbra-keymap-name mode penumbra)
+             ,mode ,penumbra))
     (unless penumbra (umbra-keymap--register mode)))
   (umbra-keymap-name mode penumbra))
 
