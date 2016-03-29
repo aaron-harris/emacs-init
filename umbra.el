@@ -366,12 +366,11 @@ makes all bindings in the umbra map associated with that mode.
 The :penumbra keyword is analogous, but makes its bindings in the
 penumbra map instead."
   :global t
-  :lighter " #" 
-  (setq umbra-minor-mode-map-alist (if umbra-mode umbra-map-alist nil)) 
-  (if umbra-mode
-      (add-hook 'after-change-major-mode-hook #'umbra--update-major-mode)
-    (remove-hook 'after-change-major-mode-hook #'umbra--update-major-mode)) 
+  :lighter " #"
+  (setq umbra-minor-mode-map-alist (if umbra-mode umbra-map-alist nil))
   (when umbra-mode (umbra--update-major-mode)))
+
+(add-hook 'after-change-major-mode-hook #'umbra--update-major-mode)
 
 
 ;;; `bind-keys' Support
@@ -478,11 +477,12 @@ If you intend to bind C-i separately from <tab> in
   "Undo changes made by `umbra'.
 
 Changes reversed are as follows:
+- Addition of `umbra--update-major-mode' to `after-change-major-mode-hook'
 - Keymaps added to `emulation-mode-map-alists'
 - Advice for `bind-keys' adding support for :umbra and :penumbra
 - All umbra and penumbra keymaps"
   (message "Unloading umbra...") 
-  (umbra-mode -1)
+  (remove-hook 'after-change-major-mode-hook #'umbra--update-major-mode)
   (dolist (elt '(umbra-overriding-map-alist
                  umbra-minor-mode-map-alist
                  umbra-local-map-alist))
