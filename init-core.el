@@ -689,7 +689,8 @@ The return value depends only on `aph/machine'."
                    ("C-M-t" . org-metaup))
   :config
   (message "Loading org...")         ; Because this may take a while. 
-  (use-package init-org))
+  (use-package init-org)
+  (message "Loading org...done"))
 
 (use-package aph-org
   :after org
