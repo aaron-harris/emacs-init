@@ -473,13 +473,10 @@ If you intend to bind C-i separately from <tab> in
 (defun umbra-unload-function ()
   "Undo changes made by `umbra'.
 
-Changes reversed:
+Changes reversed are as follows:
 - Keymaps added to `emulation-mode-map-alists'
 - Advice for `bind-keys' adding support for :umbra and :penumbra
-
-Note that all umbra and penumbra keymaps remain
-defined.  (Ideally, these would be removed as well, but that has
-not yet been implemented.)"
+- All umbra and penumbra keymaps"
   (message "Unloading umbra...") 
   (umbra-mode -1)
   (dolist (elt '(umbra-overriding-map-alist
@@ -487,6 +484,12 @@ not yet been implemented.)"
                  umbra-local-map-alist))
     (aph/assq-delete-in emulation-mode-map-alists elt))
   (advice-remove 'bind-keys #'umbra--bind-keys-advice)
+  (mapatoms (lambda (sym)
+              (dolist (prefix '("umbra-mode-map:"
+                                "umbra-overriding-mode-map:"))
+                (when (string-prefix-p prefix (symbol-name sym))
+                  (unintern sym)))))
+  (message "Unloading umbra...done")
   nil)
 
 (provide 'umbra)
