@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-mpc" "aph-mpc.el" (22112 53514 667623
-;;;;;;  800000))
+;;;### (autoloads nil "aph-mpc" "aph-mpc.el" (22194 22352 298961
+;;;;;;  500000))
 ;;; Generated autoloads from aph-mpc.el
 
 (autoload 'cde "aph-mpc" "\
@@ -19,8 +19,8 @@ cde will return 14.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22128 31870 577110
-;;;;;;  500000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22257 53869 994247
+;;;;;;  700000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-spin-basic "aph-org" "\
@@ -58,8 +58,8 @@ Store the current eww url as an Org-Mode link.
 
 ;;;***
 
-;;;### (autoloads nil "aph-window" "aph-window.el" (22107 19482 83804
-;;;;;;  400000))
+;;;### (autoloads nil "aph-window" "aph-window.el" (22217 60391 0
+;;;;;;  0))
 ;;; Generated autoloads from aph-window.el
 
 (defvar aph/help-window-names '("*Help*" "*Apropos*" "*Messages*" "*Completions*" "*Command History*" "*Compile-Log*" "*disabled command*") "\
@@ -67,16 +67,86 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 
 ;;;***
 
-;;;### (autoloads nil nil ("aph-advice.el" "aph-comparators.el" "aph-dash.el"
-;;;;;;  "aph-elfeed.el" "aph-face-remap.el" "aph-files.el" "aph-font-lock.el"
-;;;;;;  "aph-framewin.el" "aph-ielm.el" "aph-info.el" "aph-keypad.el"
-;;;;;;  "aph-keys.el" "aph-latex.el" "aph-lexical.el" "aph-message.el"
-;;;;;;  "aph-mode-tag.el" "aph-org-agenda.el" "aph-org-capture.el"
-;;;;;;  "aph-rect.el" "aph-shr.el" "aph-simple.el" "aph-subr.el"
-;;;;;;  "aph-symbol.el" "aph-theme.el" "aph-w32.el" "aph-web.el"
-;;;;;;  "init-core.el" "init-draft.el" "init-elfeed.el" "init-ido.el"
-;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el")
-;;;;;;  (22128 32025 333483 0))
+;;;### (autoloads nil "umbra" "umbra.el" (22268 697 871345 400000))
+;;; Generated autoloads from umbra.el
+
+(autoload 'umbra-keymap "umbra" "\
+Return umbra keymap corresponding to MODE for `umbra-mode'.
+
+The parameter MODE should be a symbol naming a major or minor
+mode (e.g., the symbol 'text-mode).  Other symbols can be passed,
+but this may or may not work as expected.
+
+The keymap returned will be active whenever both MODE (or a mode
+descended from MODE) and `umbra-mode' are active.  This provides
+a mechanism for mode-local keybindings that are still toggleable
+with `umbra-mode'.
+
+If PENUMBRA is non-nil, then MODE should be a major mode, and the
+keymap returned (the \"penumbra keymap\" for MODE) takes
+precedence over all ordinary augmented maps.
+
+Subsequent calls to this function with the same arguments return
+the same keymap, including any bindings that were made to that
+keymap after its construction.  That is, there is at most one
+umbra keymap and one penumbra keymap for each mode, and this
+function returns the appropriate such keymap, constructing it if
+necessary.
+
+The variable holding an umbra keymap is named using the format
+'umbra-mode-map:MODE', e.g. 'umbra-mode-map:text-mode'.  Penumbra
+keymaps are named like 'umbra-overriding-mode-map:MODE.
+
+\(fn MODE &optional PENUMBRA)" nil nil)
+
+(defvar umbra-mode nil "\
+Non-nil if Umbra mode is enabled.
+See the command `umbra-mode' for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `umbra-mode'.")
+
+(custom-autoload 'umbra-mode "umbra" nil)
+
+(autoload 'umbra-mode "umbra" "\
+Mode for reversible keybindings.
+
+To bind a key globally (in a way that shadows, rather than
+overwrites, the default binding), use `umbra-mode-map'.  To bind
+a key in the same way, but specific to a particular major or
+minor mode, pass the symbol naming the mode to the function
+`umbra-keymap', and then bind the key in the resulting keymap.
+
+If you with to use the `bind-key' package with `umbra-mode', two
+additional keywords are provided for `bind-keys', :umbra
+and :penumbra.
+
+The :umbra keyword is similar to the existing :map keyword; it
+takes the symbol naming a mode, or a list of such symbols, and
+makes all bindings in the umbra map associated with that mode.
+
+The :penumbra keyword is analogous, but makes its bindings in the
+penumbra map instead.
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
+;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-bind-key.el"
+;;;;;;  "aph-browse-url.el" "aph-comparators.el" "aph-cygwin.el"
+;;;;;;  "aph-dash.el" "aph-elfeed.el" "aph-ert.el" "aph-face-remap.el"
+;;;;;;  "aph-files.el" "aph-font-lock.el" "aph-forms.el" "aph-frame.el"
+;;;;;;  "aph-framewin.el" "aph-haskell.el" "aph-helm-forms.el" "aph-helm-projectile.el"
+;;;;;;  "aph-helm.el" "aph-help.el" "aph-ielm.el" "aph-iimage.el"
+;;;;;;  "aph-info.el" "aph-keypad.el" "aph-keys.el" "aph-latex.el"
+;;;;;;  "aph-lexical.el" "aph-lisp-mode.el" "aph-message.el" "aph-mode-tag.el"
+;;;;;;  "aph-number-lines.el" "aph-org-agenda.el" "aph-org-capture.el"
+;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
+;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
+;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-theme.el"
+;;;;;;  "aph-w32.el" "aph-which-func.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-elfeed.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el") (22268 705 38662 500000))
 
 ;;;***
 

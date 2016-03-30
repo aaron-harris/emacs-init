@@ -257,6 +257,7 @@ See `umbra-keymap' for more information."
     (unless penumbra (umbra-keymap--register mode)))
   (umbra-keymap-name mode penumbra))
 
+;;;###autoload
 (defun umbra-keymap (mode &optional penumbra)
   "Return umbra keymap corresponding to MODE for `umbra-mode'.
 
@@ -346,6 +347,7 @@ This function is suitable for use in `after-change-major-mode-hook'."
     (setq umbra-local-map-alist      `((umbra-mode . ,umbra-map))
           umbra-overriding-map-alist `((umbra-mode . ,penumbra-map)))))
 
+;;;###autoload
 (define-minor-mode umbra-mode
   "Mode for reversible keybindings.
 
