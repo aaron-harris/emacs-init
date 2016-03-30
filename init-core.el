@@ -1,8 +1,9 @@
-;;; -*- lexical-binding: t -*-
+;;; init-core.el --- Personal Emacs configuration -*- lexical-binding: t; -*-
 
-;;;; The Emacs init files of Aaron Harris:
-;;;; CORE FILE
-;;;;============================================================================
+;; Copyright (C) 2015-2016  Aaron Harris
+;; Author: Aaron Harris <meerwolf@gmail.com>
+
+;;; Code:
 
 
 ;;; Bootstrapping Variables
@@ -1120,3 +1121,4 @@ The return value depends only on `aph/machine'."
 
 (provide 'init-core)
 (provide 'init)
+;;; init-core.el ends here
