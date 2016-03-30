@@ -59,10 +59,7 @@
   :bind (:map umbra-mode-map
               ("<return>" . umbra-default-return-command)
               ("<tab>"    . umbra-default-tab-command))
-  :demand t
-  :config
-  ;; Personal keybinding mode
-  (umbra-mode)) 
+  :init (umbra-mode))
 
 (use-package hydra
   :ensure t
