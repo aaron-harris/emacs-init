@@ -104,8 +104,10 @@
       w32-pass-rwindow-to-system nil)
 
 ;; Enable some disabled commands
-(put 'downcase-region 'disabled nil)
-(put 'upcase-region   'disabled nil)
+(dolist (command '(downcase-region
+                   narrow-to-region
+                   upcase-region))
+  (put command 'disabled nil))
 
 ;; Keybindings for source-defined commands
 (bind-keys :map umbra-mode-map
