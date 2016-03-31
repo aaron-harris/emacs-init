@@ -68,13 +68,14 @@
   (setq lv-use-separator t))
 
 
-;;; Mode Tags
-;;;==========
-(use-package aph-mode-tag)
-(aph/mode-tag-create 'clojure
-  "Tag for modes used to edit Clojure, including REPLs.")
-(aph/mode-tag-create 'lisp
-  "Tag for modes used to edit any sort of Lisp, including REPLs.")
+;;; Mode Families
+;;;==============
+(use-package mode-family
+  :config
+  (mode-family-create 'clojure
+    "Tag for modes used to edit Clojure, including REPLs.")
+  (mode-family-create 'lisp
+    "Tag for modes used to edit any sort of Lisp, including REPLs."))
 
 
 ;;; Configuration: Source-Level
@@ -248,8 +249,8 @@
   (setq cider-auto-select-error-buffer      nil
         cider-show-error-buffer             'except-in-repl
         cider-repl-pop-to-buffer-on-connect nil)
-  (aph/mode-tag-add 'cider-repl-mode 'lisp)
-  (aph/mode-tag-add 'cider-repl-mode 'clojure)
+  (mode-family-add 'cider-repl-mode 'lisp)
+  (mode-family-add 'cider-repl-mode 'clojure)
   (add-to-list 'aph/help-window-names "*cider-doc*")
   ;; Output from the JVM has Windows-style newlines, so we need to
   ;; strip those unless we want to see ^M characters in Cider buffers.
@@ -262,16 +263,16 @@
   :ensure t
   :defer t
   :config
-  (aph/mode-tag-add 'clojure-mode 'lisp)
-  (aph/mode-tag-add 'clojure-mode 'clojure)
-  (add-hook 'clojure-tag-hook #'subword-mode))
+  (mode-family-add 'clojure-mode 'lisp)
+  (mode-family-add 'clojure-mode 'clojure)
+  (add-hook 'clojure-family-hook #'subword-mode))
 
 (use-package color-identifiers-mode
   :ensure t
   :defer t
   :diminish color-identifiers-mode
   :init
-  (add-hook 'lisp-tag-hook #'color-identifiers-mode)
+  (add-hook 'lisp-family-hook #'color-identifiers-mode)
   :config
   (setq color-identifiers:num-colors      12
         color-identifiers:color-luminance 0.65)
@@ -292,7 +293,7 @@
                 ("C-<tab>" . company-complete-common))
   :diminish company-mode
   :init
-  (add-hook 'lisp-tag-hook #'company-mode)
+  (add-hook 'lisp-family-hook #'company-mode)
   :config 
   (bind-keys :map company-active-map
              ("<tab>" . company-complete-common-or-cycle))
@@ -314,7 +315,7 @@
   :defer t
   :diminish eldoc-mode
   :init
-  (add-hook 'lisp-tag-hook #'eldoc-mode))
+  (add-hook 'lisp-family-hook #'eldoc-mode))
 
 (use-package elfeed
   :ensure t
@@ -562,7 +563,7 @@
             try-expand-list
             try-expand-line
             try-expand-line-all-buffers)))
-  (add-hook 'lisp-tag-hook #'aph/hippie-expand-config-lisp))
+  (add-hook 'lisp-family-hook #'aph/hippie-expand-config-lisp))
 
 (use-package hl-line
   :bind (:map umbra-mode-map
@@ -603,7 +604,7 @@
                 ("C-c M-w" . aph/ielm-copy-last-output))
   :config
   (use-package aph-ielm) 
-  (aph/mode-tag-add 'ielm-mode 'lisp))
+  (mode-family-add 'ielm-mode 'lisp))
 
 (use-package aph-iimage
   :after iimage
@@ -630,9 +631,9 @@
 (use-package lisp-mode 
   :config 
   ;; Mode tags
-  (aph/mode-tag-add 'lisp-mode             'lisp)
-  (aph/mode-tag-add 'emacs-lisp-mode       'lisp)
-  (aph/mode-tag-add 'lisp-interaction-mode 'lisp)
+  (mode-family-add 'lisp-mode             'lisp)
+  (mode-family-add 'emacs-lisp-mode       'lisp)
+  (mode-family-add 'lisp-interaction-mode 'lisp)
   ;; Add `use-package' blocks to Imenu
   (add-to-list 'lisp-imenu-generic-expression
                '("Package"
@@ -805,7 +806,7 @@
   :ensure t
   :defer t
   :init
-  (add-hook 'lisp-tag-hook #'rainbow-delimiters-mode))
+  (add-hook 'lisp-family-hook #'rainbow-delimiters-mode))
 
 (use-package rect
   ;; Move from "C-x r" prefix to "C-c r"
@@ -886,11 +887,11 @@
   (setq save-interprogram-paste-before-kill t
         shift-select-mode                   nil)
   ;; Tweaking `eval-expression'
-  (defun aph/mode-tag-run-hook--lisp ()
-    "Run the hook for the `lisp' mode tag."
-    (run-hooks 'lisp-tag-hook))
+  (defun mode-family-run-hook--lisp ()
+    "Run the hook for the `lisp' mode family."
+    (run-hooks 'lisp-family-hook))
   (add-hook 'eval-expression-minibuffer-setup-hook
-            #'aph/mode-tag-run-hook--lisp)
+            #'mode-family-run-hook--lisp)
   (setq eval-expression-print-length nil
         eval-expression-print-level  nil))
 
@@ -978,7 +979,7 @@
   :init
   (require 'smartparens-config)
   (smartparens-global-mode)
-  (add-hook 'lisp-tag-hook #'smartparens-strict-mode)
+  (add-hook 'lisp-family-hook #'smartparens-strict-mode)
   :config 
   ;; String handling
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
