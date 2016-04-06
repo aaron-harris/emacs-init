@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: extensions
 
-;; Required features: `aph-symbol', `dash'
+;; Required features: `aph-subr', `dash'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -72,30 +72,30 @@
 ;; a particular family, see `mode-family-list-members', and to get a
 ;; list of all families to which a particular mode belongs, see
 ;; `mode-family-list-families'.
-;;
-;; Implementation Details
-;; ----------------------
-;;
-;; Information about mode families is currently stored using symbol
-;; properties.  Four properties are used; except for `mode-families',
-;; these properties are associated with the symbol naming the family.
-;;
-;; - `mode-family-p' is set to t for symbols which name mode families.
-;;
-;; - `mode-family-members' stores a list of all modes belonging to a
-;;   particular family.
-;;
-;; - `mode-family-docstring' stores the docstring for the family.  The
-;;   functionality to reference this (e.g., in a Help buffer) has not
-;;   yet been implemented.
-;;
-;; - `mode-families' (on the *mode* name) stores a list of all
-;;   families to which that mode belongs.
 
 ;;; Code:
 
-(require 'aph-symbol) ; For `aph/symbol-concat', `aph/symbol-prop-delq'
-(require 'dash)       ; For `-union', `-when-let'
+(require 'aph-subr)   ; For `aph/set-assq'
+(require 'dash)       ; For `-when-let', `-union', `-reduce-from', `-lambda'
+
+
+;;; Internal Variables
+;;;===================
+(defvar mode-family--list nil
+  "The list of all mode families.
+
+Do not modify this list directly; use `mode-family-create'
+instead.")
+
+(defvar mode-family--alist nil
+  "An alist associating modes to families.
+
+The car of each element should be a symbol naming a mode; the
+associated cdr is a list of all mode families to which that mode
+belongs.
+
+Do not modify this list directly; use `mode-family-add' and
+`mode-family-remove' instead.")
 
 
 ;;; Mode Family Creation
@@ -115,11 +115,12 @@ No problems result if this variable is not bound.
 
 This function is syntactic only; it is not necessary that FAMILY
 actually be a mode family."
-  (aph/symbol-concat family "-family-hook"))
+  (intern (concat (symbol-name family) "-family-hook")))
 
 ;;;###autoload
-(defun mode-family-create (family &optional docstring)
+(defun mode-family-create (family)
   "Define FAMILY as a mode family.
+If one already exists, do nothing.
 
 A mode family is a way to designate several otherwise-unrelated
 modes (major or minor) as sharing some particular characteristic.
@@ -139,16 +140,15 @@ Each mode family has a hook, named `FAMILY-family-hook', and all
 modes associated with a family (or derived from such a mode) run
 this hook along with their individual mode hooks.
 
-If a mode family named FAMILY already exists, then its docstring
-is updated to DOCSTRING and no other change is made.  Similarly,
-if *any* variable exists with the same name as the desired hook
-variable, it will be \"stolen\" by the mode family, but its value
-will not be changed; this is necessary in order to allow for
-out-of-order hooks."
+In the event that a variable already exists with the same name as
+the hook variable for the new family, it will be \"stolen\" by
+the mode family (without warning!), but its value will not be
+changed; this is necessary in order to allow for out-of-order
+hooks."
   (declare (indent defun))
-  (put family 'mode-family-p t)
-  (when docstring (put family 'mode-family-docstring docstring))
-  (eval `(define-mode-family-hook ,(mode-family--hook family) ,family)))
+  (unless (mode-family-p family)
+    (push family mode-family--list) 
+    (eval `(define-mode-family-hook ,(mode-family--hook family) ,family))))
 
 
 ;;; Predicates
@@ -157,7 +157,7 @@ out-of-order hooks."
   "Return non-nil if SYM is the name of a mode family.
 
 See the documentation for `mode-family-create' for more information."
-  (get sym 'mode-family-p))
+  (memq sym mode-family--list))
 
 (defun mode-family-member-p (mode family &optional inherit)
   "Return non-nil if MODE is a member of FAMILY.
@@ -166,31 +166,11 @@ If the optional parameter INHERIT is non-nil, also return non-nil
 if any ancestor of MODE is a member of FAMILY.
 
 See the documentation for `mode-family-create' for more information."
-  (or (memq mode (get family 'mode-family-modes))
-      (when inherit
-        (-when-let (parent (get mode 'derived-mode-parent))
-          (mode-family-member-p parent family inherit)))))
-
-
-;;; Membership Management
-;;;======================
-(defun mode-family-add (mode family)
-  "Add MODE to FAMILY.  If FAMILY doesn't exist, create it.
-If MODE is already a member of FAMILY, do nothing.
-
-See the documentation for `mode-family-create' for more information."
-  (unless (mode-family-p family) (mode-family-create family))
-  (unless (mode-family-member-p mode family)
-    (push mode   (get family 'mode-family-modes))
-    (push family (get mode   'mode-families))))
-
-(defun mode-family-remove (mode family)
-  "If MODE is a member of FAMILY, remove it.
-Otherwise, do nothing.
-
-See the documentation for `mode-family-create' for more information."
-  (aph/symbol-prop-delq mode   family 'mode-family-modes)
-  (aph/symbol-prop-delq family mode   'mode-families))
+  (let ((mode-families  (assoc-default mode mode-family--alist #'eq)))
+    (or (memq family mode-families)
+        (when inherit
+          (-when-let (parent (get mode 'derived-mode-parent))
+            (mode-family-member-p parent family inherit))))))
 
 
 ;;; Membership Lists
@@ -203,17 +183,43 @@ families to which an ancestor of MODE belongs.  If multiple
 ancestors belong to the same family, it is included only once.
 
 See the documentation for `mode-family-create' for more information."
-  (when mode
-    (let ((parent       (and inherit (get mode 'derived-mode-parent)))
-          (-compare-fn  #'eq))
-      (-union (mode-family-list-families parent inherit)
-              (get mode 'mode-families)))))
+  (-union (assoc-default mode mode-family--alist #'eq)
+          (-when-let (parent (and inherit (get mode 'derived-mode-parent)))
+            (mode-family-list-families
+             (get mode 'derived-mode-parent) inherit))))
 
 (defun mode-family-list-members (family)
   "Return a list of all modes belonging to FAMILY.
 
 See the documentation for `mode-family-create' for more information."
-  (get family 'mode-family-modes))
+  (-reduce-from (-lambda (acc (mode . families))
+                  (if (memq family families)
+                      (cons mode acc)
+                    acc))
+                nil
+                mode-family--alist))
+
+
+;;; Membership Management
+;;;======================
+(defun mode-family-add (mode family)
+  "Add MODE to FAMILY.  If FAMILY doesn't exist, create it.
+If MODE is already a member of FAMILY, do nothing.
+
+See the documentation for `mode-family-create' for more information." 
+  (unless (mode-family-p family) (mode-family-create family))
+  (unless (mode-family-member-p mode family)
+    (let ((families (assoc-default mode mode-family--alist)))
+      (aph/set-assq mode-family--alist mode (push family families)))))
+
+(defun mode-family-remove (mode family)
+  "If MODE is a member of FAMILY, remove it.
+Otherwise, do nothing.
+
+See the documentation for `mode-family-create' for more information."
+  (aph/set-assq mode-family--alist
+                mode
+                (remove family (mode-family-list-families mode))))
 
 
 ;;; Hook Functionality
@@ -228,11 +234,10 @@ This function is automatically run whenever the major mode is changed.
 
 See the documentation for `mode-family-create' for more information."
   (apply #'run-hooks
-         (mapcar (lambda (family)
-                   (mode-family--hook family))
+         (mapcar #'mode-family--hook
                  (mode-family-list-families major-mode :inherit))))
 
-(add-hook 'change-major-mode-after-body-hook #'mode-family-run-hooks) 
+(add-hook 'change-major-mode-after-body-hook #'mode-family-run-hooks)
 
 
 (provide 'mode-family)
