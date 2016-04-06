@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: extensions
 
-;; Required features: `aph-subr', `dash'
+;; Required features: `dash'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -75,8 +75,10 @@
 
 ;;; Code:
 
-(require 'aph-subr)   ; For `aph/set-assq'
 (require 'dash)       ; For `-when-let', `-union', `-reduce-from', `-lambda'
+
+(eval-when-compile (require 'aph-subr))   ; For `aph/set-assq'
+
 
 
 ;;; Internal Variables
