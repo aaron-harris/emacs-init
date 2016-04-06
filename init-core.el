@@ -67,13 +67,8 @@
   :config
   (setq lv-use-separator t))
 
-
-;;; Mode Families
-;;;==============
 (use-package mode-family
-  :config
-  (mode-family-create 'clojure)
-  (mode-family-create 'lisp))
+  :defer t)
 
 
 ;;; Configuration: Source-Level

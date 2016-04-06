@@ -67,6 +67,52 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 
 ;;;***
 
+;;;### (autoloads nil "mode-family" "mode-family.el" (22277 35665
+;;;;;;  55619 500000))
+;;; Generated autoloads from mode-family.el
+
+(autoload 'mode-family-create "mode-family" "\
+Define FAMILY as a mode family.
+If one already exists, do nothing.
+
+A mode family is a way to designate several otherwise-unrelated
+modes (major or minor) as sharing some particular characteristic.
+Mode families are named using symbols in the standard obarray,
+but this does not use either a symbol's variable slot or its
+function slot, so the same symbol can name both a mode family and
+a variable and/or function.
+
+To associate a mode with a mode family, see `mode-family-add';
+this creates the family if it doesn't already exist.  To remove a
+mode from a family, see `mode-family-remove'.  To check for the
+existence of a family, see `mode-family-exists-p'.  To check
+whether a mode is part of a family, see `mode-family-member-p',
+`mode-family-list-members', or `mode-family-list-families'.
+
+Each mode family has a hook, named `FAMILY-family-hook', and all
+modes associated with a family (or derived from such a mode) run
+this hook along with their individual mode hooks.
+
+In the event that a variable already exists with the same name as
+the hook variable for the new family, it will be \"stolen\" by
+the mode family (without warning!), but its value will not be
+changed; this is necessary in order to allow for out-of-order
+hooks.
+
+\(fn FAMILY)" nil nil)
+
+(put 'mode-family-create 'lisp-indent-function 'defun)
+
+(autoload 'mode-family-add "mode-family" "\
+Add MODE to FAMILY.  If FAMILY doesn't exist, create it.
+If MODE is already a member of FAMILY, do nothing.
+
+See the documentation for `mode-family-create' for more information.
+
+\(fn MODE FAMILY)" nil nil)
+
+;;;***
+
 ;;;### (autoloads nil "umbra" "umbra.el" (22268 697 871345 400000))
 ;;; Generated autoloads from umbra.el
 
@@ -139,14 +185,14 @@ penumbra map instead.
 ;;;;;;  "aph-framewin.el" "aph-haskell.el" "aph-helm-forms.el" "aph-helm-projectile.el"
 ;;;;;;  "aph-helm.el" "aph-help.el" "aph-ielm.el" "aph-iimage.el"
 ;;;;;;  "aph-info.el" "aph-keypad.el" "aph-keys.el" "aph-latex.el"
-;;;;;;  "aph-lexical.el" "aph-lisp-mode.el" "aph-message.el" "aph-mode-tag.el"
-;;;;;;  "aph-number-lines.el" "aph-org-agenda.el" "aph-org-capture.el"
-;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
-;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
-;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-theme.el"
-;;;;;;  "aph-w32.el" "aph-which-func.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-elfeed.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el") (22268 705 38662 500000))
+;;;;;;  "aph-lexical.el" "aph-lisp-mode.el" "aph-message.el" "aph-number-lines.el"
+;;;;;;  "aph-org-agenda.el" "aph-org-capture.el" "aph-org-table.el"
+;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-rect.el"
+;;;;;;  "aph-shr.el" "aph-silence.el" "aph-simple.el" "aph-smartparens.el"
+;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-theme.el" "aph-w32.el"
+;;;;;;  "aph-which-func.el" "init-core.el" "init-draft.el" "init-elfeed.el"
+;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el")
+;;;;;;  (22277 35673 167532 500000))
 
 ;;;***
 
