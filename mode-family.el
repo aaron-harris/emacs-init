@@ -204,6 +204,7 @@ See the documentation for `mode-family-create' for more information."
 
 ;;; Membership Management
 ;;;======================
+;;;###autoload
 (defun mode-family-add (mode family)
   "Add MODE to FAMILY.  If FAMILY doesn't exist, create it.
 If MODE is already a member of FAMILY, do nothing.
