@@ -844,6 +844,10 @@
   (setq-default save-place t)
   (setq save-place-file (concat user-emacs-directory "places")))
 
+(use-package seq
+  :ensure t
+  :defer t)
+
 (use-package server
   :disabled t
   :config
