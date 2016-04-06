@@ -67,7 +67,7 @@
 ;;
 ;; The remaining functions in this module allow for inspection of mode
 ;; families.  To test for the existence of a mode family, see
-;; `mode-family-exists-p'.  To test for membership in a family, see
+;; `mode-family-p'.  To test for membership in a family, see
 ;; `mode-family-member-p'.  To get a list of all members belonging to
 ;; a particular family, see `mode-family-list-members', and to get a
 ;; list of all families to which a particular mode belongs, see
@@ -240,6 +240,22 @@ See the documentation for `mode-family-create' for more information."
                  (mode-family-list-families major-mode :inherit))))
 
 (add-hook 'change-major-mode-after-body-hook #'mode-family-run-hooks)
+
+
+;;; Unloading
+;;;==========
+(defun mode-family-unload-function ()
+  "Undo changes made to Emacs by mode-family.el.
+
+More specifically:
+
+- Remove `mode-family-run-hooks' from
+  `change-major-mode-after-body-hook'.
+
+- Delete all mode family hooks."
+  (remove-hook 'change-major-mode-after-body-hook #'mode-family-run-hooks)
+  (dolist (family mode-family--list)
+    (makunbound (mode-family--hook family))))
 
 
 (provide 'mode-family)
