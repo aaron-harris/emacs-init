@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Required features: `mode-family', `aph-ert', `cl-lib'
+;; Required features: `mode-family', `aph-ert'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,220 +22,172 @@
 ;;; Code:
 
 (require 'mode-family)
-(require 'aph-ert)                      ; For `aph/ert-with-test-mode'
+(require 'aph-ert)                      ; For `aph/ert-with-major-mode'
 
-(require 'cl-lib)                       ; For `cl-gensym'
+(eval-when-compile (require 'dash))     ; For `->>', `-lambda'
 
 
 ;;; Testing Apparatus
 ;;;==================
-(defmacro with-test-mode-family (name doc &rest body)
-  "Execute BODY in an environment with a temporary mode family.
+(defmacro mode-family-test (&rest body)
+  "Execute BODY in an \"safe\" environment w.r.t. mode families.
 
-More specifically:
-
-- Use `cl-gensym' to construct a name guaranteed not to already
-  be in use, and create a mode family (using `mode-family-create')
-  with this name and DOC as its docstring.
-
-- Execute BODY, with the name of the mode family bound to NAME
-  and the name of the associated hook variable bound to the
-  symbol NAME-hook.
-
-- Make sure the mode family created does not persist outside this
-  form, using `unwind-protect' to ensure the family is deleted in
-  the event of an error or nonlocal exit from BODY."
-  (declare (debug ((symbolp &optional symbolp) form body))
-           (indent 2))
-  (let ((hook  (aph/symbol-concat name "-hook"))) 
-    `(let* ((,name  (cl-gensym "family"))
-            (,hook  (mode-family--hook ,name)))
-       (unwind-protect
-           (progn (mode-family-create ,name ,doc)
-                  ,@body)
-         ;; Since family is uninterned, its symbol properties won't
-         ;; persist, but we need to clean up after hook, which was
-         ;; created with `defvar'.  It should suffice to unintern it.
-         (unintern ,hook)))))
-
-
-;;; Apparatus Testing: `with-test-mode-family'
-;;;===========================================
-(ert-deftest with-test-mode-family--body ()
-  "Test that body of `with-test-mode-family' is executed."
-  (aph/ert-macro-executes-body 'with-test-mode-family '(family "doc")))
-
-(ert-deftest with-test-mode-family--bindings ()
-  "Test that `with-test-mode-family' sets bindings correctly."
-  ;; Intentional bindings
-  (with-test-mode-family family "doc"
-    (should (symbolp family))
-    (should (symbolp family-hook))
-    (should (boundp family-hook))
-    (should (eq family-hook (mode-family--hook family)))))
-
-(ert-deftest with-test-mode-family--cleanup ()
-  "Test that `with-test-mode-family' cleans up after itself." 
-  ;; Normal exit 
-  (let (family-x hook-x)
-    (with-test-mode-family family "doc"
-      (setq family-x  family
-            hook-x    family-hook))
-    (should-not (intern-soft family-x))
-    (should-not (intern-soft hook-x)))
-  ;; Error
-  (let (family-x hook-x)
-    (ignore-errors
-      (with-test-mode-family family "doc"
-        (setq family-x  family
-              hook-x    family-hook)
-        (error "Triggered error")))
-    (should-not (intern-soft family-x))
-    (should-not (intern-soft hook-x))))
+Inside BODY, none of the mode families that normally exist will
+be in effect, and no changes made to mode families inside BODY
+will persist once BODY exits.  This includes changes to mode
+family hooks."
+  (declare (debug body)) 
+  `(let ((saved-hook-alist
+          (mapcar (lambda (family)
+                    (let ((family-hook (mode-family--hook family)))
+                      (prog1 `(,family . ,(->> family-hook
+                                               symbol-value
+                                               copy-list))
+                        (set family-hook nil))))
+                  mode-family--list))
+         mode-family--list
+         mode-family--alist)
+     (unwind-protect (progn ,@body)
+       (dolist (family mode-family--list)
+         (unless (memq family saved-hook-alist)          
+           (makunbound (mode-family--hook family))))
+       (mapc (-lambda ((family . hooks)) 
+               (set (mode-family--hook family) hooks))
+             saved-hook-alist))))
 
 
 ;;; Content Tests
 ;;;============== 
-(ert-deftest mode-family-test-pred ()
-  "Test functionality of `mode-family-p'."
-  (with-test-mode-family family "doc"
-    (should (mode-family-p family)))
-  (let ((family (make-symbol "family")))
-    (should-not (mode-family-p family))))
-
-(ert-deftest mode-family-test-create--init ()
-  "Test that `mode-family-create' initializes family correctly."
-  (with-test-mode-family family "doc"
-    (should (equal "doc" (get family 'mode-family-docstring)))
-    (should (boundp family-hook))
-    (should (null (symbol-value family-hook)))))
+(ert-deftest mode-family-test-create--basic ()
+  "Test basic functionality of `mode-family-create'."
+  (mode-family-test
+   (should-not (mode-family-p 'foo))
+   (mode-family-create 'foo)
+   (should (mode-family-p 'foo))
+   (should (boundp 'foo-family-hook))
+   (should (null foo-family-hook))))
 
 (ert-deftest mode-family-test-create--redef ()
-  "Test handling of existing families for `mode-family-create'."
-  (with-test-mode-family family "foo"
-    (add-hook family-hook #'ignore)
-    (aph/ert-with-major-mode mode 'text-mode
-      (mode-family-add mode family)
-      (mode-family-create family "bar")
-      (mode-family-create family nil)
-      (should (mode-family-p family))
-      (should (equal "bar" (get family 'mode-family-docstring)))
-      (should (equal (symbol-value family-hook) (list #'ignore)))
-      (should (mode-family-member-p mode family))))) 
-
-(ert-deftest mode-family-test-create--out-of-order ()
-  "Test that hooks can be added before family is defined."
-  (let ((family (cl-gensym "family")))
-    (add-hook (mode-family--hook family) #'ignore)
-    (mode-family-create family "doc")
-    (should (mode-family-p family))))
+  "Test handling of existing families for `mode-family-create'. 
+Also test adding hooks out-of-order."
+  (mode-family-test
+   (add-hook 'foo-family-hook #'ignore)
+   (mode-family-create 'foo)
+   (aph/ert-with-major-mode mode 'text-mode
+     (mode-family-add mode 'foo)
+     (mode-family-create 'foo)
+     (should (mode-family-p 'foo))
+     (should (equal foo-family-hook (list #'ignore)))
+     (should (mode-family-member-p mode 'foo)))))
 
 (ert-deftest mode-family-test-add/remove ()
-  "Test association of familiess to modes.
+  "Test association of families to modes.
 
 This test confirms basic functionality of the functions
 `mode-family-add', `mode-family-remove', and
-`mode-family-member-p'."
-  (with-test-mode-family family "doc" 
+`mode-family-member-p'." 
+  (mode-family-test
+   (mode-family-create 'foo)
     (aph/ert-with-major-mode mode 'text-mode
-      (mode-family-add mode family)
-      (should (mode-family-member-p mode family))
-      (mode-family-remove mode family)
-      (should-not (mode-family-member-p mode family)))))
+      (mode-family-add mode 'foo)
+      (should (mode-family-member-p mode 'foo))
+      (mode-family-remove mode 'foo)
+      (should-not (mode-family-member-p mode 'foo)))))
 
 (ert-deftest mode-family-test-add--new ()
   "Test `mode-family-add' when family doesn't yet exist."
-  (let ((family (cl-gensym "family")))
-    (aph/ert-with-major-mode mode 'text-mode
-      (unwind-protect
-          (progn
-            (mode-family-add mode family)
-            (should (mode-family-p family))
-            (should (mode-family-member-p mode family))
-            (mode-family-create family "doc")
-            (should (equal "doc" (get family 'mode-family-docstring))))
-        (unintern (mode-family--hook family))))))
+  (mode-family-test
+   (aph/ert-with-major-mode mode 'text-mode
+     (mode-family-add mode 'foo)
+     (should (mode-family-p 'foo))
+     (should (mode-family-member-p mode 'foo)))))
 
 (ert-deftest mode-family-test-member-p--inherit ()
   "Test `mode-family-member-p' on inherited mode families."
-  (with-test-mode-family family "doc"
-    (aph/ert-with-major-mode mode1 'text-mode
-      (aph/ert-with-major-mode mode2 mode1
-        (mode-family-add mode1 family)
-        (should (mode-family-member-p mode1 family))
-        (should-not (mode-family-member-p mode2 family))
-        (should (mode-family-member-p mode2 family :inherit))))))
+  (mode-family-test
+   (mode-family-create 'foo)
+   (aph/ert-with-major-mode mode1 'text-mode
+     (aph/ert-with-major-mode mode2 mode1
+       (mode-family-add mode1 'foo)
+       (should (mode-family-member-p mode1 'foo))
+       (should-not (mode-family-member-p mode2 'foo))
+       (should (mode-family-member-p mode2 'foo :inherit))))))
 
 (ert-deftest mode-family-test-lists ()
   "Test get-all functions for mode families.
 
 These functions are `mode-family-list-families' and
 `mode-family-list-members'."
-  (with-test-mode-family family "doc" 
+  (mode-family-test
+   (mode-family-create 'foo)
     (aph/ert-with-major-mode mode 'text-mode
-      (mode-family-add mode family)
-      (should (memq mode (mode-family-list-members family)))
-      (should (memq family (mode-family-list-families mode)))
-      (mode-family-remove mode family)
-      (should-not (memq mode (mode-family-list-members family)))
-      (should-not (memq family (mode-family-list-families mode))))))
+      (mode-family-add mode 'foo)
+      (should (memq mode (mode-family-list-members 'foo)))
+      (should (memq 'foo (mode-family-list-families mode)))
+      (mode-family-remove mode 'foo)
+      (should-not (memq mode (mode-family-list-members 'foo)))
+      (should-not (memq 'foo (mode-family-list-families mode))))))
 
 (ert-deftest mode-family-test-hooks--addition ()
   "Test that a mode runs its families' hooks."
-  (let (log)
-    (aph/ert-with-major-mode mode 'fundamental-mode
-      (with-test-mode-family family-1 "doc"
-        (with-test-mode-family family-2 "doc"
-          (add-hook family-1-hook (lambda () (push :hook1 log)))
-          (add-hook family-2-hook (lambda () (push :hook2 log)))
-          (mode-family-add mode family-1)
-          (mode-family-add mode family-2)
-          (with-temp-buffer
-            (funcall mode)
-            (should (memq :hook1 log))
-            (should (memq :hook2 log))))))))
+  (mode-family-test
+   (let (log)
+     (aph/ert-with-major-mode mode 'fundamental-mode
+       (mode-family-create 'foo)
+       (mode-family-create 'bar)
+       (add-hook 'foo-family-hook (lambda () (push :foo log)))
+       (add-hook 'bar-family-hook (lambda () (push :bar log)))
+       (mode-family-add mode 'foo)
+       (mode-family-add mode 'bar)
+       (with-temp-buffer
+         (funcall mode)
+         (should (memq :foo log))
+         (should (memq :bar log)))))))
 
 (ert-deftest mode-family-test-hooks--removal ()
   "Test that a mode doesn't run family hooks after removal."
-  (let (log)
-    (aph/ert-with-major-mode mode 'fundamental-mode
-      (with-test-mode-family family "doc"
-        (add-hook family-hook (lambda () (push :hook log)))
-        (mode-family-add mode family)
-        (mode-family-remove mode family)
-        (with-temp-buffer
-          (funcall mode)
-          (should-not (memq :hook log)))))))
+  (mode-family-test
+   (let (log)
+     (aph/ert-with-major-mode mode 'fundamental-mode
+       (mode-family-create 'foo)
+       (add-hook 'foo-family-hook (lambda () (push :hook log)))
+       (mode-family-add mode 'foo)
+       (mode-family-remove mode 'foo)
+       (with-temp-buffer
+         (funcall mode)
+         (should-not (memq :hook log)))))))
 
 (ert-deftest mode-family-test-hooks--partial-removal ()
   "Test that removing a family doesn't remove all family hooks."
-  (let (log)
-    (aph/ert-with-major-mode mode 'fundamental-mode
-      (with-test-mode-family family-1 "doc"
-        (with-test-mode-family family-2 "doc"
-          (add-hook family-1-hook (lambda () (push :hook1 log)))
-          (add-hook family-2-hook (lambda () (push :hook2 log)))
-          (mode-family-add mode family-1)
-          (mode-family-add mode family-2)
-          (mode-family-remove mode family-2)
-          (with-temp-buffer
-            (funcall mode)
-            (should (memq :hook1 log))
-            (should-not (memq :hook2 log))))))))
+  (mode-family-test 
+   (let (log)
+     (aph/ert-with-major-mode mode 'fundamental-mode
+       (mode-family-create 'foo)
+       (mode-family-create 'bar)
+       (add-hook 'foo-family-hook (lambda () (push :foo log)))
+       (add-hook 'bar-family-hook (lambda () (push :bar log)))
+       (mode-family-add mode 'foo)
+       (mode-family-add mode 'bar)
+       (mode-family-remove mode 'bar)
+       (with-temp-buffer
+         (funcall mode)
+         (should (memq :foo log))
+         (should-not (memq :bar log)))))))
 
 (ert-deftest mode-family-test-hooks--inheritance ()
   "Test that a mode runs its ancestors' family hooks (only once)."
-  (let (log)
-    (aph/ert-with-major-mode mode1 'fundamental-mode
-      (aph/ert-with-major-mode mode2 mode1
-        (aph/ert-with-major-mode mode3 mode2
-          (with-test-mode-family family "doc"
-            (add-hook family-hook (lambda () (push :hook log)))
-            (mode-family-add mode1 family)
-            (mode-family-add mode2 family)
-            (with-temp-buffer
-              (funcall mode3)
-              (should (equal log '(:hook))))))))))
+  (mode-family-test 
+   (mode-family-create 'foo) 
+   (let (log)
+     (aph/ert-with-major-mode     mode1  'fundamental-mode
+       (aph/ert-with-major-mode   mode2  mode1
+         (aph/ert-with-major-mode mode3  mode2
+           (add-hook 'foo-family-hook (lambda () (push :hook log)))
+           (mode-family-add mode1 'foo)
+           (mode-family-add mode2 'foo)
+           (with-temp-buffer
+             (funcall mode3)
+             (should (equal log '(:hook))))))))))
 
 
 (provide 'mode-family-test)

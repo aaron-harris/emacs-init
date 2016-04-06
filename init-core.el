@@ -72,10 +72,8 @@
 ;;;==============
 (use-package mode-family
   :config
-  (mode-family-create 'clojure
-    "Tag for modes used to edit Clojure, including REPLs.")
-  (mode-family-create 'lisp
-    "Tag for modes used to edit any sort of Lisp, including REPLs."))
+  (mode-family-create 'clojure)
+  (mode-family-create 'lisp))
 
 
 ;;; Configuration: Source-Level
