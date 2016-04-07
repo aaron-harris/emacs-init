@@ -54,12 +54,7 @@
 ;; Packages in this section are loaded early so we can use them in
 ;; subsequent package declarations.
 
-(use-package umbra
-  :bind (("C-x C-#" . umbra-mode))
-  :bind (:map umbra-mode-map
-              ("<return>" . umbra-default-return-command)
-              ("<tab>"    . umbra-default-tab-command))
-  :init (umbra-mode))
+(use-package aph-keys)
 
 (use-package hydra
   :ensure t
@@ -69,6 +64,13 @@
 
 (use-package mode-family
   :defer t)
+
+(use-package umbra
+  :bind (("C-x C-#" . umbra-mode))
+  :bind (:map umbra-mode-map
+              ("<return>" . umbra-default-return-command)
+              ("<tab>"    . umbra-default-tab-command))
+  :init (umbra-mode))
 
 
 ;;; Configuration: Source-Level
@@ -136,20 +138,6 @@
                 ("C-i" . aph/align))
   :bind (:umbra prog-mode
                 ("C-i" . aph/align)))
-
-(use-package aph-keys
-  :bind (:map umbra-mode-map
-              ;; Liberating C-M-[ from legacy of escape
-              ("<escape> <escape> <escape>" . keyboard-escape-quit)
-              ("ESC ESC ESC"                . undefined)
-              ("M-ESC :"                    . undefined)) 
-  :demand t
-  :config
-  ;; Key liberation
-  (aph/keys-liberate-escape)
-  (add-hook 'after-make-frame-functions #'aph/keys-liberate-escape)
-  ;; Map <kp-enter> to <return> rather than to RET (C-m) 
-  (define-key function-key-map (kbd "<kp-enter>") (kbd "<return>")))
 
 (use-package aph-mpc
   :if (eq aph/machine 'mpc)
@@ -620,6 +608,20 @@
 (use-package aph-keypad
   :bind (:map umbra-mode-map 
               ("C-<kp-enter>" . aph/keypad-enter-toggle-newline)))
+
+(use-package liberate-key
+  :bind (:map umbra-mode-map
+              ;; Liberating C-M-[ from legacy of escape
+              ("<escape> <escape> <escape>" . keyboard-escape-quit)
+              ("ESC ESC ESC"                . undefined)
+              ("M-ESC :"                    . undefined)) 
+  :demand t
+  :config
+  ;; Key liberation
+  (liberate-key-escape) 
+  (add-hook 'after-make-frame-functions #'liberate-key-escape)
+  ;; Map <kp-enter> to <return> rather than to RET (C-m) 
+  (define-key function-key-map (kbd "<kp-enter>") (kbd "<return>")))
 
 (use-package lisp-mode 
   :config 
