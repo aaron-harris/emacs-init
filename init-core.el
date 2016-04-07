@@ -1090,6 +1090,10 @@
   (aph/which-func-use-header-line)
   (add-to-list 'which-func-functions #'aph/which-function-org))
 
+(use-package whitespace
+  :bind (:map umbra-mode-map
+              ("s-<apps> w" . whitespace-cleanup)))
+
 (use-package aph-window
   :bind (:map umbra-mode-map
               ;; Scrolling and Positioning
