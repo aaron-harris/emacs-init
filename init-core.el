@@ -104,19 +104,19 @@
   (put command 'disabled nil))
 
 ;; Keybindings for source-defined commands
-(bind-keys :map umbra-mode-map
+(bind-keys :map umbra-mode-map 
            ("<up>"           . scroll-down-line)
-           ("<down>"         . scroll-up-line)
-           ("C-]"            . other-window)
-           ("C-M-g"          . abort-recursive-edit)
-           ("C-S-t"          . transpose-paragraphs)
-           ("C-M-\\"         . toggle-input-method)
-           ("s-<apps> k"     . flush-lines)
-           ("s-<apps> M-k"   . keep-lines) 
+           ("<down>"         . scroll-up-line) 
+           ("C-]"            . other-window) 
            ("C-'"            . query-replace)
-           ("M-'"            . query-replace-regexp)
-           ("s-<apps> <tab>" . indent-region)
-           ("M-i"            . indent-relative))
+           ("M-'"            . query-replace-regexp) 
+           ("M-i"            . indent-relative)
+           ("C-M-g"          . abort-recursive-edit)
+           ("C-M-\\"         . toggle-input-method)
+           ("C-S-t"          . transpose-paragraphs)
+           ("s-<apps> k"     . flush-lines)
+           ("s-<apps> M-k"   . keep-lines)
+           ("s-<apps> <tab>" . indent-region))
 
 
 ;;; Package Configuration
