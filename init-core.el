@@ -836,6 +836,10 @@
               ("C-m"     . copy-to-register) 
               ("C-M-m"   . increment-register)))
 
+(use-package s
+  :ensure t
+  :defer t)
+
 (use-package saveplace
   :config
   (setq-default save-place t)
