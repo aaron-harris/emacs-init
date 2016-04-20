@@ -54,7 +54,7 @@
 ;; Packages in this section are loaded early so we can use them in
 ;; subsequent package declarations.
 
-(use-package aph-keys)
+(use-package chimera)
 
 (use-package hydra
   :ensure t
@@ -671,9 +671,7 @@
                 ([remap next-error] . org-cycle-agenda-files)
                 ;; Following bindings restore `org-mode' keys
                 ;; unintentionally shadowed by `umbra-mode'
-                ("C-o"              . org-open-line)
-                :when ((org-table-p))
-                ("S-<return>"       . org-table-copy-down))
+                ("C-o"              . org-open-line))
   :bind (:penumbra org-mode
                    ("C-M-[" . org-metaleft)
                    ("C-M-]" . org-metaright)
@@ -681,6 +679,9 @@
   :config
   (message "Loading org...")         ; Because this may take a while. 
   (use-package init-org)
+  (bind-keys
+   ("S-<return>" . (chimera "chimera/org-table-copy-down"
+                     (when (org-table-p) #'org-table-copy-down))))
   (message "Loading org...done"))
 
 (use-package aph-org
