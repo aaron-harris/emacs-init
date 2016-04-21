@@ -131,6 +131,35 @@ is unavailable if RANGES is presented as a list."
    ((listp ranges)    (cde--list ranges))
    ((stringp ranges)  (cde--string ranges))))
 
+;;;###autoload
+(defun cde-format (&optional verbose)
+  "Convert word at point with `cde'.
+
+If the text at point looks like a suitable input for `cde',
+replace it with a string of the form
+
+    N (RANGES)
+
+where RANGES is the original word and N is the result of calling
+`cde' on RANGES.  The return value is the text inserted.
+
+If the text at point is not suitable for `cde', do nothing and
+return nil.  Interactively, or with VERBOSE non-nil, print an
+explanatory message."
+  (interactive "p")
+  (require 'dash)
+  (-let ((ranges         (thing-at-point 'symbol))
+         ((start . end)  (bounds-of-thing-at-point 'symbol)))
+    (cond
+     ;; Format if possible
+     ((string-match-p "^\\([0-9]+[AB]?[,-]?\\)+" ranges)
+      (setf (buffer-substring start end)
+            (format "%d (%s)" (cde ranges) ranges)))
+     ;; Display message if desired
+     (verbose
+      (message "Cannot use `cde' at point")
+      nil))))
+
 
 ;;; Calc Bar
 ;;;=========

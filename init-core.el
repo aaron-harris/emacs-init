@@ -144,7 +144,8 @@
   :bind (:map umbra-mode-map
               ("C-x C-y"   . aph/mpc-yank-access-inline)
               ("C-x C-S-y" . aph/mpc-yank-access-overfull)
-              ("C-z C-="   . aph/mpc-calc-bar)))
+              ("C-z C-="   . aph/mpc-calc-bar)
+              ("C-c C-="   . cde-format)))
 
 (use-package aph-number-lines
   :bind (:map umbra-mode-map
