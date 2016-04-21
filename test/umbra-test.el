@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Required features: `umbra', `dash', `aph-dash', `aph-ert-test'
+;; Dependencies: `umbra', `dash', `aph-dash', `aph-ert-test'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

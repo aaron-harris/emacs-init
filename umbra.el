@@ -5,7 +5,9 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience keybinding
 
-;; Required features: `aph-symbol', `aph-plist' (only with `bind-key')
+;; Dependencies: `aph-symbol', `aph-plist' (only with `bind-key')
+;; Advised functions from other packages:
+;;   bind-key: `bind-keys'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
