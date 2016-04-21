@@ -3,22 +3,6 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-mpc" "aph-mpc.el" (22194 22352 298961
-;;;;;;  500000))
-;;; Generated autoloads from aph-mpc.el
-
-(autoload 'cde "aph-mpc" "\
-Count the numbers in RANGES.
-
-Here, RANGES may either be a comma-separated string of hyphenated
-ranges, e.g. \"1-5,7,8-15\", or a list encoding the same
-information, e.g., '((1 5) 7 (8 15)). For both of the examples above,
-cde will return 14.
-
-\(fn RANGES)" nil nil)
-
-;;;***
-
 ;;;### (autoloads nil "aph-org" "aph-org.el" (22257 53869 994247
 ;;;;;;  700000))
 ;;; Generated autoloads from aph-org.el
@@ -64,6 +48,45 @@ Store the current eww url as an Org-Mode link.
 
 (defvar aph/help-window-names '("*Help*" "*Apropos*" "*Messages*" "*Completions*" "*Command History*" "*Compile-Log*" "*disabled command*") "\
 Names of buffers that `aph/quit-help-windows' should quit.")
+
+;;;***
+
+;;;### (autoloads nil "cde" "cde.el" (22297 20382 476162 300000))
+;;; Generated autoloads from cde.el
+
+(autoload 'cde "cde" "\
+Count the numbers in RANGES.
+
+Here, RANGES may either be a comma-separated string of hyphenated
+ranges, e.g. \"1-5,7,8-15\", or a list encoding the same
+information, e.g., '((1 5) 7 (8 15)). For both of the examples above,
+cde will return 14.
+
+Additionally, the alphabetic character \"A\" and \"B\" are
+interpreted as sides of a page, with the page size given by
+`cde-page-size'.  Thus if `cde-page-size' is 50 (the default),
+then the string \"5A\" will be interpreted as the integer 5,
+while the string \"5B\" will be interpreted as 55.  This feature
+is unavailable if RANGES is presented as a list.
+
+\(fn RANGES)" nil nil)
+
+(autoload 'cde-format "cde" "\
+Convert word at point with `cde'.
+
+If the text at point looks like a suitable input for `cde',
+replace it with a string of the form
+
+    N (RANGES)
+
+where RANGES is the original word and N is the result of calling
+`cde' on RANGES.  The return value is the text inserted.
+
+If the text at point is not suitable for `cde', do nothing and
+return nil.  Interactively, or with VERBOSE non-nil, print an
+explanatory message.
+
+\(fn &optional VERBOSE)" t nil)
 
 ;;;***
 
@@ -178,21 +201,21 @@ penumbra map instead.
 
 ;;;***
 
-;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-bind-key.el"
-;;;;;;  "aph-browse-url.el" "aph-comparators.el" "aph-cygwin.el"
-;;;;;;  "aph-dash.el" "aph-elfeed.el" "aph-ert.el" "aph-face-remap.el"
-;;;;;;  "aph-files.el" "aph-font-lock.el" "aph-forms.el" "aph-frame.el"
-;;;;;;  "aph-framewin.el" "aph-haskell.el" "aph-helm-forms.el" "aph-helm-projectile.el"
-;;;;;;  "aph-helm.el" "aph-help.el" "aph-ielm.el" "aph-iimage.el"
-;;;;;;  "aph-info.el" "aph-keypad.el" "aph-keys.el" "aph-latex.el"
-;;;;;;  "aph-lexical.el" "aph-lisp-mode.el" "aph-message.el" "aph-number-lines.el"
-;;;;;;  "aph-org-agenda.el" "aph-org-capture.el" "aph-org-table.el"
-;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-rect.el"
-;;;;;;  "aph-shr.el" "aph-silence.el" "aph-simple.el" "aph-smartparens.el"
-;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-theme.el" "aph-w32.el"
-;;;;;;  "aph-which-func.el" "init-core.el" "init-draft.el" "init-elfeed.el"
-;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el")
-;;;;;;  (22277 35673 167532 500000))
+;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
+;;;;;;  "aph-comparators.el" "aph-cygwin.el" "aph-dash.el" "aph-elfeed.el"
+;;;;;;  "aph-ert.el" "aph-face-remap.el" "aph-files.el" "aph-font-lock.el"
+;;;;;;  "aph-forms.el" "aph-frame.el" "aph-framewin.el" "aph-haskell.el"
+;;;;;;  "aph-helm-forms.el" "aph-helm-projectile.el" "aph-helm.el"
+;;;;;;  "aph-help.el" "aph-ielm.el" "aph-iimage.el" "aph-info.el"
+;;;;;;  "aph-keypad.el" "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el"
+;;;;;;  "aph-message.el" "aph-mpc.el" "aph-number-lines.el" "aph-org-agenda.el"
+;;;;;;  "aph-org-capture.el" "aph-org-table.el" "aph-outline.el"
+;;;;;;  "aph-page.el" "aph-plist.el" "aph-rect.el" "aph-shr.el" "aph-silence.el"
+;;;;;;  "aph-simple.el" "aph-smartparens.el" "aph-subr.el" "aph-symbol.el"
+;;;;;;  "aph-theme.el" "aph-w32.el" "aph-which-func.el" "chimera.el"
+;;;;;;  "init-core.el" "init-draft.el" "init-elfeed.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "liberate-key.el") (22297
+;;;;;;  20394 989798 100000))
 
 ;;;***
 
