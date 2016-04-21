@@ -144,8 +144,7 @@
   :bind (:map umbra-mode-map
               ("C-x C-y"   . aph/mpc-yank-access-inline)
               ("C-x C-S-y" . aph/mpc-yank-access-overfull)
-              ("C-z C-="   . aph/mpc-calc-bar)
-              ("C-c C-="   . cde-format)))
+              ("C-z C-="   . aph/mpc-calc-bar)))
 
 (use-package aph-number-lines
   :bind (:map umbra-mode-map
@@ -221,6 +220,11 @@
 (use-package calc
   :bind (:map umbra-mode-map
               ("C-z C-c" . calc)))
+
+(use-package cde
+  :if (eq aph/machine 'mpc)
+  :bind (:map umbra-mode-map
+              ("C-c C-="   . cde-format)))
 
 (use-package cider
   :ensure t
