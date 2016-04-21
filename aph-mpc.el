@@ -106,11 +106,12 @@ As `cde', but RANGES must be in list form."
   "Count the numbers in RANGES.
 
 As `cde', but RANGES must be in string form."
-  (->> (split-string ranges ",")
-       (mapcar (lambda (range)
-                 (->> (split-string range "-") 
-                      (mapcar #'cde--unpage))))
-       (cde--list)))
+  (save-match-data
+    (->> (split-string ranges ",")
+         (mapcar (lambda (range)
+                   (->> (split-string range "-") 
+                        (mapcar #'cde--unpage))))
+         (cde--list))))
 
 ;;;###autoload
 (defun cde (ranges)
@@ -147,19 +148,15 @@ If the text at point is not suitable for `cde', do nothing and
 return nil.  Interactively, or with VERBOSE non-nil, print an
 explanatory message."
   (interactive "p")
-  (require 'dash)
-  ;; We're abusing `thing-at-point' here since we're not actually
-  ;; looking for a filename.  But this is easy and seems to give us
-  ;; the correct results.
-  (-let ((ranges         (thing-at-point 'filename))
-         ((start . end)  (bounds-of-thing-at-point 'filename)))
+  (save-match-data
     (cond
-     ;; Format if possible
-     ((and (stringp ranges)
-           (string-match-p "^\\([0-9]+[AB]?[,-]?\\)+" ranges))
-      (setf (buffer-substring start end)
-            (format "%d (%s)" (cde ranges) ranges)))
-     ;; Display message if desired
+     ;; On successful match, do the replacement
+     ((thing-at-point-looking-at
+       "(?\\(\\(?:[0-9]+[AB]?[,-]?\\)*[0-9]+[AB]?\\))?\\(,?\\)")
+      (let ((ranges  (match-string 1))
+            (tail    (match-string 2)))
+        (replace-match (format "%d (%s)%s" (cde ranges) ranges tail))))
+     ;; Otherwise, maybe display a message.
      (verbose
       (message "Cannot use `cde' at point")
       nil))))
