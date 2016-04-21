@@ -72,6 +72,25 @@ THRESHOLD is nil or omitted, it defaults to the value of
 ;; Because of this, they depart from my usual convention of using
 ;; "aph/" as a prefix.
 
+(defvar cde-page-size 50
+  "The increment size for alphabetic characters in `cde'.
+See the documentation of `cde' for more information.")
+
+(defun cde--unpage (ref)
+  "Convert REF to an integer using `cde-page-size'.
+Here REF should be a string of the form \"nX\", where n is an
+integer and X is any string.
+
+The return value is n unless X is the string \"B\", in which case
+it is n plus the value of `cde-page-size'.
+
+This function is used as a subroutine by `cde'."
+  (save-match-data
+    (string-match "\\([0-9]+\\)\\(B?\\)" ref)
+    (let ((n  (string-to-int (match-string 1 ref)))
+          (x  (match-string 2 ref)))
+      (+ n (if (equal x "B") cde-page-size 0)))))
+
 (defun cde--list (ranges)
   "Count the numbers in RANGES.
 
@@ -89,8 +108,8 @@ As `cde', but RANGES must be in list form."
 As `cde', but RANGES must be in string form."
   (->> (split-string ranges ",")
        (mapcar (lambda (range)
-                 (->> (split-string range "-")
-                      (mapcar #'string-to-int))))
+                 (->> (split-string range "-") 
+                      (mapcar #'cde--unpage))))
        (cde--list)))
 
 ;;;###autoload
@@ -100,7 +119,14 @@ As `cde', but RANGES must be in string form."
 Here, RANGES may either be a comma-separated string of hyphenated
 ranges, e.g. \"1-5,7,8-15\", or a list encoding the same
 information, e.g., '((1 5) 7 (8 15)). For both of the examples above,
-cde will return 14."
+cde will return 14.
+
+Additionally, the alphabetic character \"A\" and \"B\" are
+interpreted as sides of a page, with the page size given by
+`cde-page-size'.  Thus if `cde-page-size' is 50 (the default),
+then the string \"5A\" will be interpreted as the integer 5,
+while the string \"5B\" will be interpreted as 55.  This feature
+is unavailable if RANGES is presented as a list."
   (cond
    ((listp ranges)    (cde--list ranges))
    ((stringp ranges)  (cde--string ranges))))
