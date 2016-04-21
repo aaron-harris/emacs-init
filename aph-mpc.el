@@ -148,11 +148,15 @@ return nil.  Interactively, or with VERBOSE non-nil, print an
 explanatory message."
   (interactive "p")
   (require 'dash)
-  (-let ((ranges         (thing-at-point 'symbol))
-         ((start . end)  (bounds-of-thing-at-point 'symbol)))
+  ;; We're abusing `thing-at-point' here since we're not actually
+  ;; looking for a filename.  But this is easy and seems to give us
+  ;; the correct results.
+  (-let ((ranges         (thing-at-point 'filename))
+         ((start . end)  (bounds-of-thing-at-point 'filename)))
     (cond
      ;; Format if possible
-     ((string-match-p "^\\([0-9]+[AB]?[,-]?\\)+" ranges)
+     ((and (stringp ranges)
+           (string-match-p "^\\([0-9]+[AB]?[,-]?\\)+" ranges))
       (setf (buffer-substring start end)
             (format "%d (%s)" (cde ranges) ranges)))
      ;; Display message if desired
