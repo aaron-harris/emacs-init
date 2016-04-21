@@ -75,6 +75,12 @@
 ;; This module was inspired by a blog post by Artur Malabarba:
 ;;   http://endlessparentheses.com/define-context-aware-keys-in-emacs.html
 
+;;; Known issues:
+
+;; * While `chimera' works in `bind-keys', it doesn't work in the
+;;   :bind section of a `use-package' form.  In most cases, you can
+;;   work around this by using `bind-keys' in a :config block.
+
 ;;; Code:
 
 (eval-when-compile 'cl-lib)
@@ -121,8 +127,8 @@ If RAW is non-nil, return non-nil only for unexpanded chimeras."
    (:else                                      nil)))
 
 
-;;; `bind-key' support
-;;;===================
+;;;; `bind-key' support
+;;;;===================
 (defun chimera--bind-keys-advice (args)
   "Advice to add `chimera' support to `bind-keys'.
 
@@ -179,8 +185,8 @@ the return value is \"foo\"."
             #'chimera--get-binding-description-advice)
 
 
-;;; Unloading
-;;;==========
+;;;; Unloading
+;;;;==========
 (defun chimera-unload-function ()
   "Undo changes made to Emacs for `chimera'.
 
