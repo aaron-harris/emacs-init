@@ -32,6 +32,7 @@
    ("http://ps238.nodwick.com/?feed=rss2" comics link)
    ("http://pvponline.com/feed" comics link)
    ("http://samandfuzzy.com/rss.php" comics link)
+   ("http://sharksplode.com/feed/" comics)
    ("http://skin-horse.com/feed/" comics link)
    ("http://tabletitans.com/feed" comics link)
    ("http://www.alicegrove.com/rss" comics link)
