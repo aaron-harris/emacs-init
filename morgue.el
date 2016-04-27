@@ -1,4 +1,4 @@
-;;; filet.el --- In-place kill ring processing       -*- lexical-binding: t; -*-
+;;; morgue.el --- In-place kill ring processing      -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016  Aaron Harris
 
@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-(defun filet (transform)
+(defun morgue-transform (transform)
   "Apply TRANSFORM to most recent kill.
 
 TRANSFORM should be a function taking a single string and
@@ -35,6 +35,28 @@ that the original kill is not removed.
 Return the new kill."
   (kill-new (funcall transform (current-kill 0))))
 
+
+;;; Transforms
+;;;===========
+(defun morgue-map (old-seps new-sep &optional transform)
+  "Return function applying TRANSFORM to each part of a string.
 
-(provide 'filet)
-;;; filet.el ends here
+TRANSFORM should be a function taking a single string and
+producing a new string.  If it is omitted, `identity' is used.
+
+The function returned takes in a string, splits it on OLD-SEPS (a
+regexp), applies TRANSFORM to each substring, then joins these
+together with NEW-SEP as a separator, returning the result.
+
+As a special case, if OLD-SEPS is nil, the value of
+`split-string-default-separators' is used, as in
+`split-string'."
+  (let ((transform (or transform #'identity)))
+    (lambda (s)
+      (mapconcat transform
+                 (split-string s old-seps)
+                 new-sep))))
+
+
+(provide 'morgue)
+;;; morgue.el ends here
