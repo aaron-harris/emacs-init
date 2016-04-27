@@ -9,8 +9,8 @@
 ;;; Bootstrapping Variables
 ;;;========================
 ;; These variables should have been set by the bootstrapper.
-(defvar aph/init-path "~/sync/emacs/init"
-  "The path to the directory containing my init files.")
+(defvar aph/sync-directory "~/sync"
+  "The path to my Dropbox folder on the current machine.")
 
 (defvar aph/machine 'default
   "A symbol denoting the specific PC being used.")
@@ -28,13 +28,17 @@
 
 ;;; Package Loading
 ;;;================
-(add-to-list 'load-path (expand-file-name aph/init-path)) 
+(add-to-list 'load-path
+             (expand-file-name (concat aph/sync-directory "/emacs/init")))
 
 (require 'package)
 
-(setq package-user-dir "~/sync/emacs/elpa") 
+(setq package-user-dir
+      (expand-file-name (concat aph/sync-directory "/emacs/elpa")))
+
 (setq package-archives
       (and (not (eq aph/machine 'mpc))
+           (not (eq aph/machine 'portable))
            '(("elpa"      . "http://elpa.gnu.org/packages/")
              ("marmalade" . "https://marmalade-repo.org/packages/")
              ("melpa"     . "https://melpa.org/packages/"))))
@@ -349,7 +353,8 @@
   :bind (:umbra emacs-lisp-mode
                 ("C-c C-t" . ert))
   :init 
-  (add-to-list 'load-path (expand-file-name (concat aph/init-path "/test"))))
+  (add-to-list 'load-path (expand-file-name (concat aph/sync-directory
+                                                    "/emacs/init/test"))))
 
 (use-package eww
   :bind (:map umbra-mode-map ("C-z C-w" . eww))
