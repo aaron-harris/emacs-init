@@ -39,6 +39,12 @@ Return the new kill."
       (setq kill (funcall (pop transforms) kill)))
     (kill-new kill)))
 
+(defun morgue-yank (&rest transforms)
+  "As `morgue-apply', and yank the result at point."
+  (let ((result  (apply #'morgue-apply transforms)))
+    (insert-for-yank result)
+    result))
+
 
 ;;; Transforms
 ;;;===========

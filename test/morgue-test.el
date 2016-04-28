@@ -84,6 +84,19 @@ appropriately."
     (lambda (s) (concat s s)))
   (morgue-test-all "Foo" "Foo"))
 
+(ert-deftest morgue-test-yank ()
+  "Test `morgue-yank'."
+  (let (kill-ring)
+    (with-temp-buffer
+      (kill-new "Foo")
+      (should (equal "FooFoobar"
+                     (morgue-yank (lambda (s) (concat s s))
+                                  (lambda (s) (concat s "bar")))))
+      (should (equal "FooFoobar"
+                     (buffer-string)))
+      (should (equal '("FooFoobar" "Foo")
+                     kill-ring)))))
+
 
 ;;; Transform Tests
 ;;;================
