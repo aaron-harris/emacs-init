@@ -5,6 +5,8 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience kill-ring
 
+;; Dependencies: `dash', `s'
+
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
@@ -20,13 +22,40 @@
 
 ;;; Commentary:
 
-;; 
+;; This module contains functions for editing the contents of the kill
+;; ring (specifically, the most recent kill) in-place; that is,
+;; without yanking it into a buffer first.
+;;
+;; To use this code, just require the module, then call `morgue-apply'
+;; with suitable transforms (functions taking a string to another
+;; string).  This will apply those transforms in sequence and put the
+;; result onto the kill ring (without disturbing the original).
+;;
+;; Alternatively, you could use `morgue-yank', which is just like
+;; `morgue-apply' except it yanks the result, too.
+;;
+;; The remaining functions define transforms usable with either of
+;; these functions.  A brief list follows.
+;;
+;; - `morgue-map' is a higher-level transform that applies its
+;;   argument to each chunk of a kill; the chunks can be specified
+;;   using regexps.  This function is also useful for changing the
+;;   delimiters within a string.  For instance, to change all newlines
+;;   to tabs, you could use this transform:
+;;
+;;     (morgue-map #'identity "\n" "\t")
+;;
+;; - `morgue-zap' ignores the part of the kill preceding the given
+;;   string and returns the rest.
 
 ;;; Code:
 
 (require 'dash)
 (require 's)
 
+
+;;; Applicators
+;;;============
 (defun morgue-apply (&rest transforms)
   "Apply TRANSFORMS to most recent kill.
 
