@@ -105,9 +105,9 @@ The returned function takes a string and returns the substring
 starting after the first instance of SEP (a string) and
 continuing to the end."
   (lambda (s)
-    (->> (split-string s char)
+    (->> (split-string s sep)
          cdr
-         (s-join char))))
+         (s-join sep))))
 
 
 (provide 'morgue)
