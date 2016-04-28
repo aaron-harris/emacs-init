@@ -22,7 +22,14 @@
 
 ;;; Commentary:
 
-;; 
+;; This module contains commands that yank text originating from other
+;; applications while "cleaning it up" in some way.  See the
+;; individual functions for more information.
+;;
+;; Because these commands are designed for very specific
+;; circumstances, none of them are autoloaded by default.  To use
+;; them, you must first require this module or autoload specific
+;; commands yourself.
 
 ;;; Code:
 
@@ -44,6 +51,13 @@ the field names, which this function removes."
   (interactive)
   (morgue-yank
    (morgue-zap "\n")))
+
+(defun jerk-access-inline ()
+  "As `jerk-access', but also convert all whitespace to spaces."
+  (interactive)
+  (morgue-yank
+   (morgue-zap "\n")
+   (morgue-map #'identity "[[:space:]]" " ")))
 
 
 (provide 'jerk)
