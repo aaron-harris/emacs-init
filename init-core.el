@@ -146,13 +146,6 @@
   :bind (:umbra prog-mode
                 ("C-i" . aph/align)))
 
-(use-package aph-mpc
-  :if (eq aph/machine 'mpc)
-  :bind (:map umbra-mode-map
-              ("C-x C-y"   . aph/mpc-yank-access-inline)
-              ("C-x C-S-y" . aph/mpc-yank-access-overfull)
-              ("C-z C-="   . aph/mpc-calc-bar)))
-
 (use-package aph-number-lines
   :bind (:map umbra-mode-map
               ("s-<apps> n"       . aph/number-lines)
@@ -617,6 +610,11 @@
               ("C-h i" . aph/info-mode-or-clone-buffer))
   :bind (:umbra Info-mode
                 ("0" . aph/Info-final-menu-item)))
+
+(use-package jerk
+  :if (eq aph/machine 'mpc)
+  :bind (:map umbra-mode-map
+              ("C-x C-y" . jerk-access-inline)))
 
 (use-package aph-keypad
   :bind (:map umbra-mode-map 
