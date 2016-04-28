@@ -106,5 +106,11 @@ appropriately."
     ((morgue-map (lambda (s) (concat s s))) . "FooFoo\nbarbar")
     ((morgue-map #'identity "\nbar" " ")    . "FooFoo bar")))
 
+(ert-deftest morgue-test-zap ()
+  "Test `morgue-zap'."
+  (morgue-test "Foo\nbar\nbaz"
+    ((morgue-zap "\n") . "bar\nbaz")
+    ((morgue-zap "ba") . "r\nbaz")))
+
 (provide 'morgue-test)
 ;;; morgue-test.el ends here

@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+(require 'dash)
+(require 's)
+
 (defun morgue-apply (&rest transforms)
   "Apply TRANSFORMS to most recent kill.
 
@@ -65,6 +68,17 @@ so that TRANSFORM is applied to individual lines."
       (mapconcat transform
                  (split-string s old-seps)
                  new-sep))))
+
+(defun morgue-zap (sep)
+  "Return function that ignores prefix of string delimited by SEP.
+
+The returned function takes a string and returns the substring
+starting after the first instance of SEP (a string) and
+continuing to the end."
+  (lambda (s)
+    (->> (split-string s char)
+         cdr
+         (s-join char))))
 
 
 (provide 'morgue)
