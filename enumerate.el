@@ -1,18 +1,74 @@
-;;; -*- lexical-binding: t -*-
+;;; enumerate.el --- Number lines in the region      -*- lexical-binding: t; -*-
 
-;;;; The Emacs init files of Aaron Harris:
-;;;; LINE NUMBERING FUNCTIONS
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-;; This module provides commands that number the lines in the region
-;; in various ways, or modify line numbers already present.  These
-;; functions are similar to, but not directly extensions of,
-;; `rectangle-number-line'.
+;; Author: Aaron Harris <meerwolf@gmail.com>
+;; Keywords: convenience
+
+;; Dependencies: `dash'
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; This module contains commands that number the lines in the region
+;; in various ways.  These functions are similar to, but not directly
+;; extensions of, `rectangle-number-line'.
+;;
+;; The basic command is `enumerate-lines'.  This adds line numbers to
+;; each line in the region.  With a prefix argument, it can start the
+;; numbering at a number other than 1.
+;;
+;; There is also `enumerate-alpha'.  This adds line numbers to each
+;; line in the region, but according to how they would be sorted
+;; alphabetically, instead of their current position.
+;;
+;; Both commands are autoloaded.
+
+;;; Code:
+
+(require 'dash)
 
 
-;;; Line Numbering
-;;;===============
-(defun aph/number-lines (beg end &optional offset eol sep format-str)
+;;; Subroutines
+;;;============
+(defun enumerate--bol (&optional pos)
+  "Return position of first character on line containing POS.
+If POS is omitted, use position of point.
+
+Do not move point."
+  (save-excursion
+    (let ((pos (or pos (point))))
+      (goto-char pos)
+      (line-beginning-position))))
+
+(defun enumerate--eol (&optional pos)
+  "Return position of last character on line containing POS.
+If POS is omitted, use position of point.
+
+Do not move point."
+  (save-excursion
+    (let ((pos (or pos (point))))
+      (goto-char pos)
+      (line-end-position))))
+
+
+;;; Commands
+;;;=========
+
+;;;###autoload
+(defun enumerate-lines (beg end &optional offset eol sep format-str)
   "Insert a number for each line in the region.
 Non-interactively, act on the text between BEG and END.
 
@@ -41,10 +97,8 @@ will be replaced with the maximum number of digits of any line
 number before the other escapes are interpreted.  The default
 value for FORMAT-STR is \"%%%nd\"."
   (interactive "r\np")
-  (require 'aph-subr)               ; For `aph/get-bol', `aph/get-eol'
-  (require 'dash)                   ; For `->>'
-  (let* ((beg        (if (use-region-p) (aph/get-bol beg) (point-min)))
-         (end        (if (use-region-p) (aph/get-eol end) (point-max)))
+  (let* ((beg        (if (use-region-p) (enumerate--bol beg) (point-min)))
+         (end        (if (use-region-p) (enumerate--eol end) (point-max)))
          (offset     (1- (or offset 1)))
          (sep        (or sep " "))
          (format-str (or format-str "%%%nd"))
@@ -68,24 +122,24 @@ value for FORMAT-STR is \"%%%nd\"."
                  (end-of-line)
                  (= (forward-line) 0)))))))
 
-(defun aph/number-lines-alpha (beg end &optional offset sep format-string)
+;;;###autoload
+(defun enumerate-alpha (beg end &optional offset sep format-string)
   "Number lines in region according to alphabetic order.
 
-As `aph/number-lines', except lines are numbered according to
+As `enumerate-lines', except lines are numbered according to
 their alphabetic order instead of their position, and the option
 to put the number at the end of the line is unavailable."
   (interactive "r\np")
-  (require 'aph-subr)               ; For `aph/get-bol', `aph/get-eol'
-  (let* ((beg (if (use-region-p) (aph/get-bol beg) (point-min)))
-         (end (if (use-region-p) (aph/get-eol end) (point-max))))
+  (let* ((beg (if (use-region-p) (enumerate--bol beg) (point-min)))
+         (end (if (use-region-p) (enumerate--eol end) (point-max))))
     (save-excursion
       (save-restriction
         (narrow-to-region beg end)
         ;; Append ordinary line numbers to eol, sort, then add the
         ;; numbers we want to bol.
-        (aph/number-lines (point-min) (point-max) 1 :eol " " "%%0%nd")
+        (enumerate-lines (point-min) (point-max) 1 :eol " " "%%0%nd")
         (sort-lines nil (point-min) (point-max))
-        (aph/number-lines (point-min) (point-max) offset nil sep format-string)
+        (enumerate-lines (point-min) (point-max) offset nil sep format-string)
         ;; Move the eol line numbers to bol and sort again to recover
         ;; original order.
         (goto-char (point-min))
@@ -98,48 +152,5 @@ to put the number at the end of the line is unavailable."
           (replace-match "")
           (end-of-line))))))
 
-
-;;; Working with Line Numbers
-;;;==========================
-;; Fnctions in this section are designed to manipulate existing line
-;; numbers.
-
-(defun aph/number-lines-open (beg end n)
-  "Renumber lines in region to skip N.
-Non-interactively, act on the text between BEG and END.
-
-Interpreting any sequence of digits at the beginning of a line as
-a line number, increment all line numbers in the region that are
-at least N by one.
-
-Attempt to match line number formatting (e.g., leading zeros)
-when this is not too difficult.
-
-If the region is not active, act on the entire buffer."
-  (interactive "r\nNNumber to skip: ")
-  (let ((beg (if (use-region-p) beg (point-min)))
-        (end (if (use-region-p) end (point-max))))
-    (goto-char beg)
-    (while (re-search-forward "^[0-9]+" end :noerr)
-      (let* ((str       (match-string 0))
-             (k         (string-to-number str))
-             (len       (length str))
-             (zeros     (equal (substring str 0 1) "0"))
-             (formatter (format "%%%s%dd" (if zeros "0" "") len)))
-        (when (>= k n)
-          (replace-match (format formatter (1+ k))))))))
-
-(defun aph/number-lines-open-multiple (beg end nums)
-  "Renumber lines in region to skip all NUMS.
-Here NUMS may be a comma- or whitespace-delimited string, or a list.
-
-Interactively, prompt for NUMS."
-  (interactive "r\nsNumbers to skip: ")
-  (when (stringp nums)
-    (setq nums
-          (mapcar #'string-to-number
-                  (split-string nums "[, \f\t\n\r\v]" :omit-nulls "\s-+"))))
-  (mapcar (apply-partially #'aph/number-lines-open beg end) nums))
-
-
-(provide 'aph-number-lines)
+(provide 'enumerate)
+;;; enumerate.el ends here

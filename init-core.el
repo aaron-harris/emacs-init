@@ -146,13 +146,6 @@
   :bind (:umbra prog-mode
                 ("C-i" . aph/align)))
 
-(use-package aph-number-lines
-  :bind (:map umbra-mode-map
-              ("s-<apps> n"       . aph/number-lines)
-              ("s-<apps> C-n"     . aph/number-lines-alpha)
-              ("s-<apps> M-n o"   . aph/number-lines-open)
-              ("s-<apps> M-n M-o" . aph/number-lines-open-multiple)))
-
 (use-package aph-theme
   :bind (:map umbra-mode-map
               ("s-n" . aph/theme-cycle))
@@ -341,6 +334,11 @@
   :bind (:umbra eww-mode
                 ("p" . aph/elfeed-show-prev)
                 ("n" . aph/elfeed-show-next)))
+
+(use-package enumerate
+  :bind (:map umbra-mode-map
+              ("s-<apps> n"       . enumerate-lines)
+              ("s-<apps> C-n"     . enumerate-alpha)))
 
 (use-package ert
   :bind (:umbra emacs-lisp-mode
