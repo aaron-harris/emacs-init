@@ -24,34 +24,37 @@
 
 ;;; Code:
 
-(defun morgue-transform (transform)
-  "Apply TRANSFORM to most recent kill.
+(defun morgue-apply (&rest transforms)
+  "Apply TRANSFORMS to most recent kill.
 
-TRANSFORM should be a function taking a single string and
-producing a new string.  It is called on the most recent kill in
-the kill ring, and the result is placed onto the kill ring.  Note
-that the original kill is not removed.
+Each TRANSFORM should be a function taking a single string and
+producing a new string.  The composition of the TRANSFORMS (in
+left-to-right order) is applied to the most recent kill in the
+kill ring, and the result is placed onto the kill ring.  The
+original kill is not removed.
 
 Return the new kill."
-  (kill-new (funcall transform (current-kill 0))))
+  (let ((kill  (current-kill 0)))
+    (while transforms
+      (setq kill (funcall (pop transforms) kill)))
+    (kill-new kill)))
 
 
 ;;; Transforms
 ;;;===========
-(defun morgue-map (old-seps new-sep &optional transform)
+(defun morgue-map (transform &optional old-seps new-sep)
   "Return function applying TRANSFORM to each part of a string.
 
 TRANSFORM should be a function taking a single string and
-producing a new string.  If it is omitted, `identity' is used.
+producing a new string.  The function returned takes in a string,
+splits it on OLD-SEPS (a regexp), applies TRANSFORM to each
+substring, then joins these together with NEW-SEP as a separator,
+returning the result.
 
-The function returned takes in a string, splits it on OLD-SEPS (a
-regexp), applies TRANSFORM to each substring, then joins these
-together with NEW-SEP as a separator, returning the result.
-
-As a special case, if OLD-SEPS is nil, the value of
-`split-string-default-separators' is used, as in
-`split-string'."
-  (let ((transform (or transform #'identity)))
+If OLD-SEPS or NEW-SEP is nil or omitted, both default to \"\n\",
+so that TRANSFORM is applied to individual lines."
+  (let ((old-seps  (or old-seps "\n"))
+        (new-sep   (or new-sep  "\n")))
     (lambda (s)
       (mapconcat transform
                  (split-string s old-seps)

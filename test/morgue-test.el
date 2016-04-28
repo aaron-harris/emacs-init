@@ -35,12 +35,12 @@
   "Expand into code running TEST-PAIRS starting from S (a string).
 
 Each TEST-PAIR is a pair (TRANSFORM . RESULT), where TRANSFORM is
-a function suitable for use with `morgue-transform' and RESULT
-is a string.
+a function suitable for use with `morgue-apply' and RESULT is a
+string.
 
 The expanded code puts S on a fresh kill ring (one that has been
-let-bound for testing purposes), then applies `morgue-transform'
-with each TRANSFORM and tests that RESULT is returned.
+let-bound for testing purposes), then applies `morgue-apply' with
+each TRANSFORM individually and tests that RESULT is returned.
 
 After all tests have been performed, the code checks that the
 kill ring contains all results in sequence."
@@ -53,26 +53,45 @@ kill ring contains all results in sequence."
          ,@(cl-loop for (transform . result) in test-pairs
                    do (push result results)
                    collect
-                   `(should (equal ,result (morgue-transform ,transform))))
+                   `(should (equal ,result (morgue-apply ,transform))))
          (should (equal kill-ring '(,@results ,s)))))))
+
+(defmacro morgue-test-all (s result &rest transforms)
+  "Expand into code testing that TRANSFORMS give RESULT ON S.
+
+Put S (a string) on a fresh kill ring (let-bound for testing
+purposes), apply `morgue-apply' to transforms (all together), and
+test that RESULT is returned, and that the kill ring is updated
+appropriately."
+  (declare (indent 2)
+           (debug (stringp stringp &rest function-form)))
+  `(let (kill-ring)
+     (with-temp-buffer
+       (kill-new ,s)
+       (morgue-apply ,@transforms)
+       (should (equal kill-ring '(,result ,s))))))
 
 
 ;;; Basic Tests
 ;;;============
-(ert-deftest morgue-test-transform ()
-  "Test basic functionality of `morgue-transform'."
+(ert-deftest morgue-test-apply ()
+  "Test basic functionality of `morgue-apply'."
   (morgue-test "Foo"
      (#'identity                          . "Foo")
-     ((lambda (kill) (concat kill "bar")) . "Foobar")))
+     ((lambda (kill) (concat kill "bar")) . "Foobar"))
+  (morgue-test-all "Foo" "FoobarFoobar"
+    (lambda (s) (concat s "bar"))
+    (lambda (s) (concat s s)))
+  (morgue-test-all "Foo" "Foo"))
 
 
 ;;; Transform Tests
 ;;;================
-(ert-deftest morgue-map-join ()
+(ert-deftest morgue-test-map ()
   "Test `morgue-map'."
-  (morgue-test "Foo bar"
-    ((morgue-map nil "X")                           . "FooXbar")
-    ((morgue-map "X" " " (lambda (s) (concat s s))) . "FooFoo barbar")))
+  (morgue-test "Foo\nbar" 
+    ((morgue-map (lambda (s) (concat s s))) . "FooFoo\nbarbar")
+    ((morgue-map #'identity "\nbar" " ")    . "FooFoo bar")))
 
 (provide 'morgue-test)
 ;;; morgue-test.el ends here
