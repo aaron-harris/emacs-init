@@ -51,7 +51,7 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 
 ;;;***
 
-;;;### (autoloads nil "cde" "cde.el" (22297 20382 476162 300000))
+;;;### (autoloads nil "cde" "cde.el" (22297 20489 276601 500000))
 ;;; Generated autoloads from cde.el
 
 (autoload 'cde "cde" "\
@@ -87,6 +87,52 @@ return nil.  Interactively, or with VERBOSE non-nil, print an
 explanatory message.
 
 \(fn &optional VERBOSE)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "enumerate" "enumerate.el" (22306 21552 766542
+;;;;;;  300000))
+;;; Generated autoloads from enumerate.el
+
+(autoload 'enumerate-lines "enumerate" "\
+Insert a number for each line in the region.
+Non-interactively, act on the text between BEG and END.
+
+If the region is not active, act on the entire buffer.
+
+If the region to be acted on starts or ends in the middle of a
+line, a line number will still be inserted for that line.
+
+If OFFSET is supplied (interactively, as a numeric prefix
+argument), it is used as a starting point for the numbering;
+otherwise, it defaults to 1.
+
+If EOL is non-nil, the numbers will be appended to the end of
+each line instead of being prepended to the beginning.
+
+The SEP argument is the string separating the line number from
+the rest of the line; i.e., it will ordinarily follow the number
+but precedes it if EOL is supplied.  This defaults to a single
+space.
+
+The FORMAT-STR argument can be used to configure how the
+numbers are displayed.  This is a string similar to those used in
+the `format' function, but all ordinary format specifiers should
+be double-escaped (e.g., \"%%d\"), and the special escape \"%n\"
+will be replaced with the maximum number of digits of any line
+number before the other escapes are interpreted.  The default
+value for FORMAT-STR is \"%%%nd\".
+
+\(fn BEG END &optional OFFSET EOL SEP FORMAT-STR)" t nil)
+
+(autoload 'enumerate-alpha "enumerate" "\
+Number lines in region according to alphabetic order.
+
+As `enumerate-lines', except lines are numbered according to
+their alphabetic order instead of their position, and the option
+to put the number at the end of the line is unavailable.
+
+\(fn BEG END &optional OFFSET SEP FORMAT-STRING)" t nil)
 
 ;;;***
 
@@ -136,7 +182,7 @@ See the documentation for `mode-family-create' for more information.
 
 ;;;***
 
-;;;### (autoloads nil "umbra" "umbra.el" (22268 697 871345 400000))
+;;;### (autoloads nil "umbra" "umbra.el" (22297 20541 864025 800000))
 ;;; Generated autoloads from umbra.el
 
 (autoload 'umbra-keymap "umbra" "\
@@ -208,14 +254,14 @@ penumbra map instead.
 ;;;;;;  "aph-helm-forms.el" "aph-helm-projectile.el" "aph-helm.el"
 ;;;;;;  "aph-help.el" "aph-ielm.el" "aph-iimage.el" "aph-info.el"
 ;;;;;;  "aph-keypad.el" "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el"
-;;;;;;  "aph-message.el" "aph-mpc.el" "aph-number-lines.el" "aph-org-agenda.el"
+;;;;;;  "aph-message.el" "aph-number-lines.el" "aph-org-agenda.el"
 ;;;;;;  "aph-org-capture.el" "aph-org-table.el" "aph-outline.el"
 ;;;;;;  "aph-page.el" "aph-plist.el" "aph-rect.el" "aph-shr.el" "aph-silence.el"
 ;;;;;;  "aph-simple.el" "aph-smartparens.el" "aph-subr.el" "aph-symbol.el"
 ;;;;;;  "aph-theme.el" "aph-w32.el" "aph-which-func.el" "chimera.el"
 ;;;;;;  "init-core.el" "init-draft.el" "init-elfeed.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "liberate-key.el") (22297
-;;;;;;  20394 989798 100000))
+;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "liberate-key.el"
+;;;;;;  "morgue.el") (22306 21843 889091 300000))
 
 ;;;***
 
