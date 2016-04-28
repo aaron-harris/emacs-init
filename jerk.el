@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience kill-ring
 
-;; Dependencies: `morgue'
+;; Dependencies: `morgue', `s'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@
 ;;; Code:
 
 (require 'morgue)
+(require 's)
 
 
 ;;; MS Access
@@ -57,7 +58,7 @@ the field names, which this function removes."
   (interactive)
   (morgue-yank
    (morgue-zap "\n")
-   (morgue-map #'identity "[[:space:]]" " ")))
+   #'s-collapse-whitespace))
 
 
 (provide 'jerk)
