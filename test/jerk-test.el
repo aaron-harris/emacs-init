@@ -24,6 +24,9 @@
 (require 'jerk)
 (require 'ert)
 
+
+;;; MS Access Tests
+;;;================
 (ert-deftest jerk-test-access ()
   "Test `jerk-access'."
   (let (kill-ring)
@@ -34,6 +37,18 @@
       (should (equal "Foo\tBar"
                      (buffer-string)))
       (should (equal '("Foo\tBar" "Alpha\tBravo\nFoo\tBar")
+                     kill-ring)))))
+
+(ert-deftest jerk-test-access-inline ()
+  "Test `jerk-access-inline'."
+  (let (kill-ring)
+    (with-temp-buffer
+      (kill-new "Alpha\tBravo\nFoo\tBar\n1\t2")
+      (should (equal "Foo Bar 1 2"
+                     (jerk-access-inline)))
+      (should (equal "Foo Bar 1 2"
+                     (buffer-string)))
+      (should (equal '("Foo Bar 1 2" "Alpha\tBravo\nFoo\tBar\n1\t2")
                      kill-ring)))))
 
 
