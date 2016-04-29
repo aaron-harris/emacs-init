@@ -80,6 +80,7 @@
 ;;; Configuration: Source-Level
 ;;;============================
 (prefer-coding-system 'utf-8-unix)
+(setq enable-recursive-minibuffers t)
 
 ;; Personal Information
 (setq user-full-name    "Aaron Harris"
