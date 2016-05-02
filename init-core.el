@@ -426,6 +426,25 @@
   :bind (:umbra haskell-mode
                 ("C-c C-l" . aph/haskell-process-load-file-cygwin)))
 
+(use-package hc-zenburn-theme
+  :defer t
+  :config
+  ;; The `hc-zenburn' theme lacks definitions for the the `avy' faces.
+  ;; These specs are translated directly from those in the `zenburn'
+  ;; theme.
+  (hc-zenburn-with-color-variables
+    (custom-theme-set-faces
+     'hc-zenburn 
+     `(avy-background-face
+       ((t (:foreground ,hc-zenburn-fg-1 :background ,hc-zenburn-bg
+                        :inverse-video nil))))
+     `(avy-lead-face-0
+       ((t (:foreground ,hc-zenburn-green+3 :background ,hc-zenburn-bg
+                        :inverse-video nil))))
+     `(avy-lead-face
+       ((t (:foreground ,hc-zenburn-green+2 :background ,hc-zenburn-bg
+                        :inverse-video nil)))))))
+
 (use-package helm
   :ensure t
   :demand t
