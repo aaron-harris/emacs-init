@@ -49,24 +49,7 @@ first element of `aph/theme-list'."
 ;; Load all the base themes, and enable the first one.
 (load-theme (car aph/theme-list) :noconfirm)
 (dolist (thm (cdr aph/theme-list))
-  (load-theme thm :noconfirm :noenable)) 
-
-;; The `hc-zenburn' theme lacks definitions for the the `avy' faces.
-;; These specs are translated directly from those in the `zenburn'
-;; theme.
-(with-eval-after-load 'hc-zenburn-theme
-  (hc-zenburn-with-color-variables
-    (custom-theme-set-faces
-     'hc-zenburn
-     `(avy-background-face
-       ((t (:foreground ,hc-zenburn-fg-1 :background ,hc-zenburn-bg
-                        :inverse-video nil))))
-     `(avy-lead-face-0
-       ((t (:foreground ,hc-zenburn-green+3 :background ,hc-zenburn-bg
-                        :inverse-video nil))))
-     `(avy-lead-face
-       ((t (:foreground ,hc-zenburn-green+2 :background ,hc-zenburn-bg
-                        :inverse-video nil)))))))
+  (load-theme thm :noconfirm :noenable))
 
 ;; Face settings that should apply to all base themes.
 (custom-theme-set-faces
