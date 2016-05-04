@@ -168,4 +168,4 @@
 
 ;;; Face and Display Tweaks
 ;;;========================
-(add-hook 'aph/theme-base-change-hook #'aph/org-update-faces)
+(add-hook 'multitheme-base-change-hook #'aph/org-update-faces)

@@ -148,15 +148,11 @@
                 ("C-i" . aph/align)))
 
 (use-package aph-theme
-  :bind (:map umbra-mode-map
-              ("s-n" . aph/theme-cycle))
-  :demand t
-  :config
-  ;; Treat 'aph theme as safe:
+  :defer t
+  :init
   (add-to-list
    'custom-safe-themes
-   "416ef2f2057400db7cab91aeacb583b4b539c549f4713260282a903d79344312") 
-  (load-theme 'aph :noconfirm))
+   "2a03aae022d8d102346e1013da40692476d34cfb27b392415df6d6c9d0610f83"))
 
 (use-package autoinsert
   :init
@@ -395,7 +391,8 @@
 (use-package font-lock
   :defer t
   :config
-  (eval-after-load 'dash        #'dash-enable-font-lock))
+  (with-eval-after-load 'dash
+    (dash-enable-font-lock)))
 
 (use-package aph-forms
   :after forms)
@@ -428,6 +425,11 @@
 
 (use-package hc-zenburn-theme
   :defer t
+  :ensure t
+  :init
+  (add-to-list
+   'custom-safe-themes
+   "bcc6775934c9adf5f3bd1f428326ce0dcd34d743a92df48c128e6438b815b44f")
   :config
   ;; The `hc-zenburn' theme lacks definitions for the the `avy' faces.
   ;; These specs are translated directly from those in the `zenburn'
@@ -683,6 +685,16 @@
               ("C-<tab>" . completion-at-point))
   :config
   (setq completion-auto-help 'lazy))
+
+(use-package multitheme
+  :bind (:map umbra-mode-map
+              ("s-n" . multitheme-cycle))
+  :demand t
+  :config
+  (setq multitheme-base-theme-list '(hc-zenburn zenburn)
+        multitheme-overtheme       'aph)
+  ;; (add-hook 'after-init-hook #'multitheme-load)
+  )
 
 (use-package ob-core
   :defer t
@@ -1145,7 +1157,15 @@
   (winner-mode))
 
 (use-package xahk-mode
-  :mode "\\.ahk\\'") 
+  :mode "\\.ahk\\'")
+
+(use-package zenburn-theme
+  :defer t
+  :ensure t
+  :init
+  (add-to-list
+   'custom-safe-themes
+   "19352d62ea0395879be564fc36bc0b4780d9768a964d26dfae8aad218062858d"))
 
 (provide 'init-core)
 (provide 'init)

@@ -1,60 +1,50 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-theme.el --- Personal overtheme              -*- lexical-binding: t; -*-
 
-;;;; The Emacs init files of Aaron Harris:
-;;;; CUSTOM THEME
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-(require 'dash)                         ; For `-drop-while'
+;; Author: Aaron Harris <meerwolf@gmail.com>
+;; Keywords: themes
 
-
-;;; Base Theme Setup
-;;;=================
-;; This theme is designed to be an extension for some other base
-;; theme.  Support is provided for cycling the base theme used.
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
 
-(defvar aph/theme-base-change-hook nil
-  "Hook run after a base change for the 'aph theme.
-The hook is run after the new base theme has been loaded.")
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
 
-(defvar aph/theme-list '(zenburn hc-zenburn)
-  "A list of themes the 'aph theme can use as bases.
-The modifications of 'aph occur on top of one of these.  When the
-theme is first loaded, the first element is taken as the base.
-Subsequently, `aph/theme-cycle' can be used to change out the
-base.
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Be aware that 'aph will treat all of these themes as safe
-regardless of the value of `custom-safe-themes'.")
+;;; Commentary:
 
-(defun aph/theme-cycle ()
-  "Cycle between the themes in `aph/theme-list'.
-If none of these themes is currently active, instead load the
-first element of `aph/theme-list'."
-  (interactive)
-  (let ((themes (-drop-while (lambda (thm)
-                               (not (custom-theme-enabled-p thm)))
-                             aph/theme-list)))
-    (if (null themes)
-        (enable-theme (car aph/theme-list))
-      (disable-theme (car themes))
-      (enable-theme (or (cadr themes) (car aph/theme-list)))
-      (enable-theme 'aph))
-    (run-hooks 'aph/theme-base-change-hook)))
+;; This module defines the `aph' theme, which I use as an overtheme
+;; for the `multitheme' package.  That is, it contains face overrides
+;; that I wish to apply regardless of which "actual theme" I am using.
 
-
-;;; Theme Definition
-;;;=================
+;;; Code:
+
 (deftheme aph "Personal theme of Aaron Harris")
 
-;; Load all the base themes, and enable the first one.
-(load-theme (car aph/theme-list) :noconfirm)
-(dolist (thm (cdr aph/theme-list))
-  (load-theme thm :noconfirm :noenable))
-
-;; Face settings that should apply to all base themes.
+
+;;; Theme Faces
+;;;============
 (custom-theme-set-faces
  'aph
  '(region ((t (:inverse-video t))))
  '(avy-lead-face-0 ((t (:inverse-video t)))))
 
+
+;;; Path Handling
+;;;==============
+;;;###autoload
+(and load-file-name
+     (boundp 'custom-theme-load-path)
+     (add-to-list 'custom-theme-load-path
+                  (file-name-as-directory
+                   (file-name-directory load-file-name))))
+
 (provide-theme 'aph)
+;;; aph-theme.el ends here

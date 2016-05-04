@@ -42,6 +42,14 @@ Store the current eww url as an Org-Mode link.
 
 ;;;***
 
+;;;### (autoloads nil "aph-theme" "aph-theme.el" (22312 55357 765002
+;;;;;;  700000))
+;;; Generated autoloads from aph-theme.el
+
+(and load-file-name (boundp 'custom-theme-load-path) (add-to-list 'custom-theme-load-path (file-name-as-directory (file-name-directory load-file-name))))
+
+;;;***
+
 ;;;### (autoloads nil "aph-window" "aph-window.el" (22217 60391 0
 ;;;;;;  0))
 ;;; Generated autoloads from aph-window.el
@@ -182,6 +190,28 @@ See the documentation for `mode-family-create' for more information.
 
 ;;;***
 
+;;;### (autoloads nil "multitheme" "multitheme.el" (22314 25775 43104
+;;;;;;  600000))
+;;; Generated autoloads from multitheme.el
+
+(autoload 'multitheme-cycle "multitheme" "\
+Cycle between the themes in `multitheme-base-theme-list'.
+If none of these themes is currently active, instead enable the
+first element of `multitheme-base-theme-list'.
+
+Also re-enable `multitheme-overtheme' so it remains \"on top\" of
+the base theme.
+
+If a theme to be enabled is not yet defined, attempt to load it
+first (using `load-theme').  Respect `custom-safe-themes'.
+
+After all theme changes have been made, run
+`multitheme-base-change-hook'.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "umbra" "umbra.el" (22297 20541 864025 800000))
 ;;; Generated autoloads from umbra.el
 
@@ -254,14 +284,14 @@ penumbra map instead.
 ;;;;;;  "aph-helm-forms.el" "aph-helm-projectile.el" "aph-helm.el"
 ;;;;;;  "aph-help.el" "aph-ielm.el" "aph-iimage.el" "aph-info.el"
 ;;;;;;  "aph-keypad.el" "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el"
-;;;;;;  "aph-message.el" "aph-number-lines.el" "aph-org-agenda.el"
-;;;;;;  "aph-org-capture.el" "aph-org-table.el" "aph-outline.el"
-;;;;;;  "aph-page.el" "aph-plist.el" "aph-rect.el" "aph-shr.el" "aph-silence.el"
-;;;;;;  "aph-simple.el" "aph-smartparens.el" "aph-subr.el" "aph-symbol.el"
-;;;;;;  "aph-theme.el" "aph-w32.el" "aph-which-func.el" "chimera.el"
-;;;;;;  "init-core.el" "init-draft.el" "init-elfeed.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "liberate-key.el"
-;;;;;;  "morgue.el") (22306 21843 889091 300000))
+;;;;;;  "aph-message.el" "aph-org-agenda.el" "aph-org-capture.el"
+;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
+;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
+;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-w32.el"
+;;;;;;  "aph-which-func.el" "chimera.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-elfeed.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el") (22314
+;;;;;;  25801 577215 400000))
 
 ;;;***
 
