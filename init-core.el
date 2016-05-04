@@ -168,10 +168,10 @@
   (mouse-avoidance-mode 'banish)
   :config
   (setq mouse-avoidance-banish-position
-        '((frame-or-window . frame)
-          (side . right)
-          (side-pos . -50)
-          (top-or-bottom . bottom)
+        '((frame-or-window   . frame)
+          (side              . right)
+          (side-pos          . -50)
+          (top-or-bottom     . bottom)
           (top-or-bottom-pos . -50))))
 
 (use-package avy
