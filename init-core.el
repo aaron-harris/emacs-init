@@ -223,17 +223,17 @@
                 ("C-h D" . cider-apropos-documentation))
   :config 
   (setq cider-auto-select-error-buffer      nil
-        cider-show-error-buffer             'except-in-repl
-        cider-repl-pop-to-buffer-on-connect nil)
+        cider-repl-pop-to-buffer-on-connect nil
+        cider-show-error-buffer             'except-in-repl)
   (mode-family-add 'cider-repl-mode 'lisp)
   (mode-family-add 'cider-repl-mode 'clojure)
   (add-to-list 'aph/help-window-names "*cider-doc*")
   ;; Output from the JVM has Windows-style newlines, so we need to
   ;; strip those unless we want to see ^M characters in Cider buffers.
-  (use-package aph-w32)
-  (add-hook 'cider-repl-mode-hook            #'aph/remove-dos-eol)
-  (add-hook 'cider-macroexpansion-mode-hook  #'aph/remove-dos-eol)
-  (add-hook 'cider-test-report-mode-hook     #'aph/remove-dos-eol))
+  (require 'cygwinize) 
+  (add-hook 'cider-repl-mode-hook            #'cygwinize-hide-dos-eol)
+  (add-hook 'cider-macroexpansion-mode-hook  #'cygwinize-hide-dos-eol)
+  (add-hook 'cider-test-report-mode-hook     #'cygwinize-hide-dos-eol))
 
 (use-package clojure-mode
   :ensure t
