@@ -29,10 +29,10 @@ This function detects a Cygwin system using the variable
 `system-type'; non-Cygwin systems should be unaffected." 
   (interactive)
   (require 'aph-advice)                 ; For `aph/with-advice'
-  (if (and (eq system-type 'cygwin) (require 'aph-cygwin))
+  (if (and (eq system-type 'cygwin) (require 'cygwinize))
       (aph/with-advice
           ((#'buffer-file-name
-            :filter-return #'aph/cygwin-convert-file-name-to-hybrid-windows))
+            :filter-return #'cygwinize-convert-file-name-to-hybrid-windows))
         (haskell-process-load-file))
     (haskell-process-load-file)))
 
