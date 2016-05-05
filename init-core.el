@@ -152,7 +152,7 @@
   :init
   (add-to-list
    'custom-safe-themes
-   "2a03aae022d8d102346e1013da40692476d34cfb27b392415df6d6c9d0610f83"))
+   "6b49a4d91f081d80555084e34242bac76f9b00eaa8d862ae9be26ef9ad0bbb76"))
 
 (use-package autoinsert
   :init
@@ -693,8 +693,7 @@
   :config
   (setq multitheme-base-theme-list '(hc-zenburn zenburn)
         multitheme-overtheme       'aph)
-  ;; (add-hook 'after-init-hook #'multitheme-load)
-  )
+  (add-hook 'after-init-hook #'multitheme-cycle))
 
 (use-package ob-core
   :defer t
