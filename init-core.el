@@ -152,7 +152,7 @@
   :init
   (add-to-list
    'custom-safe-themes
-   "6b49a4d91f081d80555084e34242bac76f9b00eaa8d862ae9be26ef9ad0bbb76"))
+   "b50769e9fcc86519e961fe7614b5577368701c392afbb8604d5f1b07e2b5b7ac"))
 
 (use-package autoinsert
   :init
@@ -253,14 +253,11 @@
   (setq color-identifiers:num-colors      12
         color-identifiers:color-luminance 0.65)
 
-  (use-package aph-font-lock)
-  (add-hook 'color-identifiers-mode-hook #'aph/font-lock-decolorize)
-
-  ;; In the function `color-identifiers:clojure-declarations-in-sexp',
+    ;; In the function `color-identifiers:clojure-declarations-in-sexp',
   ;; there is a call to `evenp', which is not defined; presumably, the
   ;; package maintainers are expecting use to be using `cl' rather
   ;; than `cl-lib'.  As a stopgap, I'm aliasing just `evenp' globally.
-  (defalias #'evenp #'cl-evenp)) 
+  (defalias #'evenp #'cl-evenp))
 
 (use-package company
   :ensure t
