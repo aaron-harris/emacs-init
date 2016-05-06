@@ -33,8 +33,18 @@
 ;;;============
 (custom-theme-set-faces
  'aph
+ ;; Basic faces
  '(region ((t (:inverse-video t))))
- '(avy-lead-face-0 ((t (:inverse-video t)))))
+ ;; Avy
+ '(avy-lead-face-0 ((t (:inverse-video t))))
+ ;; Font lock (decolorization)
+ '(font-lock-builtin-face       ((t (:foreground nil :slant italic))))
+ '(font-lock-comment-face       ((t (:slant italic))))
+ '(font-lock-constant-face      ((t (:weight bold))))
+ '(font-lock-function-name-face ((t (:weight bold))))
+ '(font-lock-keyword-face       ((t (:foreground nil :weight ultra-bold))))
+ '(font-lock-type-face          ((t (:foreground nil :underline t))))
+ '(font-lock-variable-name-face ((t (:weight bold)))))
 
 
 ;;; Path Handling
