@@ -253,10 +253,10 @@
   (setq color-identifiers:num-colors      12
         color-identifiers:color-luminance 0.65)
 
-    ;; In the function `color-identifiers:clojure-declarations-in-sexp',
+  ;; In the function `color-identifiers:clojure-declarations-in-sexp',
   ;; there is a call to `evenp', which is not defined; presumably, the
-  ;; package maintainers are expecting use to be using `cl' rather
-  ;; than `cl-lib'.  As a stopgap, I'm aliasing just `evenp' globally.
+  ;; package maintainers are using `cl' in their local setup.  As a
+  ;; stopgap, I'm aliasing just `evenp' globally.
   (defalias #'evenp #'cl-evenp))
 
 (use-package company
