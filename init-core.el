@@ -427,13 +427,13 @@
   (add-to-list
    'custom-safe-themes
    "bcc6775934c9adf5f3bd1f428326ce0dcd34d743a92df48c128e6438b815b44f")
-  :config
-  ;; The `hc-zenburn' theme lacks definitions for the the `avy' faces.
-  ;; These specs are translated directly from those in the `zenburn'
-  ;; theme.
+  :config 
   (hc-zenburn-with-color-variables
     (custom-theme-set-faces
-     'hc-zenburn 
+     'hc-zenburn
+     ;; The `hc-zenburn' theme lacks definitions for the the `avy'
+     ;; faces.  These specs are translated directly from those in the
+     ;; `zenburn' theme.
      `(avy-background-face
        ((t (:foreground ,hc-zenburn-fg-1 :background ,hc-zenburn-bg
                         :inverse-video nil))))
@@ -442,7 +442,10 @@
                         :inverse-video nil))))
      `(avy-lead-face
        ((t (:foreground ,hc-zenburn-green+2 :background ,hc-zenburn-bg
-                        :inverse-video nil)))))))
+                        :inverse-video nil))))
+     ;; The `volatile-highlights' face should be easier to see.
+     `(vhl/default-face
+       ((t (:background ,hc-zenburn-bg-2)))))))
 
 (use-package helm
   :ensure t
@@ -1120,6 +1123,12 @@
         visible-mark-faces '(aph/visible-mark-top
                              aph/visible-mark-other)))
 
+(use-package volatile-highlights
+  :ensure t
+  :diminish volatile-highlights-mode
+  :init
+  (volatile-highlights-mode t))
+
 (use-package which-func
   :init
   (which-function-mode))
@@ -1161,7 +1170,14 @@
   :init
   (add-to-list
    'custom-safe-themes
-   "19352d62ea0395879be564fc36bc0b4780d9768a964d26dfae8aad218062858d"))
+   "19352d62ea0395879be564fc36bc0b4780d9768a964d26dfae8aad218062858d")
+  :config
+  (zenburn-with-color-variables
+    (custom-theme-set-faces
+     'zenburn 
+     ;; The `volatile-highlights' face should be easier to see.
+     `(vhl/default-face
+       ((t (:background ,zenburn-bg-1)))))))
 
 (provide 'init-core)
 (provide 'init)
