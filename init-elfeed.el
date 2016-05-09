@@ -40,6 +40,7 @@
    ("http://www.bugmartini.com/feed/" comics)
    ("http://www.cad-comic.com/rss/rss.xml" comics link)
    ("http://www.dumbingofage.com/feed/" comics link)
+   ("http://english.bouletcorp.com/feed/ comics")
    ("http://www.giantitp.com/comics/oots.rss" comics link)
    ("http://www.girlgeniusonline.com/ggmain.rss" comics link)
    ("http://www.kiwiblitz.com/rss.php" comics link)
