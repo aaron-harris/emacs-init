@@ -298,13 +298,17 @@
                 ("M-p" . backward-paragraph)
                 ("M-n" . forward-paragraph))
   :config
-  ;; Basic config
-  (setq elfeed-sort-order            'ascending) 
+  ;; UI config
+  (setq elfeed-sort-order 'ascending)
+
+  ;; Network config
   (setq url-queue-parallel-processes 1
         url-queue-timeout            30)
-  (setq elfeed-db-directory "~/sync/elfeed")
 
-  ;; Bugfixes
+  ;; Filesystem config
+  (setq elfeed-db-directory "~/sync/elfeed")
+  (add-hook 'kill-emacs-hook #'elfeed-db-compact)
+
   ;; The various elfeed modes do not follow the convention of using
   ;; `run-mode-hooks' and thus do not run
   ;; `after-change-major-mode-hook'.  This can probably be fixed
