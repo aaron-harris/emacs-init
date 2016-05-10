@@ -19,7 +19,7 @@
    ("http://erfworld.com/erf_stream/view?view=rss" comics)
    ("http://feeds.feedburner.com/NotInventedHere" comics link)
    ("http://feeds.feedburner.com/ScenesFromAMultiverse" comics)
-   ("http://feeds.feedburner.com/abominable" comics)
+   ("http://feeds.feedburner.com/abominable" comics link)
    ("http://feeds.feedburner.com/hijinksensue?format=xml" comics)
    ("http://feeds.feedburner.com/rsspect/fJur" comics)
    ("http://feeds.feedburner.com/uclick/basicinstructions" comics link)
