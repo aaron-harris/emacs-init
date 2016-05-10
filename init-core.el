@@ -299,8 +299,7 @@
                 ("M-n" . forward-paragraph))
   :config
   ;; Basic config
-  (setq elfeed-sort-order            'ascending
-        aph/elfeed-favorite-filters  '("@6-months-ago +unread" "+todo"))
+  (setq elfeed-sort-order            'ascending) 
   (setq url-queue-parallel-processes 1
         url-queue-timeout            30)
   (setq elfeed-db-directory "~/sync/elfeed")
@@ -327,7 +326,9 @@
                 ("n" . aph/elfeed-show-next))
   :bind (:umbra eww-mode
                 ("p" . aph/elfeed-show-prev)
-                ("n" . aph/elfeed-show-next)))
+                ("n" . aph/elfeed-show-next))
+  :config
+  (setq aph/elfeed-favorite-filters  '("@6-months-ago +unread" "+todo")))
 
 (use-package enumerate
   :bind (:map umbra-mode-map
