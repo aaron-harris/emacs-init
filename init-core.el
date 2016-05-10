@@ -318,7 +318,7 @@
   (add-hook 'elfeed-show-mode-hook   #'umbra--update-major-mode) 
 
   ;; Load the feed list
-  (use-package init-elfeed))
+  (load (expand-file-name (concat elfeed-db-directory "/feeds.el"))))
 
 (use-package aph-elfeed
   :after elfeed
