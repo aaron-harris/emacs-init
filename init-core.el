@@ -207,6 +207,12 @@
   :bind (:map umbra-mode-map
               ("C-z <return>" . browse-url)))
 
+(use-package browse-url-prefix
+  :after browse-url
+  :config
+  (setq browse-url-browser-function        #'browse-url-prefix
+        browse-url-prefix-browser-function #'eww-browse-url))
+
 (use-package calc
   :bind (:map umbra-mode-map
               ("C-z C-c" . calc)))
