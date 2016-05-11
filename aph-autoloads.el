@@ -42,8 +42,8 @@ Store the current eww url as an Org-Mode link.
 
 ;;;***
 
-;;;### (autoloads nil "aph-theme" "aph-theme.el" (22312 55357 765002
-;;;;;;  700000))
+;;;### (autoloads nil "aph-theme" "aph-theme.el" (22316 62223 201410
+;;;;;;  400000))
 ;;; Generated autoloads from aph-theme.el
 
 (and load-file-name (boundp 'custom-theme-load-path) (add-to-list 'custom-theme-load-path (file-name-as-directory (file-name-directory load-file-name))))
@@ -56,6 +56,22 @@ Store the current eww url as an Org-Mode link.
 
 (defvar aph/help-window-names '("*Help*" "*Apropos*" "*Messages*" "*Completions*" "*Command History*" "*Compile-Log*" "*disabled command*") "\
 Names of buffers that `aph/quit-help-windows' should quit.")
+
+;;;***
+
+;;;### (autoloads nil "browse-url-prefix" "browse-url-prefix.el"
+;;;;;;  (22323 39395 951051 600000))
+;;; Generated autoloads from browse-url-prefix.el
+
+(autoload 'browse-url-prefix "browse-url-prefix" "\
+Browse URL using a browser determined by the prefix arg.
+
+With a prefix arg, the function
+
+Interactively, prompt the user for URL, using any URL at point as
+a default.
+
+\(fn URL &rest ARGS)" t nil)
 
 ;;;***
 
@@ -278,20 +294,19 @@ penumbra map instead.
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
-;;;;;;  "aph-comparators.el" "aph-cygwin.el" "aph-dash.el" "aph-elfeed.el"
-;;;;;;  "aph-ert.el" "aph-face-remap.el" "aph-files.el" "aph-font-lock.el"
-;;;;;;  "aph-forms.el" "aph-frame.el" "aph-framewin.el" "aph-haskell.el"
-;;;;;;  "aph-helm-forms.el" "aph-helm-projectile.el" "aph-helm.el"
-;;;;;;  "aph-help.el" "aph-ielm.el" "aph-iimage.el" "aph-info.el"
-;;;;;;  "aph-keypad.el" "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el"
-;;;;;;  "aph-message.el" "aph-org-agenda.el" "aph-org-capture.el"
+;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-elfeed.el" "aph-ert.el"
+;;;;;;  "aph-face-remap.el" "aph-files.el" "aph-forms.el" "aph-frame.el"
+;;;;;;  "aph-framewin.el" "aph-haskell.el" "aph-helm-forms.el" "aph-helm-projectile.el"
+;;;;;;  "aph-helm.el" "aph-help.el" "aph-ielm.el" "aph-iimage.el"
+;;;;;;  "aph-info.el" "aph-keypad.el" "aph-latex.el" "aph-lexical.el"
+;;;;;;  "aph-lisp-mode.el" "aph-message.el" "aph-org-agenda.el" "aph-org-capture.el"
 ;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
 ;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
-;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-w32.el"
-;;;;;;  "aph-which-func.el" "chimera.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-elfeed.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el") (22314
-;;;;;;  25801 577215 400000))
+;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
+;;;;;;  "chimera.el" "cygwinize.el" "elfeed-link.el" "init-core.el"
+;;;;;;  "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el") (22323
+;;;;;;  39666 950346 100000))
 
 ;;;***
 
