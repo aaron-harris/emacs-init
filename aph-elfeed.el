@@ -6,51 +6,6 @@
 
 ;;; This file contains functions extending `elfeed'.
 (require 'elfeed)
-(require 'aph-advice)                   ; For `aph/advice-once'
-
-
-;;; Link Tags
-;;;==========
-;; Functions in this section cause entries tagged with the 'link tag
-;; to bypass the entry text and open the linked URL in a browser.
-(defun aph/elfeed-search-show-entry (entry &optional external)
-  "As `elfeed-search-show-entry', but intelligently follow links.
-
-If ENTRY is tagged with the 'link tag, presume that the text of
-ENTRY will be incomplete and open the url in ENTRY's link field.
-If the optional parameter EXTERNAL is supplied (interactively, with a
-prefix argument), use an external browser; otherwise, use `eww'.
-
-If ENTRY doesn't have the \"link\" tag, call `elfeed-show-entry'.
-In this case, ignore the EXTERNAL parameter."
-  (interactive (list (elfeed-search-selected :ignore-region)
-                     current-prefix-arg)) 
-  (require 'aph-browse-url)          ; For `aph/browse-url-prefer-eww'
-  ;; We want to copy all behavior of `elfeed-search-show-entry',
-  ;; except possibly the call to `elfeed-show-entry', which we
-  ;; override using advice: 
-  (when (and entry (elfeed-tagged-p 'link entry))
-    (aph/advice-once
-     #'elfeed-show-entry :override
-     (lambda (entry) 
-       (aph/browse-url-prefer-eww external (elfeed-entry-link entry)))))
-  (elfeed-search-show-entry entry))
-
-(defun aph/elfeed-show-next (&optional external)
-  "As `elfeed-show-next', but intelligently follow links.
-See `aph/elfeed-search-show-entry' for details."
-  (interactive) 
-  (aph/advice-once #'elfeed-search-show-entry
-                   :override #'aph/elfeed-search-show-entry) 
-  (elfeed-show-next))
-
-(defun aph/elfeed-show-prev (&optional external)
-  "As `elfeed-show-prev', but intelligently follow links.
-See `aph/elfeed-search-show-entry' for details."
-  (interactive)
-  (aph/advice-once #'elfeed-search-show-entry
-                   :override #'aph/elfeed-search-show-entry) 
-  (elfeed-show-prev))
 
 
 ;;; Favorite Filters

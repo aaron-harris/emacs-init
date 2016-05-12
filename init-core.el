@@ -210,8 +210,8 @@
 (use-package browse-url-prefix
   :after browse-url
   :config
-  (setq browse-url-browser-function        #'browse-url-prefix
-        browse-url-prefix-browser-function #'eww-browse-url))
+  (setq browse-url-browser-function                #'browse-url-prefix
+        browse-url-prefix-browser-default-function #'eww-browse-url))
 
 (use-package calc
   :bind (:map umbra-mode-map
@@ -313,7 +313,7 @@
 
   ;; Filesystem config
   (setq elfeed-db-directory "~/sync/elfeed")
-  (add-hook 'kill-emacs-hook #'elfeed-db-compact)
+  ;; (add-hook 'kill-emacs-hook #'elfeed-db-compact)
 
   ;; The various elfeed modes do not follow the convention of using
   ;; `run-mode-hooks' and thus do not run
@@ -326,24 +326,26 @@
   ;; Load the feed list
   (load (expand-file-name (concat elfeed-db-directory "/feeds.el"))))
 
+(use-package elfeed-link
+  :after elfeed
+  :bind (:umbra eww-mode
+                ("p" . elfeed-show-prev)
+                ("n" . elfeed-show-next))
+  :config
+  (setq elfeed-link-tag              'link
+        elfeed-link-browser-function #'eww-browse-url))
+
 (use-package aph-elfeed
   :after elfeed
   :bind (:umbra elfeed-search-mode
-                ("<return>" . aph/elfeed-search-show-entry)
-                ("'"        . aph/elfeed-search-next-favorite-filter))
-  :bind (:umbra elfeed-show-mode
-                ("p" . aph/elfeed-show-prev)
-                ("n" . aph/elfeed-show-next))
-  :bind (:umbra eww-mode
-                ("p" . aph/elfeed-show-prev)
-                ("n" . aph/elfeed-show-next))
+                ("'" . aph/elfeed-search-next-favorite-filter)) 
   :config
   (setq aph/elfeed-favorite-filters  '("@6-months-ago +unread" "+todo")))
 
 (use-package enumerate
   :bind (:map umbra-mode-map
-              ("s-<apps> n"       . enumerate-lines)
-              ("s-<apps> C-n"     . enumerate-alpha)))
+              ("s-<apps> n"   . enumerate-lines)
+              ("s-<apps> C-n" . enumerate-alpha)))
 
 (use-package ert
   :bind (:umbra emacs-lisp-mode

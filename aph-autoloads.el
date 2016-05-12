@@ -303,10 +303,10 @@ penumbra map instead.
 ;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
 ;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
 ;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
-;;;;;;  "chimera.el" "cygwinize.el" "elfeed-link.el" "init-core.el"
-;;;;;;  "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el") (22323
-;;;;;;  39666 950346 100000))
+;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
+;;;;;;  "init-core.el" "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el") (22324
+;;;;;;  63126 86323 900000))
 
 ;;;***
 

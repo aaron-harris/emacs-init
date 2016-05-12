@@ -4,7 +4,9 @@
 ;;;; SHR EXTENSIONS
 ;;;;============================================================================
 
-;; Extensions for `shr' package. 
+;; Extensions for `shr' package.
+
+(require 'aph-advice)
 
 
 ;;; Link Displey
