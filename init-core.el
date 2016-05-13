@@ -136,7 +136,7 @@
 ;;;======================
 (use-package advice
   :defer t
-  :config (setq ad-redefinition-action 'accept))
+  :config (validate-setq ad-redefinition-action 'accept))
 
 (use-package align
   :bind (:umbra text-mode
@@ -155,7 +155,8 @@
   :init
   (add-to-list
    'custom-safe-themes
-   "b50769e9fcc86519e961fe7614b5577368701c392afbb8604d5f1b07e2b5b7ac"))
+   "b50769e9fcc86519e961fe7614b5577368701c392afbb8604d5f1b07e2b5b7ac")
+  (validate-variable 'custom-safe-themes))
 
 (use-package autoinsert
   :init
@@ -164,18 +165,19 @@
   ;; Disable `helm' because it can't handle elisp keyword selection.
   (with-eval-after-load 'helm-mode
     (add-to-list 'helm-completing-read-handlers-alist
-                 '(auto-insert . nil))))
+                 '(auto-insert . nil))
+    (validate-variable 'helm-completing-read-handlers-alist)))
 
 (use-package avoid
   :init
   (mouse-avoidance-mode 'banish)
   :config
-  (setq mouse-avoidance-banish-position
-        '((frame-or-window   . frame)
-          (side              . right)
-          (side-pos          . -50)
-          (top-or-bottom     . bottom)
-          (top-or-bottom-pos . -50))))
+  (validate-setq mouse-avoidance-banish-position
+                 '((frame-or-window   . frame)
+                   (side              . right)
+                   (side-pos          . -50)
+                   (top-or-bottom     . bottom)
+                   (top-or-bottom-pos . -50))))
 
 (use-package avy
   :ensure t
@@ -187,10 +189,10 @@
   :bind (:umbra isearch-mode
                 ("M-g" . avy-isearch))
   :config
-  (setq avy-all-windows     nil
-        avy-background      t
-        avy-highlight-first t
-        avy-style           'pre))
+  (validate-setq avy-all-windows     nil)
+  (validate-setq avy-background      t)
+  (validate-setq avy-highlight-first t)
+  (validate-setq avy-style           'pre))
 
 (use-package bind-key
   :bind (:map umbra-mode-map
@@ -213,8 +215,8 @@
 (use-package browse-url-prefix
   :after browse-url
   :config
-  (setq browse-url-browser-function                #'browse-url-prefix
-        browse-url-prefix-browser-default-function #'eww-browse-url))
+  (validate-setq browse-url-browser-function                #'browse-url-prefix)
+  (validate-setq browse-url-prefix-browser-default-function #'eww-browse-url))
 
 (use-package calc
   :bind (:map umbra-mode-map
@@ -231,15 +233,15 @@
                 ("C-h A" . cider-apropos)
                 ("C-h D" . cider-apropos-documentation))
   :config 
-  (setq cider-auto-select-error-buffer      nil
-        cider-repl-pop-to-buffer-on-connect nil
-        cider-show-error-buffer             'except-in-repl)
+  (validate-setq cider-auto-select-error-buffer      nil)
+  (validate-setq cider-repl-pop-to-buffer-on-connect nil)
+  (validate-setq cider-show-error-buffer             'except-in-repl)
   (mode-family-add 'cider-repl-mode 'lisp)
   (mode-family-add 'cider-repl-mode 'clojure)
   (add-to-list 'aph/help-window-names "*cider-doc*")
   ;; Output from the JVM has Windows-style newlines, so we need to
   ;; strip those unless we want to see ^M characters in Cider buffers.
-  (require 'cygwinize) 
+  (require 'cygwinize)
   (add-hook 'cider-repl-mode-hook            #'cygwinize-hide-dos-eol)
   (add-hook 'cider-macroexpansion-mode-hook  #'cygwinize-hide-dos-eol)
   (add-hook 'cider-test-report-mode-hook     #'cygwinize-hide-dos-eol))
@@ -259,8 +261,8 @@
   :init
   (add-hook 'lisp-family-hook #'color-identifiers-mode)
   :config
-  (setq color-identifiers:num-colors      12
-        color-identifiers:color-luminance 0.65)
+  (validate-setq color-identifiers:num-colors      12)
+  (validate-setq color-identifiers:color-luminance 0.65)
 
   ;; In the function `color-identifiers:clojure-declarations-in-sexp',
   ;; there is a call to `evenp', which is not defined; presumably, the
@@ -279,7 +281,7 @@
   :config 
   (bind-keys :map company-active-map
              ("<tab>" . company-complete-common-or-cycle))
-  (setq company-idle-delay nil))
+  (validate-setq company-idle-delay nil))
 
 (use-package dash
   :ensure t
@@ -291,7 +293,7 @@
   (setq doc-view-resolution 200)
   ;; On mpc, Ghostview has a different name.
   (when (eq aph/machine 'mpc)
-    (setq doc-view-ghostscript-program "mgs.exe")))
+    (validate-setq doc-view-ghostscript-program "mgs.exe")))
 
 (use-package eldoc
   :defer t
@@ -308,14 +310,14 @@
                 ("M-n" . forward-paragraph))
   :config
   ;; UI config
-  (setq elfeed-sort-order 'ascending)
+  (validate-setq elfeed-sort-order 'ascending)
 
   ;; Network config
-  (setq url-queue-parallel-processes 1
-        url-queue-timeout            30)
+  (validate-setq url-queue-parallel-processes 1)
+  (validate-setq url-queue-timeout            30)
 
   ;; Filesystem config
-  (setq elfeed-db-directory "~/sync/elfeed")
+  (validate-setq elfeed-db-directory "~/sync/elfeed")
 
   ;; The various elfeed modes do not follow the convention of using
   ;; `run-mode-hooks' and thus do not run
@@ -326,13 +328,14 @@
   (add-hook 'elfeed-show-mode-hook   #'umbra--update-major-mode) 
 
   ;; Load the feed list
-  (load (expand-file-name (concat elfeed-db-directory "/feeds.el"))))
+  (load (expand-file-name (concat elfeed-db-directory "/feeds.el")))
+  (validate-variable 'elfeed-feeds))
 
 (use-package elfeed-lens
   :bind (:umbra elfeed-search-mode
                 ("'" . elfeed-lens-cycle)) 
   :config
-  (setq elfeed-lens-list '("@6-months-ago +unread" "+todo")))
+  (validate-setq elfeed-lens-list '("@6-months-ago +unread" "+todo")))
 
 (use-package elfeed-link
   :after elfeed
@@ -340,8 +343,8 @@
                 ("p" . elfeed-show-prev)
                 ("n" . elfeed-show-next))
   :config
-  (setq elfeed-link-tag              'link
-        elfeed-link-browser-function #'eww-browse-url))
+  (validate-setq elfeed-link-tag              'link)
+  (validate-setq elfeed-link-browser-function #'eww-browse-url))
 
 (use-package enumerate
   :bind (:map umbra-mode-map
@@ -353,7 +356,8 @@
                 ("C-c C-t" . ert))
   :init 
   (add-to-list 'load-path (expand-file-name (concat aph/sync-directory
-                                                    "/emacs/init/test"))))
+                                                    "/emacs/init/test")))
+  (validate-variable 'load-path))
 
 (use-package eww
   :bind (:map umbra-mode-map ("C-z C-w" . eww))
@@ -368,15 +372,15 @@
 (use-package expand-region
   :bind (:map umbra-mode-map ("C-;" . er/expand-region))
   :config
-  (setq expand-region-contract-fast-key "'"
-        expand-region-reset-fast-key    " "))
+  (validate-setq expand-region-contract-fast-key "'")
+  (validate-setq expand-region-reset-fast-key    " "))
 
 (use-package files
   :defer t
   :config 
-  (setq backup-directory-alist
-        `(("." . ,(concat user-emacs-directory "backups"))))
-  (setq confirm-kill-emacs #'y-or-n-p))
+  (validate-setq backup-directory-alist
+                 `(("." . ,(concat user-emacs-directory "backups"))))
+  (validate-setq confirm-kill-emacs #'y-or-n-p))
 
 (use-package aph-files
   :after files
