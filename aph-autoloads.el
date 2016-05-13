@@ -114,6 +114,30 @@ explanatory message.
 
 ;;;***
 
+;;;### (autoloads nil "elfeed-lens" "elfeed-lens.el" (22326 18128
+;;;;;;  953454 900000))
+;;; Generated autoloads from elfeed-lens.el
+
+(autoload 'elfeed-lens-cycle "elfeed-lens" "\
+Apply the next filter in `elfeed-lens-list'.
+
+If the current search filter is an element of `elfeed-lens-list',
+apply the filter immediately following that one in the list,
+looping back to the beginning if necessary.
+
+If the current search filter is not in `elfeed-lens-list', just
+apply the first filter in the list.
+
+If `elfeed-lens-list' is empty, just apply the default filter.
+
+Return the filter applied.  When called interactively or the
+optional VERBOSE parameter is non-nil, also print a message
+informing the user of the newly applied filter.
+
+\(fn &optional VERBOSE)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "enumerate" "enumerate.el" (22306 21552 766542
 ;;;;;;  300000))
 ;;; Generated autoloads from enumerate.el
@@ -294,9 +318,9 @@ penumbra map instead.
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
-;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-elfeed.el" "aph-ert.el"
-;;;;;;  "aph-face-remap.el" "aph-files.el" "aph-forms.el" "aph-frame.el"
-;;;;;;  "aph-framewin.el" "aph-haskell.el" "aph-helm-forms.el" "aph-helm-projectile.el"
+;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-face-remap.el"
+;;;;;;  "aph-files.el" "aph-forms.el" "aph-frame.el" "aph-framewin.el"
+;;;;;;  "aph-haskell.el" "aph-helm-forms.el" "aph-helm-projectile.el"
 ;;;;;;  "aph-helm.el" "aph-help.el" "aph-ielm.el" "aph-iimage.el"
 ;;;;;;  "aph-info.el" "aph-keypad.el" "aph-latex.el" "aph-lexical.el"
 ;;;;;;  "aph-lisp-mode.el" "aph-message.el" "aph-org-agenda.el" "aph-org-capture.el"
@@ -305,8 +329,8 @@ penumbra map instead.
 ;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
 ;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
 ;;;;;;  "init-core.el" "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el") (22324
-;;;;;;  63126 86323 900000))
+;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el") (22326
+;;;;;;  18344 108395 600000))
 
 ;;;***
 
