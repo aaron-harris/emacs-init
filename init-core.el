@@ -67,7 +67,7 @@
   :ensure t
   :defer t
   :config
-  (setq lv-use-separator t))
+  (validate-setq lv-use-separator t))
 
 (use-package mode-family
   :defer t)
@@ -83,29 +83,29 @@
 ;;; Configuration: Source-Level
 ;;;============================
 (prefer-coding-system 'utf-8-unix)
-(setq enable-recursive-minibuffers t)
+(validate-setq enable-recursive-minibuffers t)
 
 ;; Personal Information
-(setq user-full-name    "Aaron Harris"
-      user-mail-address "meerwolf@gmail.com")
+(validate-setq user-full-name    "Aaron Harris")
+(validate-setq user-mail-address "meerwolf@gmail.com")
 
 ;; UI Configuration
-(setq-default cursor-type                     'box
-              frame-resize-pixelwise          t
-              indent-tabs-mode                nil
-              indicate-buffer-boundaries      'right
-              inhibit-startup-screen          t
-              resize-mini-windows             t
-              ring-bell-function              #'ignore
-              scroll-conservatively           1000
-              scroll-margin                   1
-              scroll-preserve-screen-position :always)
+(validate-setq cursor-type                     'box)
+(validate-setq frame-resize-pixelwise          t)
+(validate-setq indent-tabs-mode                nil)
+(validate-setq indicate-buffer-boundaries      'right)
+(validate-setq inhibit-startup-screen          t)
+(validate-setq resize-mini-windows             t)
+(validate-setq ring-bell-function              #'ignore)
+(validate-setq scroll-conservatively           1000)
+(validate-setq scroll-margin                   1)
+(validate-setq scroll-preserve-screen-position :always)
 
 ;; Use Windows keys for super modifier.
-(setq w32-lwindow-modifier       'super
-      w32-pass-lwindow-to-system nil
-      w32-rwindow-modifier       'super
-      w32-pass-rwindow-to-system nil)
+(validate-setq w32-lwindow-modifier       'super)
+(validate-setq w32-rwindow-modifier       'super)
+(validate-setq w32-pass-lwindow-to-system nil)
+(validate-setq w32-pass-rwindow-to-system nil)
 
 ;; Enable some disabled commands
 (dolist (command '(downcase-region
