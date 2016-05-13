@@ -313,7 +313,6 @@
 
   ;; Filesystem config
   (setq elfeed-db-directory "~/sync/elfeed")
-  ;; (add-hook 'kill-emacs-hook #'elfeed-db-compact)
 
   ;; The various elfeed modes do not follow the convention of using
   ;; `run-mode-hooks' and thus do not run
@@ -326,6 +325,12 @@
   ;; Load the feed list
   (load (expand-file-name (concat elfeed-db-directory "/feeds.el"))))
 
+(use-package elfeed-lens
+  :bind (:umbra elfeed-search-mode
+                ("'" . elfeed-lens-cycle)) 
+  :config
+  (setq elfeed-lens-list '("@6-months-ago +unread" "+todo")))
+
 (use-package elfeed-link
   :after elfeed
   :bind (:umbra eww-mode
@@ -334,13 +339,6 @@
   :config
   (setq elfeed-link-tag              'link
         elfeed-link-browser-function #'eww-browse-url))
-
-(use-package aph-elfeed
-  :after elfeed
-  :bind (:umbra elfeed-search-mode
-                ("'" . aph/elfeed-search-next-favorite-filter)) 
-  :config
-  (setq aph/elfeed-favorite-filters  '("@6-months-ago +unread" "+todo")))
 
 (use-package enumerate
   :bind (:map umbra-mode-map
