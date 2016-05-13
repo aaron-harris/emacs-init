@@ -58,6 +58,9 @@
 ;; Packages in this section are loaded early so we can use them in
 ;; subsequent package declarations.
 
+(use-package validate
+  :ensure t)
+
 (use-package chimera)
 
 (use-package hydra
@@ -896,6 +899,10 @@
   :config
   (setq-default save-place t)
   (setq save-place-file (concat user-emacs-directory "places")))
+
+(use-package seq
+  :ensure t
+  :defer t)
 
 (use-package server
   :disabled t
