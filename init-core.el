@@ -58,6 +58,12 @@
 ;; Packages in this section are loaded early so we can use them in
 ;; subsequent package declarations.
 
+(use-package seq
+  :ensure t
+  :defer t
+  :config
+  (require 'seq-24))
+
 (use-package validate
   :ensure t)
 
@@ -95,7 +101,7 @@
 (validate-setq indent-tabs-mode                nil)
 (validate-setq indicate-buffer-boundaries      'right)
 (validate-setq inhibit-startup-screen          t)
-(validate-setq resize-mini-windows             t)
+(setq resize-mini-windows                      t) ;; Validation doesn't support this?
 (validate-setq ring-bell-function              #'ignore)
 (validate-setq scroll-conservatively           1000)
 (validate-setq scroll-margin                   1)
@@ -903,10 +909,6 @@
   :config
   (setq-default save-place t)
   (setq save-place-file (concat user-emacs-directory "places")))
-
-(use-package seq
-  :ensure t
-  :defer t)
 
 (use-package server
   :disabled t
