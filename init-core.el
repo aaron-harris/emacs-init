@@ -1124,7 +1124,13 @@
 
 (use-package uniquify
   :config
-  (setq uniquify-buffer-name-style 'forward))
+  ;; Snippet from http://pragmaticemacs.com/emacs/uniquify-your-buffer-names/
+  (setq uniquify-buffer-name-style 'forward)
+  (setq uniquify-separator "/")
+  (setq uniquify-after-kill-buffer-p t)
+  (setq uniquify-ignore-buffers-re "^\\*"))
+
+
 
 (use-package visible-mark
   :ensure t
