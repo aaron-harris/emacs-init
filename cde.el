@@ -76,11 +76,18 @@
 (require 'dash)
 
 
-;;;; Configuration Variables
-;;;;========================
-(defvar cde-page-size 50
+;;;; User Options
+;;;;=============
+(defgroup cde nil
+  "Count elided sequences."
+  :prefix "cde-"
+  :link '(emacs-commentary-link "cde")
+  :group 'applications)
+
+(defcustom cde-page-size 50
   "The increment size for alphabetic characters in `cde'.
-See the documentation of `cde' for more information.")
+See the documentation of `cde' for more information."
+  :type 'integer)
 
 
 ;;;; Subroutines
