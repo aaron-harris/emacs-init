@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience, rss
 
-;; Dependencies: `elfeed'
+;; Dependencies: `elfeed', `validate'
 ;; Advised functions from other packages:
 ;;   elfeed: `elfeed-show-entry'
 
@@ -55,7 +55,7 @@ Each hook function is passed a single argument, the Elfeed entry
 that is about to be shown.  If any function returns non-nil, then
 the entry is not shown and further functions are not
 called."
-  :group elfeed
+  :group 'elfeed
   :type 'hook)
 
 
@@ -65,6 +65,8 @@ called."
 (defun elfeed-barb--before-show-functions-advice (entry)
   "Advice to enable `elfeed-barb-before-show-functions'.
 Intended as :before-until advice for `elfeed-show-entry'."
+  (require 'validate)
+  (validate-variable 'elfeed-barb-before-show-functions)
   (run-hook-with-args-until-success
    'elfeed-barb-before-show-functions entry))
 
