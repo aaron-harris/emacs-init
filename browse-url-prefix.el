@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: hypermedia
 
-;; Dependencies: `browse-url', `validate'
+;; Dependencies: `browse-url', `validate' (optional)
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -92,9 +92,12 @@ With a prefix arg, the function
 Interactively, prompt the user for URL, using any URL at point as
 a default."
   (interactive (browse-url-interactive-arg "URL: "))
+  (when (require 'validate nil :noerror)
+    (validate-variable 'browse-url-prefix-browser-function)
+    (validate-variable 'browse-url-prefix-default-browser-function))
   (apply (if current-prefix-arg
-             (validate-variable 'browse-url-prefix-browser-function)
-           (validate-variable 'browse-url-prefix-default-browser-function))
+             browse-url-prefix-browser-function
+           browse-url-prefix-default-browser-function)
          (cons url args)))
 
 
