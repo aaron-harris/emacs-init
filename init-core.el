@@ -311,6 +311,8 @@
   :ensure t
   :bind (:map umbra-mode-map
               ("C-z C-f" . elfeed))
+  :bind (:umbra elfeed-search-mode
+                ("U" . elfeed-unjam))
   :bind (:umbra elfeed-show-mode
                 ("M-p" . backward-paragraph)
                 ("M-n" . forward-paragraph))
