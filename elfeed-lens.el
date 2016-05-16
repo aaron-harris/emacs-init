@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience rss
 
-;; Dependencies: `aph-dash'
+;; Dependencies: `aph-dash', `validate'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -57,8 +57,9 @@ optional VERBOSE parameter is non-nil, also print a message
 informing the user of the newly applied filter."
   (interactive "p")
   (require 'aph-dash)                   ; For `aph/successor-in-list'
+  (require 'validate)
   (let ((new-filter
-         (aph/successor-in-list elfeed-lens-list
+         (aph/successor-in-list (validate-variable 'elfeed-lens-list)
                                 elfeed-search-filter :cyclical)))
     (elfeed-search-set-filter new-filter)
     (when verbose (message "Filter applied: %s" elfeed-search-filter))
