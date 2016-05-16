@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience, rss
 
-;; Dependencies: `elfeed', `validate'
+;; Dependencies: `elfeed', `validate' (optional)
 ;; Advised functions from other packages:
 ;;   elfeed: `elfeed-show-entry'
 
@@ -64,9 +64,9 @@ called."
 
 (defun elfeed-barb--before-show-functions-advice (entry)
   "Advice to enable `elfeed-barb-before-show-functions'.
-Intended as :before-until advice for `elfeed-show-entry'."
-  (require 'validate)
-  (validate-variable 'elfeed-barb-before-show-functions)
+Intended as :before-until advice for `elfeed-show-entry'." 
+  (when (require 'validate nil :noerror)
+    (validate-variable 'elfeed-barb-before-show-functions))
   (run-hook-with-args-until-success
    'elfeed-barb-before-show-functions entry))
 
