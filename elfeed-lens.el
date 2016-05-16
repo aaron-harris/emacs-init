@@ -33,9 +33,11 @@
 
 ;;; Code:
 
-(defvar elfeed-lens-list nil
+(defcustom elfeed-lens-list nil
   "A list of commonly-used filters for Elfeed.
-Use `elfeed-lens-cycle' to cycle through these.")
+Use `elfeed-lens-cycle' to cycle through these."
+  :group 'elfeed
+  :type '(repeat 'string))
 
 ;;;###autoload
 (defun elfeed-lens-cycle (&optional verbose)

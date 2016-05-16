@@ -46,10 +46,13 @@
 ;;;; Customization Variables
 ;;;;========================
 
-(defvar elfeed-link-tag nil
-  "Elfeed tag whose entries should be opened as links.")
+(defcustom elfeed-link-tag nil
+  "Elfeed tag whose entries should be opened as links."
+  :group 'elfeed
+  :type '(choice (const :tag "None" nil)
+                 symbol))
 
-(defvar elfeed-link-browser-function nil
+(defcustom elfeed-link-browser-function nil
   "Function to use to open external links from Elfeed.
 
 If nil, the default browser (`browse-url-browser-function') is
@@ -59,7 +62,9 @@ of arguments and expect a URL as its first argument.
 
 This function is only used for links opened automatically on
 entries with `elfeed-link-tag', not to links opened with
-`elfeed-show-visit'.")
+`elfeed-show-visit'."
+  :group 'elfeed
+  :type (custom-variable-type 'browse-url-browser-function))
 
 
 ;;;; Implementation
