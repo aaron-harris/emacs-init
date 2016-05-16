@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: extensions
 
-;; Required features: `dash'
+;; Required features: `dash', `validate' (optional)
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -102,15 +102,22 @@ Do not modify this list directly; use `mode-family-add' and
 
 ;;; Mode Family Creation
 ;;;=====================
+(defgroup mode-family nil
+  "Group modes into families."
+  :link '(emacs-commentary-link "mode-family")
+  :group 'convenience)
+
 (defmacro define-mode-family-hook (name family)
   "Define NAME as a hook variable for FAMILY.
 Do not use this directly; use `mode-family-create' instead."
   (declare (debug (&define name symbolp)))
-  `(defvar ,name nil
+  `(defcustom ,name nil
      ,(format "Hook run for all modes belonging to the mode family %s.
 No problems result if this variable is not bound.
 `add-hook' automatically binds it.  (This is true for all hook variables.)"
-              family)))
+              family)
+     :group 'mode-family
+     :type 'hook))
 
 (defun mode-family--hook (family)
   "Return the name of the hook variable for FAMILY (a symbol).
@@ -235,10 +242,12 @@ families associated with all its ancestors.
 
 This function is automatically run whenever the major mode is changed.
 
-See the documentation for `mode-family-create' for more information."
-  (apply #'run-hooks
-         (mapcar #'mode-family--hook
-                 (mode-family-list-families major-mode :inherit))))
+See the documentation for `mode-family-create' for more information." 
+  (dolist (hook (mapcar #'mode-family--hook
+                        (mode-family-list-families major-mode :inherit)))
+    (when (require 'validate nil :noerror)
+      (validate-variable hook))
+    (run-hooks hook)))
 
 (add-hook 'change-major-mode-after-body-hook #'mode-family-run-hooks)
 
@@ -257,7 +266,6 @@ More specifically:
   (remove-hook 'change-major-mode-after-body-hook #'mode-family-run-hooks)
   (dolist (family mode-family--list)
     (makunbound (mode-family--hook family))))
-
 
 (provide 'mode-family)
 ;;; mode-family.el ends here
