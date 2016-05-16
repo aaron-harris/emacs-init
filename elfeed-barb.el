@@ -48,13 +48,15 @@
 ;;;; Hook Variables
 ;;;;===============
 
-(defvar elfeed-barb-before-show-functions nil
+(defcustom elfeed-barb-before-show-functions nil
   "Abnormal hook run before showing an entry in Elfeed.
 
 Each hook function is passed a single argument, the Elfeed entry
 that is about to be shown.  If any function returns non-nil, then
 the entry is not shown and further functions are not
-called.")
+called."
+  :group elfeed
+  :type 'hook)
 
 
 ;;;; Hook Insertion
