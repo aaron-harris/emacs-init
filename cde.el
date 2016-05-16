@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience, local
 
-;; Dependencies: `dash', `validate'
+;; Dependencies: `dash', `validate' (optional)
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -73,8 +73,7 @@
 ;;   result of calling `cde' on it.
 
 ;;; Code:
-(require 'dash)
-(require 'validate)
+(require 'dash) 
 
 
 ;;;; User Options
@@ -102,11 +101,13 @@ The return value is n unless X is the string \"B\", in which case
 it is n plus the value of `cde-page-size'.
 
 This function is used as a subroutine by `cde'."
+  (when (require 'validate nil :noerror)
+    (validate-variable 'cde-page-size))
   (save-match-data
     (string-match "\\([0-9]+\\)\\(B?\\)" ref)
     (let ((n  (string-to-int (match-string 1 ref)))
           (x  (match-string 2 ref)))
-      (+ n (if (equal x "B") (validate-variable 'cde-page-size) 0)))))
+      (+ n (if (equal x "B") cde-page-size 0)))))
 
 (defun cde--list (ranges)
   "Count the numbers in RANGES.

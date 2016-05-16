@@ -52,7 +52,6 @@
 ;;; Code:
 
 (require 'browse-url)
-(require 'validate)
 
 
 ;;;; User Options
