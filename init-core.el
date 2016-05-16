@@ -101,7 +101,7 @@
 (validate-setq indent-tabs-mode                nil)
 (validate-setq indicate-buffer-boundaries      'right)
 (validate-setq inhibit-startup-screen          t)
-(setq resize-mini-windows                      t) ;; Validation doesn't support this?
+(setq resize-mini-windows                      t) ;; Won't validate on Emacs 25
 (validate-setq ring-bell-function              #'ignore)
 (validate-setq scroll-conservatively           1000)
 (validate-setq scroll-margin                   1)
