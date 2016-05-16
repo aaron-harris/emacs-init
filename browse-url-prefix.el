@@ -54,23 +54,31 @@
 (require 'browse-url)
 
 
-;;;; Configuration Variables
-;;;;========================
-(defvar browse-url-prefix-browser-function
+;;;; User Options
+;;;;=============
+(defgroup browse-url-prefix nil
+  "Choose a web browser based on prefix arg."
+  :prefix "browse-url-prefix-"
+  :link '(emacs-commentary-link "browse-url-prefix")
+  :group 'browse-url)
+
+(defcustom browse-url-prefix-browser-function
   #'browse-url-default-browser
   "Function that `browse-url' should use with prefix arg.
 
 This function should obey the same calling convention as
 `browse-url-browser-function'; i.e., it should take a url as its
-first argument.")
+first argument."
+  :type 'function)
 
-(defvar browse-url-prefix-default-browser-function
+(defcustom browse-url-prefix-default-browser-function
   #'browse-url-default-browser
   "Function that `browse-url' should use without prefix arg.
 
 This function should obey the same calling convention as
 `browse-url-browser-function'; i.e., it should take a url as its
-first argument.")
+first argument."
+  :type 'function)
 
 
 ;;;; Dispatch Function
