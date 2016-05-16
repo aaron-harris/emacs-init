@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience rss
 
-;; Dependencies: `elfeed-barb', `validate'
+;; Dependencies: `elfeed-barb', `validate' (optional)
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -78,12 +78,14 @@ to open the URL rather than `browse-url-browser-function'.
 Return non-nil if ENTRY has `elfeed-link-tag' and nil if it does
 not.  This makes the function suitable for use in
 `elfeed-barb-before-show-functions'."
-  (require 'validate)
-  (when (and (validate-variable 'elfeed-link-tag)
+  (when (require 'validate nil :noerror)
+    (validate-variable 'elfeed-link-tag)
+    (validate-variable 'elfeed-link-browser-function))
+  (when (and elfeed-link-tag
              (elfeed-tagged-p elfeed-link-tag entry))
     (let ((link  (elfeed-entry-link entry))
           (browse-url-browser-function
-           (or (validate-variable 'elfeed-link-browser-function)
+           (or elfeed-link-browser-function
                browse-url-browser-function)))
       (message "Opening entry link: %s" link)
       (browse-url link))))
