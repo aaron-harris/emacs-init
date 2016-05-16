@@ -222,7 +222,7 @@
   :after browse-url
   :config
   (validate-setq browse-url-browser-function                #'browse-url-prefix)
-  (validate-setq browse-url-prefix-browser-default-function #'eww-browse-url))
+  (validate-setq browse-url-prefix-default-browser-function #'eww-browse-url))
 
 (use-package calc
   :bind (:map umbra-mode-map
