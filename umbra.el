@@ -98,8 +98,17 @@
 (eval-when-compile (require 'aph-subr))
 
 
-;;; Base Keymaps
-;;;=============
+;;;; User Options
+;;;;=============
+(defgroup umbra nil
+  "Shadow keybindings without overwriting."
+  :prefix "umbra-"
+  :link '(emacs-commentary-link "umbra")
+  :group convenience)
+
+
+;;;; Base Keymaps
+;;;;=============
 (defvar umbra-mode-map (make-sparse-keymap)
   "Global keymap for `umbra-mode'.
 
@@ -139,8 +148,8 @@ major mode during a `helm' session.  Bind keys here if you wish
 them to override keys in `helm-map'.")
 
 
-;;; Keymap Management
-;;;==================
+;;;; Keymap Management
+;;;;==================
 (defvar umbra-map-alist nil
   "Alist containing all augmented (\"umbra\") keymaps.
 
@@ -203,8 +212,8 @@ maintained by the function `umbra--update-major-mode'.")
              'umbra-local-map-alist :append #'eq)
 
 
-;;; Augmented keymaps
-;;;==================
+;;;; Augmented keymaps
+;;;;==================
 (defmacro define-umbra-keymap (name mode &optional penumbra)
   "Define umbra keymap variable with NAME for MODE.
 
@@ -289,8 +298,8 @@ keymaps are named like 'umbra-overriding-mode-map:MODE."
   (symbol-value (umbra-keymap-var mode penumbra)))
 
 
-;;; Mode Definition
-;;;================ 
+;;;; Mode Definition
+;;;;================ 
 (defun umbra--set-major-mode-parentage (mode &optional penumbra)
   "Set parentage of umbra keymap for MODE.
 
@@ -377,8 +386,8 @@ penumbra map instead."
 (add-hook 'after-change-major-mode-hook #'umbra--update-major-mode)
 
 
-;;; `bind-keys' Support
-;;;====================
+;;;; `bind-keys' Support
+;;;;====================
 (defun umbra--bind-keys-advice (orig &rest args)
   "Advice to add :umbra, :penumbra keywords to `bind-keys'.
 
@@ -422,8 +431,8 @@ Intended as :around advice for `bind-keys'."
 (advice-add #'bind-keys :around #'umbra--bind-keys-advice)
 
 
-;;; Compatibility Functions
-;;;========================
+;;;; Compatibility Functions
+;;;;========================
 (defun umbra-default-command (key &optional default)
   "Execute the command bound to KEY without `umbra-mode'.
 
@@ -475,8 +484,8 @@ If you intend to bind C-i separately from <tab> in
   (umbra-default-command (kbd "TAB") #'indent-for-tab-command))
 
 
-;;; Unloading
-;;;==========
+;;;; Unloading
+;;;;==========
 (defun umbra-unload-function ()
   "Undo changes made to Emacs for `umbra-mode'.
 
