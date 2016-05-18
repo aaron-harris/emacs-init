@@ -5,38 +5,7 @@
 ;;;;============================================================================
 
 ;; Extensions for `forms' module.
-(require 'forms-barb)
-
-
-;;; Functional Subroutines
-;;;=======================
-(defun aph/forms-reduce (fun &optional acc)
-  "Reduce FUN over all records in current database.
-Use ACC as the initial value for the accumulator, or nil if ACC
-is not provided.
-
-The function FUN should take a single argument (the accumulator)
-and return a value of the same type.  The data in the current
-record can be accessed using dynamic variables such as
-`forms-fields'.
-
-Do not change current record (or, more accurately, save current
-record and restore it after completion).  Since this is
-frequently necessary to refresh some aspect of the buffer's
-appearance, it is run even in the event of an error or nonlocal
-exit.
-
-Run `aph/forms-change-record-hook' only once, when restoring the
-initial record."
-  (save-excursion
-    (unwind-protect
-        (let ((aph/forms-change-record-hook nil)) 
-          (forms-first-record)
-          (while (< forms--current-record forms--total-records)
-            (setq acc (funcall fun acc))
-            (forms-next-record 1))
-          (setq acc (funcall fun acc)))
-      (run-hooks 'aph/forms-change-record-hook))))
+(require 'formation)
 
 
 ;;; Database Query Functions
@@ -51,10 +20,9 @@ is specified by NAME-FIELD and NUM is the number of the record.
 
 If omitted, NAME-FIELD defaults to 1."
   (let ((name-field  (or name-field 1)))
-    (aph/forms-reduce
-     (lambda (acc)
-       (cons `(,(nth name-field forms-fields) . ,forms--current-record)
-             acc)))))
+    (formation-map
+     (lambda ()
+       `(,(nth name-field forms-fields) . ,forms--current-record)))))
 
 
 ;;; Auxiliary File
@@ -122,10 +90,10 @@ total of this field across all records in the database."
                     (+ acc (funcall aph/forms-random-record-weight-transform
                                     (nth aph/forms-random-record-weight
                                          forms-fields)))))
-         (total   (aph/forms-reduce counter 0))
+         (total   (formation-reduce counter 0))
          (roll    (random total))) 
     (catch 'found
-      (aph/forms-reduce
+      (formation-reduce
        (lambda (acc)
          (setq acc (funcall counter acc))
          (if (< roll acc)
