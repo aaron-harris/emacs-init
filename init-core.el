@@ -291,7 +291,9 @@
 
 (use-package dash
   :ensure t
-  :defer t)
+  :defer t
+  :config
+  (dash-enable-font-lock)) 
 
 (use-package doc-view
   :defer t
@@ -403,13 +405,7 @@
               ("C-h C-M-k" . find-function-on-key)
               ("C-h C-M-v" . find-variable)
               ("C-h M-F"   . find-face-definition)
-              ("C-h C-M-l" . find-library)))
-
-(use-package font-lock
-  :defer t
-  :config
-  (with-eval-after-load 'dash
-    (dash-enable-font-lock)))
+              ("C-h C-M-l" . find-library))) 
 
 (use-package aph-forms
   :after forms)
