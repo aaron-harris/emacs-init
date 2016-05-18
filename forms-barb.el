@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016  Aaron Harris
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
-;; Keywords: data
+;; Keywords: data forms
 
 ;; Dependencies: `forms', `validate' (optional)
 ;; Advised functions from other packages:
