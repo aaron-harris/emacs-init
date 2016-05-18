@@ -104,7 +104,7 @@
   "Shadow keybindings without overwriting."
   :prefix "umbra-"
   :link '(emacs-commentary-link "umbra")
-  :group convenience)
+  :group 'convenience)
 
 
 ;;;; Base Keymaps
