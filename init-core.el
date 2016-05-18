@@ -395,13 +395,7 @@
   :bind (:map umbra-mode-map
               ("C-x k"        . aph/kill-active-buffer)
               ("C-x C-c"      . aph/delete-frame-or-exit)
-              ("C-x <delete>" . aph/kill-active-buffer-delete-file))
-  :config
-  ;; Make Emacs source read-only
-  (when (eq aph/machine 'mpc)
-    (setq aph/emacs-source-dirs
-          '("C:/Program Files (Portable)/Emacs/share/emacs")))
-  (aph/emacs-source-make-read-only))
+              ("C-x <delete>" . aph/kill-active-buffer-delete-file)))
 
 (use-package find-func
   :bind (:map umbra-mode-map
@@ -1082,6 +1076,13 @@
   :bind (:map umbra-mode-map
               ("s-<apps> d" . delete-duplicate-lines)
               ("s-<apps> s" . sort-lines)))
+
+(use-package source-lock
+  :config
+  (when (eq aph/machine 'mpc)
+    (setq source-lock-directories
+          '("C:/Program Files (Portable)/Emacs/share/emacs")))
+  (source-lock-mode t))
 
 (use-package tex-site
   :ensure auctex
