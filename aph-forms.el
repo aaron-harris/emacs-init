@@ -5,23 +5,7 @@
 ;;;;============================================================================
 
 ;; Extensions for `forms' module.
-(require 'forms)
-
-
-;;; Additional Hooks
-;;;=================
-(defvar aph/forms-change-record-hook nil
-  "Hook run after changing records in `forms-mode'.")
-
-(defun aph/forms-change-record-hook-run (&rest args)
-  "Run `aph/forms-change-record-hook'.
-
-The ARGS are ignored.  The reason for including them is so that
-this function can be used as advice.  By default this function is
-installed as :after advice on `forms-jump-record'."
-  (run-hooks 'aph/forms-change-record-hook))
-
-(advice-add #'forms-jump-record :after #'aph/forms-change-record-hook-run)
+(require 'forms-barb)
 
 
 ;;; Functional Subroutines
