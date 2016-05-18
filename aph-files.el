@@ -1,10 +1,29 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-files.el --- Extensions for `files` module   -*- lexical-binding: t; -*-
 
-;;;; The Emacs init files of Aaron Harris:
-;;;; FILE-HANDLING EXTENSIONS
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-;; Extensions for `files' package.
+;; Author: Aaron Harris;;; -*- lexical-binding: t -*- <meerwolf@gmail.com>
+;; Keywords: files
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Miscellaneous functions extending those in the `files' module built
+;; into Emacs.
+
+;;; Code:
 
 
 ;;; Killing Buffers
@@ -86,3 +105,4 @@ Emacs, bypassing all normal confirmation prompts."
    (:else                                (save-buffers-kill-terminal))))
 
 (provide 'aph-files)
+;;; aph-files.el ends here
