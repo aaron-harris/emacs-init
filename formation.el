@@ -54,7 +54,7 @@ Run `forms-barb-change-record-hook' only once, when restoring the
 initial record.  Since this is frequently necessary to refresh
 some aspect of the buffer's appearance, it is run even in the
 event of an error or nonlocal exit."
-  (save-excursion
+  (let ((rec forms--current-record))
     (unwind-protect
         (let ((forms-barb-change-record-hook nil)) 
           (forms-first-record)
@@ -62,7 +62,7 @@ event of an error or nonlocal exit."
             (setq acc (funcall fun acc))
             (forms-next-record 1))
           (setq acc (funcall fun acc)))
-      (run-hooks 'forms-barb-change-record-hook))))
+      (forms-jump-record rec))))
 
 (defun formation-map (fun)
   "Call FUN once for each record, and accumulate the results.
