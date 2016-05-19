@@ -407,8 +407,19 @@
               ("C-h M-F"   . find-face-definition)
               ("C-h C-M-l" . find-library))) 
 
-(use-package aph-forms
-  :after forms)
+(use-package forms
+  :bind (:umbra forms-mode
+                ("C-M-p"      . forms-prev-record)
+                ("C-M-n"      . forms-next-record)
+                ("C-M-a"      . forms-first-record)
+                ("C-M-e"      . forms-last-record)
+                ("C-<return>" . forms-insert-record))
+  :config
+  (validate-setq forms-insert-after t))
+
+(use-package forms-random
+ :bind (:umbra forms-mode
+               ("C-M-." . forms-random-record-weighted)))
 
 (use-package aph-frame
   :config
@@ -527,6 +538,10 @@
   :ensure t
   :after helm
   :config (helm-descbinds-mode))
+
+(use-package helm-forms
+  :bind (:umbra forms-mode
+                ("M-." . helm-forms-records)))
 
 (use-package helm-projectile
   :ensure t
