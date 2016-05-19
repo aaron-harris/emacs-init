@@ -25,33 +25,6 @@ If omitted, NAME-FIELD defaults to 1."
        `(,(nth name-field forms-fields) . ,forms--current-record)))))
 
 
-;;; Auxiliary File
-;;;===============
-(defvar-local aph/forms-aux-buffer nil
-  "The auxiliary file buffer for the current database.")
-
-(defun aph/forms-open-auxiliary-file-from-field (&optional field)
-  "Open the file named in FIELD in a separate window.
-Kill any other buffer previously created by this function,
-without saving any changes.
-
-Return the newly opened buffer, but do not select it.
-
-If omitted, FIELD defaults to 1."
-  (interactive)
-  (let* ((field       (or field 1))
-         (filename    (nth field forms-fields))
-         (window      (selected-window))
-         (aux-buffer  aph/forms-aux-buffer))
-    (when aux-buffer  (aph/kill-buffer-nowarn aux-buffer)) 
-    (setq aux-buffer  (find-file-other-window filename))
-    (select-window window)
-    ;; The circumlocution here is because `aph/forms-aux-buffer' is
-    ;; buffer-local, and we want to set it in our original buffer, not
-    ;; in the auxiliary buffer itself.
-    (setq aph/forms-aux-buffer aux-buffer)))
-
-
 ;;; Random Record Selection
 ;;;========================
 (defun aph/forms-random-record ()
