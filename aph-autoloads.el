@@ -60,7 +60,7 @@ Names of buffers that `aph/quit-help-windows' should quit.")
 ;;;***
 
 ;;;### (autoloads nil "browse-url-prefix" "browse-url-prefix.el"
-;;;;;;  (22323 39395 951051 600000))
+;;;;;;  (22330 17349 411909 400000))
 ;;; Generated autoloads from browse-url-prefix.el
 
 (autoload 'browse-url-prefix "browse-url-prefix" "\
@@ -75,7 +75,7 @@ a default.
 
 ;;;***
 
-;;;### (autoloads nil "cde" "cde.el" (22297 20489 276601 500000))
+;;;### (autoloads nil "cde" "cde.el" (22330 17248 261613 200000))
 ;;; Generated autoloads from cde.el
 
 (autoload 'cde "cde" "\
@@ -114,8 +114,8 @@ explanatory message.
 
 ;;;***
 
-;;;### (autoloads nil "elfeed-lens" "elfeed-lens.el" (22326 18128
-;;;;;;  953454 900000))
+;;;### (autoloads nil "elfeed-lens" "elfeed-lens.el" (22330 16992
+;;;;;;  645014 100000))
 ;;; Generated autoloads from elfeed-lens.el
 
 (autoload 'elfeed-lens-cycle "elfeed-lens" "\
@@ -184,8 +184,28 @@ to put the number at the end of the line is unavailable.
 
 ;;;***
 
-;;;### (autoloads nil "mode-family" "mode-family.el" (22277 35665
-;;;;;;  55619 500000))
+;;;### (autoloads nil "forms-aux" "forms-aux.el" (22334 5858 341350
+;;;;;;  800000))
+;;; Generated autoloads from forms-aux.el
+
+(autoload 'forms-aux-open-file "forms-aux" "\
+Open the auxiliary file for the current record.
+
+The filename to open is the current record's value for the field
+numbered by `forms-aux-field'.  Open this file, if it exists, in
+a separate window, and kill any other buffer previously created
+by this function. 
+
+Return the newly opened buffer, but do not select it.
+
+If `forms-aux-field' is nil, do nothing.
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "mode-family" "mode-family.el" (22330 16407
+;;;;;;  159146 400000))
 ;;; Generated autoloads from mode-family.el
 
 (autoload 'mode-family-create "mode-family" "\
@@ -252,7 +272,32 @@ After all theme changes have been made, run
 
 ;;;***
 
-;;;### (autoloads nil "umbra" "umbra.el" (22297 20541 864025 800000))
+;;;### (autoloads nil "source-lock" "source-lock.el" (22332 54401
+;;;;;;  140316 900000))
+;;; Generated autoloads from source-lock.el
+
+(defvar source-lock-mode nil "\
+Non-nil if Source-Lock mode is enabled.
+See the command `source-lock-mode' for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `source-lock-mode'.")
+
+(custom-autoload 'source-lock-mode "source-lock" nil)
+
+(autoload 'source-lock-mode "source-lock" "\
+Mode to make source files read-only.
+
+When enabled, any file in one of the directories listed in
+`source-lock-directories' will be opened in read-only mode.  If
+`source-lock-protect-packages-p' is non-nil, then
+`package-user-dir' is similarly protected.
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "umbra" "umbra.el" (22332 37495 310947 0))
 ;;; Generated autoloads from umbra.el
 
 (autoload 'umbra-keymap "umbra" "\
@@ -328,9 +373,10 @@ penumbra map instead.
 ;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
 ;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
 ;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
-;;;;;;  "init-core.el" "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el") (22326
-;;;;;;  18344 108395 600000))
+;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
+;;;;;;  "jerk.el" "liberate-key.el" "morgue.el") (22334 5872 674417
+;;;;;;  400000))
 
 ;;;***
 
