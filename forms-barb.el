@@ -59,7 +59,7 @@ this function can be used as advice.  By default this function is
 installed as :after advice on `forms-jump-record'."
   (when (require 'validate nil :noerror)
     (validate-variable 'forms-barb-change-record-hook))
-  (run-hooks 'aph/forms-change-record-hook))
+  (run-hooks 'forms-barb-change-record-hook))
 
 (advice-add 'forms-jump-record :after #'forms-barb--change-record-hook-advice)
 
