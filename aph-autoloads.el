@@ -204,6 +204,34 @@ If `forms-aux-field' is nil, do nothing.
 
 ;;;***
 
+;;;### (autoloads nil "forms-random" "forms-random.el" (22334 14569
+;;;;;;  877195 600000))
+;;; Generated autoloads from forms-random.el
+
+(autoload 'forms-random-record "forms-random" "\
+Go to a randomly selected record in current database.
+
+\(fn)" t nil)
+
+(autoload 'forms-random-record-weighted "forms-random" "\
+As `forms-random-record', but die is weighted.
+
+Interpret the field specified by the variable
+`forms-random-weight-field' as a weighting factor, using the
+value of `forms-random-weight-transform' to transform this into
+an integer.
+
+If `forms-random-weight-field' is nil, treat all weights as
+equal; i.e., behave identically to `forms-random-record'.
+
+The chance of selecting any particular record R is then n/N,
+where n is the value R has for the weighting field and N is the
+total of this field across all records in the database.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "mode-family" "mode-family.el" (22330 16407
 ;;;;;;  159146 400000))
 ;;; Generated autoloads from mode-family.el
@@ -375,8 +403,8 @@ penumbra map instead.
 ;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
 ;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "jerk.el" "liberate-key.el" "morgue.el") (22334 5872 674417
-;;;;;;  400000))
+;;;;;;  "jerk.el" "liberate-key.el" "morgue.el") (22334 14605 477639
+;;;;;;  100000))
 
 ;;;***
 
