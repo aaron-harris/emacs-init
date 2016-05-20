@@ -3,9 +3,36 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-org" "/home/Aaron/sync/emacs/init/aph-org.el"
-;;;;;;  "d93c75e741e9a17988e901663457a451")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/aph-org.el
+;;;### (autoloads nil "aph-helm" "aph-helm.el" (22335 35426 611881
+;;;;;;  300000))
+;;; Generated autoloads from aph-helm.el
+
+(autoload 'aph/helm-browse-project "aph-helm" "\
+As `helm-browse-project', but truncate lines.
+
+\(fn ARG)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "aph-helm-projectile" "aph-helm-projectile.el"
+;;;;;;  (22335 35414 770211 300000))
+;;; Generated autoloads from aph-helm-projectile.el
+
+(autoload 'aph/helm-projectile "aph-helm-projectile" "\
+As `helm-projectile', but truncate lines.
+
+\(fn &optional ARG)" t nil)
+
+(autoload 'aph/helm-projectile-grep "aph-helm-projectile" "\
+As `helm-projectile-grep', but suspend updates initially.
+
+\(fn &optional DIR)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "aph-org" "aph-org.el" (22257 53869 994247
+;;;;;;  700000))
+;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-spin-basic "aph-org" "\
 Move point to a random child of heading at point.
@@ -42,26 +69,26 @@ Store the current eww url as an Org-Mode link.
 
 ;;;***
 
-;;;### (autoloads nil "aph-theme" "/home/Aaron/sync/emacs/init/aph-theme.el"
-;;;;;;  "ed632e0fde31778406f0f6bf9beeedbb")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/aph-theme.el
+;;;### (autoloads nil "aph-theme" "aph-theme.el" (22316 62223 201410
+;;;;;;  400000))
+;;; Generated autoloads from aph-theme.el
 
 (and load-file-name (boundp 'custom-theme-load-path) (add-to-list 'custom-theme-load-path (file-name-as-directory (file-name-directory load-file-name))))
 
 ;;;***
 
-;;;### (autoloads nil "aph-window" "/home/Aaron/sync/emacs/init/aph-window.el"
-;;;;;;  "f851cea49a337046fbfcb85d175a019a")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/aph-window.el
+;;;### (autoloads nil "aph-window" "aph-window.el" (22217 60391 0
+;;;;;;  0))
+;;; Generated autoloads from aph-window.el
 
 (defvar aph/help-window-names '("*Help*" "*Apropos*" "*Messages*" "*Completions*" "*Command History*" "*Compile-Log*" "*disabled command*") "\
 Names of buffers that `aph/quit-help-windows' should quit.")
 
 ;;;***
 
-;;;### (autoloads nil "browse-url-prefix" "/home/Aaron/sync/emacs/init/browse-url-prefix.el"
-;;;;;;  "e9484922f0e99b8f077428ba8f95e9a0")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/browse-url-prefix.el
+;;;### (autoloads nil "browse-url-prefix" "browse-url-prefix.el"
+;;;;;;  (22330 17349 411909 400000))
+;;; Generated autoloads from browse-url-prefix.el
 
 (autoload 'browse-url-prefix "browse-url-prefix" "\
 Browse URL using a browser determined by the prefix arg.
@@ -75,9 +102,8 @@ a default.
 
 ;;;***
 
-;;;### (autoloads nil "cde" "/home/Aaron/sync/emacs/init/cde.el"
-;;;;;;  "e1af80f8452e96f551a187f9734168b7")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/cde.el
+;;;### (autoloads nil "cde" "cde.el" (22330 17248 261613 200000))
+;;; Generated autoloads from cde.el
 
 (autoload 'cde "cde" "\
 Count the numbers in RANGES.
@@ -115,9 +141,9 @@ explanatory message.
 
 ;;;***
 
-;;;### (autoloads nil "elfeed-lens" "/home/Aaron/sync/emacs/init/elfeed-lens.el"
-;;;;;;  "a75b0d70278c48c26130cbd043869a06")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/elfeed-lens.el
+;;;### (autoloads nil "elfeed-lens" "elfeed-lens.el" (22330 16992
+;;;;;;  645014 100000))
+;;; Generated autoloads from elfeed-lens.el
 
 (autoload 'elfeed-lens-cycle "elfeed-lens" "\
 Apply the next filter in `elfeed-lens-list'.
@@ -139,9 +165,9 @@ informing the user of the newly applied filter.
 
 ;;;***
 
-;;;### (autoloads nil "enumerate" "/home/Aaron/sync/emacs/init/enumerate.el"
-;;;;;;  "7868dfcf91b7b13873477e51c234393a")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/enumerate.el
+;;;### (autoloads nil "enumerate" "enumerate.el" (22306 21552 766542
+;;;;;;  300000))
+;;; Generated autoloads from enumerate.el
 
 (autoload 'enumerate-lines "enumerate" "\
 Insert a number for each line in the region.
@@ -185,9 +211,9 @@ to put the number at the end of the line is unavailable.
 
 ;;;***
 
-;;;### (autoloads nil "forms-aux" "/home/Aaron/sync/emacs/init/forms-aux.el"
-;;;;;;  "948904b72b9145c3969c433d6acc4e73")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/forms-aux.el
+;;;### (autoloads nil "forms-aux" "forms-aux.el" (22334 5858 341350
+;;;;;;  800000))
+;;; Generated autoloads from forms-aux.el
 
 (autoload 'forms-aux-open-file "forms-aux" "\
 Open the auxiliary file for the current record.
@@ -205,9 +231,9 @@ If `forms-aux-field' is nil, do nothing.
 
 ;;;***
 
-;;;### (autoloads nil "forms-random" "/home/Aaron/sync/emacs/init/forms-random.el"
-;;;;;;  "509fdb0d449022f899372390ed248b54")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/forms-random.el
+;;;### (autoloads nil "forms-random" "forms-random.el" (22334 14569
+;;;;;;  877195 600000))
+;;; Generated autoloads from forms-random.el
 
 (autoload 'forms-random-record "forms-random" "\
 Go to a randomly selected record in current database.
@@ -233,9 +259,9 @@ total of this field across all records in the database.
 
 ;;;***
 
-;;;### (autoloads nil "helm-forms" "/home/Aaron/sync/emacs/init/helm-forms.el"
-;;;;;;  "da052f702b3e6703cf3f2aed3c6bef26")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/helm-forms.el
+;;;### (autoloads nil "helm-forms" "helm-forms.el" (22334 17550 859516
+;;;;;;  200000))
+;;; Generated autoloads from helm-forms.el
 
 (autoload 'helm-forms-records "helm-forms" "\
 A `helm' command for browsing records in `forms-mode'.
@@ -244,9 +270,9 @@ A `helm' command for browsing records in `forms-mode'.
 
 ;;;***
 
-;;;### (autoloads nil "mode-family" "/home/Aaron/sync/emacs/init/mode-family.el"
-;;;;;;  "3c02d24d863b116e707b18cd7fb87045")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/mode-family.el
+;;;### (autoloads nil "mode-family" "mode-family.el" (22330 16407
+;;;;;;  159146 400000))
+;;; Generated autoloads from mode-family.el
 
 (autoload 'mode-family-create "mode-family" "\
 Define FAMILY as a mode family.
@@ -290,9 +316,9 @@ See the documentation for `mode-family-create' for more information.
 
 ;;;***
 
-;;;### (autoloads nil "multitheme" "/home/Aaron/sync/emacs/init/multitheme.el"
-;;;;;;  "7e75ddd89592bd8915716636f1e849a9")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/multitheme.el
+;;;### (autoloads nil "multitheme" "multitheme.el" (22314 25775 43104
+;;;;;;  600000))
+;;; Generated autoloads from multitheme.el
 
 (autoload 'multitheme-cycle "multitheme" "\
 Cycle between the themes in `multitheme-base-theme-list'.
@@ -312,9 +338,40 @@ After all theme changes have been made, run
 
 ;;;***
 
-;;;### (autoloads nil "source-lock" "/home/Aaron/sync/emacs/init/source-lock.el"
-;;;;;;  "2ff105959fe4be6617ad9a9a795a529b")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/source-lock.el
+;;;### (autoloads nil "silence" "silence.el" (22335 35090 99982 700000))
+;;; Generated autoloads from silence.el
+
+(autoload 'silence "silence" "\
+Execute BODY silencing messages matching MSG-LIST.
+
+Here MSG-LIST is a list of the same format as `silence-list'.
+Its elements will be added to `silence-list' for the duration
+of BODY, and `silence-enabled' will be treated as non-nil.
+
+This is accomplished by advising `message'.  As `message' is a
+primitive, not all messages can be silenced; calls from C code
+may avoid being silenced.
+
+\(fn MSG-LIST &rest BODY)" nil t)
+
+(put 'silence 'lisp-indent-function '1)
+
+(autoload 'silence-loading "silence" "\
+Execute BODY silencing `load' messages.
+
+Note that the mechanism used is unrelated to that used by the
+`silence' macro.  Instead, we advise `load'.  As `load' is also a
+primitive, the same caveat regarding C calls applies.
+
+\(fn &rest BODY)" nil t)
+
+(put 'silence-loading 'lisp-indent-function '0)
+
+;;;***
+
+;;;### (autoloads nil "source-lock" "source-lock.el" (22332 54401
+;;;;;;  140316 900000))
+;;; Generated autoloads from source-lock.el
 
 (defvar source-lock-mode nil "\
 Non-nil if Source-Lock mode is enabled.
@@ -337,9 +394,8 @@ When enabled, any file in one of the directories listed in
 
 ;;;***
 
-;;;### (autoloads nil "umbra" "/home/Aaron/sync/emacs/init/umbra.el"
-;;;;;;  "b1885ac57d88517a321f5526bd25bd2c")
-;;; Generated autoloads from /home/Aaron/sync/emacs/init/umbra.el
+;;;### (autoloads nil "umbra" "umbra.el" (22332 37495 310947 0))
+;;; Generated autoloads from umbra.el
 
 (autoload 'umbra-keymap "umbra" "\
 Return umbra keymap corresponding to MODE for `umbra-mode'.
@@ -403,53 +459,20 @@ penumbra map instead.
 
 ;;;***
 
-;;;### (autoloads nil nil ("/home/Aaron/sync/emacs/init/aph-advice.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-align.el" "/home/Aaron/sync/emacs/init/aph-autoloads.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-browse-url.el" "/home/Aaron/sync/emacs/init/aph-comparators.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-dash.el" "/home/Aaron/sync/emacs/init/aph-ert.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-face-remap.el" "/home/Aaron/sync/emacs/init/aph-files.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-frame.el" "/home/Aaron/sync/emacs/init/aph-framewin.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-haskell.el" "/home/Aaron/sync/emacs/init/aph-helm-projectile.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-helm.el" "/home/Aaron/sync/emacs/init/aph-help.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-ielm.el" "/home/Aaron/sync/emacs/init/aph-iimage.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-info.el" "/home/Aaron/sync/emacs/init/aph-keypad.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-latex.el" "/home/Aaron/sync/emacs/init/aph-lexical.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-lisp-mode.el" "/home/Aaron/sync/emacs/init/aph-message.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-org-agenda.el" "/home/Aaron/sync/emacs/init/aph-org-capture.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-org-table.el" "/home/Aaron/sync/emacs/init/aph-org.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-outline.el" "/home/Aaron/sync/emacs/init/aph-page.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-plist.el" "/home/Aaron/sync/emacs/init/aph-rect.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-shr.el" "/home/Aaron/sync/emacs/init/aph-silence.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-simple.el" "/home/Aaron/sync/emacs/init/aph-smartparens.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-subr.el" "/home/Aaron/sync/emacs/init/aph-symbol.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-theme.el" "/home/Aaron/sync/emacs/init/aph-which-func.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/aph-window.el" "/home/Aaron/sync/emacs/init/browse-url-prefix.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/cde.el" "/home/Aaron/sync/emacs/init/chimera.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/cygwinize.el" "/home/Aaron/sync/emacs/init/elfeed-barb.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/elfeed-lens.el" "/home/Aaron/sync/emacs/init/elfeed-link.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/enumerate.el" "/home/Aaron/sync/emacs/init/formation.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/forms-aux.el" "/home/Aaron/sync/emacs/init/forms-barb.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/forms-random.el" "/home/Aaron/sync/emacs/init/helm-forms.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/init-core.el" "/home/Aaron/sync/emacs/init/init-draft.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/init-org-agenda.el" "/home/Aaron/sync/emacs/init/init-org-capture.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/init-org.el" "/home/Aaron/sync/emacs/init/jerk.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/liberate-key.el" "/home/Aaron/sync/emacs/init/mode-family.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/morgue.el" "/home/Aaron/sync/emacs/init/multitheme.el"
-;;;;;;  "/home/Aaron/sync/emacs/init/source-lock.el" "/home/Aaron/sync/emacs/init/umbra.el"
-;;;;;;  "aph-advice.el" "aph-align.el" "aph-browse-url.el" "aph-comparators.el"
-;;;;;;  "aph-dash.el" "aph-ert.el" "aph-face-remap.el" "aph-files.el"
-;;;;;;  "aph-frame.el" "aph-framewin.el" "aph-haskell.el" "aph-helm-projectile.el"
-;;;;;;  "aph-helm.el" "aph-help.el" "aph-ielm.el" "aph-iimage.el"
-;;;;;;  "aph-info.el" "aph-keypad.el" "aph-latex.el" "aph-lexical.el"
-;;;;;;  "aph-lisp-mode.el" "aph-message.el" "aph-org-agenda.el" "aph-org-capture.el"
-;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
-;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
-;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
-;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
-;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "jerk.el" "liberate-key.el" "morgue.el") (22334 17560 880240
-;;;;;;  100000))
+;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
+;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-face-remap.el"
+;;;;;;  "aph-files.el" "aph-framewin.el" "aph-haskell.el" "aph-help.el"
+;;;;;;  "aph-ielm.el" "aph-iimage.el" "aph-info.el" "aph-keypad.el"
+;;;;;;  "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el" "aph-message.el"
+;;;;;;  "aph-org-agenda.el" "aph-org-capture.el" "aph-org-table.el"
+;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-rect.el"
+;;;;;;  "aph-shr.el" "aph-silence.el" "aph-simple.el" "aph-smartparens.el"
+;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "chimera.el"
+;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
+;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "liberate-key.el"
+;;;;;;  "morgue.el" "vizier-helm.el" "vizier.el") (22335 35608 582389
+;;;;;;  900000))
 
 ;;;***
 

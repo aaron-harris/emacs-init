@@ -1,59 +1,42 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-helm.el --- Extensions for Helm              -*- lexical-binding: t; -*-
 
-;;;; The Emacs init files of Aaron Harris:
-;;;; HELM EXTENSIONS
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-;; Extensions to the `helm' package.
-(require 'helm)
+;; Author: Aaron Harris;;; -*- lexical-binding: t -*- <meerwolf@gmail.com>
+;; Keywords: convenience helm
 
-
-;;; Subroutines
-;;;============
-(defun aph/helm-append-keyword (keyword value)
-  "Add KEYWORD and VALUE as args to next `helm' invocation."
-  (require 'aph-advice)
-  (aph/advice-once #'helm :filter-args
-                   (lambda (args) 
-                     (append args (list keyword value)))))
+;; Dependencies: `vizier-helm'
 
-(defun aph/helm-suspend-update-initially ()
-  "Suspend updates; remove self from `helm-after-initialize-hook'.
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
 
-Add to `helm-after-initialize-hook' to cause the next `helm'
-command invoked to start with updates suspended.
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
 
-If that `helm' command specified that updates should start
-suspended, this will instead reenable updates."
-  (require 'aph-silence)
-  (unwind-protect
-      (let ((aph/silence-list    '("^Helm update suspended!$"))
-            (aph/silence-enabled t))
-        (helm-toggle-suspend-update))
-    (remove-hook 'helm-after-initialize-hook
-                 #'aph/helm-suspend-update-initially)))
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Miscellaneous functions extending those from the `helm' package.
+
+;;; Code:
+
+(require 'vizier-helm)
 
 
-;;; In-Session Commands
-;;;====================
-(defun aph/helm-resume-update-or-exit-minibuffer ()
-  "Resume updates if suspended, else `helm-maybe-exit-minibuffer'."
-  (interactive)
-  (require 'aph-silence)
-  (if helm-suspend-update-flag
-      (let ((aph/silence-list    '("^Helm update reenabled!$"))
-            (aph/silence-enabled t))
-        (helm-toggle-suspend-update))
-    (helm-maybe-exit-minibuffer)))
-
-
-;;; Session-Starting Commands
-;;;==========================
+;;;; Helm Commands
+;;================
+;;;###autoload
 (defun aph/helm-browse-project (arg)
   "As `helm-browse-project', but truncate lines."
   (interactive "P")
-  (aph/helm-append-keyword :truncate-lines t)
+  (vizier-helm-append-keyword :truncate-lines t)
   (helm-browse-project arg))
 
-
 (provide 'aph-helm)
+;;; aph-helm.el ends here
