@@ -496,9 +496,7 @@
 
 (use-package aph-helm
   :bind (:map umbra-mode-map
-              ("C-x M-p" . aph/helm-browse-project))
-  :bind (:map umbra-mode-helm-map
-              ("<return>" . aph/helm-resume-update-or-exit-minibuffer)))
+              ("C-x M-p" . aph/helm-browse-project)))
 
 (use-package helm-config
   :after helm
@@ -509,22 +507,24 @@
   :config
   (helm-mode 1)
   (helm-autoresize-mode t)
-  (setq helm-scroll-amount                    8
-        helm-split-window-in-side-p           t
-        helm-ff-file-name-history-use-recentf t
-        helm-ff-search-library-in-sexp        t)
-  ;; Info pages to use for `helm-info-at-point'.
-  (setq helm-info-default-sources
-        '(helm-source-info-emacs
-          helm-source-info-elisp
-          helm-source-info-cl
-          helm-source-info-eieio
-          helm-source-info-org
-          helm-source-info-pages))
+  (validate-setq helm-scroll-amount                    8)
+  (validate-setq helm-split-window-in-side-p           t)
+  (validate-setq helm-ff-file-name-history-use-recentf t)
+  (validate-setq helm-ff-search-library-in-sexp        t)
+  ;; Info pages to use for `helm-info-at-point'. 
+  (put 'helm-info-default-sources 'custom-type '(repeat symbol))
+  (validate-setq helm-info-default-sources
+                 '(helm-source-info-emacs
+                   helm-source-info-elisp
+                   helm-source-info-cl
+                   helm-source-info-eieio
+                   helm-source-info-org
+                   helm-source-info-pages))
   ;; Turn Helm off for Org-mode refiling, since Helm can't handle
   ;; multiple levels of refile targets.
   (add-to-list 'helm-completing-read-handlers-alist
-               '(org-refile . nil)))
+               '(org-refile . nil))
+  (validate-variable 'helm-completing-read-handlers-alist))
 
 (use-package helm-descbinds
   :ensure t
@@ -1158,6 +1158,10 @@
   (setq visible-mark-max   2
         visible-mark-faces '(aph/visible-mark-top
                              aph/visible-mark-other)))
+
+(use-package vizier-helm
+  :bind (:map umbra-mode-helm-map
+              ("<return>" . vizier-helm-resume-update-or-exit-minibuffer)))
 
 (use-package volatile-highlights
   :ensure t
