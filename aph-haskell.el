@@ -1,10 +1,34 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-haskell.el --- Extensions for `haskell-mode'  -*- lexical-binding: t; -*-
 
-;;;; The Emacs init files of Aaron Harris:
-;;;; HASKELL EXTENSIONS
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-;; Functions extending Haskell mode and related packages.
+;; Author: Aaron Harris <meerwolf@gmail.com>
+;; Keywords: languages haskell
+
+;; Dependencies: `haskell-mode', `aph-advice' (Cygwin only),
+;;   `cygwinize' (Cygwin only)
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Miscellaneous functions extending those associated with
+;; `haskell-mode'.
+
+;;; Code:
+
+(require 'haskell-mode)
 
 
 ;;; Indentation
@@ -27,14 +51,15 @@ argument of -1 and is intended for use in hooks (where using a
 
 This function detects a Cygwin system using the variable
 `system-type'; non-Cygwin systems should be unaffected." 
-  (interactive)
-  (require 'aph-advice)                 ; For `aph/with-advice'
-  (if (and (eq system-type 'cygwin) (require 'cygwinize))
-      (aph/with-advice
+  (interactive) 
+  (if (not (eq system-type 'cygwin))
+      (haskell-process-load-file)
+    (require 'aph-advice)
+    (require 'cygwinize)
+    (aph/with-advice
           ((#'buffer-file-name
             :filter-return #'cygwinize-convert-file-name-to-hybrid-windows))
-        (haskell-process-load-file))
-    (haskell-process-load-file)))
-
+      (haskell-process-load-file))))
 
 (provide 'aph-haskell)
+;;; aph-haskell.el ends here
