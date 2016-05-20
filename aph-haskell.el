@@ -5,8 +5,8 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: languages haskell
 
-;; Dependencies: `haskell-mode', `aph-advice' (Cygwin only),
-;;   `cygwinize' (Cygwin only)
+;; Dependencies: `haskell-mode', `cygwinize' (Cygwin only),
+;;   `vizier' (Cygwin only)
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -54,11 +54,11 @@ This function detects a Cygwin system using the variable
   (interactive) 
   (if (not (eq system-type 'cygwin))
       (haskell-process-load-file)
-    (require 'aph-advice)
+    (require 'vizier)
     (require 'cygwinize)
-    (aph/with-advice
-          ((#'buffer-file-name
-            :filter-return #'cygwinize-convert-file-name-to-hybrid-windows))
+    (vizier-with-advice
+        ((#'buffer-file-name
+          :filter-return #'cygwinize-convert-file-name-to-hybrid-windows))
       (haskell-process-load-file))))
 
 (provide 'aph-haskell)
