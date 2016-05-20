@@ -1,4 +1,4 @@
-;;; aph-files.el --- Extensions for `files` module   -*- lexical-binding: t; -*-
+;;; aph-files.el --- Extensions for `files' module   -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016  Aaron Harris
 
