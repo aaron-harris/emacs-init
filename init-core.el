@@ -421,14 +421,6 @@
  :bind (:umbra forms-mode
                ("C-M-." . forms-random-record-weighted)))
 
-(use-package aph-frame
-  :config
-  ;; Machine-specific geometry
-  (if (eq aph/machine 'mpc)
-      (setq aph/frame-margin-width 16)
-    (setq aph/frame-margin-width 4
-          aph/frame-offset       -8)))
-
 (use-package haskell-mode
   :ensure t
   :bind (:umbra haskell-mode
