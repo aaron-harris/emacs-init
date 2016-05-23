@@ -1,3 +1,30 @@
+;;; aph-files.el --- Extensions for `help' module    -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2016  Aaron Harris
+
+;; Author: Aaron Harris;;; -*- lexical-binding: t -*- <meerwolf@gmail.com>
+;; Keywords: help
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Miscellaneous functions extending those in the `help' module built
+;; into Emacs.
+
+;;; Code:
+
 ;;; -*- lexical-binding: t -*-
 
 ;;;; The Emacs init files of Aaron Harris:
@@ -8,32 +35,14 @@
 (require 'help)
 
 
-;;; No-Confirmation Revert
-;;;=======================
-(defvar aph/help-mode-confirm-reversion t
-  "Whether to confirm before reverting a help buffer.
-Enforced by `aph/help-mode--confirm-reversion-advice'")
+;;;; No-Confirmation Revert
+;;=========================
+(defun aph/help-mode-revert-buffer (ignore-auto _noconfirm)
+  "As `help-mode-revert-buffer', but skip confirmation.
 
-(defun aph/help-mode--confirm-reversion-advice (args)
-  "Advice enforcing `aph/help-mode-confirm-reversion'.
-This is intended as :filter-args advice for
-`help-mode-revert-buffer'.
-
-With this advice, `help-mode-revert-buffer' will invert its
-CONFIRM argument when `aph/help-mode-confirm-reversion' is nil;
-this will invert the action of a prefix argument on
-`revert-buffer' in `help-mode' buffers, so that confirmation is
-only requested if a prefix argument is supplied.
-
-If `aph/help-mode-confirm-reversion' is non-nil (the default),
-the behavior of `help-mode-revert-buffer' is unchanged."
-  (let ((_ignore-auto   (nth 0 args))
-        (maybe-confirm  (nth 1 args))) 
-    `(,_ignore-auto ,(if aph/help-mode-confirm-reversion
-                         maybe-confirm
-                       (not maybe-confirm)))))
-
-(advice-add 'help-mode-revert-buffer
-            :filter-args #'aph/help-mode--confirm-reversion-advice)
+To enable this feature, put this function in
+`revert-buffer-function' in `help-mode'."
+  (help-mode-revert-buffer ignore-auto :noconfirm))
 
 (provide 'aph-help)
+;;; aph-help.el ends here

@@ -78,6 +78,10 @@
 (use-package mode-family
   :defer t)
 
+(use-package mode-local
+  :config
+  (put 'setq-mode-local 'lisp-indent-function 1))
+
 (use-package umbra
   :bind (("C-x C-#" . umbra-mode))
   :bind (:map umbra-mode-map
@@ -555,7 +559,10 @@
 (use-package aph-help
   :after help 
   :config
-  (setq aph/help-mode-confirm-reversion nil))
+  (add-hook 'help-mode-hook #'activate-mode-local-bindings)
+  (setq-mode-local help-mode
+    revert-buffer-function
+    #'aph/help-mode-revert-buffer))
 
 (use-package help+
   :ensure t
