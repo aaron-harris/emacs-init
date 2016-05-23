@@ -228,6 +228,10 @@
   :bind (:map umbra-mode-map
               ("C-z C-c" . calc)))
 
+(use-package canary
+  :bind (:map umbra-mode-map
+              ("C-h h" . canary-hooks)))
+
 (use-package cde
   :if (eq aph/machine 'mpc)
   :bind (:map umbra-mode-map
@@ -549,9 +553,7 @@
               ("C-h C-h" . undefined)))
 
 (use-package aph-help
-  :after help
-  :bind (:map umbra-mode-map
-              ("C-h h" . aph/call-logging-hooks))
+  :after help 
   :config
   (setq aph/help-mode-confirm-reversion nil))
 

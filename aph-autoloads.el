@@ -102,6 +102,26 @@ a default.
 
 ;;;***
 
+;;;### (autoloads nil "canary" "canary.el" (22339 16860 375557 600000))
+;;; Generated autoloads from canary.el
+
+(autoload 'canary "canary" "\
+Print a message containing ARGS.
+
+\(fn &rest ARGS)" nil nil)
+
+(autoload 'canary-hooks "canary" "\
+Call COMMAND, reporting every hook run in the process.
+Interactively, prompt for a command to execute.
+
+Return a list of the hooks run, in the order they were run.
+Interactively, or with optional argument VERBOSE, also print a
+message listing the hooks.
+
+\(fn COMMAND &optional VERBOSE)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "cde" "cde.el" (22330 17248 261613 200000))
 ;;; Generated autoloads from cde.el
 
@@ -463,16 +483,15 @@ penumbra map instead.
 ;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-face-remap.el"
 ;;;;;;  "aph-files.el" "aph-framewin.el" "aph-haskell.el" "aph-help.el"
 ;;;;;;  "aph-ielm.el" "aph-iimage.el" "aph-info.el" "aph-keypad.el"
-;;;;;;  "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el" "aph-message.el"
-;;;;;;  "aph-org-agenda.el" "aph-org-capture.el" "aph-org-table.el"
-;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-rect.el"
-;;;;;;  "aph-shr.el" "aph-silence.el" "aph-simple.el" "aph-smartparens.el"
-;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "chimera.el"
-;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
-;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "liberate-key.el"
-;;;;;;  "morgue.el" "vizier-helm.el" "vizier.el") (22335 35608 582389
-;;;;;;  900000))
+;;;;;;  "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el" "aph-org-agenda.el"
+;;;;;;  "aph-org-capture.el" "aph-org-table.el" "aph-outline.el"
+;;;;;;  "aph-page.el" "aph-plist.el" "aph-rect.el" "aph-shr.el" "aph-silence.el"
+;;;;;;  "aph-simple.el" "aph-smartparens.el" "aph-subr.el" "aph-symbol.el"
+;;;;;;  "aph-which-func.el" "chimera.el" "cygwinize.el" "elfeed-barb.el"
+;;;;;;  "elfeed-link.el" "formation.el" "forms-barb.el" "init-core.el"
+;;;;;;  "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
+;;;;;;  "vizier.el") (22339 16869 666441 500000))
 
 ;;;***
 
