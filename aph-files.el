@@ -26,8 +26,8 @@
 ;;; Code:
 
 
-;;; Killing Buffers
-;;;================
+;;;; Killing Buffers
+;;==================
 (defun aph/kill-active-buffer (&optional choose)
   "Kill the active buffer.
 
@@ -82,8 +82,8 @@ confirmations as `aph/kill-buffer-nowarn'."
       (kill-buffer buffer-or-name))))
 
 
-;;; Extensions to `save-buffers-kill-emacs'
-;;;========================================
+;;;; Extensions to `save-buffers-kill-emacs'
+;;==========================================
 (defun aph/delete-frame-or-exit (&optional arg)
   "Delete this frame.  With only one frame, exit Emacs.
 
