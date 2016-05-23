@@ -582,7 +582,7 @@
   ;; Add Org manual to list of manuals to include links for in help.
   ;; This is a stopgap measure.  In the long run, keying in to
   ;; `Info-file-list-for-emacs' is probably the way to go.
-  (setq help-cross-reference-manuals '(("emacs" "elisp" "org"))))
+  (validate-setq help-cross-reference-manuals '(("emacs" "elisp" "org"))))
 
 (use-package hippie-exp
   :bind (:map umbra-mode-map
