@@ -39,17 +39,22 @@
 ;;========
 (ert-deftest family-local-test ()
   "Test family-local variables."
-  (family-local-test
-   (mode-family-create 'foo)
-   (setq-family-local foo
-     case-fold-search :foo)
-   (aph/ert-with-major-mode mode 'fundamental-mode
-     (mode-family-add mode 'foo)
-     (with-temp-buffer
-       (funcall mode)
-       (should (eq case-fold-search :foo))
-       (text-mode)
-       (should-not (eq case-fold-search :foo))))))
+  ;; In theory, this next value should never be evaluated, so if the
+  ;; error it describes is signaled, we know that some part of the
+  ;; machinery is doing too much evaluation.
+  (let ((test-value
+	 '(error "family-local-test: `setq-family-local' is too eager")))
+    (family-local-test
+     (mode-family-create 'foo)
+     (setq-family-local foo
+       case-fold-search test-value)
+     (aph/ert-with-major-mode mode 'fundamental-mode
+       (mode-family-add mode 'foo)
+       (with-temp-buffer
+	 (funcall mode)
+	 (should (equal case-fold-search test-value))
+	 (text-mode)
+	 (should-not (equal case-fold-search test-value)))))))
 
 (provide 'family-local-test)
 ;;; family-local-test.el ends here
