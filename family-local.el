@@ -87,7 +87,7 @@ instead.")
     (dolist (fam (mode-family-list-families major-mode :inherit))
       (setq var-plist (assoc-default fam family-local--alist #'eq))
       (while var-plist
-	(eval `(setq-local ,(pop var-plist) ,(pop var-plist)))))))
+	(eval `(setq-local ,(pop var-plist) ',(pop var-plist)))))))
 
 (add-hook 'after-change-major-mode-hook #'family-local-activate)
 
