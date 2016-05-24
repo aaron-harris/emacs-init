@@ -231,6 +231,19 @@ to put the number at the end of the line is unavailable.
 
 ;;;***
 
+;;;### (autoloads nil "family-local" "family-local.el" (22340 53541
+;;;;;;  307199 300000))
+;;; Generated autoloads from family-local.el
+
+(autoload 'setq-family-local "family-local" "\
+Set each VAR to VALUE in FAMILY.
+
+\(fn FAMILY [VAR VALUE] ...)" nil t)
+
+(put 'setq-family-local 'lisp-indent-function '1)
+
+;;;***
+
 ;;;### (autoloads nil "forms-aux" "forms-aux.el" (22334 5858 341350
 ;;;;;;  800000))
 ;;; Generated autoloads from forms-aux.el
@@ -491,7 +504,7 @@ penumbra map instead.
 ;;;;;;  "elfeed-link.el" "formation.el" "forms-barb.el" "init-core.el"
 ;;;;;;  "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
 ;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22339 16869 666441 500000))
+;;;;;;  "vizier.el") (22340 53668 816710 900000))
 
 ;;;***
 
