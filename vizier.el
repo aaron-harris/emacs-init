@@ -47,8 +47,8 @@
 (require 'cl-lib)           ; For `cl-destructuring-bind', `cl-gensym'
 
 
-;;; Subroutines
-;;;============ 
+;;;; Subroutines
+;;============== 
 (defun vizier--genname (props)
   "Use `cl-gensym' to generate a generic 'name for PROPS.
 Return a new alist incorporating this association.
@@ -63,8 +63,8 @@ legibility), and \"vizier:\" otherwise."
     (cons `(name . ,(cl-gensym prefix)) props)))
 
 
-;;; Temporary Advice
-;;;================= 
+;;;; Temporary Advice
+;;=================== 
 (defun vizier-advise-once (symbol where function &optional props)
   "As `advice-add', but remove advice after first call.
 
@@ -110,25 +110,25 @@ will be removed even in the event of an error or nonlocal exit."
                   (symbol where function &optional props) adform
                 (cond
                  ((null option)
-                  (push `(advice-remove ,symbol ,function) removal-list)
-                  (cons 'advice-add adform))
+                  (push `(advice-remove ',symbol ,function) removal-list)
+		  `(advice-add ',symbol ,where ,function ',props))
 
                  ((eq option :once)
-                  (push `(advice-remove ,symbol ,function) removal-list)
-                  (cons 'vizier-advise-once adform))
+                  (push `(advice-remove ',symbol ,function) removal-list)
+		  `(vizier-advise-once ',symbol ,where ,function ',props))
 
                  ((eq option :genname)
                   (let* ((props  (vizier--genname props))
                          (name   (assoc-default 'name props)))
-                    (push `(advice-remove ,symbol ',name) removal-list)
-                    `(advice-add ,symbol ,where ,function ',props)))))))
+                    (push `(advice-remove ',symbol ',name) removal-list)
+                    `(advice-add ',symbol ,where ,function ',props)))))))
           adlist) 
        (unwind-protect (progn ,@body)
          ,@removal-list))))
 
 
-;;; Utility Functions
-;;;==================
+;;;; Utility Functions
+;;====================
 (defun vizier-clear (symbol)
   "Remove all advice on SYMBOL."
   (advice-mapc (lambda (fn props) (advice-remove symbol fn))

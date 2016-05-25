@@ -91,7 +91,7 @@ rather than the usual `run-mode-hooks'.
 Intended as :around advice for `elfeed-search-mode' and
 `elfeed-show-mode'."
   (vizier-with-advice 
-      (('run-hooks :around #'elfeed-barb--mode-hook-normalization-subadvice))
+      ((run-hooks :around #'elfeed-barb--mode-hook-normalization-subadvice))
     (funcall mode-fn)))
 
 (dolist (mode '(elfeed-search-mode elfeed-show-mode))

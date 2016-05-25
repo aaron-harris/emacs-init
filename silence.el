@@ -181,7 +181,7 @@ primitive, the same caveat regarding C calls applies."
   (require 'vizier)                     ; For `vizier-with-advice'
   `(vizier-with-advice
        ((:genname
-         #'load
+         load
          :filter-args
          (-lambda ((file noerror nomessage nosuffix must-suffix))
            (list file noerror t nosuffix must-suffix))))
