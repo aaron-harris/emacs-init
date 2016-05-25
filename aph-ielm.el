@@ -1,14 +1,36 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-ielm.el --- Extensions for `ielm'            -*- lexical-binding: t; -*-
 
-;;;; The Emacs init file of Aaron Harris.
-;;;; IELM COMMANDS
-;;;;============================================================================ 
+;; Copyright (C) 2016  Aaron Harris
 
-;;; This file contains commands and functions used in `ielm'
+;; Author: Aaron Harris <meerwolf@gmail.com>
+;; Keywords: tools, lisp
+
+;; Dependencies: `ielm'
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Commands for use with `ielm'.
+
+;;; Code:
+
+(require 'ielm)
 
 
-;;; Subroutines
-;;;============
+;;;; Subroutines
+;;==============
 (defun aph/ielm-get-last-output (&optional arg)
   "Return the last output produced by `ielm'.
 
@@ -34,8 +56,9 @@ outputs in the ielm buffer, return nil."
             nil))))))
 
 
-;;; Commands
-;;;=========
+;;;; Commands
+;;===========
+;;;###autoload
 (defun aph/ielm-copy-last-output (&optional arg)
   "Copy the last output produced by `ielm' to the kill ring.
 
@@ -50,3 +73,4 @@ uncleared outputs)."
   (kill-new (aph/ielm-get-last-output arg)))
 
 (provide 'aph-ielm)
+;;; aph-ielm.el ends here
