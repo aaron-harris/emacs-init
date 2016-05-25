@@ -324,8 +324,18 @@
                 ("M-p" . backward-paragraph)
                 ("M-n" . forward-paragraph))
   :config
+  ;; Mode family setup (so we can address both elfeed modes together)
+  (mode-family-create 'elfeed)
+  (mode-family-add 'elfeed-search-mode 'elfeed)
+  (mode-family-add 'elfeed-show-mode   'elfeed)
+
   ;; UI config
   (validate-setq elfeed-sort-order 'ascending)
+
+  ;; Browser config
+  (setq-family-local elfeed
+    browse-url-prefix-browser-function         #'eww-browse-url
+    browse-url-prefix-default-browser-function #'browse-url-default-browser)
 
   ;; Network config
   (validate-setq url-queue-parallel-processes 1)
@@ -339,8 +349,10 @@
   ;; `after-change-major-mode-hook'.  This can probably be fixed
   ;; through advice; in the meantime, the following line is an easy
   ;; stopgap fix for the immediate problem this causes for me.
-  (add-hook 'elfeed-search-mode-hook #'umbra--update-major-mode)
-  (add-hook 'elfeed-show-mode-hook   #'umbra--update-major-mode) 
+  (add-hook 'elfeed-search-mode-hook #'mode-family-run-hooks)
+  (add-hook 'elfeed-show-mode-hook   #'mode-family-run-hooks)
+  (add-hook 'elfeed-family-hook      #'umbra--update-major-mode)
+  (add-hook 'elfeed-family-hook      #'family-local-activate) 
 
   ;; Load the feed list
   (load (expand-file-name (concat elfeed-db-directory "/feeds.el")))
