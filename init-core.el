@@ -257,6 +257,13 @@
   (add-hook 'cider-macroexpansion-mode-hook  #'cygwinize-hide-dos-eol)
   (add-hook 'cider-test-report-mode-hook     #'cygwinize-hide-dos-eol))
 
+(use-package clean-eval
+  :bind (:umbra inferior-emacs-lisp-mode
+		("C-'" . clean-eval-mode))
+  :init
+  (when (eq aph/machine 'mpc)
+    (clean-eval-mode t)))
+
 (use-package clojure-mode
   :ensure t
   :defer t
@@ -614,9 +621,7 @@
 
 (use-package ielm
   :bind (:map umbra-mode-map
-              ("C-z C-r" . ielm))
-  :bind (:umbra inferior-emacs-lisp-mode
-                ("C-c C-t" . aph/eval-expression-toggle-clean-output))
+              ("C-z C-r" . ielm)) 
   :config
   (mode-family-add 'ielm-mode 'lisp))
 
@@ -955,12 +960,7 @@
               ("M-l"             . undefined)
               ("M-u"             . undefined)
               ("C-`"             . next-error)
-              ("M-`"             . previous-error))
-  :config
-  (advice-add #'eval-expression-print-format
-              :around #'aph/eval-expression-mute-print-format)
-  (when (eq aph/machine 'mpc)
-    (setq aph/eval-expression-clean-output t)))
+              ("M-`"             . previous-error)))
 
 (use-package smart-tab
   :ensure t

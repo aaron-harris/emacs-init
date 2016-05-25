@@ -30,8 +30,8 @@ As `helm-projectile-grep', but suspend updates initially.
 
 ;;;***
 
-;;;### (autoloads nil "aph-ielm" "aph-ielm.el" (22342 11426 711474
-;;;;;;  700000))
+;;;### (autoloads nil "aph-ielm" "aph-ielm.el" (22342 12714 23786
+;;;;;;  300000))
 ;;; Generated autoloads from aph-ielm.el
 
 (autoload 'aph/ielm-copy-last-output "aph-ielm" "\
@@ -177,6 +177,41 @@ return nil.  Interactively, or with VERBOSE non-nil, print an
 explanatory message.
 
 \(fn &optional VERBOSE)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "clean-eval" "clean-eval.el" (22342 14480 483921
+;;;;;;  600000))
+;;; Generated autoloads from clean-eval.el
+
+(defvar clean-eval-mode nil "\
+Non-nil if Clean-Eval mode is enabled.
+See the command `clean-eval-mode' for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `clean-eval-mode'.")
+
+(custom-autoload 'clean-eval-mode "clean-eval" nil)
+
+(autoload 'clean-eval-mode "clean-eval" "\
+Mode to clean evaluation output.
+
+When enabled, evaluating elisp (e.g., with `eval-expression' or
+via `ielm') will not produce extra \"junk output\".  For example,
+you would see
+
+    (+ 1 1)
+    => 2
+
+rather than
+
+    (+ 1 1)
+    => 2 (#o2, #x2, ?\\C-b).
+
+Note that this is accomplished via advice on the function
+`eval-expression-print-format'.
+
+\(fn &optional ARG)" t nil)
 
 ;;;***
 
@@ -524,7 +559,7 @@ penumbra map instead.
 ;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
 ;;;;;;  "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22342 12214 116493 400000))
+;;;;;;  "vizier.el") (22342 14488 492706 800000))
 
 ;;;***
 
