@@ -30,6 +30,25 @@ As `helm-projectile-grep', but suspend updates initially.
 
 ;;;***
 
+;;;### (autoloads nil "aph-ielm" "aph-ielm.el" (22342 11426 711474
+;;;;;;  700000))
+;;; Generated autoloads from aph-ielm.el
+
+(autoload 'aph/ielm-copy-last-output "aph-ielm" "\
+Copy the last output produced by `ielm' to the kill ring.
+
+With argument N > 0, instead copy the Nth last output.
+With argument N < 0, copy the Nth output since last clear.
+With argument N = 0, do nothing.
+
+Return the newly copied string, or nil if nothing was
+copied (e.g., if the argument is greater than the number of
+uncleared outputs).
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-org" "aph-org.el" (22257 53869 994247
 ;;;;;;  700000))
 ;;; Generated autoloads from aph-org.el
@@ -102,7 +121,7 @@ a default.
 
 ;;;***
 
-;;;### (autoloads nil "canary" "canary.el" (22339 16860 375557 600000))
+;;;### (autoloads nil "canary" "canary.el" (22341 65219 709867 600000))
 ;;; Generated autoloads from canary.el
 
 (autoload 'canary "canary" "\
@@ -231,8 +250,8 @@ to put the number at the end of the line is unavailable.
 
 ;;;***
 
-;;;### (autoloads nil "family-local" "family-local.el" (22340 53541
-;;;;;;  307199 300000))
+;;;### (autoloads nil "family-local" "family-local.el" (22340 54590
+;;;;;;  272672 200000))
 ;;; Generated autoloads from family-local.el
 
 (autoload 'setq-family-local "family-local" "\
@@ -371,7 +390,8 @@ After all theme changes have been made, run
 
 ;;;***
 
-;;;### (autoloads nil "silence" "silence.el" (22335 35090 99982 700000))
+;;;### (autoloads nil "silence" "silence.el" (22341 65274 644268
+;;;;;;  100000))
 ;;; Generated autoloads from silence.el
 
 (autoload 'silence "silence" "\
@@ -495,16 +515,16 @@ penumbra map instead.
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
 ;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-face-remap.el"
 ;;;;;;  "aph-files.el" "aph-framewin.el" "aph-haskell.el" "aph-help.el"
-;;;;;;  "aph-ielm.el" "aph-iimage.el" "aph-info.el" "aph-keypad.el"
-;;;;;;  "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el" "aph-org-agenda.el"
-;;;;;;  "aph-org-capture.el" "aph-org-table.el" "aph-outline.el"
-;;;;;;  "aph-page.el" "aph-plist.el" "aph-rect.el" "aph-shr.el" "aph-silence.el"
-;;;;;;  "aph-simple.el" "aph-smartparens.el" "aph-subr.el" "aph-symbol.el"
-;;;;;;  "aph-which-func.el" "chimera.el" "cygwinize.el" "elfeed-barb.el"
-;;;;;;  "elfeed-link.el" "formation.el" "forms-barb.el" "init-core.el"
-;;;;;;  "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22340 53668 816710 900000))
+;;;;;;  "aph-iimage.el" "aph-info.el" "aph-keypad.el" "aph-latex.el"
+;;;;;;  "aph-lexical.el" "aph-lisp-mode.el" "aph-org-agenda.el" "aph-org-capture.el"
+;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
+;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
+;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
+;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
+;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
+;;;;;;  "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
+;;;;;;  "vizier.el") (22342 12214 116493 400000))
 
 ;;;***
 

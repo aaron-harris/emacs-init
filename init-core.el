@@ -616,11 +616,13 @@
   :bind (:map umbra-mode-map
               ("C-z C-r" . ielm))
   :bind (:umbra inferior-emacs-lisp-mode
-                ("C-c C-t" . aph/eval-expression-toggle-clean-output)
-                ("C-c M-w" . aph/ielm-copy-last-output))
+                ("C-c C-t" . aph/eval-expression-toggle-clean-output))
   :config
-  (use-package aph-ielm) 
   (mode-family-add 'ielm-mode 'lisp))
+
+(use-package aph-ielm
+  :bind (:umbra inferior-emacs-lisp-mode
+		("C-c C-w" . aph/ielm-copy-last-output)))
 
 (use-package aph-iimage
   :after iimage
