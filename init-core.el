@@ -324,7 +324,7 @@
                 ("M-p" . backward-paragraph)
                 ("M-n" . forward-paragraph))
   :config
-  ;; Mode family setup (so we can address both elfeed modes together)
+  ;; Mode family setup (so we can address both Elfeed modes together)
   (mode-family-create 'elfeed)
   (mode-family-add 'elfeed-search-mode 'elfeed)
   (mode-family-add 'elfeed-show-mode   'elfeed)
@@ -342,21 +342,14 @@
   (validate-setq url-queue-timeout            30)
 
   ;; Filesystem config
-  (validate-setq elfeed-db-directory "~/sync/elfeed")
-
-  ;; The various elfeed modes do not follow the convention of using
-  ;; `run-mode-hooks' and thus do not run
-  ;; `after-change-major-mode-hook'.  This can probably be fixed
-  ;; through advice; in the meantime, the following line is an easy
-  ;; stopgap fix for the immediate problem this causes for me.
-  (add-hook 'elfeed-search-mode-hook #'mode-family-run-hooks)
-  (add-hook 'elfeed-show-mode-hook   #'mode-family-run-hooks)
-  (add-hook 'elfeed-family-hook      #'umbra--update-major-mode)
-  (add-hook 'elfeed-family-hook      #'family-local-activate) 
+  (validate-setq elfeed-db-directory "~/sync/elfeed") 
 
   ;; Load the feed list
   (load (expand-file-name (concat elfeed-db-directory "/feeds.el")))
   (validate-variable 'elfeed-feeds))
+
+(use-package elfeed-barb
+  :defer t)
 
 (use-package elfeed-lens
   :bind (:umbra elfeed-search-mode
