@@ -5,9 +5,9 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience, rss
 
-;; Dependencies: `elfeed', `validate' (optional)
+;; Dependencies: `elfeed', `vizier', `validate' (optional)
 ;; Advised functions from other packages:
-;;   elfeed: `elfeed-show-entry'
+;;   elfeed: `elfeed-search-mode', `elfeed-show-mode', `elfeed-show-entry'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,7 +28,14 @@
 ;; are injected using advice, contrary to the usual admonition against
 ;; advising other packages' functions.
 ;;
-;; The hooks added are as follows:
+;; In addition to various new hooks (described below), both
+;; `elfeed-search-mode' and `elfeed-show-mode' are advised so that
+;; they will actually run all the ordinary mode-change hooks (e.g.,
+;; `after-change-major-mode-hook'); this is necessary because both of
+;; these modes run their hooks with `run-hooks' rather than the usual
+;; `run-mode-hooks'.
+;;
+;; The new hooks added are as follows:
 ;;
 ;; `elfeed-barb-before-show-functions':
 ;;
@@ -43,11 +50,11 @@
 ;;; Code:
 
 (require 'elfeed)
+(require 'vizier)
 
 
 ;;;; Hook Variables
 ;;;;===============
-
 (defcustom elfeed-barb-before-show-functions nil
   "Abnormal hook run before showing an entry in Elfeed.
 
@@ -61,6 +68,34 @@ called."
 
 ;;;; Hook Insertion
 ;;;;===============
+(defun elfeed-barb--mode-hook-normalization-subadvice (orig-fn &rest hooks)
+  "Temporary advice forcing use of `run-mode-hooks'.
+
+Intended as :around advice for `run-hooks'.  Note that this is
+advising a primitive, so use this function with caution!"
+  (let ((major-mode-hook  (intern (concat (symbol-name major-mode) "-hook"))))
+    (if (or (> 1 (length hooks))
+	    (not (eq (car hooks) major-mode-hook))) 
+	(apply orig-fn hooks)
+      (advice-remove 'run-hooks
+		     #'elfeed-barb--mode-hook-normalization-subadvice)
+      (apply #'run-mode-hooks hooks))))
+
+(defun elfeed-barb--mode-hook-normalization-advice (mode-fn)
+  "Advice to cause Elfeed modes to use `run-mode-hooks'.
+
+This is necessary because both `elfeed-search-mode' and
+`elfeed-show-mode' use `run-hooks' to run their mode hooks,
+rather than the usual `run-mode-hooks'.
+
+Intended as :around advice for `elfeed-search-mode' and
+`elfeed-show-mode'."
+  (vizier-with-advice 
+      (('run-hooks :around #'elfeed-barb--mode-hook-normalization-subadvice))
+    (funcall mode-fn)))
+
+(dolist (mode '(elfeed-search-mode elfeed-show-mode))
+  (advice-add mode :around #'elfeed-barb--mode-hook-normalization-advice))
 
 (defun elfeed-barb--before-show-functions-advice (entry)
   "Advice to enable `elfeed-barb-before-show-functions'.
@@ -76,11 +111,14 @@ Intended as :before-until advice for `elfeed-show-entry'."
 
 ;;;; Unloading
 ;;;;==========
-
 (defun elfeed-barb-unload-function ()
   "Remove all hooks added by `elfeed-barb' module."
-  (advice-remove 'elfeed-show-entry
-                 #'elfeed-barb--before-show-functions-advice))
+  (let ((advice-list
+	 '((elfeed-search-mode . elfeed-barb--mode-hook-normalization-advice)
+	   (elfeed-show-mode   . elfeed-barb--mode-hook-normalization-advice)
+	   (elfeed-show-entry  . elfeed-barb--before-show-functions-advice))))
+    (dolist (pair advice-list)
+      (advice-remove (car pair) (cdr pair)))))
 
 (provide 'elfeed-barb)
 ;;; elfeed-barb.el ends here
