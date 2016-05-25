@@ -59,7 +59,7 @@
   "Test the function `silence-advice'."
   (require 'vizier)                     ; For `vizier-with-advice'
   (vizier-with-advice
-      ((:genname #'message :around #'silence-advice))
+      ((:genname message :around #'silence-advice))
     (let ((silence-list      '("foo"))
           (silence-enabled-p t))
       (should (equal (message "bar") (current-message)))

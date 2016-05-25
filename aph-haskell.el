@@ -57,7 +57,7 @@ This function detects a Cygwin system using the variable
     (require 'vizier)
     (require 'cygwinize)
     (vizier-with-advice
-        ((#'buffer-file-name
+        ((buffer-file-name
           :filter-return #'cygwinize-convert-file-name-to-hybrid-windows))
       (haskell-process-load-file))))
 

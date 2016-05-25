@@ -53,7 +53,7 @@
   (defun vizier-test-bar () :bar)
   (unwind-protect
       (progn (vizier-with-advice
-                 ((#'vizier-test-foo :override #'vizier-test-bar))
+                 ((vizier-test-foo :override #'vizier-test-bar))
                ;; Test that function is advised
                (should (advice-member-p #'vizier-test-bar
                                         #'vizier-test-foo))
@@ -71,7 +71,7 @@
   (let ((bar (lambda () :bar)))
     (unwind-protect
         (progn (vizier-with-advice
-                   ((#'vizier-test-foo :override bar))
+                   ((vizier-test-foo :override bar))
                  ;; Test that function is advised
                  (should (advice-member-p bar #'vizier-test-foo))
                  (should (equal (vizier-test-foo) :bar)))
@@ -86,12 +86,12 @@
   (let ((bar (lambda () :bar)))
     (unwind-protect
         (progn (vizier-with-advice
-                   ((#'vizier-test-foo :override bar '((name . ad-bar))))
+                   ((vizier-test-foo :override bar ((name . ad-bar))))
                  ;; Test that function is advised
-                 (should (advice-member-p 'ad-bar #'vizier-test-foo))
+                 (should (advice-member-p 'ad-bar 'vizier-test-foo))
                  (should (equal (vizier-test-foo) :bar)))
                ;; Test cleanup
-               (should-not (advice-member-p 'ad-bar #'vizier-test-foo))
+               (should-not (advice-member-p 'ad-bar 'vizier-test-foo))
                (should (equal (vizier-test-foo) :foo)))
       (unintern 'vizier-test-foo))))
 
@@ -101,7 +101,7 @@
   (let ((bar (lambda () :bar)))
     (unwind-protect
         (progn (vizier-with-advice
-                   ((:once #'vizier-test-foo :override bar))
+                   ((:once vizier-test-foo :override bar))
                  (should (advice-member-p bar #'vizier-test-foo))
                  (should (equal (vizier-test-foo) :bar))
                  (should (equal (vizier-test-foo) :foo)))
@@ -116,9 +116,9 @@
          (bar  (lambda () (push :bar log))))
     (unwind-protect
         (progn (vizier-with-advice
-                   ((#'vizier-test-foo :override bar))
+                   ((vizier-test-foo :override bar))
                  (vizier-with-advice
-                     ((:genname #'vizier-test-foo :before bar))
+                     ((:genname vizier-test-foo :before bar))
                    ;; Test that both pieces of advice are in effect.
                    (should (advice-member-p bar #'vizier-test-foo))
                    (should (equal (vizier-test-foo) '(:bar :bar))))

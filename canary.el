@@ -62,7 +62,7 @@ message listing the hooks."
          (logger (lambda (&rest hooks) 
                    (setq log (append log hooks nil)))))
     (vizier-with-advice
-        ((#'run-hooks :before logger))
+        ((run-hooks :before logger))
       (call-interactively command))
     (when verbose
       (message
