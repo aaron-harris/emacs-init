@@ -637,10 +637,10 @@
   :defer t
   :config
   ;; Improves functionality of `C-h F' for Org commands.
-  (add-to-list 'Info-file-list-for-emacs "org"))
+  (add-to-list 'Info-file-list-for-emacs "org")
+  (validate-variable 'Info-file-list-for-emacs))
 
 (use-package aph-info
-  :after info
   :bind (:map umbra-mode-map
               ("C-h i" . aph/info-mode-or-clone-buffer))
   :bind (:umbra Info-mode

@@ -60,6 +60,29 @@ Refresh inline images in current buffer.
 
 ;;;***
 
+;;;### (autoloads nil "aph-info" "aph-info.el" (22343 12844 97830
+;;;;;;  300000))
+;;; Generated autoloads from aph-info.el
+
+(autoload 'aph/info-mode-or-clone-buffer "aph-info" "\
+Enter info mode or clone info buffer.
+
+In an info buffer when no prefix argument has been supplied,
+clone the buffer (as `clone-buffer').  Otherwise, enter info
+mode (as `info').
+
+\(fn PREFIX)" t nil)
+
+(autoload 'aph/Info-final-menu-item "aph-info" "\
+Go to the node of the last menu item.
+
+This command duplicates the functionality of the 0 key in the
+standalone info application.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-org" "aph-org.el" (22257 53869 994247
 ;;;;;;  700000))
 ;;; Generated autoloads from aph-org.el
@@ -561,16 +584,16 @@ penumbra map instead.
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
 ;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-face-remap.el"
 ;;;;;;  "aph-files.el" "aph-framewin.el" "aph-haskell.el" "aph-help.el"
-;;;;;;  "aph-info.el" "aph-keypad.el" "aph-latex.el" "aph-lexical.el"
-;;;;;;  "aph-lisp-mode.el" "aph-org-agenda.el" "aph-org-capture.el"
-;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
-;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
-;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
-;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
-;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22343 12276 376311 200000))
+;;;;;;  "aph-keypad.el" "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el"
+;;;;;;  "aph-org-agenda.el" "aph-org-capture.el" "aph-org-table.el"
+;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-rect.el"
+;;;;;;  "aph-shr.el" "aph-silence.el" "aph-simple.el" "aph-smartparens.el"
+;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "chimera.el"
+;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
+;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "liberate-key.el"
+;;;;;;  "morgue.el" "vizier-helm.el" "vizier.el") (22343 12854 2168
+;;;;;;  900000))
 
 ;;;***
 
