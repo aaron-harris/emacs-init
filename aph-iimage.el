@@ -1,9 +1,9 @@
-;;; aph-ielm.el --- Extensions for `iimage-mode'     -*- lexical-binding: t; -*-
+;;; aph-iimage.el --- Extensions for `iimage-mode'   -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016  Aaron Harris
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
-;; Keywords: tools, lisp
+;; Keywords: multimedia
 
 ;; Dependencies: `iimage'
 
