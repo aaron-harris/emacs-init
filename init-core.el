@@ -701,7 +701,7 @@
   :bind (:map umbra-mode-map
               ("C-<tab>" . completion-at-point))
   :config
-  (setq completion-auto-help 'lazy))
+  (validate-setq completion-auto-help 'lazy))
 
 (use-package multitheme
   :bind (:map umbra-mode-map
