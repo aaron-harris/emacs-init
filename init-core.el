@@ -82,8 +82,9 @@
 (use-package umbra
   :bind (("C-x C-#" . umbra-mode))
   :bind (:map umbra-mode-map
-              ("<return>" . umbra-default-return-command)
-              ("<tab>"    . umbra-default-tab-command))
+              ("<return>"   . umbra-default-return-command)
+	      ("<kp-enter>" . umbra-default-kp-enter-command)
+              ("<tab>"      . umbra-default-tab-command))
   :init (umbra-mode))
 
 
@@ -651,9 +652,9 @@
   :bind (:map umbra-mode-map
               ("C-x C-y" . jerk-access-inline)))
 
-(use-package aph-keypad
+(use-package kp-motion
   :bind (:map umbra-mode-map 
-              ("C-<kp-enter>" . aph/keypad-enter-toggle-newline)))
+              ("C-<kp-enter>" . kp-motion-mode)))
 
 (use-package liberate-key
   :bind (:map umbra-mode-map
