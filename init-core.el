@@ -714,7 +714,7 @@
 (use-package ob-core
   :defer t
   :config
-  (setq org-confirm-babel-evaluate nil))
+  (validate-setq org-confirm-babel-evaluate nil))
 
 (use-package org
   :ensure t
@@ -722,9 +722,8 @@
               ("C-c l" . org-store-link))
   :bind (:umbra org-mode
                 ("C-c ["            . undefined)
-                ("C-c ]"            . undefined)
-                ("M-."              . helm-org-in-buffer-headings)
-                ([remap next-error] . org-cycle-agenda-files)
+                ("C-c ]"            . org-cycle-agenda-files)
+                ("M-."              . helm-org-in-buffer-headings) 
                 ;; Following bindings restore `org-mode' keys
                 ;; unintentionally shadowed by `umbra-mode'
                 ("C-o"              . org-open-line))
@@ -735,7 +734,7 @@
   :config
   (message "Loading org...")         ; Because this may take a while. 
   (use-package init-org)
-  (bind-keys
+  (bind-keys :umbra org-mode
    ("S-<return>" . (chimera "chimera/org-table-copy-down"
                      (when (org-table-p) #'org-table-copy-down))))
   (message "Loading org...done"))
