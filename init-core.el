@@ -690,7 +690,8 @@
   (add-to-list 'lisp-imenu-generic-expression
                '("Test"
                  "^(ert-deftest\\s-+\\(\\_<.+?\\_>\\)"
-                 1)))
+                 1))
+  (validate-variable 'lisp-imenu-generic-expression))
 
 (use-package aph-lisp-mode
   :bind (:umbra emacs-lisp-mode 
