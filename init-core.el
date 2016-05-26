@@ -630,7 +630,6 @@
 		("C-c C-w" . aph/ielm-copy-last-output)))
 
 (use-package aph-iimage
-  :after iimage
   :bind (:umbra iimage-mode
                 ("C-c i" . aph/iimage-refresh)))
 

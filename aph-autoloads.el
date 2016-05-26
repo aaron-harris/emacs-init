@@ -49,6 +49,17 @@ uncleared outputs).
 
 ;;;***
 
+;;;### (autoloads nil "aph-iimage" "aph-iimage.el" (22343 12244 832717
+;;;;;;  0))
+;;; Generated autoloads from aph-iimage.el
+
+(autoload 'aph/iimage-refresh "aph-iimage" "\
+Refresh inline images in current buffer.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-org" "aph-org.el" (22257 53869 994247
 ;;;;;;  700000))
 ;;; Generated autoloads from aph-org.el
@@ -550,8 +561,8 @@ penumbra map instead.
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
 ;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-face-remap.el"
 ;;;;;;  "aph-files.el" "aph-framewin.el" "aph-haskell.el" "aph-help.el"
-;;;;;;  "aph-iimage.el" "aph-info.el" "aph-keypad.el" "aph-latex.el"
-;;;;;;  "aph-lexical.el" "aph-lisp-mode.el" "aph-org-agenda.el" "aph-org-capture.el"
+;;;;;;  "aph-info.el" "aph-keypad.el" "aph-latex.el" "aph-lexical.el"
+;;;;;;  "aph-lisp-mode.el" "aph-org-agenda.el" "aph-org-capture.el"
 ;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
 ;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
 ;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
@@ -559,7 +570,7 @@ penumbra map instead.
 ;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
 ;;;;;;  "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22342 14488 492706 800000))
+;;;;;;  "vizier.el") (22343 12276 376311 200000))
 
 ;;;***
 
