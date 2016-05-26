@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: themes
 
-;; Dependencies: `dash'
+;; Dependencies: `dash', `validate' (optional)
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -44,43 +44,46 @@
 (require 'dash)                         ; For `-drop-while'
 
 
-;;; Configuration Variables
-;;;========================
-(defvar multitheme-base-theme-list nil
-  "A list of themes to be used as multitheme bases.
+;;;; User Options
+;;===============
+(defgroup multitheme nil
+  "Use multiple themes at once."
+  :prefix "multitheme-"
+  :link '(emacs-commentary-link "multitheme")
+  :group 'faces)
 
-Note that multitheme does not check whether these themes are
-marked as \"safe\" and will load any theme without
-confirmation.")
+(defcustom multitheme-base-theme-list nil
+  "A list of themes to be used as multitheme bases."
+  :type '(repeat symbol))
 
-(defvar multitheme-overtheme nil
+(defcustom multitheme-overtheme nil
   "A theme used on top of the multitheme base.
 
 If this variable is non-nil, it should be the name of a theme.
 Whenever the multitheme base is changed (e.g., by
 `multitheme-cycle'), this theme will be applied on top of the new
 base theme.  Hence this theme should be \"thin\", overriding only
-those elements that you wish to change in all base themes.
+those elements that you wish to change in all base themes."
+  :type 'symbol)
 
-Note that multitheme does not check whether this theme is marked
-as \"safe\" and will load any theme without confirmation.")
-
-(defvar multitheme-base-theme-change-hook nil
+(defcustom multitheme-base-theme-change-hook nil
   "Hook run when the multitheme base is changed.
-When this hook is run, the new base has already been loaded.")
+When this hook is run, the new base has already been loaded."
+  :type 'hook)
 
 
-;;; Subroutines
-;;;============
+;;;; Subroutines
+;;==============
 (defun multitheme--enable (theme)
-  "As `enable-theme', but load the theme if necessary."
+  "As `enable-theme', but load the theme if necessary.
+Respect `custom-safe-themes'."
   (if (custom-theme-p theme)
       (enable-theme theme)
     (load-theme theme)))
 
 
-;;; Commands
-;;;=========
+;;;; Commands
+;;===========
 
 ;;;###autoload
 (defun multitheme-cycle ()
@@ -97,6 +100,10 @@ first (using `load-theme').  Respect `custom-safe-themes'.
 After all theme changes have been made, run
 `multitheme-base-change-hook'."
   (interactive)
+  (when (require 'validate nil :noerror)
+    (validate-variable 'multitheme-base-theme-list)
+    (validate-variable 'multitheme-overtheme)
+    (validate-variable 'multitheme-base-theme-change-hook))
   (let ((themes (-drop-while
                  (lambda (thm) (not (custom-theme-enabled-p thm)))
                  multitheme-base-theme-list)))
@@ -110,7 +117,7 @@ After all theme changes have been made, run
     (when multitheme-overtheme
       (multitheme--enable multitheme-overtheme))
     ;; Run hooks
-    (run-hooks 'multitheme-base-change-hook)))
+    (run-hooks 'multitheme-base-theme-change-hook)))
 
 (provide 'multitheme)
 ;;; multitheme.el ends here
