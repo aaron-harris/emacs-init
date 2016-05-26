@@ -706,10 +706,9 @@
 (use-package multitheme
   :bind (:map umbra-mode-map
               ("s-n" . multitheme-cycle))
-  :demand t
-  :config
-  (setq multitheme-base-theme-list '(hc-zenburn zenburn)
-        multitheme-overtheme       'aph)
+  :init
+  (validate-setq multitheme-base-theme-list '(hc-zenburn zenburn))
+  (validate-setq multitheme-overtheme       'aph)
   (add-hook 'after-init-hook #'multitheme-cycle))
 
 (use-package ob-core
