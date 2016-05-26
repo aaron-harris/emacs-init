@@ -391,6 +391,21 @@ A `helm' command for browsing records in `forms-mode'.
 
 ;;;***
 
+;;;### (autoloads nil "kp-motion" "kp-motion.el" (22343 25489 74134
+;;;;;;  600000))
+;;; Generated autoloads from kp-motion.el
+
+(autoload 'kp-motion-mode "kp-motion" "\
+Simple minor mode enabling motion with enter key on keypad.
+
+When this mode is enabled, the enter key on the
+keypad (`<kp-enter>') will be used for downward
+motion (`next-line') instead of its normal function.
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "mode-family" "mode-family.el" (22330 16407
 ;;;;;;  159146 400000))
 ;;; Generated autoloads from mode-family.el
@@ -516,7 +531,7 @@ When enabled, any file in one of the directories listed in
 
 ;;;***
 
-;;;### (autoloads nil "umbra" "umbra.el" (22332 37495 310947 0))
+;;;### (autoloads nil "umbra" "umbra.el" (22343 25352 800105 500000))
 ;;; Generated autoloads from umbra.el
 
 (autoload 'umbra-keymap "umbra" "\
@@ -592,8 +607,8 @@ penumbra map instead.
 ;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
 ;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
 ;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "liberate-key.el"
-;;;;;;  "morgue.el" "vizier-helm.el" "vizier.el") (22343 12854 2168
-;;;;;;  900000))
+;;;;;;  "morgue.el" "vizier-helm.el" "vizier.el") (22343 25493 899335
+;;;;;;  300000))
 
 ;;;***
 

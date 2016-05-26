@@ -447,11 +447,11 @@ This function serves as the back end for the commands
     ;; Do everything possible to let the command called think it was
     ;; called via its usual binding, as doing otherwise can confuse
     ;; some commands.
-    (let* ((char                (string-to-char key))
-           (last-command-event  char))
+    (let* ((last-command-event
+	    (if (stringp key) (string-to-char key) key)))
       (call-interactively (or (key-binding key) default #'undefined)
                           (not :record-flag)
-                          (vector (string-to-char key))))))
+                          (vector last-command-event)))))
 
 (defun umbra-default-return-command ()
   "Execute the command bound to RET without `umbra-mode'.
@@ -467,6 +467,15 @@ If you intend to bind C-m separately from <return> in
 <return> in `umbra-mode-map'."
   (interactive)
   (umbra-default-command (kbd "RET") #'newline))
+
+(defun umbra-default-kp-enter-command ()
+  "Execute the command bound to <kp-enter> without `umbra-mode'.
+
+This is ordinarily the same as `umbra-default-return-command',
+but will preserve any command specifically bound to <kp-enter>
+rather than RET or <return>."
+  (interactive)
+  (umbra-default-command (kbd "<kp-enter>") #'newline))
 
 (defun umbra-default-tab-command ()
   "Execute the command bound to TAB without `umbra-mode'.
