@@ -152,14 +152,6 @@
 (require 'init-org-agenda)
 
 
-;;; Markup
-;;;=======
-;; Remove strike-through markup, and change code markup to use ` as a
-;; delimiter rather than ~.
-(setq org-emphasis-alist (aph/assoc-delete-all "+" org-emphasis-alist))
-(aph/org-emphasis-alist-update "~" "`")
-
-
 ;;; Smart Tab Compatibility
 ;;;========================
 (with-eval-after-load 'smart-tab

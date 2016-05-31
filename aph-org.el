@@ -206,74 +206,6 @@ keybinding for that function is not appropriate."
          :description  (plist-get eww-data :title))))
 
 
-;;; Markup
-;;;=======
-(defconst aph/org-emphasis-alist-dict
-  '(("*" bold           bold)
-    ("/" italic         italic)
-    ("_" underline      underline)
-    ("+" strike-through (:strike-through t))
-    ("~" code           org-code verbatim)
-    ("=" verbatim       org-verbatim verbatim))
-  "Alist mapping keys in `org-emphasis-alist' to desired markup.
-Each entry should be a list (CHAR SYM . FACES), where CHAR is a
-key in `org-emphasis-alist', SYM is the return value of
-`org-element-text-markup-successor' associated with that
-character, and FACES is the value associated with CHAR in
-`org-emphasis-alist'.
-
-This alist is essentially the logic inappropriately hard-coded by
-`org-element-text-markup-successor', and is used by
-`aph/org-emphasis-alist-update' to update that function's
-behavior.")
-
-(defun aph/org-emphasis-alist-update (old new)
-  "Update `org-emphasis-alist' to use NEW char in place of OLD.
-
-Because the function `org-element-text-markup-successor' uses
-hard-coded logic assuming the default value of
-`org-emphasis-alist', updating `org-emphasis-alist' is not enough
-to change the character controlling a particular kind of
-markup.  (It does suffice if you're just removing an entry,
-however.)
-
-This function makes the necessary changes to `org-emphasis-alist'
-and also advises `org-element-text-markup-successor'
-appropriately.  Because `org-emphasis-alist' recommends
-restarting Org-mode after making changes to that variable, we do
-that too.
-
-Because this function reloads Org-mode, if you use it in a file
-that is loaded automatically following Org-mode (e.g., in
-the :config block of a `use-package' declaration), you should use
-`require' make sure that the relevant feature is `provide'd
-*before* this function is called to prevent the file from being
-loaded twice.  This does not apply if you are using
-`with-eval-after-load' instead of `use-package', as this macro
-evaluates its body only once."
-  (require 'aph-silence)
-  (let ((sym  (or (cadr (assoc old aph/org-emphasis-alist-dict))
-                  (error "Emphasis char %S not recognized" old)))
-        (adv  (lambda (oldfn)
-                (condition-case err
-                    (funcall oldfn)
-                  (error
-                   (let ((delim
-                          (->> (cadr err)
-                               (replace-regexp-in-string "[^0-9]" "")
-                               string-to-number
-                               char-after)))
-                     (if (= delim (elt 0 old))
-                         (cons sym (match-beginning 2))
-                       (signal (car err) (cdr err))))))))
-        (name (intern (format "aph/org-emphasis-alist-update[%s]" new))))
-    (setcar (assoc old org-emphasis-alist) new)
-    (aph/silence ("^Loading org" "^Successfully reloaded Org$")
-      (aph/silence-loading (org-reload)))
-    (advice-add 'org-element-text-markup-successor :around
-                adv `((name . ,name)))))
-
-
 ;;; Advice
 ;;;=======
 (defun aph/org-todo-window-advice (orig-fn)

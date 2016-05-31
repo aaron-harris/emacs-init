@@ -721,22 +721,30 @@
   :bind (:map umbra-mode-map
               ("C-c l" . org-store-link))
   :bind (:umbra org-mode
-                ("C-c ["            . undefined)
-                ("C-c ]"            . org-cycle-agenda-files)
-                ("M-."              . helm-org-in-buffer-headings) 
+                ("C-c [" . undefined)
+                ("C-c ]" . org-cycle-agenda-files)
+                ("M-."   . helm-org-in-buffer-headings) 
                 ;; Following bindings restore `org-mode' keys
                 ;; unintentionally shadowed by `umbra-mode'
-                ("C-o"              . org-open-line))
+                ("C-o"   . org-open-line))
   :bind (:penumbra org-mode
                    ("C-M-[" . org-metaleft)
                    ("C-M-]" . org-metaright)
                    ("C-M-t" . org-metaup))
+  :init
+  (custom-set-variables
+   ;; Remove strike-through and use ` rather than ~ for code. 
+   '(org-emphasis-alist '(("*" bold)
+			  ("/" italic)
+			  ("_" underline)
+			  ("=" org-verbatim verbatim)
+			  ("`" org-code verbatim))))
   :config
   (message "Loading org...")         ; Because this may take a while. 
   (use-package init-org)
   (bind-keys :umbra org-mode
-   ("S-<return>" . (chimera "chimera/org-table-copy-down"
-                     (when (org-table-p) #'org-table-copy-down))))
+	     ("S-<return>" . (chimera "chimera/org-table-copy-down"
+			       (when (org-table-p) #'org-table-copy-down))))
   (message "Loading org...done"))
 
 (use-package aph-org
