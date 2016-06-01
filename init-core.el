@@ -84,7 +84,7 @@
   :bind (:map umbra-mode-map
               ("<return>"   . umbra-default-return-command)
 	      ("<kp-enter>" . umbra-default-kp-enter-command)
-              ("<tab>"      . umbra-default-tab-command))
+              ("<tab>"      . umbra-default-tab-command)) 
   :init (umbra-mode))
 
 
@@ -227,7 +227,7 @@
   (validate-setq browse-url-prefix-default-browser-function #'eww-browse-url))
 
 (use-package calc
-  :bind (:map umbra-mode-map
+  :bind (:map umbra-mode-map 
               ("C-z C-c" . calc)))
 
 (use-package canary
