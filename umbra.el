@@ -433,25 +433,31 @@ Intended as :around advice for `bind-keys'."
 
 ;;;; Compatibility Functions
 ;;;;========================
-(defun umbra-default-command (key &optional default)
-  "Execute the command bound to KEY without `umbra-mode'.
-
-Execute whatever command would be bound to KEY if `umbra-mode'
-were not active.  If DEFAULT is provided, use that instead if no
-command would normally be bound to KEY; otherwise, call `undefined'.
-
-This function serves as the back end for the commands
-`umbra-default-return-command' and `umbra-default-tab-command'."
+(defun umbra-default-binding (key)
+  "Return the command bound to KEY without `umbra-mode'."
   (let ((umbra-mode                  nil)
         (umbra-minor-mode-map-alist  nil))
-    ;; Do everything possible to let the command called think it was
-    ;; called via its usual binding, as doing otherwise can confuse
-    ;; some commands.
-    (let* ((last-command-event
-	    (if (stringp key) (string-to-char key) key)))
-      (call-interactively (or (key-binding key) default #'undefined)
-                          (not :record-flag)
-                          (vector last-command-event)))))
+    (key-binding key)))
+
+(defun umbra-default-command (&rest keys)
+  "Execute first command bound to one of KEYS without `umbra-mode'.
+
+Check each KEY in sequence to see whether it would be bound if
+`umbra-mode' were not active.  Execute the first command found;
+if none is found, call `undefined'.
+
+This function serves as the back end for the commands
+`umbra-default-return-command', `umbra-default-tab-command', and
+`umbra-default-kp-enter-command'."
+  ;; We do everything possible to let the command called think it was
+  ;; called via its usual binding, as doing otherwise can confuse some
+  ;; commands.
+  (let* ((key                 (seq-find #'umbra-default-binding keys))
+	 (last-command-event  (if (stringp key) (string-to-char key) key)))
+    (call-interactively
+     (if key (umbra-default-binding key) #'undefined)
+     (not :record-flag)
+     (vector last-command-event))))
 
 (defun umbra-default-return-command ()
   "Execute the command bound to RET without `umbra-mode'.
@@ -462,20 +468,26 @@ separately from <return>.  This command attempts to alleviate
 that difficulty by executing whatever command would be bound to
 RET if `umbra-mode' were not active.
 
+In the event that a command is actually bound to <return> outside
+of `umbra-mode', it takes priority over the command bound to RET.
+
 If you intend to bind C-m separately from <return> in
 `umbra-mode-map' or any augmented keymap, bind this command to
 <return> in `umbra-mode-map'."
   (interactive)
-  (umbra-default-command (kbd "RET") #'newline))
+  (umbra-default-command (kbd "<return>")
+			 (kbd "RET")))
 
 (defun umbra-default-kp-enter-command ()
   "Execute the command bound to <kp-enter> without `umbra-mode'.
 
 This is ordinarily the same as `umbra-default-return-command',
 but will preserve any command specifically bound to <kp-enter>
-rather than RET or <return>."
+rather than to RET or <return>."
   (interactive)
-  (umbra-default-command (kbd "<kp-enter>") #'newline))
+  (umbra-default-command (kbd "<kp-enter>")
+			 (kbd "<return>")
+			 (kbd "RET")))
 
 (defun umbra-default-tab-command ()
   "Execute the command bound to TAB without `umbra-mode'.
@@ -490,7 +502,7 @@ If you intend to bind C-i separately from <tab> in
 `umbra-mode-map' or any augmented keymap, bind this command to
 <tab> in `umbra-mode-map'."
   (interactive)
-  (umbra-default-command (kbd "TAB") #'indent-for-tab-command))
+  (umbra-default-command (kbd "TAB")))
 
 
 ;;;; Unloading
