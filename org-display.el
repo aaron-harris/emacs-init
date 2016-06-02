@@ -7,7 +7,7 @@
 
 ;; Dependencies: `validate' (optional)
 ;; Advised functions from other packages:
-;;   org: `org-fast-todo-selection'
+;;   org: `org-capture', `org-fast-todo-selection'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -32,14 +32,21 @@
 ;; Each type of control buffer can be position independently using a
 ;; different control variable; see below for a complete list.  To
 ;; control where a type of buffer is placed, find the appropriate
-;; control variable and set it to a function usable as an "action" by
-;; `display-buffer'.  These are functions like
-;; `display-buffer-pop-up-window' and `display-buffer-in-side-window'.
+;; control variable and set it to a suitable "action" for use by
+;; `display-buffer'.  See the docstring for `display-buffer' for more
+;; information on what this means; most often, this will be a
+;; singleton list containing a function like
+;; `display-buffer-pop-up-window' or `display-buffer-in-side-window'.
 ;;
 ;; Here is a complete list of control variables, and the buffers they
 ;; control:
 ;;
-;; `org-display-todo-placement-function':
+;; `org-display-capture-placement-action':
+;;
+;;     This variable controls the placement of all buffers used by
+;;     `org-capture'.
+;;
+;; `org-display-todo-placement-action':
 ;;
 ;;     This variable controls the fast todo selection buffer presented
 ;;     by `org-todo' when the option `org-use-fast-todo-selection' is
@@ -58,33 +65,80 @@
   :link '(emacs-commentary-link "org-display")
   :group 'org)
 
-(defcustom org-display-todo-placement-function nil
-  "Function to use for placement of todo selection window.
+(define-widget 'org-display-action 'lazy
+  "An action for use with `display-buffer'.
+This is a cons with car a function or list of functions and cdr
+an arbitrary alist."
+  :tag "Buffer display action"
+  :type '(cons (choice function (repeat function))
+	       (alist :key-type sexp :value-type sexp)))
+
+(defcustom org-display-capture-placement-action nil
+  "Action to use for placement of capture buffer.
+
+This affects all buffers displayed during the capture process.
 
 If nil, do not override Org-mode's default behavior.  Otherwise,
-attempt to use the specified function as a `display-buffer'
-action; see the docstring for `display-buffer' for more
-information."
-  :type 'function
+attempt to use the specified value (a pair (FUNCTION . ALIST)) as
+a `display-buffer' action; see the docstring for `display-buffer'
+for more information."
+  :type 'org-display-action
+  :require 'org-display)
+
+(defcustom org-display-todo-placement-action nil
+  "Action to use for placement of todo selection buffer.
+
+This affects the buffer displayed by `org-todo' when the option
+`org-use-fast-todo-selection' is non-nil.
+
+If nil, do not override Org-mode's default behavior.  Otherwise,
+attempt to use the specified value (a pair (FUNCTION . ALIST)) as
+a `display-buffer' action; see the docstring for `display-buffer'
+for more information."
+  :type 'org-display-action
   :require 'org-display)
 
 
 ;;;; Implementation
 ;;=================
-(defun org-display-todo-placement-advice (orig-fn)
-  "Advice to enforce `org-display-todo-placement-function'.
-Intended as :around advice for `org-fast-todo-selection'."
-  (if (not org-display-todo-placement-function) (funcall orig-fn)
+(defun org-display-placement-advice-core
+    (orig-fn control-var buffer-re &rest args)
+  "Core subroutine for `org-display' module.
+
+Call ORIG-FN with ARGS, overriding `org-mode''s hard-coded
+positioning logic and using the value of CONTROL-VAR as a
+`display-buffer' action for buffers matching the regexp
+BUFFER-RE."
+  (if (not (symbol-value control-var)) (apply orig-fn args)
     (when (require 'validate nil :noerror)
-      (validate-variable 'org-display-todo-placement-function))
+      (validate-variable control-var))
     (cl-letf*
 	(((symbol-function 'org-switch-to-buffer-other-window)
 	  #'pop-to-buffer)
 
 	 (display-buffer-alist
-	  (cons `("\\*Org todo\\*" ,org-display-todo-placement-function)
+	  (cons `(,buffer-re ,(symbol-value control-var))
 		display-buffer-alist)))
-      (funcall orig-fn))))
+      (apply orig-fn args))))
+
+(defun org-display-capture-placement-advice (orig-fn &optional goto keys)
+  "Advice to enforce `org-display-capture-placement-action'.
+Intended as :around advice for `org-capture'."
+  (if goto (funcall orig-fn goto keys)
+    (org-display-placement-advice-core
+     orig-fn 'org-display-capture-placement-action
+     "\\*Org Select\\*\\|\\*Capture\\*\\|CAPTURE-.*"
+     goto keys)))
+
+(advice-add 'org-capture
+	    :around #'org-display-capture-placement-advice)
+
+(defun org-display-todo-placement-advice (orig-fn)
+  "Advice to enforce `org-display-todo-placement-action'.
+Intended as :around advice for `org-fast-todo-selection'." 
+  (org-display-placement-advice-core
+   orig-fn 'org-display-todo-placement-action
+   "\\*Org todo\\*"))
 
 (advice-add 'org-fast-todo-selection
 	    :around #'org-display-todo-placement-advice)
@@ -97,8 +151,14 @@ Intended as :around advice for `org-fast-todo-selection'."
 
 This consists of removing the following pieces of advice:
 
+- `org-display-capture-placement-advice' on `org-capture'.
+
 - `org-display-todo-placement-advice' on `org-fast-todo-selection'."
-  (advice-remove 'org-fast-todo-selection #'org-display-todo-placement-advice))
+  (let (advice-list
+	'((org-capture	           . org-display-capture-placement-advice)
+	  (org-fast-todo-selection . org-display-todo-placement-advice)))
+    (dolist (pair advice-list)
+      (advice-remove (car pair) (cdr pair)))))
 
 (provide 'org-display)
 ;;; org-display.el ends here
