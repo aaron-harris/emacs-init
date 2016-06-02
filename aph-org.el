@@ -208,18 +208,6 @@ keybinding for that function is not appropriate."
 
 ;;; Advice
 ;;;=======
-(defun aph/org-todo-window-advice (orig-fn)
-  "Advice to fix window placement in `org-fast-todo-selection'.
-Intended as :around advice for `org-fact-todo-selection'."
-  (require 'aph-framewin)      ; For `aph/display-buffer-in-subwindow'
-  (let  ((override '("\\*Org todo\\*" aph/display-buffer-in-subwindow)))
-    (add-to-list 'display-buffer-alist override)
-    (aph/with-advice
-        ((#'org-switch-to-buffer-other-window :override #'pop-to-buffer))
-      (unwind-protect (funcall orig-fn)
-        (setq display-buffer-alist
-              (delete override display-buffer-alist)))))) 
-
 (defun aph/org-cycle-smart-tab-advice (fn &optional arg)
   "Advice to make `org-cycle' use `smart-tab'.
 

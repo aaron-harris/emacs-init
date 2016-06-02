@@ -51,9 +51,7 @@
 (setq org-todo-keywords
       '((type "TODO(t)" "ACTIVE(a)" "|" "DONE(d)")    ; also WAIT, HOLD
         (type "MEDIA(m)" "BUY(b)" "|" "REF(r)")       ; also WAIT
-        (type "PROJECT(p)" "WAIT(w)" "|" "HOLD(h)"))) ; no WAIT
-
-(advice-add #'org-fast-todo-selection :around #'aph/org-todo-window-advice)
+        (type "PROJECT(p)" "WAIT(w)" "|" "HOLD(h)"))) ; no WAIT 
 
 
 ;;; Tags

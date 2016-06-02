@@ -800,6 +800,13 @@
   :bind (:umbra org-mode
                 ("C-c t i" . org-clock-in)))
 
+(use-package org-display
+  :after org
+  :config
+  (require 'aph-framewin)
+  (validate-setq org-display-todo-placement-function
+		 #'aph/display-buffer-in-subwindow))
+
 (use-package org-mobile
   :disabled t
   :config
