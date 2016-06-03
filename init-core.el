@@ -785,11 +785,7 @@
 (use-package aph-org-capture
   :after org-capture
   :bind (:map umbra-mode-map
-              ("C-c c" . aph/org-capture-in-popout-frame))
-  :config
-  ;; Support for `aph/org-capture-in-popout-frame':
-  (add-hook 'org-capture-after-finalize-hook
-            #'aph/org-capture-delete-capture-frame))
+              ("C-c c" . aph/org-capture-in-popout-frame)))
 
 (use-package org-clock
   :bind (:map umbra-mode-map
@@ -802,6 +798,8 @@
 
 (use-package org-display
   :after org
+  :bind (:map umbra-mode-map
+	      ("C-c c" . org-display-capture-in-popout-frame))
   :config
   (require 'aph-framewin)
   (validate-setq org-display-todo-placement-action

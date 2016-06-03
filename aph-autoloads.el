@@ -49,8 +49,8 @@ uncleared outputs).
 
 ;;;***
 
-;;;### (autoloads nil "aph-iimage" "aph-iimage.el" (22343 12244 832717
-;;;;;;  0))
+;;;### (autoloads nil "aph-iimage" "aph-iimage.el" (22343 25955 472029
+;;;;;;  800000))
 ;;; Generated autoloads from aph-iimage.el
 
 (autoload 'aph/iimage-refresh "aph-iimage" "\
@@ -83,8 +83,8 @@ standalone info application.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22257 53869 994247
-;;;;;;  700000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22352 31355 245446
+;;;;;;  0))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-spin-basic "aph-org" "\
@@ -391,8 +391,8 @@ A `helm' command for browsing records in `forms-mode'.
 
 ;;;***
 
-;;;### (autoloads nil "kp-motion" "kp-motion.el" (22343 25489 74134
-;;;;;;  600000))
+;;;### (autoloads nil "kp-motion" "kp-motion.el" (22343 25518 640308
+;;;;;;  400000))
 ;;; Generated autoloads from kp-motion.el
 
 (autoload 'kp-motion-mode "kp-motion" "\
@@ -452,8 +452,8 @@ See the documentation for `mode-family-create' for more information.
 
 ;;;***
 
-;;;### (autoloads nil "multitheme" "multitheme.el" (22314 25775 43104
-;;;;;;  600000))
+;;;### (autoloads nil "multitheme" "multitheme.el" (22343 26772 57847
+;;;;;;  800000))
 ;;; Generated autoloads from multitheme.el
 
 (autoload 'multitheme-cycle "multitheme" "\
@@ -471,6 +471,32 @@ After all theme changes have been made, run
 `multitheme-base-change-hook'.
 
 \(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "org-display" "org-display.el" (22353 51038
+;;;;;;  284215 200000))
+;;; Generated autoloads from org-display.el
+
+(autoload 'org-display-capture-in-whole-frame "org-display" "\
+As `org-capture', but take over entire frame.
+
+When capture is completed or aborted, the frame will be deleted.
+
+This is designed to be used with the -e option for emacsclient,
+where a frame has just been created that has no useful content in
+it.  For normal usage, `org-display-capture-in-popout-frame'
+probably makes more sense.
+
+\(fn &optional GOTO KEYS)" t nil)
+
+(autoload 'org-display-capture-in-popout-frame "org-display" "\
+As `org-capture', but do all work in a new frame.
+
+When capture is completed or aborted, the new frame will be
+deleted.
+
+\(fn &optional GOTO KEYS)" t nil)
 
 ;;;***
 
@@ -531,7 +557,7 @@ When enabled, any file in one of the directories listed in
 
 ;;;***
 
-;;;### (autoloads nil "umbra" "umbra.el" (22343 25352 800105 500000))
+;;;### (autoloads nil "umbra" "umbra.el" (22351 14864 363645 0))
 ;;; Generated autoloads from umbra.el
 
 (autoload 'umbra-keymap "umbra" "\
@@ -599,16 +625,15 @@ penumbra map instead.
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
 ;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-face-remap.el"
 ;;;;;;  "aph-files.el" "aph-framewin.el" "aph-haskell.el" "aph-help.el"
-;;;;;;  "aph-keypad.el" "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el"
-;;;;;;  "aph-org-agenda.el" "aph-org-capture.el" "aph-org-table.el"
-;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-rect.el"
-;;;;;;  "aph-shr.el" "aph-silence.el" "aph-simple.el" "aph-smartparens.el"
-;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "chimera.el"
-;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
-;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "liberate-key.el"
-;;;;;;  "morgue.el" "vizier-helm.el" "vizier.el") (22343 25493 899335
-;;;;;;  300000))
+;;;;;;  "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el" "aph-org-agenda.el"
+;;;;;;  "aph-org-capture.el" "aph-org-table.el" "aph-outline.el"
+;;;;;;  "aph-page.el" "aph-plist.el" "aph-rect.el" "aph-shr.el" "aph-silence.el"
+;;;;;;  "aph-simple.el" "aph-smartparens.el" "aph-subr.el" "aph-symbol.el"
+;;;;;;  "aph-which-func.el" "chimera.el" "cygwinize.el" "elfeed-barb.el"
+;;;;;;  "elfeed-link.el" "formation.el" "forms-barb.el" "init-core.el"
+;;;;;;  "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
+;;;;;;  "vizier.el") (22353 51083 872340 700000))
 
 ;;;***
 
