@@ -83,28 +83,9 @@ standalone info application.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22352 31355 245446
-;;;;;;  0))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22357 44010 631690
+;;;;;;  200000))
 ;;; Generated autoloads from aph-org.el
-
-(autoload 'aph/org-spin-basic "aph-org" "\
-Move point to a random child of heading at point.
-Return point.
-
-\(fn)" t nil)
-
-(autoload 'aph/org-spin-weighted "aph-org" "\
-As `aph/org-spin-basic', weighted by property WEIGHT-PROP.
-
-The parameter WEIGHT-PROP should be the name of a property.
-Non-negative numeric values for that property are treated as
-weights for the spin. Non-numeric and negative values are treated
-as zero.
-
-When called interactively or if WEIGHT-PROP is
-omitted,`aph/org-spin-weight-property' is used.
-
-\(fn &optional WEIGHT-PROP)" t nil)
 
 (autoload 'aph/org-goto-last-refile "aph-org" "\
 Goto last Org-mode item refiled.
@@ -474,9 +455,17 @@ After all theme changes have been made, run
 
 ;;;***
 
-;;;### (autoloads nil "org-display" "org-display.el" (22353 51038
-;;;;;;  284215 200000))
+;;;### (autoloads nil "org-display" "org-display.el" (22353 51591
+;;;;;;  588280 800000))
 ;;; Generated autoloads from org-display.el
+
+(autoload 'org-display-capture-in-popout-frame "org-display" "\
+As `org-capture', but do all work in a new frame.
+
+When capture is completed or aborted, the new frame will be
+deleted.
+
+\(fn &optional GOTO KEYS)" t nil)
 
 (autoload 'org-display-capture-in-whole-frame "org-display" "\
 As `org-capture', but take over entire frame.
@@ -490,13 +479,33 @@ probably makes more sense.
 
 \(fn &optional GOTO KEYS)" t nil)
 
-(autoload 'org-display-capture-in-popout-frame "org-display" "\
-As `org-capture', but do all work in a new frame.
+;;;***
+
+;;;### (autoloads nil "org-spin" "org-spin.el" (22357 47267 68301
+;;;;;;  100000))
+;;; Generated autoloads from org-spin.el
 
-When capture is completed or aborted, the new frame will be
-deleted.
+(autoload 'org-spin "org-spin" "\
+Move point to a random child of heading at point.
+Return point.
 
-\(fn &optional GOTO KEYS)" t nil)
+\(fn)" t nil)
+
+(autoload 'org-spin-weighted "org-spin" "\
+As `org-spin', weighted by property WEIGHT-PROP.
+
+The parameter WEIGHT-PROP should be the name of a property.
+Non-negative numeric values for that property are treated as
+weights for the spin.  Non-numeric and negative values are
+treated as zero.
+
+If all weights are zero, then weights are ignored and the
+selection is uniform, as in `org-spin'.
+
+When called interactively or if WEIGHT-PROP is omitted, the value
+of `org-spin-weight-property' is used.
+
+\(fn &optional WEIGHT-PROP)" t nil)
 
 ;;;***
 
@@ -633,7 +642,7 @@ penumbra map instead.
 ;;;;;;  "elfeed-link.el" "formation.el" "forms-barb.el" "init-core.el"
 ;;;;;;  "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
 ;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22353 51083 872340 700000))
+;;;;;;  "vizier.el") (22357 47621 960253 0))
 
 ;;;***
 

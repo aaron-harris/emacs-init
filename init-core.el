@@ -755,9 +755,7 @@
               ("C-+"   . aph/org-increase-number)
               ("C-c w" . aph/org-goto-last-refile))
   :bind (:umbra org-mode
-                ("C-k"         . aph/org-kill-line)
-                ("C-c s SPC"   . aph/org-spin-basic)
-                ("C-c s M-SPC" . aph/org-spin-weighted)))
+                ("C-k"         . aph/org-kill-line)))
 
 (use-package org-agenda
   :defer t
@@ -802,6 +800,11 @@
   (require 'aph-framewin)
   (validate-setq org-display-todo-placement-action
 		 '(aph/display-buffer-in-subwindow)))
+
+(use-package org-spin
+  :bind (:umbra org-mode
+		("C-c s"     . org-spin)
+                ("C-c C-M-s" . org-spin-weighted)))
 
 (use-package org-mobile
   :disabled t

@@ -131,53 +131,6 @@ See `aph/org-increase-number' for more details."
   (aph/org-increase-number (- (or inc 1))))
 
 
-;;; Spinners
-;;;=========
-
-;;;###autoload
-(defun aph/org-spin-basic ()
-  "Move point to a random child of heading at point.
-Return point."
-  (interactive)
-  (if (org-before-first-heading-p)
-      (message "Point not on heading.")
-    (let ((die-size  (aph/org-count-children)))
-      (aph/org-goto-nth-child (1+ (random die-size))))))
-
-(defvar aph/org-spin-weight-property
-  "Weight"
-  "The default property to be used for `aph/org-spin-weight'.")
-
-;;;###autoload
-(defun aph/org-spin-weighted (&optional weight-prop)
-  "As `aph/org-spin-basic', weighted by property WEIGHT-PROP.
-
-The parameter WEIGHT-PROP should be the name of a property.
-Non-negative numeric values for that property are treated as
-weights for the spin. Non-numeric and negative values are treated
-as zero.
-
-When called interactively or if WEIGHT-PROP is
-omitted,`aph/org-spin-weight-property' is used."
-  (interactive) 
-  (if (org-before-first-heading-p)
-      (message "Point not on heading.")
-    (org-back-to-heading))
-  (let* ((weight-prop  (or weight-prop aph/org-spin-weight-property))
-
-         (weight-list
-          (->> (aph/org-get-property-of-children (point) weight-prop)
-               (mapcar #'string-to-number)
-               (mapcar (lambda (x) (if (< x 0) 0 x)))))
-         
-         (threshold-list  (aph/reductions #'+ weight-list)) 
-         (roll            (random (apply #'+ weight-list)))) 
-    (->> threshold-list
-         (-find-index (apply-partially #'< roll))
-         1+
-         aph/org-goto-nth-child))) 
-
-
 ;;; Refile
 ;;;=======
 
