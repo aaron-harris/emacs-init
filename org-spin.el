@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience, Org
 
-;; Dependencies: `aph-org', `aph-dash'
+;; Dependencies: `org-child', `aph-dash', `validate' (optional)
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
 
 ;;; Code:
 
-(require 'aph-org)
+(require 'org-child)
 (require 'aph-dash) 
 
 
@@ -65,8 +65,8 @@ Return point."
   (interactive)
   (if (org-before-first-heading-p)
       (message "Point not on heading.")
-    (let ((die-size  (aph/org-count-children)))
-      (aph/org-goto-nth-child (1+ (random die-size)))))) 
+    (let ((die-size  (org-child-count)))
+      (org-child-goto (1+ (random die-size)))))) 
 
 ;;;###autoload
 (defun org-spin-weighted (&optional weight-prop)
@@ -86,10 +86,12 @@ of `org-spin-weight-property' is used."
   (if (org-before-first-heading-p)
       (message "Before first heading.")
     (org-back-to-heading)
+    (when (require 'validate nil :noerror)
+      (validate-variable 'org-spin-weight-property))
     (let* ((weight-prop  (or weight-prop org-spin-weight-property))
 
 	   (weight-list 
-	    (->> (aph/org-get-property-of-children (point) weight-prop)
+	    (->> (org-child-get-property (point) weight-prop)
 		 (mapcar (lambda (x) (if x (string-to-number x) 0)))
 		 (mapcar (lambda (x) (if (< x 0) 0 x)))))
 	   
@@ -100,7 +102,7 @@ of `org-spin-weight-property' is used."
 	(->> threshold-list
 	     (-find-index (apply-partially #'< roll))
 	     1+
-	     aph/org-goto-nth-child)))))
+	     org-child-goto)))))
 
 (provide 'org-spin)
 ;;; org-spin.el ends here

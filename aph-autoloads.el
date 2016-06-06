@@ -83,8 +83,8 @@ standalone info application.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22357 44010 631690
-;;;;;;  200000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22357 62780 248475
+;;;;;;  300000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-goto-last-refile "aph-org" "\
@@ -455,6 +455,26 @@ After all theme changes have been made, run
 
 ;;;***
 
+;;;### (autoloads nil "org-child" "org-child.el" (22357 63699 894897
+;;;;;;  600000))
+;;; Generated autoloads from org-child.el
+
+(autoload 'org-child-goto "org-child" "\
+Goto the Nth child of heading at point.
+
+Children are counted from 1.  If heading does not have N
+children, return nil and do not move point; otherwise, return
+point.
+
+If N is zero, call `org-back-to-heading' and return point.
+
+If N is negative, goto the (-N)th child from the end (so
+\(org-child-goto -1) moves to the last child).
+
+\(fn N)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "org-display" "org-display.el" (22353 51591
 ;;;;;;  588280 800000))
 ;;; Generated autoloads from org-display.el
@@ -481,7 +501,7 @@ probably makes more sense.
 
 ;;;***
 
-;;;### (autoloads nil "org-spin" "org-spin.el" (22357 47267 68301
+;;;### (autoloads nil "org-spin" "org-spin.el" (22357 63807 430404
 ;;;;;;  100000))
 ;;; Generated autoloads from org-spin.el
 
@@ -642,7 +662,7 @@ penumbra map instead.
 ;;;;;;  "elfeed-link.el" "formation.el" "forms-barb.el" "init-core.el"
 ;;;;;;  "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
 ;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22357 47621 960253 0))
+;;;;;;  "vizier.el") (22357 63852 895516 100000))
 
 ;;;***
 
