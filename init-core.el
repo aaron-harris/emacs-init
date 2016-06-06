@@ -783,9 +783,7 @@
   (require 'init-org-capture))
 
 (use-package aph-org-capture
-  :after org-capture
-  :bind (:map umbra-mode-map
-              ("C-c c" . aph/org-capture-in-popout-frame)))
+  :after org-capture)
 
 (use-package org-clock
   :bind (:map umbra-mode-map
