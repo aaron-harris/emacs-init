@@ -387,22 +387,6 @@ motion (`next-line') instead of its normal function.
 
 ;;;***
 
-;;;### (autoloads nil "lexy" "lexy.el" (22359 12667 549355 400000))
-;;; Generated autoloads from lexy.el
-
-(autoload 'define-dynamically "lexy" "\
-As `defun', but always in dynamic scope.
-A function defined in this way ignores the value of
-`lexical-binding' and treats it as if it were nil.
-
-\(fn NAME ARGLIST &optional DOCSTRING DECL &rest BODY)" nil t)
-
-(put 'define-dynamically 'lisp-indent-function 'defun)
-
-(put 'define-dynamically 'doc-string-elt '3)
-
-;;;***
-
 ;;;### (autoloads nil "mode-family" "mode-family.el" (22330 16407
 ;;;;;;  159146 400000))
 ;;; Generated autoloads from mode-family.el
@@ -680,8 +664,8 @@ penumbra map instead.
 ;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
 ;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22359 12697 859354 900000))
+;;;;;;  "jerk.el" "lexy.el" "liberate-key.el" "morgue.el" "org-match.el"
+;;;;;;  "vizier-helm.el" "vizier.el") (22359 13160 140330 500000))
 
 ;;;***
 

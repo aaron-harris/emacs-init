@@ -76,12 +76,12 @@ position of the next headline in current buffer.
 
 Intended for use with `org-agenda-skip-function', where this will
 skip exactly those headlines that do not match."
-  (require 'aph-org)                    ; For `aph/org-match-at-point-p'
+  (require 'org-match)			; For `org-match-at-point-p'
   (save-excursion
     (unless (org-at-heading-p) (org-back-to-heading)) 
     (let ((next-headline (save-excursion
                            (or (outline-next-heading) (point-max)))))
-      (if (aph/org-match-at-point-p match) nil next-headline))))
+      (if (org-match-at-point-p match) nil next-headline))))
 
 ;;; The remaining functions are obsolete, but remain here until the
 ;;; agendas can be switched over to
