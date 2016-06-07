@@ -74,9 +74,9 @@ a random top-level heading."
   "As `org-spin', weighted by property WEIGHT-PROP.
 
 The parameter WEIGHT-PROP should be the name of a property.
-Non-negative numeric values for that property are treated as
-weights for the spin.  Non-numeric and negative values are
-treated as zero.
+Numeric values for that property are treated as weights for the
+spin.  Omitted weights default to 1 (but non-numeric values are
+treated as 0).
 
 If all weights are zero, then weights are ignored and the
 selection is uniform, as in `org-spin'.
@@ -88,7 +88,7 @@ of `org-spin-weight-property' is used."
 	     (require 'validate nil :noerror))
     (validate-variable 'org-spin-weight-property))
   (let* ((weight-prop  (or weight-prop org-spin-weight-property))
-	 (die-size     (org-child-sum-property (point) weight-prop))
+	 (die-size     (org-child-sum-property (point) weight-prop nil 1))
 	 (roll         (if (zerop die-size)
 			   (error "Weights sum to zero")
 			 (random die-size)))) 
@@ -96,10 +96,10 @@ of `org-spin-weight-property' is used."
      (catch 'hit
        (org-child-reduce
 	(lambda (acc)
-	  (if (>= acc roll) (throw 'hit (point))
-	    (let ((val (org-entry-get (point) weight-prop)))
-	      (if val (+ acc (string-to-number val))
-		acc))))
+	  (let ((val (org-entry-get (point) weight-prop)))
+	    (setq acc (+ acc (if val (string-to-number val) 1)))
+	    (when (> acc roll) (throw 'hit (point)))
+	    acc))
 	0)))))
 
 (provide 'org-spin)

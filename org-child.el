@@ -110,19 +110,24 @@ See `org-entry-get' for use of optional parameters."
 	(org-entry-get (point) prop inherit literal-nil))
       (org-child-map pom)))
 
-(defun org-child-sum-property (pom prop &optional inherit)
+(defun org-child-sum-property (pom prop &optional inherit default)
   "Return sum of PROP values for all children of heading at POM.
-Ignore missing and non-numeric values.
 
 If INHERIT is non-nil, use inherited values for PROP when
 appropriate.
 
+If DEFAULT is non-nil, it should be a number, which will be used
+in place of missing values for PROP (after inheritance, if
+applicable); if it is omitted, 0 is used.  In any case, 0 will be
+used for non-numeric values.
+
 If POM is before the first heading of the buffer, sum property
 values from the top-level headings instead."
+  (setq default (or default 0))
   (-> (lambda (acc)
-	(let ((val (org-entry-get (point) prop inherit)))
-	  (if val (+ acc (string-to-number val))
-	    acc)))
+	(let* ((raw-val  (org-entry-get (point) prop inherit))
+	       (val      (if raw-val (string-to-number raw-val) default))) 
+	  (+ acc val)))
       (org-child-reduce 0 pom)))
 
 
