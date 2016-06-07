@@ -6,13 +6,12 @@
 
 (require 'org)
 (require 'aph-advice)             ; For `aph/with-advice'
-(require 'aph-lexical)            ; For `aph/defun-dyn'
 (require 'aph-dash)               ; For `->>', `aph/reductions'
 
 
 ;;; Match Strings
 ;;;==============
-(aph/defun-dyn aph/org-match-at-point-p (match &optional todo-only)
+(define-dynamically aph/org-match-at-point-p (match &optional todo-only)
   "Return non-nil if headline at point matches MATCH.
 Here MATCH is a match string of the same format used by
 `org-tags-view'.

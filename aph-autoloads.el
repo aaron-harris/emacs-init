@@ -83,8 +83,8 @@ standalone info application.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22357 62780 248475
-;;;;;;  300000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22359 12677 204095
+;;;;;;  600000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-goto-last-refile "aph-org" "\
@@ -387,6 +387,22 @@ motion (`next-line') instead of its normal function.
 
 ;;;***
 
+;;;### (autoloads nil "lexy" "lexy.el" (22359 12667 549355 400000))
+;;; Generated autoloads from lexy.el
+
+(autoload 'define-dynamically "lexy" "\
+As `defun', but always in dynamic scope.
+A function defined in this way ignores the value of
+`lexical-binding' and treats it as if it were nil.
+
+\(fn NAME ARGLIST &optional DOCSTRING DECL &rest BODY)" nil t)
+
+(put 'define-dynamically 'lisp-indent-function 'defun)
+
+(put 'define-dynamically 'doc-string-elt '3)
+
+;;;***
+
 ;;;### (autoloads nil "mode-family" "mode-family.el" (22330 16407
 ;;;;;;  159146 400000))
 ;;; Generated autoloads from mode-family.el
@@ -455,8 +471,8 @@ After all theme changes have been made, run
 
 ;;;***
 
-;;;### (autoloads nil "org-child" "org-child.el" (22357 63699 894897
-;;;;;;  600000))
+;;;### (autoloads nil "org-child" "org-child.el" (22359 2268 388764
+;;;;;;  800000))
 ;;; Generated autoloads from org-child.el
 
 (autoload 'org-child-goto "org-child" "\
@@ -501,13 +517,16 @@ probably makes more sense.
 
 ;;;***
 
-;;;### (autoloads nil "org-spin" "org-spin.el" (22357 63807 430404
-;;;;;;  100000))
+;;;### (autoloads nil "org-spin" "org-spin.el" (22359 2659 765605
+;;;;;;  900000))
 ;;; Generated autoloads from org-spin.el
 
 (autoload 'org-spin "org-spin" "\
 Move point to a random child of heading at point.
 Return point.
+
+If point is before the first heading of the buffer, move point to
+a random top-level heading.
 
 \(fn)" t nil)
 
@@ -515,9 +534,9 @@ Return point.
 As `org-spin', weighted by property WEIGHT-PROP.
 
 The parameter WEIGHT-PROP should be the name of a property.
-Non-negative numeric values for that property are treated as
-weights for the spin.  Non-numeric and negative values are
-treated as zero.
+Numeric values for that property are treated as weights for the
+spin.  Omitted weights default to 1 (but non-numeric values are
+treated as 0).
 
 If all weights are zero, then weights are ignored and the
 selection is uniform, as in `org-spin'.
@@ -654,15 +673,15 @@ penumbra map instead.
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
 ;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-face-remap.el"
 ;;;;;;  "aph-files.el" "aph-framewin.el" "aph-haskell.el" "aph-help.el"
-;;;;;;  "aph-latex.el" "aph-lexical.el" "aph-lisp-mode.el" "aph-org-agenda.el"
-;;;;;;  "aph-org-capture.el" "aph-org-table.el" "aph-outline.el"
-;;;;;;  "aph-page.el" "aph-plist.el" "aph-rect.el" "aph-shr.el" "aph-silence.el"
-;;;;;;  "aph-simple.el" "aph-smartparens.el" "aph-subr.el" "aph-symbol.el"
-;;;;;;  "aph-which-func.el" "chimera.el" "cygwinize.el" "elfeed-barb.el"
-;;;;;;  "elfeed-link.el" "formation.el" "forms-barb.el" "init-core.el"
-;;;;;;  "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
-;;;;;;  "init-org.el" "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22357 63852 895516 100000))
+;;;;;;  "aph-latex.el" "aph-lisp-mode.el" "aph-org-agenda.el" "aph-org-capture.el"
+;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
+;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
+;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
+;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
+;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
+;;;;;;  "jerk.el" "liberate-key.el" "morgue.el" "vizier-helm.el"
+;;;;;;  "vizier.el") (22359 12697 859354 900000))
 
 ;;;***
 
