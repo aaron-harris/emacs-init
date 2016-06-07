@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience, Org
 
-;; Dependencies: `org-child', `aph-dash', `validate' (optional)
+;; Dependencies: `org-child', `validate' (optional)
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@
 ;;; Code:
 
 (require 'org-child)
-(require 'aph-dash) 
 
 
 ;;;; User Options
@@ -61,12 +60,14 @@
 ;;;###autoload
 (defun org-spin ()
   "Move point to a random child of heading at point.
-Return point."
+Return point.
+
+If point is before the first heading of the buffer, move point to
+a random top-level heading."
   (interactive)
-  (if (org-before-first-heading-p)
-      (message "Point not on heading.")
-    (let ((die-size  (org-child-count)))
-      (org-child-goto (1+ (random die-size)))))) 
+  (let ((die-size (org-child-count)))
+    (if (zerop die-size) (error "No children")
+      (org-child-goto (1+ (random die-size))))))
 
 ;;;###autoload
 (defun org-spin-weighted (&optional weight-prop)
@@ -82,27 +83,24 @@ selection is uniform, as in `org-spin'.
 
 When called interactively or if WEIGHT-PROP is omitted, the value
 of `org-spin-weight-property' is used."
-  (interactive) 
-  (if (org-before-first-heading-p)
-      (message "Before first heading.")
-    (org-back-to-heading)
-    (when (require 'validate nil :noerror)
-      (validate-variable 'org-spin-weight-property))
-    (let* ((weight-prop  (or weight-prop org-spin-weight-property))
-
-	   (weight-list 
-	    (->> (org-child-get-property (point) weight-prop)
-		 (mapcar (lambda (x) (if x (string-to-number x) 0)))
-		 (mapcar (lambda (x) (if (< x 0) 0 x)))))
-	   
-	   (threshold-list  (aph/reductions #'+ weight-list))
-	   (total           (apply #'+ weight-list))
-	   (roll            (random total)))
-      (if (= total 0) (org-spin)
-	(->> threshold-list
-	     (-find-index (apply-partially #'< roll))
-	     1+
-	     org-child-goto)))))
+  (interactive)
+  (when (and (not weight-prop)
+	     (require 'validate nil :noerror))
+    (validate-variable 'org-spin-weight-property))
+  (let* ((weight-prop  (or weight-prop org-spin-weight-property))
+	 (die-size     (org-child-sum-property (point) weight-prop))
+	 (roll         (if (zerop die-size)
+			   (error "Weights sum to zero")
+			 (random die-size)))) 
+    (goto-char
+     (catch 'hit
+       (org-child-reduce
+	(lambda (acc)
+	  (if (>= acc roll) (throw 'hit (point))
+	    (let ((val (org-entry-get (point) weight-prop)))
+	      (if val (+ acc (string-to-number val))
+		acc))))
+	0)))))
 
 (provide 'org-spin)
 ;;; org-spin.el ends here
