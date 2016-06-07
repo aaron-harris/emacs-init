@@ -29,7 +29,6 @@
 
 ;;;; Macros
 ;;=========
-;;;###autoload
 (defmacro define-dynamically (&rest def)
   "As `defun', but always in dynamic scope.
 A function defined in this way ignores the value of

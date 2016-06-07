@@ -9,20 +9,6 @@
 (require 'aph-dash)               ; For `->>', `aph/reductions'
 
 
-;;; Match Strings
-;;;==============
-(define-dynamically aph/org-match-at-point-p (match &optional todo-only)
-  "Return non-nil if headline at point matches MATCH.
-Here MATCH is a match string of the same format used by
-`org-tags-view'.
-
-If the optional argument TODO-ONLY is non-nil, do not declare a
-match unless headline at point is a todo item."
-  (let ((todo      (org-get-todo-state))
-        (tags-list (org-get-tags-at)))
-    (eval (cdr (org-make-tags-matcher match)))))
-
-
 ;;; Editing Commands
 ;;;=================
 (defun aph/org-kill-line ()
