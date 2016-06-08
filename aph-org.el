@@ -19,17 +19,15 @@ falls back to the global binding for TAB, subject to the option
 `org-cycle', except it falls back to `smart-tab' instead if
 `smart-tab-mode' is enabled."
   (interactive "P")
-  (if (not (bound-and-true-p smart-tab-mode))
-      (org-cycle arg)
-    (vizier-with-advice
-	;; Make `org-cycle' use `smart-tab' as fallback action.
-	((global-key-binding
-	  :before-until
-	  (lambda (keys &optional accept-default)
-	    (when (equal keys "\t") #'smart-tab)))
-	 ;; Prevent `smart-tab' from using `org-cycle' as its fallback.
-	 (smart-tab-default :override #'indent-for-tab-command))
-      (org-cycle arg))))
+  (vizier-with-advice-if (bound-and-true-p smart-tab-mode) 
+      ;; Make `org-cycle' use `smart-tab' as fallback action.
+      ((global-key-binding
+	:before-until
+	(lambda (keys &optional accept-default)
+	  (when (equal keys "\t") #'smart-tab)))
+       ;; Prevent `smart-tab' from using `org-cycle' as its fallback.
+       (smart-tab-default :override #'indent-for-tab-command))
+    (org-cycle arg)))
 
 (defun aph/org-kill-line ()
   "As `org-kill-line', but clear table rows.
