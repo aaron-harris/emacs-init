@@ -33,6 +33,10 @@
 ;; a body, and then remove that advice.  It also has some other bells
 ;; and whistles; see its docstring for more information.
 ;;
+;; The macro `vizier-with-advice-if' is a simple variant of
+;; `vizier-with-advice' that will only apply the advice when a
+;; condition holds.  The body is evaluated in any case.
+;;
 ;; More straightforward applications can use `vizier-advise-once' to
 ;; install self-removing advice that will only be executed once.  Be
 ;; careful with this--if the function being advised is not run when
@@ -78,7 +82,7 @@ FUNCTION calls the function named by SYMBOL directly."
     (advice-add symbol :before cleanup `((name . ,id)))))
 
 (defmacro vizier-with-advice (adlist &rest body)
-  "Execute BODY with temporary advice in ADLIST.
+  "Evaluate BODY with temporary advice in ADLIST.
 
 Each element of ADLIST should be a list of the form
   ([OPTION] SYMBOL WHERE FUNCTION [PROPS]).
@@ -125,6 +129,17 @@ will be removed even in the event of an error or nonlocal exit."
           adlist) 
        (unwind-protect (progn ,@body)
          ,@removal-list))))
+
+(defmacro vizier-with-advice-if (condition adlist &rest body)
+  "Evaluate BODY; if CONDITION holds, use advice in ADLIST.
+
+This macro is identical to `vizier-with-advice', except that the
+advice is not applied when CONDITION is nil.  BODY is still evaluated."
+  (declare (debug (form (&rest (&rest form)) body))
+           (indent 2))
+  `(if ,condition
+       (vizier-with-advice ,adlist ,@body)
+     ,@body))
 
 
 ;;;; Utility Functions
