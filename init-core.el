@@ -755,8 +755,16 @@
               ("C-+"   . aph/org-increase-number)
               ("C-c w" . aph/org-goto-last-refile))
   :bind (:umbra org-mode
-		("<tab>" . aph/org-cycle-with-smart-tab) 
-                ("C-k"   . aph/org-kill-line)))
+		("<tab>" . aph/org-cycle-with-smart-tab)
+                ("C-k"   . aph/org-kill-line))
+  :config
+  (bind-keys
+   :umbra org-mode
+   ("C-k" .
+    (chimera "chimera/org-clear-or-kill-line"
+      (cond 
+       ((org-table-p)               #'aph/org-table-clear-row-forward)
+       ((eq major-mode 'org-mode)   #'org-kill-line))))))
 
 (use-package org-agenda
   :defer t

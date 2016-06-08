@@ -83,8 +83,8 @@ standalone info application.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22359 12677 204095
-;;;;;;  600000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22360 36734 988856
+;;;;;;  900000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-goto-last-refile "aph-org" "\
@@ -100,6 +100,19 @@ keybinding for that function is not appropriate.
 Store the current eww url as an Org-Mode link.
 
 \(fn)" nil nil)
+
+;;;***
+
+;;;### (autoloads nil "aph-org-table" "aph-org-table.el" (22360 36799
+;;;;;;  693489 500000))
+;;; Generated autoloads from aph-org-table.el
+
+(autoload 'aph/org-table-clear-row-forward "aph-org-table" "\
+Erase contents of table cells from point to end of row.
+
+If point is not inside an Org table, signal an error.
+
+\(fn)" t nil)
 
 ;;;***
 
@@ -658,14 +671,14 @@ penumbra map instead.
 ;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-face-remap.el"
 ;;;;;;  "aph-files.el" "aph-framewin.el" "aph-haskell.el" "aph-help.el"
 ;;;;;;  "aph-latex.el" "aph-lisp-mode.el" "aph-org-agenda.el" "aph-org-capture.el"
-;;;;;;  "aph-org-table.el" "aph-outline.el" "aph-page.el" "aph-plist.el"
-;;;;;;  "aph-rect.el" "aph-shr.el" "aph-silence.el" "aph-simple.el"
-;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
-;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
-;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "jerk.el" "lexy.el" "liberate-key.el" "morgue.el" "org-match.el"
-;;;;;;  "vizier-helm.el" "vizier.el") (22359 13160 140330 500000))
+;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-rect.el"
+;;;;;;  "aph-shr.el" "aph-silence.el" "aph-simple.el" "aph-smartparens.el"
+;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "chimera.el"
+;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
+;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "lexy.el" "liberate-key.el"
+;;;;;;  "morgue.el" "org-match.el" "vizier-helm.el" "vizier.el")
+;;;;;;  (22360 36806 260954 300000))
 
 ;;;***
 

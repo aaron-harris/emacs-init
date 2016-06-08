@@ -27,20 +27,7 @@ falls back to the global binding for TAB, subject to the option
 	  (when (equal keys "\t") #'smart-tab)))
        ;; Prevent `smart-tab' from using `org-cycle' as its fallback.
        (smart-tab-default :override #'indent-for-tab-command))
-    (org-cycle arg)))
-
-(defun aph/org-kill-line ()
-  "As `org-kill-line', but clear table rows.
-
-If point is inside an Org table, call
-`aph/org-table-clear-row-forward'; otherwise, defer to
-`org-kill-line'."
-  (interactive) 
-  (call-interactively
-   (if (org-table-p)
-       (progn (require 'aph-org-table)
-              #'aph/org-table-clear-row-forward)
-     #'org-kill-line)))
+    (org-cycle arg))) 
 
 (defun aph/org-increase-number (&optional inc)
   "As `org-increase-number-at-point', but more flexible.
