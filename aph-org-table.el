@@ -21,6 +21,7 @@ point."
 
 ;;; Editing Functions
 ;;;==================
+;;;###autoload
 (defun aph/org-table-clear-row-forward ()
   "Erase contents of table cells from point to end of row.
 
