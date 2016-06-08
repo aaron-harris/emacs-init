@@ -720,7 +720,7 @@
   :ensure t
   :bind (:map umbra-mode-map
               ("C-c l" . org-store-link))
-  :bind (:umbra org-mode
+  :bind (:umbra org-mode 
                 ("C-c [" . undefined)
                 ("C-c ]" . org-cycle-agenda-files)
                 ("M-."   . helm-org-in-buffer-headings) 
@@ -755,7 +755,8 @@
               ("C-+"   . aph/org-increase-number)
               ("C-c w" . aph/org-goto-last-refile))
   :bind (:umbra org-mode
-                ("C-k"         . aph/org-kill-line)))
+		("<tab>" . aph/org-cycle-with-smart-tab) 
+                ("C-k"   . aph/org-kill-line)))
 
 (use-package org-agenda
   :defer t
@@ -980,6 +981,8 @@
   :diminish smart-tab-mode
   :config
   (global-smart-tab-mode 1)
+  (setq smart-tab-disabled-major-modes
+	(remove 'org-mode smart-tab-disabled-major-modes))
   (setq smart-tab-using-hippie-expand        t
         smart-tab-completion-functions-alist nil)
   ;; Use `hippie-expand' in elisp buffers.

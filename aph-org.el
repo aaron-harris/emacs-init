@@ -5,12 +5,32 @@
 ;;;;============================================================================
 
 (require 'org)
-(require 'aph-advice)             ; For `aph/with-advice'
-(require 'aph-dash)               ; For `->>', `aph/reductions'
+(require 'vizier)			; For `aph/with-advice'
 
 
 ;;; Editing Commands
 ;;;=================
+(defun aph/org-cycle-with-smart-tab (&optional arg)
+  "As `org-cycle', but fall back to `smart-tab'.
+
+Normally, if the command `org-cycle' can find nothing to do, it
+falls back to the global binding for TAB, subject to the option
+`org-cycle-emulate-tab'.  This command behaves the same as
+`org-cycle', except it falls back to `smart-tab' instead if
+`smart-tab-mode' is enabled."
+  (interactive "P")
+  (if (not (bound-and-true-p smart-tab-mode))
+      (org-cycle arg)
+    (vizier-with-advice
+	;; Make `org-cycle' use `smart-tab' as fallback action.
+	((global-key-binding
+	  :before-until
+	  (lambda (keys &optional accept-default)
+	    (when (equal keys "\t") #'smart-tab)))
+	 ;; Prevent `smart-tab' from using `org-cycle' as its fallback.
+	 (smart-tab-default :override #'indent-for-tab-command))
+      (org-cycle arg))))
+
 (defun aph/org-kill-line ()
   "As `org-kill-line', but clear table rows.
 
@@ -76,22 +96,6 @@ keybinding for that function is not appropriate."
 
 ;;; Advice
 ;;;=======
-(defun aph/org-cycle-smart-tab-advice (fn &optional arg)
-  "Advice to make `org-cycle' use `smart-tab'.
-
-With this advice :around `org-cycle', that function will use
-`smart-tab' as its fallback action instead of just indenting.
-All other behavior of `org-cycle' remains unchanged."
-  (aph/with-advice
-      ;; Make `org-cycle' use `smart-tab' as fallback action.
-      ((#'global-key-binding :before-until
-                             (lambda (keys &optional accept-default)
-                               (when (equal keys "\t")
-                                 #'smart-tab)))
-       ;; Prevent `smart-tab' from using `org-cycle' as its fallback.
-       (#'smart-tab-default :override #'indent-for-tab-command))
-    (apply fn arg)))
-
 (defun aph/org-update-faces ()
   "Update definition of `org-hide' to match current theme.
 Run after changing themes to fix display problems with the
