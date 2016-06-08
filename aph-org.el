@@ -1,15 +1,37 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-org.el --- Extensions for Org mode           -*- lexical-binding: t; -*-
 
-;;;; The Emacs init file of Aaron Harris.
-;;;; CUSTOM FUNCTIONS - ORG MODE
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
+
+;; Author: Aaron Harris <meerwolf@gmail.com>
+;; Keywords: outlines, hypermedia, wp
+
+;; Dependencies: `org'
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Code extending the `org' package.
+
+;;; Code:
 
 (require 'org)
-(require 'vizier)			; For `aph/with-advice'
+(eval-when-compile (require 'vizier))
 
 
-;;; Editing Commands
-;;;=================
+;;;; Multimodal Commands
+;;======================
 (defun aph/org-cycle-with-smart-tab (&optional arg)
   "As `org-cycle', but fall back to `smart-tab'.
 
@@ -27,8 +49,11 @@ falls back to the global binding for TAB, subject to the option
 	  (when (equal keys "\t") #'smart-tab)))
        ;; Prevent `smart-tab' from using `org-cycle' as its fallback.
        (smart-tab-default :override #'indent-for-tab-command))
-    (org-cycle arg))) 
+    (org-cycle arg)))
 
+
+;;;; Number Twiddling
+;;===================
 (defun aph/org-increase-number (&optional inc)
   "As `org-increase-number-at-point', but more flexible.
 
@@ -51,9 +76,8 @@ See `aph/org-increase-number' for more details."
   (aph/org-increase-number (- (or inc 1))))
 
 
-;;; Refile
-;;;=======
-
+;;;; Refile
+;;=========
 ;;;###autoload
 (defun aph/org-goto-last-refile ()
   "Goto last Org-mode item refiled.
@@ -64,25 +88,24 @@ keybinding for that function is not appropriate."
   (interactive)
   (org-agenda-refile '(16)))
 
-
 
-;;; Links
-;;;======
-
+;;;; Links
+;;========
 ;;;###autoload
 (defun aph/org-eww-store-link ()
-      "Store the current eww url as an Org-Mode link."
-      (when (eq major-mode 'eww-mode)
-        (org-store-link-props
-         :type         "http"
-         :link         (eww-current-url)
-         :description  (plist-get eww-data :title))))
+  "Store the current eww url as an Org-Mode link."
+  (when (eq major-mode 'eww-mode)
+    (org-store-link-props
+     :type         "http"
+     :link         (eww-current-url)
+     :description  (plist-get eww-data :title))))
 
 
-;;; Advice
-;;;=======
+;;;; Display
+;;==========
 (defun aph/org-update-faces ()
-  "Update definition of `org-hide' to match current theme.
+  "Update definition of `org-hide' face to match current theme.
+
 Run after changing themes to fix display problems with the
 `org-hide' face."
   (let ((foreground (org-find-invisible-foreground)))
@@ -90,3 +113,4 @@ Run after changing themes to fix display problems with the
         (set-face-foreground 'org-hide foreground))))
 
 (provide 'aph-org)
+;;; aph-org.el ends here

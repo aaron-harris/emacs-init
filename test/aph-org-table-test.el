@@ -1,15 +1,32 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-org-table-test.el --- Tests for aph-org-table.el -*- lexical-binding: t; -*-
 
-;;;; The Emacs init file of Aaron Harris.
-;;;; ORG TABLE TESTS
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-;; Tests for the module aph-org-table.el.
+;; Author: Aaron Harris <meerwolf@gmail.com>
+
+;; Dependencies: `aph-org-table', `ert'
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Code:
+
 (require 'aph-org-table)
+(eval-when-compile (require 'aph-ert))
 
 
-;;; Subroutines
-;;;============
+;;;; Subroutines
+;;==============
 (ert-deftest aph/org-table-test-end-of-this-field ()
   "Test `aph/org-table-end-of-this-field'."
   (aph/ert-with-buffer 'org-mode "
@@ -24,8 +41,8 @@
     (should (looking-at-p " | B"))))
 
 
-;;; Editing Functions
-;;;==================
+;;;; Editing Functions
+;;====================
 (ert-deftest aph/org-table-test-clear-row-forward ()
   "Test `aph/org-table-clear-row-forward'."
   (aph/ert-with-buffer 'org-mode "
@@ -39,5 +56,5 @@
     (aph/org-table-clear-row-forward)
     (should (looking-at-p " |       |       |"))))
 
-      
 (provide 'aph-org-table-test)
+;;; aph-org-table-test.el ends here
