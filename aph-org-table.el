@@ -1,14 +1,36 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-org-table.el --- Extensions for `org-table'  -*- lexical-binding: t; -*-
 
-;;;; The Emacs init file of Aaron Harris.
-;;;; CUSTOM FUNCTIONS - ORG MODE TABLES
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
+
+;; Author: Aaron Harris <meerwolf@gmail.com>
+;; Keywords: wp
+
+;; Dependencies: `org-table'
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Commands for use in `org-mode' tables.
+
+;;; Code:
 
 (require 'org-table)
 
 
-;;; Subroutines
-;;;============
+;;;; Subroutines
+;;==============
 (defun aph/org-table-end-of-this-field ()
   "As `org-table-end-of-field', but never change fields.
 If already at or after the end of the current field, do not move
@@ -19,8 +41,8 @@ point."
     (org-table-end-of-field 1)))
 
 
-;;; Editing Functions
-;;;==================
+;;;; Editing Commands
+;;===================
 ;;;###autoload
 (defun aph/org-table-clear-row-forward ()
   "Erase contents of table cells from point to end of row.
@@ -34,5 +56,5 @@ If point is not inside an Org table, signal an error."
       (while (re-search-forward "[^|]" (point-at-eol) :noerror)
         (replace-match " ")))))
 
-
 (provide 'aph-org-table)
+;;; aph-org-table.el ends here
