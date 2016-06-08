@@ -150,12 +150,6 @@
 (require 'init-org-agenda)
 
 
-;;; Smart Tab Compatibility
-;;;========================
-(with-eval-after-load 'smart-tab
-  (advice-add #'org-cycle :around #'aph/org-cycle-smart-tab-advice))
-
-
 ;;; Face and Display Tweaks
 ;;;========================
 (add-hook 'multitheme-base-change-hook #'aph/org-update-faces)
