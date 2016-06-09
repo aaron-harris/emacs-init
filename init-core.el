@@ -94,26 +94,26 @@
 (validate-setq enable-recursive-minibuffers t)
 
 ;; Personal Information
-(validate-setq user-full-name    "Aaron Harris")
-(validate-setq user-mail-address "meerwolf@gmail.com")
+(validate-setq user-full-name    "Aaron Harris"
+	       user-mail-address "meerwolf@gmail.com")
 
 ;; UI Configuration
-(validate-setq cursor-type                     'box)
-(validate-setq frame-resize-pixelwise          t)
-(validate-setq indent-tabs-mode                nil)
-(validate-setq indicate-buffer-boundaries      'right)
-(validate-setq inhibit-startup-screen          t)
-(setq resize-mini-windows                      t) ;; Won't validate on Emacs 25
-(validate-setq ring-bell-function              #'ignore)
-(validate-setq scroll-conservatively           1000)
-(validate-setq scroll-margin                   1)
-(validate-setq scroll-preserve-screen-position :always)
+(validate-setq cursor-type                     'box
+	       frame-resize-pixelwise          t
+	       indent-tabs-mode                nil
+	       indicate-buffer-boundaries      'right
+	       inhibit-startup-screen          t
+	       ring-bell-function              #'ignore
+	       scroll-conservatively           1000
+	       scroll-margin                   1
+	       scroll-preserve-screen-position :always)
+(setq          resize-mini-windows             t) ;; Won't validate on Emacs 25
 
 ;; Use Windows keys for super modifier.
-(validate-setq w32-lwindow-modifier       'super)
-(validate-setq w32-rwindow-modifier       'super)
-(validate-setq w32-pass-lwindow-to-system nil)
-(validate-setq w32-pass-rwindow-to-system nil)
+(validate-setq w32-lwindow-modifier       'super
+               w32-rwindow-modifier       'super
+               w32-pass-lwindow-to-system nil
+               w32-pass-rwindow-to-system nil)
 
 ;; Enable some disabled commands
 (dolist (command '(downcase-region
@@ -197,10 +197,10 @@
   :bind (:umbra isearch-mode
                 ("M-g" . avy-isearch))
   :config
-  (validate-setq avy-all-windows     nil)
-  (validate-setq avy-background      t)
-  (validate-setq avy-highlight-first t)
-  (validate-setq avy-style           'pre))
+  (validate-setq avy-all-windows     nil
+                 avy-background      t
+                 avy-highlight-first t
+                 avy-style           'pre))
 
 (use-package bind-key
   :bind (:map umbra-mode-map
@@ -223,8 +223,9 @@
 (use-package browse-url-prefix
   :after browse-url
   :config
-  (validate-setq browse-url-browser-function                #'browse-url-prefix)
-  (validate-setq browse-url-prefix-default-browser-function #'eww-browse-url))
+  (validate-setq
+   browse-url-browser-function                #'browse-url-prefix
+   browse-url-prefix-default-browser-function #'eww-browse-url))
 
 (use-package calc
   :bind (:map umbra-mode-map 
@@ -245,9 +246,9 @@
                 ("C-h A" . cider-apropos)
                 ("C-h D" . cider-apropos-documentation))
   :config 
-  (validate-setq cider-auto-select-error-buffer      nil)
-  (validate-setq cider-repl-pop-to-buffer-on-connect nil)
-  (validate-setq cider-show-error-buffer             'except-in-repl)
+  (validate-setq cider-auto-select-error-buffer      nil
+                 cider-repl-pop-to-buffer-on-connect nil
+                 cider-show-error-buffer             'except-in-repl)
   (mode-family-add 'cider-repl-mode 'lisp)
   (mode-family-add 'cider-repl-mode 'clojure)
   (add-to-list 'aph/help-window-names "*cider-doc*")
@@ -280,8 +281,8 @@
   :init
   (add-hook 'lisp-family-hook #'color-identifiers-mode)
   :config
-  (validate-setq color-identifiers:num-colors      12)
-  (validate-setq color-identifiers:color-luminance 0.65)
+  (validate-setq color-identifiers:num-colors      12
+                 color-identifiers:color-luminance 0.65)
 
   ;; In the function `color-identifiers:clojure-declarations-in-sexp',
   ;; there is a call to `evenp', which is not defined; presumably, the
@@ -346,8 +347,8 @@
     browse-url-prefix-default-browser-function #'browse-url-default-browser)
 
   ;; Network config
-  (validate-setq url-queue-parallel-processes 1)
-  (validate-setq url-queue-timeout            30)
+  (validate-setq url-queue-parallel-processes 1
+                 url-queue-timeout            30)
 
   ;; Filesystem config
   (validate-setq elfeed-db-directory "~/sync/elfeed") 
@@ -371,8 +372,8 @@
                 ("p" . elfeed-show-prev)
                 ("n" . elfeed-show-next))
   :config
-  (validate-setq elfeed-link-tag              'link)
-  (validate-setq elfeed-link-browser-function #'eww-browse-url))
+  (validate-setq elfeed-link-tag              'link
+                 elfeed-link-browser-function #'eww-browse-url))
 
 (use-package enumerate
   :bind (:map umbra-mode-map
@@ -400,15 +401,15 @@
 (use-package expand-region
   :bind (:map umbra-mode-map ("C-;" . er/expand-region))
   :config
-  (validate-setq expand-region-contract-fast-key "'")
-  (validate-setq expand-region-reset-fast-key    " "))
+  (validate-setq expand-region-contract-fast-key "'"
+                 expand-region-reset-fast-key    " "))
 
 (use-package files
   :defer t
   :config 
-  (validate-setq backup-directory-alist
-                 `(("." . ,(concat user-emacs-directory "backups"))))
-  (validate-setq confirm-kill-emacs #'y-or-n-p))
+  (validate-setq
+   backup-directory-alist  `(("." . ,(concat user-emacs-directory "backups")))
+   confirm-kill-emacs      #'y-or-n-p))
 
 (use-package aph-files
   :after files
@@ -525,10 +526,10 @@
   :config
   (helm-mode 1)
   (helm-autoresize-mode t)
-  (validate-setq helm-scroll-amount                    8)
-  (validate-setq helm-split-window-in-side-p           t)
-  (validate-setq helm-ff-file-name-history-use-recentf t)
-  (validate-setq helm-ff-search-library-in-sexp        t)
+  (validate-setq helm-scroll-amount                    8
+                 helm-split-window-in-side-p           t
+                 helm-ff-file-name-history-use-recentf t
+                 helm-ff-search-library-in-sexp        t)
   ;; Info pages to use for `helm-info-at-point'. 
   (put 'helm-info-default-sources 'custom-type '(repeat symbol))
   (validate-setq helm-info-default-sources
@@ -707,8 +708,8 @@
   :bind (:map umbra-mode-map
               ("s-n" . multitheme-cycle))
   :init
-  (validate-setq multitheme-base-theme-list '(hc-zenburn zenburn))
-  (validate-setq multitheme-overtheme       'aph)
+  (validate-setq multitheme-base-theme-list '(hc-zenburn zenburn)
+                 multitheme-overtheme       'aph)
   (add-hook 'after-init-hook #'multitheme-cycle))
 
 (use-package ob-core
@@ -807,8 +808,8 @@
 	      ("C-c c" . org-display-capture-in-popout-frame))
   :config
   (require 'aph-framewin)
-  (validate-setq org-display-todo-placement-action
-		 '(aph/display-buffer-in-subwindow)))
+  (validate-setq
+   org-display-todo-placement-action '(aph/display-buffer-in-subwindow)))
 
 (use-package org-eww
   :after org)
