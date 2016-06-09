@@ -424,7 +424,7 @@
               ("C-h C-M-k" . find-function-on-key)
               ("C-h C-M-v" . find-variable)
               ("C-h M-F"   . find-face-definition)
-              ("C-h C-M-l" . find-library))) 
+              ("C-h C-M-l" . find-library)))
 
 (use-package forms
   :bind (:umbra forms-mode
@@ -708,9 +708,10 @@
   :bind (:map umbra-mode-map
               ("s-n" . multitheme-cycle))
   :init
+  (add-hook 'after-init-hook #'multitheme-cycle)
+  :config
   (validate-setq multitheme-base-theme-list '(hc-zenburn zenburn)
-                 multitheme-overtheme       'aph)
-  (add-hook 'after-init-hook #'multitheme-cycle))
+                 multitheme-overtheme       'aph))
 
 (use-package ob-core
   :defer t
