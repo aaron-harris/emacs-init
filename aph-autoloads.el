@@ -83,8 +83,8 @@ standalone info application.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22360 36734 988856
-;;;;;;  900000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22361 46402 476865
+;;;;;;  100000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-goto-last-refile "aph-org" "\
@@ -96,15 +96,10 @@ keybinding for that function is not appropriate.
 
 \(fn)" t nil)
 
-(autoload 'aph/org-eww-store-link "aph-org" "\
-Store the current eww url as an Org-Mode link.
-
-\(fn)" nil nil)
-
 ;;;***
 
-;;;### (autoloads nil "aph-org-table" "aph-org-table.el" (22360 36799
-;;;;;;  693489 500000))
+;;;### (autoloads nil "aph-org-table" "aph-org-table.el" (22360 37778
+;;;;;;  619722 200000))
 ;;; Generated autoloads from aph-org-table.el
 
 (autoload 'aph/org-table-clear-row-forward "aph-org-table" "\
@@ -323,6 +318,35 @@ Set each VAR to VALUE in FAMILY.
 \(fn FAMILY [VAR VALUE] ...)" nil t)
 
 (put 'setq-family-local 'lisp-indent-function '1)
+
+;;;***
+
+;;;### (autoloads nil "fixed-scale" "fixed-scale.el" (22361 59474
+;;;;;;  965767 400000))
+;;; Generated autoloads from fixed-scale.el
+
+(defvar fixed-scale-mode nil "\
+Non-nil if Fixed-Scale mode is enabled.
+See the command `fixed-scale-mode' for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `fixed-scale-mode'.")
+
+(custom-autoload 'fixed-scale-mode "fixed-scale" nil)
+
+(autoload 'fixed-scale-mode "fixed-scale" "\
+Global minor mode to make `text-scale-mode' stickier.
+
+Sometimes a command will remove text scaling as a byproduct of
+its function.  This mode attempts to rectify that.  To use it,
+you must add commands that reset the text scale to the variable
+`fixed-scale-command-list'.  Then, whenever one of those commands
+is executed while `fixed-scale-mode' is enabled (it is enabled by
+default, if the module `fixed-scale' has been loaded),
+`fixed-scale-mode' will remember the proper text scaling and
+restore it after the command is finished.
+
+\(fn &optional ARG)" t nil)
 
 ;;;***
 
@@ -668,17 +692,17 @@ penumbra map instead.
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
-;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-face-remap.el"
-;;;;;;  "aph-files.el" "aph-framewin.el" "aph-haskell.el" "aph-help.el"
-;;;;;;  "aph-latex.el" "aph-lisp-mode.el" "aph-org-agenda.el" "aph-org-capture.el"
+;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-files.el"
+;;;;;;  "aph-framewin.el" "aph-haskell.el" "aph-help.el" "aph-latex.el"
+;;;;;;  "aph-lisp-mode.el" "aph-org-agenda.el" "aph-org-capture.el"
 ;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-rect.el"
 ;;;;;;  "aph-shr.el" "aph-silence.el" "aph-simple.el" "aph-smartparens.el"
 ;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "chimera.el"
 ;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
 ;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
 ;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "lexy.el" "liberate-key.el"
-;;;;;;  "morgue.el" "org-match.el" "vizier-helm.el" "vizier.el")
-;;;;;;  (22360 36806 260954 300000))
+;;;;;;  "morgue.el" "org-eww.el" "org-match.el" "org-multitheme.el"
+;;;;;;  "vizier-helm.el" "vizier.el") (22361 59537 798335 200000))
 
 ;;;***
 
