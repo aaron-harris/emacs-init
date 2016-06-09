@@ -109,11 +109,6 @@
 (setq org-archive-location "archive/%s_archive::")
 
 
-;;; Links
-;;;======
-(add-hook 'org-store-link-functions #'aph/org-eww-store-link)
-
-
 ;;; Agenda
 ;;;======= 
 (setq org-agenda-files (list org-directory))

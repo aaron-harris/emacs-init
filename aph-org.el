@@ -89,18 +89,6 @@ keybinding for that function is not appropriate."
   (org-agenda-refile '(16)))
 
 
-;;;; Links
-;;========
-;;;###autoload
-(defun aph/org-eww-store-link ()
-  "Store the current eww url as an Org-Mode link."
-  (when (eq major-mode 'eww-mode)
-    (org-store-link-props
-     :type         "http"
-     :link         (eww-current-url)
-     :description  (plist-get eww-data :title))))
-
-
 ;;;; Display
 ;;==========
 (defun aph/org-update-faces ()
