@@ -9,8 +9,9 @@
 
 ;;; Basic setup
 ;;;============
-(validate-setq org-modules   '(org-docview org-habit org-info)
-	       org-directory "~/sync/org")
+(validate-setq org-modules      '(org-docview org-habit org-info)
+	       org-directory    "~/sync/org"
+	       org-agenda-files (list org-directory))
 
 
 ;;; Editing
@@ -96,8 +97,8 @@
 
 ;;; Refile
 ;;;=======
+(setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
 (validate-setq
- org-refile-targets                     '((org-agenda-files :maxlevel . 5))
  org-refile-allow-creating-parent-nodes 'confirm
  org-refile-use-outline-path            'file)
 
@@ -105,48 +106,6 @@
 ;;; Archive
 ;;;========
 (validate-setq org-archive-location "archive/%s_archive::")
-
-
-;;; Agenda
-;;;=======
-(validate-setq org-agenda-files (list org-directory))
-
-(validate-setq
- org-agenda-block-separator   (make-string 80 ?=)
- org-agenda-remove-tags       t
- org-agenda-span              'day
- org-agenda-sticky            t
- org-agenda-timegrid-use-ampm t
- org-agenda-window-setup      'current-window
- org-extend-today-until       4
- org-habit-graph-column       50)
-
-(validate-setq
- org-agenda-skip-deadline-if-done                 t
- org-agenda-skip-deadline-prewarning-if-scheduled t
- org-agenda-skip-scheduled-if-done                t
- org-agenda-skip-timestamp-if-done                t
- org-agenda-tags-todo-honor-ignore-options        t
- org-agenda-todo-ignore-timestamp                 nil
- org-agenda-todo-ignore-with-date                 nil)
-
-(validate-setq
- org-agenda-prefix-format
- '((agenda   . " %i %-13:c%?-12t% s")
-   (timeline . "  % s")
-   (todo     . " %i %-13:c")
-   (tags     . " %i %-13:c")
-   (search   . " %i %-13:c")))
-
-;; Make refreshing an agenda preserve the current text scale.
-;; (The `with-eval-after-load' is because the advice isn't necessary
-;; unless the text scale has been adjusted.)
-(with-eval-after-load 'face-remap
-  (require 'aph-face-remap)
-  (advice-add #'org-agenda-redo :around #'aph/preserving-text-scale))
-
-;; Load custom agenda commands:
-(require 'init-org-agenda)
 
 (provide 'init-org)
 ;; init-org.el ends here

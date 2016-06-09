@@ -778,13 +778,46 @@
                 ([remap org-agenda-quit] . quit-window)
                 ("C-o"                   . org-agenda-open-link)
                 ("M-p"                   . org-agenda-backward-block)
-                ("M-n"                   . org-agenda-forward-block)))
+                ("M-n"                   . org-agenda-forward-block))
+  :config
+  (validate-setq
+   org-agenda-block-separator   (make-string 80 ?=)
+   org-agenda-remove-tags       t
+   org-agenda-span              'day
+   org-agenda-sticky            t
+   org-agenda-timegrid-use-ampm t
+   org-agenda-window-setup      'current-window
+   org-extend-today-until       4)
+
+  (validate-setq
+   org-agenda-skip-deadline-if-done                 t
+   org-agenda-skip-deadline-prewarning-if-scheduled t
+   org-agenda-skip-scheduled-if-done                t
+   org-agenda-skip-timestamp-if-done                t
+   org-agenda-tags-todo-honor-ignore-options        t
+   org-agenda-todo-ignore-timestamp                 nil
+   org-agenda-todo-ignore-with-date                 nil)
+
+  (validate-setq
+   org-agenda-prefix-format
+   '((agenda   . " %i %-13:c%?-12t% s")
+     (timeline . "  % s")
+     (todo     . " %i %-13:c")
+     (tags     . " %i %-13:c")
+     (search   . " %i %-13:c")))
+
+  (require 'init-org-agenda))
 
 (use-package aph-org-agenda
   :after org-agenda
   :bind (:map umbra-mode-map
               ("C-c a" . aph/org-agenda)
-              ("<f1>" . aph/org-agenda-display-smart-agenda)))
+              ("<f1>"  . aph/org-agenda-display-smart-agenda))
+  :bind (:umbra org-agenda-mode
+                ("g" . aph/org-agenda-redo))
+  :config
+  (fixed-scale-mode t)
+  (add-to-list 'fixed-scale-command-list #'aph/org-agenda-redo))
 
 (use-package org-capture
   :defer t
@@ -814,6 +847,11 @@
 
 (use-package org-eww
   :after org)
+
+(use-package org-habit
+  :defer t
+  :config
+  (validate-setq org-habit-graph-column 50))
 
 (use-package org-mobile
   :disabled t
