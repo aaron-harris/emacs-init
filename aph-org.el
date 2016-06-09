@@ -88,17 +88,5 @@ keybinding for that function is not appropriate."
   (interactive)
   (org-agenda-refile '(16)))
 
-
-;;;; Display
-;;==========
-(defun aph/org-update-faces ()
-  "Update definition of `org-hide' face to match current theme.
-
-Run after changing themes to fix display problems with the
-`org-hide' face."
-  (let ((foreground (org-find-invisible-foreground)))
-    (if foreground
-        (set-face-foreground 'org-hide foreground))))
-
 (provide 'aph-org)
 ;;; aph-org.el ends here

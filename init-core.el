@@ -813,11 +813,6 @@
 (use-package org-eww
   :after org)
 
-(use-package org-spin
-  :bind (:umbra org-mode
-		("C-c s"     . org-spin)
-                ("C-c C-M-s" . org-spin-weighted)))
-
 (use-package org-mobile
   :disabled t
   :config
@@ -826,6 +821,14 @@
   (when (eq aph/machine 'mpc)
     (setq org-mobile-checksum-binary
           "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe")))
+
+(use-package org-multitheme
+  :after org)
+
+(use-package org-spin
+  :bind (:umbra org-mode
+		("C-c s"     . org-spin)
+                ("C-c C-M-s" . org-spin-weighted)))
 
 (use-package outline
   :bind (:penumbra outline-mode
