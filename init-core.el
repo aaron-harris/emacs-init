@@ -810,6 +810,9 @@
   (validate-setq org-display-todo-placement-action
 		 '(aph/display-buffer-in-subwindow)))
 
+(use-package org-eww
+  :after org)
+
 (use-package org-spin
   :bind (:umbra org-mode
 		("C-c s"     . org-spin)
