@@ -143,8 +143,3 @@
 
 ;; Load custom agenda commands:
 (require 'init-org-agenda)
-
-
-;;; Face and Display Tweaks
-;;;========================
-(add-hook 'multitheme-base-change-hook #'aph/org-update-faces)
