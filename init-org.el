@@ -1,21 +1,20 @@
-;;; -*- lexical-binding: t -*-
+;;; init-org.el --- Personal Emacs config (Org mode) -*- lexical-binding: t; -*-
 
-;;;; The Emacs init file of Aaron Harris.
-;;;; ORG-MODE CONFIGURATION
-;;;;============================================================================
+;; Copyright (C) 2015-2016  Aaron Harris
+;; Author: Aaron Harris <meerwolf@gmail.com>
 
-(require 'aph-subr)                     ; For `aph/assoc-delete-all'
+;;; Code:
 
 
-;;; Basic setup
-;;;============
+;;;; Basic setup
+;;==============
 (validate-setq org-modules      '(org-docview org-habit org-info)
 	       org-directory    "~/sync/org"
 	       org-agenda-files (list org-directory))
 
 
-;;; Editing
-;;;========
+;;;; Editing
+;;==========
 (validate-setq org-M-RET-may-split-line   nil
 	       org-catch-invisible-edits  'smart
 	       org-cycle-emulate-tab      'exc-hl-bol
@@ -26,16 +25,16 @@
 (add-hook 'org-mode-hook #'visual-line-mode)
 
 
-;;; Tree Structure
-;;;===============
+;;;; Tree Structure
+;;=================
 (validate-setq
  org-blank-before-new-entry '((heading . nil)
 			      (plain-list-item . nil))
  org-log-into-drawer         t)
 
 
-;;; TODO Items
-;;;===========
+;;;; TODO Items
+;;=============
 (validate-setq org-track-ordered-property-with-tag t
 	       org-use-fast-todo-selection         t)
 
@@ -49,8 +48,8 @@
 	(type "PROJECT(p)" "WAIT(w)" "|" "HOLD(h)"))) ; no WAIT
 
 
-;;; Tags
-;;;=====
+;;;; Tags
+;;=======
 (setq org-tag-persistent-alist
       '(("home"     . ?h)	     ; Can be done only at home
 	("work"     . ?w)	     ; Appears in work agenda
@@ -72,15 +71,15 @@
 	("flag"     . ?F)))	     ; Generic "mark for action"
 
 
-;;; Priorities
-;;;===========
+;;;; Priorities
+;;;============
 (validate-setq org-highest-priority ?A
 	       org-lowest-priority  ?E
 	       org-default-priority ?C)
 
 
-;;; Properties and Column View
-;;;===========================
+;;;; Properties and Column View
+;;=============================
 (validate-setq
  org-global-properties
  '(("Effort_ALL" . "0:05 0:10 0:15 0:30 1:00 2:00 3:00 4:00 8:00 0"))
@@ -89,22 +88,22 @@
  "%50ITEM(Task) %TODO %2PRIORITY(^) %20TAGS(Tags) %6Effort{:} %CLOCKSUM")
 
 
-;;; Capture
-;;;========
+;;;; Capture
+;;==========
 (validate-setq
  org-default-notes-file (concat org-directory "/capture.org"))
 
 
-;;; Refile
-;;;=======
+;;;; Refile
+;;=========
 (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
 (validate-setq
  org-refile-allow-creating-parent-nodes 'confirm
  org-refile-use-outline-path            'file)
 
 
-;;; Archive
-;;;========
+;;;; Archive
+;;==========
 (validate-setq org-archive-location "archive/%s_archive::")
 
 (provide 'init-org)
