@@ -1,4 +1,4 @@
-;;; init-core.el --- Personal Emacs configuration -*- lexical-binding: t; -*-
+;;; init-core.el --- Personal Emacs configuration    -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015-2016  Aaron Harris
 ;; Author: Aaron Harris <meerwolf@gmail.com>
@@ -770,15 +770,11 @@
 
 (use-package org-agenda
   :defer t
-  :bind (:umbra org-agenda-mode
-                ;; `org-agenda-quit' is bugged, as of Emacs 24.5.1
-                ;; and Org 8.3.2.  This might be a bug in
-                ;; `bury-buffer'?  Anyway, `quit-window' still
-                ;; works, so let's just use that for the time being.
-                ([remap org-agenda-quit] . quit-window)
-                ("C-o"                   . org-agenda-open-link)
-                ("M-p"                   . org-agenda-backward-block)
-                ("M-n"                   . org-agenda-forward-block))
+  :bind (:umbra org-agenda-mode 
+                ("C-o" . org-agenda-open-link)
+                ("M-p" . org-agenda-backward-block)
+                ("M-n" . org-agenda-forward-block)
+                ("q"   . quit-window))
   :config
   (validate-setq
    org-agenda-block-separator   (make-string 80 ?=)
