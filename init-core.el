@@ -99,8 +99,7 @@
 
 ;; UI Configuration
 (validate-setq cursor-type                     'box
-	       frame-resize-pixelwise          t
-	       indent-tabs-mode                nil
+	       frame-resize-pixelwise          t 
 	       indicate-buffer-boundaries      'right
 	       inhibit-startup-screen          t
 	       ring-bell-function              #'ignore
@@ -108,6 +107,7 @@
 	       scroll-margin                   1
 	       scroll-preserve-screen-position :always)
 (setq          resize-mini-windows             t) ;; Won't validate on Emacs 25
+(setq-default  indent-tabs-mode                nil)
 
 ;; Use Windows keys for super modifier.
 (validate-setq w32-lwindow-modifier       'super
