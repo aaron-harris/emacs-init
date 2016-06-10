@@ -5,7 +5,6 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: calendar
 
-;; Dependencies: `vizier'
 ;; Advised functions from other packages:
 ;;   org-agenda: `org-agenda', `org-agenda-quit'
 
@@ -46,6 +45,8 @@
 ;;   to the symbol `reorganize-frame'.
 
 ;;; Code:
+
+(eval-when-compile (require 'vizier))
 
 
 ;;;; User Options
