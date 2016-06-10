@@ -321,8 +321,8 @@ Set each VAR to VALUE in FAMILY.
 
 ;;;***
 
-;;;### (autoloads nil "fixed-scale" "fixed-scale.el" (22361 59474
-;;;;;;  965767 400000))
+;;;### (autoloads nil "fixed-scale" "fixed-scale.el" (22361 61750
+;;;;;;  797020 400000))
 ;;; Generated autoloads from fixed-scale.el
 
 (defvar fixed-scale-mode nil "\
@@ -538,6 +538,20 @@ probably makes more sense.
 
 ;;;***
 
+;;;### (autoloads nil "org-smart-agenda" "org-smart-agenda.el" (22363
+;;;;;;  18008 927786 300000))
+;;; Generated autoloads from org-smart-agenda.el
+
+(autoload 'org-smart-agenda "org-smart-agenda" "\
+Display an Org-mode agenda based on current day and time.
+
+See the variables `org-smart-agenda-views' and
+`org-smart-agenda-workday' for configuration options.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "org-spin" "org-spin.el" (22359 2659 765605
 ;;;;;;  900000))
 ;;; Generated autoloads from org-spin.el
@@ -701,8 +715,9 @@ penumbra map instead.
 ;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
 ;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
 ;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "lexy.el" "liberate-key.el"
-;;;;;;  "morgue.el" "org-eww.el" "org-match.el" "org-multitheme.el"
-;;;;;;  "vizier-helm.el" "vizier.el") (22361 59537 798335 200000))
+;;;;;;  "morgue.el" "org-agenda-sticky.el" "org-eww.el" "org-match.el"
+;;;;;;  "org-multitheme.el" "vizier-helm.el" "vizier.el") (22363
+;;;;;;  18013 830208 300000))
 
 ;;;***
 

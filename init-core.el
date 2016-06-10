@@ -770,11 +770,12 @@
 
 (use-package org-agenda
   :defer t
+  :bind (:map umbra-mode-map
+              ("C-c a" . org-agenda))
   :bind (:umbra org-agenda-mode 
                 ("C-o" . org-agenda-open-link)
                 ("M-p" . org-agenda-backward-block)
-                ("M-n" . org-agenda-forward-block)
-                ("q"   . quit-window))
+                ("M-n" . org-agenda-forward-block))
   :config
   (validate-setq
    org-agenda-block-separator   (make-string 80 ?=)
@@ -805,15 +806,22 @@
   (require 'init-org-agenda))
 
 (use-package aph-org-agenda
-  :after org-agenda
-  :bind (:map umbra-mode-map
-              ("C-c a" . aph/org-agenda)
-              ("<f1>"  . aph/org-agenda-display-smart-agenda))
+  :after org-agenda 
   :bind (:umbra org-agenda-mode
                 ("g" . aph/org-agenda-redo))
   :config
   (fixed-scale-mode t)
   (add-to-list 'fixed-scale-command-list #'aph/org-agenda-redo))
+
+(use-package org-smart-agenda
+  :bind (:map umbra-mode-map
+              ("<f1>" . org-smart-agenda))
+  :config
+  (validate-setq org-smart-agenda-views   '("dm" "dw" "de" "ds")
+                 org-smart-agenda-workday '(10 . 18.5)))
+
+(use-package org-agenda-sticky
+  :after org-agenda)
 
 (use-package org-capture
   :defer t
@@ -845,7 +853,7 @@
   :after org)
 
 (use-package org-habit
-  :defer t
+  :after org-agenda
   :config
   (validate-setq org-habit-graph-column 50))
 

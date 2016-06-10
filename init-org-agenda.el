@@ -122,10 +122,4 @@ tasks will be displayed."
 
 (setq org-agenda-custom-commands (nreverse org-agenda-custom-commands))
 
-
-;;; Smart Agenda Setup
-;;;===================
-(setq aph/org-agenda-smart-agenda-views '("dm" "dw" "de" "ds")
-      aph/org-agenda-workday            '(10 . 18.5))
-
 (provide 'init-org-agenda)
