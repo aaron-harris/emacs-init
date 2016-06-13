@@ -6,6 +6,7 @@
 
 (require 'aph-comparators)                ; For `aph/random-comparator'
 (require 'aph-org-agenda)                 ; Skip functions and comparators
+(require 'org-match)                      ; For `org-agenda-match-skip'
 
 
 ;;; Block Definitions
@@ -19,7 +20,7 @@
      (org-habit-show-habits nil)
      (org-agenda-use-time-grid nil)
      (org-agenda-skip-function
-      '(aph/org-agenda-skip-without-match "+calendar"))))
+      '(org-match-skip "+calendar" :keep))))
   "Custom agenda block containing an overview of the day.
 This block (for use in `org-agenda-custom-commands') contains
 those tasks tagged with the \"calendar\" tag.  Note that it has
