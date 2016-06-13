@@ -24,11 +24,16 @@
 
 ;; This module defines `fixed-scale-mode', a global minor mode that
 ;; attempts to preserve the current text scaling when certain commands
-;; try to change it.
+;; change it.
 ;;
 ;; To use the mode, just enable `fixed-scale-mode' in the usual way
 ;; and add commands that you wish preserved text scaling to the
 ;; variable `fixed-scale-command-list'.
+;;
+;; If you use a replacement for `execute-extended-command' (M-x), you
+;; may need to add it to the list `fixed-scale-extended-command-list'
+;; so that `fixed-scale-mode' knows that it should check
+;; `extended-command-history' for the actual command being executed.
 
 ;;; Code:
 
@@ -53,6 +58,15 @@
   "A list of commands that should not change text scaling."
   :type '(repeat fixed-scale-command))
 
+(defcustom fixed-scale-extended-command-list
+  '(execute-extended-command helm-M-x)
+  "A list of commands that execute other commands.
+
+When one of these commands is executed, `fixed-scale-mode'
+consults `extended-command-history' to determine whether the
+command executed is in `fixed-scale-command-list'."
+  :type '(repeat fixed-scale-command))
+
 
 ;;;; State Variables
 ;;==================
@@ -70,9 +84,8 @@ Intended for use in `pre-command-hook'.  If `this-command' is in
 `fixed-scale') and add `fixed-scale-reset' to `post-command-hook'
 so it can be restored."
   (when (require 'validate nil :noerror)
-    (validate-variable 'fixed-scale-command-list)) 
-  (when (and (bound-and-true-p text-scale-mode)
-	     (seq-contains fixed-scale-command-list this-command))
+    (validate-variable 'fixed-scale-command-list))
+  (when (bound-and-true-p text-scale-mode)
     (setq fixed-scale text-scale-mode-amount)
     (add-hook 'post-command-hook #'fixed-scale-reset)))
 
@@ -83,7 +96,12 @@ Intended for use in `post-command-hook'.  Set the current text
 scale to whatever `fixed-scale-remember' remembered (as
 `fixed-scale'), and remove self from `post-command-hook'."
   (remove-hook 'post-command-hook #'fixed-scale-reset)
-  (text-scale-set fixed-scale))
+  (when (or (seq-contains fixed-scale-command-list this-command)
+            (and (seq-contains fixed-scale-extended-command-list
+                               this-command)
+                 (seq-contains fixed-scale-command-list
+                               (intern-soft (car extended-command-history)))))
+    (text-scale-set fixed-scale)))
 
 ;;;###autoload
 (define-minor-mode fixed-scale-mode
@@ -97,8 +115,9 @@ is executed while `fixed-scale-mode' is enabled (it is enabled by
 default, if the module `fixed-scale' has been loaded),
 `fixed-scale-mode' will remember the proper text scaling and
 restore it after the command is finished."
-  :global  t
-  :require 'fixed-scale 
+  :global      t
+  :init-value  t
+  :require     'fixed-scale
   (if fixed-scale-mode
       (add-hook 'pre-command-hook #'fixed-scale-remember)
     (remove-hook 'pre-command-hook  #'fixed-scale-remember)
