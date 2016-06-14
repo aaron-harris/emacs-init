@@ -47,27 +47,6 @@ that value."
      (t                raw-val))))
 
 
-;;; Skip Functions
-;;;===============
-;;; These are functions to be used with `org-agenda-skip-function'.
-(defun aph/org-agenda-skip-unless (subtree conditions)
-  "Complement of `org-agenda-skip-if'.
-
-As `org-agenda-skip-if', except the entry or subtree is skipped
-in the case where none of the CONDITIONS is true."
-  (save-excursion
-    (if (org-agenda-skip-if subtree conditions) nil
-      (or (outline-next-heading) (point-max)))))
-
-(defun aph/org-agenda-skip-entry-unless (&rest conditions)
-  "Skip entry unless any of CONDITIONS is true."
-  (aph/org-agenda-skip-unless nil conditions))
-
-(defun aph/org-agenda-skip-subtree-unless (&rest conditions)
-  "Skip entry unless any of CONDITIONS is true."
-  (aph/org-agenda-skip-unless t conditions))
-
-
 ;;; Comparators
 ;;;============
 (defun aph/org-compare-strings (str1 str2 &optional ignore-case)
