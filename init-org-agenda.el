@@ -4,9 +4,9 @@
 ;;;; ORG-MODE CUSTOM AGENDA COMMANDS
 ;;;;============================================================================
 
-(require 'aph-comparators)                ; For `aph/random-comparator'
 (require 'aph-org-agenda)                 ; Skip functions and comparators
 (require 'org-agenda-skip)                ; For `org-agenda-skip-unless'
+(require 'org-compare)                    ; For `org-compare-randomly'
 (require 'org-match)                      ; For `org-agenda-match-skip'
 
 
@@ -63,9 +63,10 @@ If LIMIT is supplied, it should be an integer, and only that many
 tasks will be displayed."
   `(tags-todo
     ,match
-    ((org-agenda-overriding-header ,header)
-     (org-agenda-cmp-user-defined #'aph/random-comparator)
-     (org-agenda-sorting-strategy '(user-defined-up)) 
+    ((org-agenda-overriding-header  ,header)
+     (org-agenda-cmp-user-defined   ',(org-compare-randomly))
+     (org-compare-random-refresh    t)
+     (org-agenda-sorting-strategy   '(user-defined-up))
      ,@(when limit `((org-agenda-max-entries ,limit))))))
 
 
