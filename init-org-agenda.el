@@ -6,6 +6,7 @@
 
 (require 'aph-comparators)                ; For `aph/random-comparator'
 (require 'aph-org-agenda)                 ; Skip functions and comparators
+(require 'org-agenda-skip)                ; For `org-agenda-skip-unless'
 (require 'org-match)                      ; For `org-agenda-match-skip'
 
 
@@ -48,7 +49,7 @@ This block will show habit graphs, overriding the global value of
      (org-agenda-todo-ignore-scheduled 'future) 
      (org-agenda-sorting-strategy '(time-up priority-down category-up))
      (org-agenda-skip-function
-      '(aph/org-agenda-skip-entry-unless
+      '(org-agenda-skip-entry-unless
         'scheduled 'deadline 'timestamp 'todo '("ACTIVE"))))))
 
 (defun aph/org-agenda-block-random-tasks (header match &optional limit)
