@@ -76,6 +76,17 @@ See `aph/org-increase-number' for more details."
   (aph/org-increase-number (- (or inc 1))))
 
 
+;;;; Agenda
+;;=========
+(defun aph/org-agenda-redo ()
+  "As `org-agenda-redo' with prefix arg.
+
+This is exactly the command bound by default to g in
+`org-agenda-mode', except it's not a lambda."
+  (interactive)
+  (org-agenda-redo t))
+
+
 ;;;; Refile
 ;;=========
 ;;;###autoload
