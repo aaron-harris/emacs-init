@@ -851,15 +851,6 @@
   :config
   (validate-setq org-habit-graph-column 50))
 
-(use-package org-mobile
-  :disabled t
-  :config
-  (setq org-mobile-directory      "~/sync/mobile"
-        org-mobile-inbox-for-pull (concat org-directory "/capture.org"))
-  (when (eq aph/machine 'mpc)
-    (setq org-mobile-checksum-binary
-          "C:/Program Files (Portable)/GnuWin Core Utilities/bin/sha1sum.exe")))
-
 (use-package org-multitheme
   :after org)
 
