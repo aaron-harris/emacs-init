@@ -759,6 +759,8 @@
   :bind (:umbra org-mode
 		("<tab>" . aph/org-cycle-with-smart-tab)
                 ("C-k"   . aph/org-kill-line))
+    :bind (:umbra org-agenda-mode
+                ("g" . aph/org-agenda-redo))
   :config
   (bind-keys
    :umbra org-mode
@@ -766,7 +768,9 @@
     (chimera "chimera/org-clear-or-kill-line"
       (cond 
        ((org-table-p)               #'aph/org-table-clear-row-forward)
-       ((eq major-mode 'org-mode)   #'org-kill-line))))))
+       ((eq major-mode 'org-mode)   #'org-kill-line))))) 
+  (fixed-scale-mode t)
+  (add-to-list 'fixed-scale-command-list #'aph/org-agenda-redo))
 
 (use-package org-agenda
   :defer t
@@ -804,14 +808,6 @@
      (search   . " %i %-13:c")))
 
   (require 'init-org-agenda))
-
-(use-package aph-org-agenda
-  :after org-agenda 
-  :bind (:umbra org-agenda-mode
-                ("g" . aph/org-agenda-redo))
-  :config
-  (fixed-scale-mode t)
-  (add-to-list 'fixed-scale-command-list #'aph/org-agenda-redo))
 
 (use-package org-smart-agenda
   :bind (:map umbra-mode-map
