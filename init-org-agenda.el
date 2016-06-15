@@ -1,8 +1,9 @@
-;;; -*- lexical-binding: t -*-
+;;; init-org-agenda.el --- Personal Emacs config (Org agendas) -*- lexical-binding: t; -*-
 
-;;;; The Emacs init file of Aaron Harris.
-;;;; ORG-MODE CUSTOM AGENDA COMMANDS
-;;;;============================================================================
+;; Copyright (C) 2015-2016  Aaron Harris
+;; Author: Aaron Harris <meerwolf@gmail.com>
+
+;;; Code:
 
 (require 'org-agenda-skip)
 (require 'org-compare)
@@ -10,8 +11,8 @@
 (require 'org-match)
 
 
-;;; Block Definitions
-;;;==================
+;;;; Block Definitions
+;;====================
 (defvar aph/org-agenda-block-calendar
   '(agenda
     ""
@@ -70,8 +71,8 @@ tasks will be displayed."
      ,@(when limit `((org-agenda-max-entries ,limit))))))
 
 
-;;; Custom Agenda Commands
-;;;=======================
+;;;; Custom Agenda Commands
+;;=========================
 (setq org-agenda-custom-commands nil)
 
 (add-to-list 'org-agenda-custom-commands
@@ -126,3 +127,4 @@ tasks will be displayed."
 (setq org-agenda-custom-commands (nreverse org-agenda-custom-commands))
 
 (provide 'init-org-agenda)
+;; init-org-agenda.el ends here
