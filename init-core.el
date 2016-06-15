@@ -73,7 +73,7 @@
   :ensure t
   :defer t
   :config
-  (validate-setq lv-use-separator t)) 
+  (validate-setq lv-use-separator t))
 
 (use-package mode-local
   :config
@@ -83,8 +83,8 @@
   :bind (("C-x C-#" . umbra-mode))
   :bind (:map umbra-mode-map
               ("<return>"   . umbra-default-return-command)
-	      ("<kp-enter>" . umbra-default-kp-enter-command)
-              ("<tab>"      . umbra-default-tab-command)) 
+              ("<kp-enter>" . umbra-default-kp-enter-command)
+              ("<tab>"      . umbra-default-tab-command))
   :init (umbra-mode))
 
 
@@ -95,17 +95,17 @@
 
 ;; Personal Information
 (validate-setq user-full-name    "Aaron Harris"
-	       user-mail-address "meerwolf@gmail.com")
+               user-mail-address "meerwolf@gmail.com")
 
 ;; UI Configuration
 (validate-setq cursor-type                     'box
-	       frame-resize-pixelwise          t 
-	       indicate-buffer-boundaries      'right
-	       inhibit-startup-screen          t
-	       ring-bell-function              #'ignore
-	       scroll-conservatively           1000
-	       scroll-margin                   1
-	       scroll-preserve-screen-position :always)
+               frame-resize-pixelwise          t
+               indicate-buffer-boundaries      'right
+               inhibit-startup-screen          t
+               ring-bell-function              #'ignore
+               scroll-conservatively           1000
+               scroll-margin                   1
+               scroll-preserve-screen-position :always)
 (setq          resize-mini-windows             t) ;; Won't validate on Emacs 25
 (setq-default  indent-tabs-mode                nil)
 
@@ -122,12 +122,12 @@
   (put command 'disabled nil))
 
 ;; Keybindings for source-defined commands
-(bind-keys :map umbra-mode-map 
+(bind-keys :map umbra-mode-map
            ("<up>"           . scroll-down-line)
-           ("<down>"         . scroll-up-line) 
-           ("C-]"            . other-window) 
+           ("<down>"         . scroll-up-line)
+           ("C-]"            . other-window)
            ("C-'"            . query-replace)
-           ("M-'"            . query-replace-regexp) 
+           ("M-'"            . query-replace-regexp)
            ("M-i"            . indent-relative)
            ("C-M-g"          . abort-recursive-edit)
            ("C-M-\\"         . toggle-input-method)
@@ -228,7 +228,7 @@
    browse-url-prefix-default-browser-function #'eww-browse-url))
 
 (use-package calc
-  :bind (:map umbra-mode-map 
+  :bind (:map umbra-mode-map
               ("C-z C-c" . calc)))
 
 (use-package canary
@@ -245,7 +245,7 @@
   :bind (:umbra cider-mode
                 ("C-h A" . cider-apropos)
                 ("C-h D" . cider-apropos-documentation))
-  :config 
+  :config
   (validate-setq cider-auto-select-error-buffer      nil
                  cider-repl-pop-to-buffer-on-connect nil
                  cider-show-error-buffer             'except-in-repl)
@@ -261,7 +261,7 @@
 
 (use-package clean-eval
   :bind (:umbra inferior-emacs-lisp-mode
-		("C-'" . clean-eval-mode))
+                ("C-'" . clean-eval-mode))
   :init
   (when (eq aph/machine 'mpc)
     (clean-eval-mode t)))
@@ -298,7 +298,7 @@
   :diminish company-mode
   :init
   (add-hook 'lisp-family-hook #'company-mode)
-  :config 
+  :config
   (bind-keys :map company-active-map
              ("<tab>" . company-complete-common-or-cycle))
   (validate-setq company-idle-delay nil))
@@ -307,7 +307,7 @@
   :ensure t
   :defer t
   :config
-  (dash-enable-font-lock)) 
+  (dash-enable-font-lock))
 
 (use-package doc-view
   :defer t
@@ -351,7 +351,7 @@
                  url-queue-timeout            30)
 
   ;; Filesystem config
-  (validate-setq elfeed-db-directory "~/sync/elfeed") 
+  (validate-setq elfeed-db-directory "~/sync/elfeed")
 
   ;; Load the feed list
   (load (expand-file-name (concat elfeed-db-directory "/feeds.el")))
@@ -362,7 +362,7 @@
 
 (use-package elfeed-lens
   :bind (:umbra elfeed-search-mode
-                ("'" . elfeed-lens-cycle)) 
+                ("'" . elfeed-lens-cycle))
   :config
   (validate-setq elfeed-lens-list '("@6-months-ago +unread" "+todo")))
 
@@ -383,7 +383,7 @@
 (use-package ert
   :bind (:umbra emacs-lisp-mode
                 ("C-c C-t" . ert))
-  :init 
+  :init
   (add-to-list 'load-path (expand-file-name (concat aph/sync-directory
                                                     "/emacs/init/test")))
   (validate-variable 'load-path))
@@ -406,7 +406,7 @@
 
 (use-package files
   :defer t
-  :config 
+  :config
   (validate-setq
    backup-directory-alist  `(("." . ,(concat user-emacs-directory "backups")))
    confirm-kill-emacs      #'y-or-n-p))
@@ -445,7 +445,7 @@
   :bind (:umbra haskell-mode
                 ("C-c C-c" . haskell-compile)
                 ("C-c C-z" . haskell-interactive-switch))
-  :config 
+  :config
   ;; Stack setup
   (setq haskell-compile-cabal-build-command "stack build")
   (add-to-list 'process-coding-system-alist '("stack" . utf-8-dos))
@@ -465,7 +465,7 @@
   (add-to-list
    'custom-safe-themes
    "bcc6775934c9adf5f3bd1f428326ce0dcd34d743a92df48c128e6438b815b44f")
-  :config 
+  :config
   (hc-zenburn-with-color-variables
     (custom-theme-set-faces
      'hc-zenburn
@@ -489,12 +489,12 @@
   :ensure t
   :demand t
   :bind (:map umbra-mode-map
-              ("M-x"                    . helm-M-x) 
+              ("M-x"                    . helm-M-x)
               ("M-y"                    . helm-show-kill-ring)
               ("M-m"                    . helm-register)
               ("C-c b b"                . helm-filtered-bookmarks)
               ("M-."                    . helm-semantic-or-imenu)
-              ("M-s o"                  . helm-occur) 
+              ("M-s o"                  . helm-occur)
               ("M-,"                    . helm-all-mark-rings)
               ([remap switch-to-buffer] . helm-mini)
               ([remap find-file]        . helm-find-files)
@@ -530,7 +530,7 @@
                  helm-split-window-in-side-p           t
                  helm-ff-file-name-history-use-recentf t
                  helm-ff-search-library-in-sexp        t)
-  ;; Info pages to use for `helm-info-at-point'. 
+  ;; Info pages to use for `helm-info-at-point'.
   (put 'helm-info-default-sources 'custom-type '(repeat symbol))
   (validate-setq helm-info-default-sources
                  '(helm-source-info-emacs
@@ -540,9 +540,10 @@
                    helm-source-info-org
                    helm-source-info-pages))
   ;; Turn Helm off for Org-mode refiling, since Helm can't handle
-  ;; multiple levels of refile targets.
-  (add-to-list 'helm-completing-read-handlers-alist
-               '(org-refile . nil))
+  ;; multiple levels of refile targets.  We also need to turn off
+  ;; capture to use `aph/org-capture-choose-targets'.
+  (add-to-list 'helm-completing-read-handlers-alist '(org-capture . nil))
+  (add-to-list 'helm-completing-read-handlers-alist '(org-refile  . nil))
   (validate-variable 'helm-completing-read-handlers-alist))
 
 (use-package helm-descbinds
@@ -568,7 +569,7 @@
               ("C-h C-h" . undefined)))
 
 (use-package aph-help
-  :after help 
+  :after help
   :config
   (add-hook 'help-mode-hook #'activate-mode-local-bindings)
   (setq-mode-local help-mode
@@ -623,13 +624,13 @@
 
 (use-package ielm
   :bind (:map umbra-mode-map
-              ("C-z C-r" . ielm)) 
+              ("C-z C-r" . ielm))
   :config
   (mode-family-add 'ielm-mode 'lisp))
 
 (use-package aph-ielm
   :bind (:umbra inferior-emacs-lisp-mode
-		("C-c C-w" . aph/ielm-copy-last-output)))
+                ("C-c C-w" . aph/ielm-copy-last-output)))
 
 (use-package aph-iimage
   :bind (:umbra iimage-mode
@@ -654,7 +655,7 @@
               ("C-x C-y" . jerk-access-inline)))
 
 (use-package kp-motion
-  :bind (:map umbra-mode-map 
+  :bind (:map umbra-mode-map
               ("C-<kp-enter>" . kp-motion-mode)))
 
 (use-package liberate-key
@@ -662,17 +663,17 @@
               ;; Liberating C-M-[ from legacy of escape
               ("<escape> <escape> <escape>" . keyboard-escape-quit)
               ("ESC ESC ESC"                . undefined)
-              ("M-ESC :"                    . undefined)) 
+              ("M-ESC :"                    . undefined))
   :demand t
   :config
   ;; Key liberation
-  (liberate-key-escape) 
+  (liberate-key-escape)
   (add-hook 'after-make-frame-functions #'liberate-key-escape)
-  ;; Map <kp-enter> to <return> rather than to RET (C-m) 
+  ;; Map <kp-enter> to <return> rather than to RET (C-m)
   (define-key function-key-map (kbd "<kp-enter>") (kbd "<return>")))
 
-(use-package lisp-mode 
-  :config 
+(use-package lisp-mode
+  :config
   ;; Mode tags
   (mode-family-add 'lisp-mode             'lisp)
   (mode-family-add 'emacs-lisp-mode       'lisp)
@@ -695,7 +696,7 @@
   (validate-variable 'lisp-imenu-generic-expression))
 
 (use-package aph-lisp-mode
-  :bind (:umbra emacs-lisp-mode 
+  :bind (:umbra emacs-lisp-mode
                 ("C-c C-c" . aph/eval-region-or-buffer)))
 
 (use-package minibuffer
@@ -722,10 +723,10 @@
   :ensure t
   :bind (:map umbra-mode-map
               ("C-c l" . org-store-link))
-  :bind (:umbra org-mode 
+  :bind (:umbra org-mode
                 ("C-c [" . undefined)
                 ("C-c ]" . org-cycle-agenda-files)
-                ("M-."   . helm-org-in-buffer-headings) 
+                ("M-."   . helm-org-in-buffer-headings)
                 ;; Following bindings restore `org-mode' keys
                 ;; unintentionally shadowed by `umbra-mode'
                 ("C-o"   . org-open-line))
@@ -735,18 +736,18 @@
                    ("C-M-t" . org-metaup))
   :init
   (custom-set-variables
-   ;; Remove strike-through and use ` rather than ~ for code. 
+   ;; Remove strike-through and use ` rather than ~ for code.
    '(org-emphasis-alist '(("*" bold)
-			  ("/" italic)
-			  ("_" underline)
-			  ("=" org-verbatim verbatim)
-			  ("`" org-code verbatim))))
+                          ("/" italic)
+                          ("_" underline)
+                          ("=" org-verbatim verbatim)
+                          ("`" org-code verbatim))))
   :config
-  (message "Loading org...")         ; Because this may take a while. 
+  (message "Loading org...")         ; Because this may take a while.
   (use-package init-org)
   (bind-keys :umbra org-mode
-	     ("S-<return>" . (chimera "chimera/org-table-copy-down"
-			       (when (org-table-p) #'org-table-copy-down))))
+             ("S-<return>" . (chimera "chimera/org-table-copy-down"
+                               (when (org-table-p) #'org-table-copy-down))))
   (message "Loading org...done"))
 
 (use-package aph-org
@@ -757,7 +758,7 @@
               ("C-+"   . aph/org-increase-number)
               ("C-c w" . aph/org-goto-last-refile))
   :bind (:umbra org-mode
-		("<tab>" . aph/org-cycle-with-smart-tab)
+                ("<tab>" . aph/org-cycle-with-smart-tab)
                 ("C-k"   . aph/org-kill-line))
     :bind (:umbra org-agenda-mode
                 ("g" . aph/org-agenda-redo))
@@ -766,9 +767,9 @@
    :umbra org-mode
    ("C-k" .
     (chimera "chimera/org-clear-or-kill-line"
-      (cond 
+      (cond
        ((org-table-p)               #'aph/org-table-clear-row-forward)
-       ((eq major-mode 'org-mode)   #'org-kill-line))))) 
+       ((eq major-mode 'org-mode)   #'org-kill-line)))))
   (fixed-scale-mode t)
   (add-to-list 'fixed-scale-command-list #'aph/org-agenda-redo))
 
@@ -776,7 +777,7 @@
   :defer t
   :bind (:map umbra-mode-map
               ("C-c a" . org-agenda))
-  :bind (:umbra org-agenda-mode 
+  :bind (:umbra org-agenda-mode
                 ("C-o" . org-agenda-open-link)
                 ("M-p" . org-agenda-backward-block)
                 ("M-n" . org-agenda-forward-block))
@@ -824,9 +825,6 @@
   :config
   (require 'init-org-capture))
 
-(use-package aph-org-capture
-  :after org-capture)
-
 (use-package org-clock
   :bind (:map umbra-mode-map
               ("C-c t j" . org-clock-goto)
@@ -839,7 +837,7 @@
 (use-package org-display
   :after org
   :bind (:map umbra-mode-map
-	      ("C-c c" . org-display-capture-in-popout-frame))
+              ("C-c c" . org-display-capture-in-popout-frame))
   :config
   (require 'aph-framewin)
   (validate-setq
@@ -867,7 +865,7 @@
 
 (use-package org-spin
   :bind (:umbra org-mode
-		("C-c s"     . org-spin)
+                ("C-c s"     . org-spin)
                 ("C-c C-M-s" . org-spin-weighted)))
 
 (use-package outline
@@ -884,7 +882,7 @@
                    ("C-M-a" . aph/outline-get-first-sibling)
                    ("C-M-e" . aph/outline-get-final-sibling)))
 
-(use-package page 
+(use-package page
   :config
   (put 'narrow-to-page 'disabled nil))
 
@@ -958,7 +956,7 @@
 
 (use-package register
   :bind (:map umbra-mode-map
-              ("C-m"     . copy-to-register) 
+              ("C-m"     . copy-to-register)
               ("C-M-m"   . increment-register)))
 
 (use-package s
@@ -1036,7 +1034,7 @@
   :config
   (global-smart-tab-mode 1)
   (setq smart-tab-disabled-major-modes
-	(remove 'org-mode smart-tab-disabled-major-modes))
+        (remove 'org-mode smart-tab-disabled-major-modes))
   (setq smart-tab-using-hippie-expand        t
         smart-tab-completion-functions-alist nil)
   ;; Use `hippie-expand' in elisp buffers.
@@ -1045,7 +1043,7 @@
                          smart-tab-completion-functions-alist)))
 
 (use-package smartparens
-  :ensure t 
+  :ensure t
   :bind (:umbra smartparens-mode
                 ;; Movement
                 ([remap backward-sexp]    . sp-backward-sexp)
@@ -1101,7 +1099,7 @@
   (require 'smartparens-config)
   (smartparens-global-mode)
   (add-hook 'lisp-family-hook #'smartparens-strict-mode)
-  :config 
+  :config
   ;; String handling
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'lisp-mode)
@@ -1119,7 +1117,7 @@
 
 (use-package smartscan
   :ensure t
-  :bind (:umbra smartscan-mode 
+  :bind (:umbra smartscan-mode
                 ("C-M-r" . smartscan-symbol-go-backward)
                 ("C-M-s" . smartscan-symbol-go-forward)
                 ("C-M-'" . smartscan-symbol-replace))
@@ -1272,7 +1270,7 @@
   :config
   (zenburn-with-color-variables
     (custom-theme-set-faces
-     'zenburn 
+     'zenburn
      ;; The `volatile-highlights' face should be easier to see.
      `(vhl/default-face
        ((t (:background ,zenburn-bg-1)))))))

@@ -1,11 +1,9 @@
-;;; -*- lexical-binding: t -*-
+;;; init-org-capture.el --- Personal Emacs config (Org capture templates) -*- lexical-binding: t; -*-
 
-;;;; The Emacs init file of Aaron Harris.
-;;;; ORG-MODE CUSTOM CAPTURE TEMPLATES
-;;;;============================================================================
+;; Copyright (C) 2015-2016  Aaron Harris
+;; Author: Aaron Harris <meerwolf@gmail.com>
 
-(require 'dash)                         ; For `->'
-(require 'aph-org-capture)
+(require 'aph-org)
 
 
 ;;; Capture Template Definitions
@@ -169,3 +167,4 @@
 (setq org-capture-templates (nreverse org-capture-templates))
 
 (provide 'init-org-capture)
+;; init-org-capture.el ends here

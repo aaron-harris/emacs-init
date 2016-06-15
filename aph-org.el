@@ -27,6 +27,7 @@
 ;;; Code:
 
 (require 'org)
+(eval-when-compile (require 'cl-lib))
 (eval-when-compile (require 'vizier))
 
 
@@ -85,6 +86,54 @@ This is exactly the command bound by default to g in
 `org-agenda-mode', except it's not a lambda."
   (interactive)
   (org-agenda-redo t))
+
+
+;;;; Capture
+;;==========
+(defun aph/org-capture-add-properties (template &optional props)
+  "Append a property drawer containing PROPS to the capture TEMPLATE.
+
+PROPS is an alist associating property names (strings) to their
+desired values (also strings, which will typically include
+template escapes like '%^').
+
+If PROPS is omitted, the property drawer will be empty.
+
+Note that Org syntax currently requires that the property drawer
+come immediately after the headline in any entry, and this
+function makes no attempt to guarantee that, so TEMPLATE should
+not contain any line breaks."
+  (concat template "\n"
+          ":PROPERTIES:\n"
+          (mapconcat
+           (lambda (x) (concat ":" (car x) ": " (cdr x)))
+           props "\n")
+          "\n:END:"))
+
+;; This function needs to be a cl-defun because we need to distinguish between
+;; the case where new-nodes is omitted and the case where it is supplied as nil.
+(cl-defun aph/org-capture-choose-target
+    (&optional (prompt    "Capture at")
+               (new-nodes org-refile-allow-creating-parent-nodes))
+  "Prompt for a location in an Org-Mode file, then jump there.
+
+This function is intended for use with the 'function option for
+capture templates.  If PROMPT is not supplied, it defaults to
+\"Capture at\".
+
+The optional parameter NEW-NODES will override the variable
+`org-refile-allow-creating-parent-nodes' for the duration of this
+command.  If it is omitted, the default value of the variable
+will be used."
+  (let* ((target
+          (save-excursion
+            (org-refile-get-location prompt nil new-nodes :no-exclude)))
+         (file (nth 1 target))
+         (pos  (nth 3 target)))
+    (find-file file)
+    (goto-char (or pos (point-max)))
+    (org-end-of-subtree)
+    (org-return)))
 
 
 ;;;; Refile
