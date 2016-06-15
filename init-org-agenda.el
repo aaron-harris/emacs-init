@@ -4,15 +4,15 @@
 ;;;; ORG-MODE CUSTOM AGENDA COMMANDS
 ;;;;============================================================================
 
-(require 'aph-org-agenda)                 ; Skip functions and comparators
-(require 'org-agenda-skip)                ; For `org-agenda-skip-unless'
-(require 'org-compare)                    ; For `org-compare-randomly'
-(require 'org-match)                      ; For `org-agenda-match-skip'
+(require 'org-agenda-skip)
+(require 'org-compare)
+(require 'org-habit-everywhere)
+(require 'org-match)
 
 
 ;;; Block Definitions
 ;;;==================
-(defvar aph/org-agenda-block-calendar 
+(defvar aph/org-agenda-block-calendar
   '(agenda
     ""
     ((org-agenda-overriding-header "Calendar")
@@ -39,14 +39,14 @@ match MATCH and satisfy at least one of the following criteria:
  - Has the \"ACTIVE\" todo keyword.
 
 This block will show habit graphs, overriding the global value of
-`aph/org-habit-show-graphs-everywhere'."
+`org-habit-everywhere-p'." 
   `(tags-todo
     ,match
     ((org-agenda-overriding-header ,header)
-     (aph/org-habit-show-graphs-everywhere t)
+     (org-habit-everywhere-p t)
      (org-agenda-todo-ignore-with-date nil)
      (org-agenda-todo-ignore-timestamp 'future)
-     (org-agenda-todo-ignore-scheduled 'future) 
+     (org-agenda-todo-ignore-scheduled 'future)
      (org-agenda-sorting-strategy '(time-up priority-down category-up))
      (org-agenda-skip-function
       '(org-agenda-skip-entry-unless
@@ -87,7 +87,7 @@ tasks will be displayed."
              `("dw" "Work Agenda"
                (,aph/org-agenda-block-calendar
                 ,(aph/org-agenda-block-scheduled-tasks
-                  "Work Tasks" "+work|all/TODO|ACTIVE") 
+                  "Work Tasks" "+work|all/TODO|ACTIVE")
                 (tags
                  "+work+LEVEL=1+TODO=\"\""
                  ((org-agenda-overriding-header "Work Notes:"))))))
