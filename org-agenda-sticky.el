@@ -6,7 +6,7 @@
 ;; Keywords: calendar
 
 ;; Advised functions from other packages:
-;;   org-agenda: `org-agenda', `org-agenda-quit'
+;;   org-agenda: `org-agenda'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -46,8 +46,6 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'vizier))
-
 
 ;;;; User Options
 ;;===============
@@ -74,36 +72,12 @@ Intended as :filter-return advice on `org-agenda'."
 
 (advice-add 'org-agenda :filter-return #'org-agenda-sticky-auto-refresh-advice)
 
-(defun org-agenda-sticky-quit-advice (orig-fn)
-  "Advice so `org-agenda-quit' buries sticky agendas properly.
-
-When `org-agenda-sticky' is true and `org-agenda-window-setup' is
-the symbol `reorganize-frame', `org-agenda-quit' has a bug where
-the agenda does not get buried properly.  This advice restores
-the intended behavior.
-
-Intended as :around advice for `org-agenda-quit'."
-  ;; The bug seems to stem from the fact that `bury-buffer' only
-  ;; removes the current buffer from its window if its argument is
-  ;; nil, not if its argument is the current buffer.  So we
-  ;; temporarily advice `bury-buffer' so that it only gets an argument
-  ;; when that argument is not current.
-  (vizier-with-advice-if org-agenda-sticky
-      ((bury-buffer :filter-args
-                    (lambda (args)
-                      (unless (equal args (list (current-buffer)))
-                        (list (current-buffer))))))
-    (funcall orig-fn)))
-
-(advice-add 'org-agenda-quit :around #'org-agenda-sticky-quit-advice)
-
 
 ;;;; Unloading
 ;;============
 (defun org-agenda-sticky-unload-function ()
   "Undo changes made to Emacs by the module `org-agenda-sticky'."
-  (advice-remove 'org-agenda #'org-agenda-sticky-auto-refresh-advice)
-  (advice-remove 'org-agenda-quit #'org-agenda-sticky-quit-advice))
+  (advice-remove 'org-agenda #'org-agenda-sticky-auto-refresh-advice))
 
 (provide 'org-agenda-sticky)
 ;;; org-agenda-sticky.el ends here
