@@ -33,16 +33,6 @@
 ;; * When displaying an agenda with `org-agenda', if a sticky agenda
 ;;   is already open, refresh it automatically.  This feature can be
 ;;   disabled with the option `org-agenda-sticky-auto-refresh'.
-;;
-;; In addition, there are some bugs in `org-mode' that directly affect
-;; sticky agendas.  We patch these bugs using advice; unlike the
-;; features listed above, the patches cannot be disabled by setting
-;; user options.
-;;
-;; * There is a bug in the implementation of `org-agenda-quit' that
-;;   can cause a sticky agenda to remain displayed (rather than being
-;;   buried).  This bug applies when `org-agenda-window-setup' is set
-;;   to the symbol `reorganize-frame'.
 
 ;;; Code:
 
