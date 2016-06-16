@@ -1104,8 +1104,8 @@
 (use-package solar
   :defer t
   :config
-  (setq calendar-longitude -93.2
-        calendar-latitude   45.0))
+  (validate-setq calendar-longitude -93.2
+                 calendar-latitude   45.0))
 
 (use-package sort
   :bind (:map umbra-mode-map
@@ -1115,8 +1115,8 @@
 (use-package source-lock
   :config
   (when (eq aph/machine 'mpc)
-    (setq source-lock-directories
-          '("C:/Program Files (Portable)/Emacs/share/emacs")))
+    (validate-setq source-lock-directories
+                   '("C:/Program Files (Portable)/Emacs/share/emacs")))
   (source-lock-mode t))
 
 (use-package tex-site
@@ -1126,30 +1126,28 @@
   (use-package aph-latex)
   (setq-default TeX-master nil)
   ;; Caching settings
-  (setq TeX-auto-save  t
-        TeX-parse-self t)
+  (validate-setq TeX-auto-save  t
+                 TeX-parse-self t)
   ;; Outline settings
   (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
   ;; Preview settings
-  (setq preview-image-type          'dvipng
-        preview-preserve-counters   t
-        preview-auto-cache-preamble t)
+  (validate-setq preview-image-type          'dvipng
+                 preview-preserve-counters   t
+                 preview-auto-cache-preamble t)
   ;; Math mode settings
   (add-hook 'LaTeX-mode-hook #'LaTeX-math-mode)
-  (setq LaTeX-math-list
-        '(("'" (lambda () (interactive) (insert "^{\\prime}")))))
+  (validate-setq LaTeX-math-list
+                 '(("'" (lambda () (interactive) (insert "^{\\prime}")))))
   ;; RefTeX settings
   (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
-  (setq reftex-plug-into-auctex t)
+  (validate-setq reftex-plug-into-auctex t)
   ;; Compilation and viewer settings
-  (setq TeX-PDF-mode t)
+  (validate-setq TeX-PDF-mode t)
   (add-hook 'LaTeX-mode-hook #'aph/LaTeX-use-emacs-as-viewer)
   ;; Miscellaneous settings
   (add-to-list 'aph/help-window-names "*TeX Help*")
-  (defun aph/LaTeX-mode-hook ()
-    "Apply my settings for `LaTeX-mode'."
-    (setq fill-column 75))
-  (add-hook 'LaTeX-mode-hook #'aph/LaTeX-mode-hook))
+  (setq-mode-local LaTeX-mode
+    fill-column 75))
 
 (use-package text-mode
   :bind (:umbra text-mode
@@ -1163,12 +1161,10 @@
 (use-package uniquify
   :config
   ;; Snippet from http://pragmaticemacs.com/emacs/uniquify-your-buffer-names/
-  (setq uniquify-buffer-name-style 'forward)
-  (setq uniquify-separator "/")
-  (setq uniquify-after-kill-buffer-p t)
-  (setq uniquify-ignore-buffers-re "^\\*"))
-
-
+  (validate-setq uniquify-buffer-name-style   'forward
+                 uniquify-separator           "/"
+                 uniquify-after-kill-buffer-p t
+                 uniquify-ignore-buffers-re   "^\\*"))
 
 (use-package visible-mark
   :ensure t
@@ -1187,9 +1183,9 @@
     '((t (:underline "light goldenrod")))
     "Face for marks other than the most recent."
     :group 'visible-mark)
-  (setq visible-mark-max   2
-        visible-mark-faces '(aph/visible-mark-top
-                             aph/visible-mark-other)))
+  (validate-setq visible-mark-max   2
+                 visible-mark-faces '(aph/visible-mark-top
+                                      aph/visible-mark-other)))
 
 (use-package vizier-helm
   :bind (:map umbra-mode-helm-map
@@ -1199,11 +1195,11 @@
   :ensure t
   :diminish volatile-highlights-mode
   :init
-  (volatile-highlights-mode t))
+  (volatile-highlights-mode 1))
 
 (use-package which-func
   :init
-  (which-function-mode))
+  (which-function-mode 1))
 
 (use-package aph-which-func
   :after which-func
