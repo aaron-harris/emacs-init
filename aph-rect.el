@@ -1,14 +1,33 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-rect.el --- Rectangle extensions             -*- lexical-binding: t; -*-
 
-;;;; The Emacs init files of Aaron Harris:
-;;;; RECTANGLE EXTENSIONS
-;;;;============================================================================ 
+;; Copyright (C) 2016  Aaron Harris
 
-;; Extensions for `rect' module.
+;; Author: Aaron Harris <meerwolf@gmail.com>
+;; Keywords: convenience
 
-
-;;; Rectangle Commands
-;;;===================
+;; Dependencies: `rect'
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Code extending the `rect' module built into Emacs.
+
+;;; Code:
+
+(require 'rect)
+
 (defun aph/yank-rectangle-from-kill-ring (&optional arg verbose)
   "Yank the top of kill ring as a rectangle.
 Make the \"last killed rectangle\" be the top entry of the kill
@@ -40,3 +59,4 @@ most recent."
       (yank-rectangle))))
 
 (provide 'aph-rect)
+;; aph-rect.el ends here
