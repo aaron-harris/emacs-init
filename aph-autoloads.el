@@ -157,6 +157,25 @@ Return the new value of point.
 
 ;;;***
 
+;;;### (autoloads nil "aph-smartparens" "aph-smartparens.el" (22371
+;;;;;;  9305 676871 500000))
+;;; Generated autoloads from aph-smartparens.el
+
+(autoload 'aph/sp-kill-sentence "aph-smartparens" "\
+As `kill-sentence', but don't kill past end of current context.
+
+In a string or comment, kill either to the end of sentence (as
+`kill-sentence') or to the end of the string or comment,
+whichever is nearer.  Do not kill a closing string or comment
+delimiter.  Treat ARG in the same way as `kill-sentence'.
+
+Outside of strings and comments, this should generally behave as
+`kill-sentence', but no guarantees are made.
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-theme" "aph-theme.el" (22316 62223 201410
 ;;;;;;  400000))
 ;;; Generated autoloads from aph-theme.el
@@ -755,15 +774,14 @@ penumbra map instead.
 ;;;;;;  "aph-dash.el" "aph-ert.el" "aph-files.el" "aph-framewin.el"
 ;;;;;;  "aph-haskell.el" "aph-help.el" "aph-latex.el" "aph-lisp-mode.el"
 ;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-silence.el"
-;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
-;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
-;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "jerk.el" "lexy.el" "liberate-key.el" "morgue.el" "org-agenda-skip.el"
-;;;;;;  "org-agenda-sticky.el" "org-barb.el" "org-compare.el" "org-eww.el"
-;;;;;;  "org-habit-everywhere.el" "org-match.el" "org-multitheme.el"
-;;;;;;  "shr-link-img.el" "vizier-helm.el" "vizier.el") (22371 9237
-;;;;;;  781744 100000))
+;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "chimera.el"
+;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
+;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "lexy.el" "liberate-key.el"
+;;;;;;  "morgue.el" "org-agenda-skip.el" "org-agenda-sticky.el" "org-barb.el"
+;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
+;;;;;;  "org-multitheme.el" "shr-link-img.el" "vizier-helm.el" "vizier.el")
+;;;;;;  (22371 9315 403037 500000))
 
 ;;;***
 
