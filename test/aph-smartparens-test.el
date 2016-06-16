@@ -1,16 +1,29 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-smartparens-test.el --- Tests for aph-smartparens.el -*- lexical-binding: t; -*-
 
-;;;; The Emacs init file of Aaron Harris.
-;;;; SMARTPARENS TESTS
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-;; Tests for the module aph-smartparens.el.
+;; Author: Aaron Harris <meerwolf@gmail.com>
+
+;; Dependencies: `aph-smartparens', `aph-ert'
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Code:
+
 (require 'aph-smartparens)
 (require 'aph-ert)
 
-
-;;; String Protection
-;;;==================
 (defun aph/sp-test-kill-sentence-1 (lines words chars arg start desired)
   "Subroutine for `aph/sp-test-kill-sentence'.
 
@@ -52,3 +65,4 @@ Sentence one.  Sentence two."
 
 
 (provide 'aph-smartparens-test)
+;;; aph-smartparens-test.el ends here
