@@ -451,11 +451,11 @@
                 ("C-c C-z" . haskell-interactive-switch))
   :config
   ;; Stack setup
-  (setq haskell-compile-cabal-build-command "stack build")
+  (validate-setq haskell-compile-cabal-build-command "stack build")
   (add-to-list 'process-coding-system-alist '("stack" . utf-8-dos))
   ;; REPL setup
-  (setq haskell-process-show-debug-tips nil
-        haskell-process-log t))
+  (validate-setq haskell-process-show-debug-tips nil
+                 haskell-process-log t))
 
 (use-package aph-haskell
   :after haskell-mode
@@ -954,13 +954,7 @@
 (use-package saveplace
   :config
   (setq-default save-place t)
-  (setq save-place-file (concat user-emacs-directory "places")))
-
-(use-package server
-  :disabled t
-  :config
-  (unless (server-running-p) (server-start))
-  (setq server-window 'pop-to-buffer))
+  (validate-setq save-place-file (concat user-emacs-directory "places")))
 
 (use-package shm
   :ensure t
