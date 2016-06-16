@@ -1009,14 +1009,14 @@
   :diminish smart-tab-mode
   :config
   (global-smart-tab-mode 1)
-  (setq smart-tab-disabled-major-modes
-        (remove 'org-mode smart-tab-disabled-major-modes))
-  (setq smart-tab-using-hippie-expand        t
-        smart-tab-completion-functions-alist nil)
+  (validate-setq smart-tab-disabled-major-modes
+                 (remove 'org-mode smart-tab-disabled-major-modes)) 
+  (validate-setq smart-tab-using-hippie-expand        t
+                 smart-tab-completion-functions-alist nil)
   ;; Use `hippie-expand' in elisp buffers.
-  (setq smart-tab-completion-functions-alist
-        (assq-delete-all 'emacs-lisp-mode
-                         smart-tab-completion-functions-alist)))
+  (validate-setq smart-tab-completion-functions-alist
+                 (assq-delete-all 'emacs-lisp-mode
+                                  smart-tab-completion-functions-alist)))
 
 (use-package smartparens
   :ensure t
