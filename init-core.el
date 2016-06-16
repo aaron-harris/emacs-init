@@ -983,18 +983,18 @@
               ("M-= l"      . what-line))
   :config
   ;; Global minor modes
-  (column-number-mode)
+  (column-number-mode 1)
   ;; Misc. settings
-  (setq save-interprogram-paste-before-kill t
-        shift-select-mode                   nil)
+  (validate-setq save-interprogram-paste-before-kill t
+                 shift-select-mode                   nil)
   ;; Tweaking `eval-expression'
-  (defun mode-family-run-hook--lisp ()
+  (defun mode-family-run-hook:lisp ()
     "Run the hook for the `lisp' mode family."
     (run-hooks 'lisp-family-hook))
   (add-hook 'eval-expression-minibuffer-setup-hook
-            #'mode-family-run-hook--lisp)
-  (setq eval-expression-print-length nil
-        eval-expression-print-level  nil))
+            #'mode-family-run-hook:lisp)
+  (validate-setq eval-expression-print-length nil
+                 eval-expression-print-level  nil))
 
 (use-package aph-simple
   :after simple
