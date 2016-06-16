@@ -31,6 +31,7 @@
 
 ;;;; Newline Commands
 ;;===================
+;;;###autoload
 (defun aph/open-line (n)
   "As `open-line', with support for negative argument.
 An argument of -N calls `join-line' with an argument N times."
@@ -42,6 +43,7 @@ An argument of -N calls `join-line' with an argument N times."
 
 ;;;; Motion Commands
 ;;==================
+;;;###autoload
 (defun aph/move-beginning-of-line (&optional arg)
   "Combine `move-beginning-of-line' and `back-to-indentation'.
 
