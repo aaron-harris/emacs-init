@@ -6,8 +6,8 @@
 ;;; Code:
 
 
-;;; Bootstrapping Variables
-;;;========================
+;;;; Bootstrapping Variables
+;;==========================
 ;; These variables should have been set by the bootstrapper.
 (defvar aph/sync-directory "~/sync"
   "The path to my Dropbox folder on the current machine.")
@@ -16,8 +16,8 @@
   "A symbol denoting the specific PC being used.")
 
 
-;;; Display Settings
-;;;=================
+;;;; Display Settings
+;;===================
 ;; Placing this close to the beginning of initialization should
 ;; prevent chrome from being drawn at all, rather than drawing it then
 ;; removing it.
@@ -26,8 +26,8 @@
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 
-;;; Package Loading
-;;;================
+;;;; Package Loading
+;;==================
 (add-to-list 'load-path
              (expand-file-name (concat aph/sync-directory "/emacs/init")))
 
@@ -53,10 +53,17 @@
 (use-package aph-autoloads)
 
 
-;;; Metaconfiguration Packages
-;;;===========================
-;; Packages in this section are loaded early so we can use them in
-;; subsequent package declarations.
+;;;; Library Packages
+;;===================
+(use-package dash
+  :ensure t
+  :defer t
+  :config
+  (dash-enable-font-lock))
+
+(use-package s
+  :ensure t
+  :defer t)
 
 (use-package seq
   :ensure t
@@ -67,6 +74,9 @@
 (use-package validate
   :ensure t)
 
+
+;;;; Metaconfiguration Packages
+;;=============================
 (use-package chimera)
 
 (use-package hydra
@@ -88,8 +98,8 @@
   :init (umbra-mode))
 
 
-;;; Configuration: Source-Level
-;;;============================
+;;;; Configuration: Source-Level
+;;==============================
 (prefer-coding-system 'utf-8-unix)
 (validate-setq enable-recursive-minibuffers t)
 
@@ -140,8 +150,8 @@
            ("s-<apps> <tab>" . indent-region))
 
 
-;;; Package Configuration
-;;;======================
+;;;; Package Configuration
+;;========================
 (use-package advice
   :defer t
   :config (validate-setq ad-redefinition-action 'accept))
@@ -302,12 +312,6 @@
   (bind-keys :map company-active-map
              ("<tab>" . company-complete-common-or-cycle))
   (validate-setq company-idle-delay nil))
-
-(use-package dash
-  :ensure t
-  :defer t
-  :config
-  (dash-enable-font-lock))
 
 (use-package doc-view
   :defer t
@@ -944,12 +948,8 @@
 
 (use-package register
   :bind (:map umbra-mode-map
-              ("C-m"     . copy-to-register)
-              ("C-M-m"   . increment-register)))
-
-(use-package s
-  :ensure t
-  :defer t)
+              ("C-m"   . copy-to-register)
+              ("C-M-m" . increment-register)))
 
 (use-package saveplace
   :config
