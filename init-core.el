@@ -1000,12 +1000,9 @@
   :after simple
   :bind (:map umbra-mode-map
               ("C-a"             . aph/move-beginning-of-line)
-              ([remap open-line] . aph/open-line)
-              ("M-c"             . aph/hydra-caps/body)
-              ("M-l"             . undefined)
-              ("M-u"             . undefined)
+              ([remap open-line] . aph/open-line) 
               ("C-`"             . next-error)
-              ("M-`"             . previous-error)))
+              ("M-`"             . previous-error))) 
 
 (use-package smart-tab
   :ensure t
@@ -1065,11 +1062,11 @@
                 ;; Narrowing
                 ("C-x n ("                . sp-narrow-to-sexp)
                 ;; Prefix Arguments
-                ("M-u SPC"                . sp-prefix-save-excursion)
-                ("M-u '"                  . sp-prefix-symbol-object)
-                ("M-u ("                  . sp-prefix-pair-object)
-                ("M-u ["                  . sp-prefix-pair-object)
-                ("M-u ,"                  . sp-prefix-tag-object))
+                ("C-S-u SPC"              . sp-prefix-save-excursion)
+                ("C-S-u '"                . sp-prefix-symbol-object)
+                ("C-S-u ("                . sp-prefix-pair-object)
+                ("C-S-u ["                . sp-prefix-pair-object)
+                ("C-S-u ,"                . sp-prefix-tag-object)) 
   :bind (:umbra smartparens-strict-mode
                 (")" . sp-up-sexp)
                 ("]" . sp-up-sexp)
@@ -1218,10 +1215,13 @@
   :bind (:map umbra-mode-map
               ("s-<apps> w" . whitespace-cleanup)))
 
+(use-package window
+  :bind (:map umbra-mode-map
+              ("C-S-l" . move-to-window-line-top-bottom)))
+
 (use-package aph-window
   :bind (:map umbra-mode-map
-              ;; Scrolling and Positioning
-              ("M-l"   . move-to-window-line-top-bottom)
+              ;; Scrolling and Positioning 
               ("C-M-v" . aph/hydra-scroll-other/body)
               ;; Sliding windows
               ("<C-[>" . aph/other-window-backward)

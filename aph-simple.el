@@ -63,26 +63,4 @@ Return the new value of point."
    (:else   (move-beginning-of-line 1)))
   (point))
 
-
-;;; Capitalization Commands
-;;;========================
-(defhydra aph/hydra-caps (:color red)
-  "Capitalization"
-  ;; Capitalization commands
-  ("c"   capitalize-word "proper")
-  ("l"   downcase-word   "lower")
-  ("u"   upcase-word     "upper")
-  ;; Movement commands
-  ("b"   backward-word   "back")
-  ("f"   forward-word    "forward")
-  ;; Aliases to allow use with or without meta
-  ("M-c" capitalize-word nil)
-  ("M-l" downcase-word   nil)
-  ("M-u" upcase-word     nil)
-  ("M-b" backward-word   nil)
-  ("M-f" forward-word    nil)
-  ;; Quit
-  ("q"   nil             "quit" :color blue))
-
-
 (provide 'aph-simple)
