@@ -940,10 +940,7 @@
 (use-package aph-rect
   :after rect
   :bind (:map umbra-mode-map
-              ("C-M-y" . aph/yank-rectangle-from-kill-ring))
-  :config
-  (when (>= emacs-major-version 25)
-    (advice-add #'rectangle--*-char :around #'aph/rectangle-repetition-fix)))
+              ("C-M-y" . aph/yank-rectangle-from-kill-ring)))
 
 (use-package register
   :bind (:map umbra-mode-map
@@ -1265,6 +1262,52 @@
      ;; The `volatile-highlights' face should be easier to see.
      `(vhl/default-face
        ((t (:background ,zenburn-bg-1)))))))
+
+
+;;;; Bug fixes
+;;============
+(defun aph/rectangle-repetition-fix (fn cmd n &optional other-cmd)
+  "Advice to fix bug in `rectangle-mark-mode' motion commands.
+
+The basic cursor motion commands in `rectangle-mark-mode' that
+were introduced in Emacs 25 do not currently handle their prefix
+arguments correctly (as of Emacs 25.0.50.1).  These
+commands (principally `rectangle-forward-char' and
+`rectangle-backward-char') delegate to `rectangle--*-char'.  This
+function fixes the problem when used as advice :around
+`rectangle--*-char'."
+  (cond
+   ((< n 0)  (aph/rectangle-repetition-fix fn other-cmd (- n)))
+   ((= n 0)  (funcall fn cmd 0 other-cmd))
+   ((> n 0)  (dotimes (i (1- n) (funcall fn cmd 1 other-cmd))
+               (funcall fn cmd 1 other-cmd)))))
+
+(when (>= emacs-major-version 25)
+  (advice-add #'rectangle--*-char :around #'aph/rectangle-repetition-fix))
+
+(defun aph/org-agenda-quit-fix (orig-fn)
+  "Advice so `org-agenda-quit' buries sticky agendas properly.
+
+When `org-agenda-sticky' is true and `org-agenda-window-setup' is
+the symbol `reorganize-frame', `org-agenda-quit' has a bug where
+the agenda does not get buried properly.  This advice restores
+the intended behavior.
+
+Intended as :around advice for `org-agenda-quit'."
+  ;; The bug seems to stem from the fact that `bury-buffer' only
+  ;; removes the current buffer from its window if its argument is
+  ;; nil, not if its argument is the current buffer.  So we
+  ;; temporarily advice `bury-buffer' so that it only gets an argument
+  ;; when that argument is not current.
+  (require 'vizier)
+  (vizier-with-advice-if org-agenda-sticky
+      ((bury-buffer :filter-args
+                    (lambda (args)
+                      (unless (equal args (list (current-buffer)))
+                        (list (current-buffer))))))
+    (funcall orig-fn)))
+
+(advice-add 'org-agenda-quit :around #'aph/org-agenda-quit-fix)
 
 (provide 'init-core)
 (provide 'init)
