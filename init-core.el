@@ -906,9 +906,9 @@
   :ensure t
   :config
   (projectile-global-mode)
-  (setq projectile-completion-system     'helm
-        projectile-switch-project-action #'helm-projectile
-        projectile-enable-caching        t)
+  (validate-setq projectile-completion-system     'helm
+                 projectile-switch-project-action #'helm-projectile
+                 projectile-enable-caching        t)
   (helm-projectile-on))
 
 (use-package rainbow-delimiters
