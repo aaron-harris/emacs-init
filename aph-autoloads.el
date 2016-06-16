@@ -83,8 +83,8 @@ standalone info application.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22361 46402 476865
-;;;;;;  100000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22369 52842 151102
+;;;;;;  800000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-goto-last-refile "aph-org" "\
@@ -108,6 +108,52 @@ Erase contents of table cells from point to end of row.
 If point is not inside an Org table, signal an error.
 
 \(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "aph-rect" "aph-rect.el" (22371 9210 5791 400000))
+;;; Generated autoloads from aph-rect.el
+
+(autoload 'aph/yank-rectangle-from-kill-ring "aph-rect" "\
+Yank the top of kill ring as a rectangle.
+Make the \"last killed rectangle\" be the top entry of the kill
+ring, then yank that rectangle at point.
+
+With \\[universal-argument] as argument, just save the top entry
+of the kill ring as a rectangle, without yanking.  Print a
+message to that effect.  When called from elisp, this message is
+suppressed unless the optional argument VERBOSE is supplied.
+ 
+With argument N, save the Nth most recent kill instead of the
+most recent.
+
+\(fn &optional ARG VERBOSE)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "aph-simple" "aph-simple.el" (22371 9185 881189
+;;;;;;  300000))
+;;; Generated autoloads from aph-simple.el
+
+(autoload 'aph/open-line "aph-simple" "\
+As `open-line', with support for negative argument.
+An argument of -N calls `join-line' with an argument N times.
+
+\(fn N)" t nil)
+
+(autoload 'aph/move-beginning-of-line "aph-simple" "\
+Combine `move-beginning-of-line' and `back-to-indentation'.
+
+Behave as `move-beginning-of-line', unless point is already at
+beginning of line, in which case call `back-to-indentation'.
+
+If ARG is supplied, then it is interpreted as in
+`move-beginning-of-line' and `back-to-indentation' is not
+called.
+
+Return the new value of point.
+
+\(fn &optional ARG)" t nil)
 
 ;;;***
 
@@ -321,11 +367,11 @@ Set each VAR to VALUE in FAMILY.
 
 ;;;***
 
-;;;### (autoloads nil "fixed-scale" "fixed-scale.el" (22361 61750
-;;;;;;  797020 400000))
+;;;### (autoloads nil "fixed-scale" "fixed-scale.el" (22367 2809
+;;;;;;  488722 900000))
 ;;; Generated autoloads from fixed-scale.el
 
-(defvar fixed-scale-mode nil "\
+(defvar fixed-scale-mode t "\
 Non-nil if Fixed-Scale mode is enabled.
 See the command `fixed-scale-mode' for a description of this minor mode.
 Setting this variable directly does not take effect;
@@ -539,7 +585,7 @@ probably makes more sense.
 ;;;***
 
 ;;;### (autoloads nil "org-smart-agenda" "org-smart-agenda.el" (22363
-;;;;;;  18008 927786 300000))
+;;;;;;  18974 406525 800000))
 ;;; Generated autoloads from org-smart-agenda.el
 
 (autoload 'org-smart-agenda "org-smart-agenda" "\
@@ -706,18 +752,18 @@ penumbra map instead.
 ;;;***
 
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
-;;;;;;  "aph-comparators.el" "aph-dash.el" "aph-ert.el" "aph-files.el"
-;;;;;;  "aph-framewin.el" "aph-haskell.el" "aph-help.el" "aph-latex.el"
-;;;;;;  "aph-lisp-mode.el" "aph-org-agenda.el" "aph-org-capture.el"
-;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-rect.el"
-;;;;;;  "aph-shr.el" "aph-silence.el" "aph-simple.el" "aph-smartparens.el"
-;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "chimera.el"
-;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
-;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "lexy.el" "liberate-key.el"
-;;;;;;  "morgue.el" "org-agenda-sticky.el" "org-eww.el" "org-match.el"
-;;;;;;  "org-multitheme.el" "vizier-helm.el" "vizier.el") (22363
-;;;;;;  18013 830208 300000))
+;;;;;;  "aph-dash.el" "aph-ert.el" "aph-files.el" "aph-framewin.el"
+;;;;;;  "aph-haskell.el" "aph-help.el" "aph-latex.el" "aph-lisp-mode.el"
+;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-silence.el"
+;;;;;;  "aph-smartparens.el" "aph-subr.el" "aph-symbol.el" "aph-which-func.el"
+;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
+;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
+;;;;;;  "jerk.el" "lexy.el" "liberate-key.el" "morgue.el" "org-agenda-skip.el"
+;;;;;;  "org-agenda-sticky.el" "org-barb.el" "org-compare.el" "org-eww.el"
+;;;;;;  "org-habit-everywhere.el" "org-match.el" "org-multitheme.el"
+;;;;;;  "shr-link-img.el" "vizier-helm.el" "vizier.el") (22371 9237
+;;;;;;  781744 100000))
 
 ;;;***
 

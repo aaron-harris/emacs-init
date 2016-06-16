@@ -28,6 +28,7 @@
 
 (require 'rect)
 
+;;;###autoload
 (defun aph/yank-rectangle-from-kill-ring (&optional arg verbose)
   "Yank the top of kill ring as a rectangle.
 Make the \"last killed rectangle\" be the top entry of the kill
