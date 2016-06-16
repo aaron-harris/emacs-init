@@ -966,11 +966,8 @@
   (add-hook 'structured-haskell-mode-hook #'turn-off-smartparens-mode)
   (add-hook 'structured-haskell-mode-hook #'electric-indent-local-mode))
 
-(use-package shr
-  :defer t
-  :config
-  (use-package aph-shr)
-  (advice-add #'shr-urlify :before #'aph/shr-urlify-advice))
+(use-package shr-link-img
+  :after shr)
 
 (use-package simple
   :demand t
