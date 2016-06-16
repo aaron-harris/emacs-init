@@ -972,15 +972,17 @@
 (use-package simple
   :demand t
   :bind (:map umbra-mode-map
-              ("M-o"        . join-line)
               ("C-M-/"      . undo-only)
               ("C-S-k"      . kill-whole-line)
+              ("C-`"        . next-error)
               ("C-x M-k"    . append-next-kill)
-              ("S-<return>" . delete-blank-lines)
-              ("S-SPC"      . cycle-spacing)
+              ("M-= l"      . what-line)
               ("M-= w"      . count-words)
               ("M-SPC"      . mark-word)
-              ("M-= l"      . what-line))
+              ("M-`"        . previous-error)
+              ("M-o"        . join-line)
+              ("S-<return>" . delete-blank-lines)
+              ("S-SPC"      . cycle-spacing))
   :config
   ;; Global minor modes
   (column-number-mode 1)
@@ -999,10 +1001,8 @@
 (use-package aph-simple
   :after simple
   :bind (:map umbra-mode-map
-              ("C-a"             . aph/move-beginning-of-line)
-              ([remap open-line] . aph/open-line) 
-              ("C-`"             . next-error)
-              ("M-`"             . previous-error))) 
+              ("C-a"             . aph/move-beginning-of-line) 
+              ([remap open-line] . aph/open-line)))
 
 (use-package smart-tab
   :ensure t

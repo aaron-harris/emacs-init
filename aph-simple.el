@@ -1,17 +1,36 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-simple.el --- Extensions for `simple' module -*- lexical-binding: t; -*-
 
-;;;; The Emacs init files of Aaron Harris:
-;;;; SIMPLE EXTENSIONS
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-;; Extensions for `simple' package.
+;; Author: Aaron Harris <meerwolf@gmail.com>
+;; Keywords: convenience
+
+;; Dependencies: `simple'
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Extensions for the `simple' module built into Emacs.
+
+;;; Code:
+
 (require 'simple)
 
-(require 'hydra)
-
 
-;;; Newline Commands
-;;;=================
+;;;; Newline Commands
+;;===================
 (defun aph/open-line (n)
   "As `open-line', with support for negative argument.
 An argument of -N calls `join-line' with an argument N times."
@@ -21,30 +40,8 @@ An argument of -N calls `join-line' with an argument N times."
     (open-line n)))
 
 
-;;; Yank Commands
-;;;==============
-(defun aph/yank-command-on-string (string command &rest args)
-  "Return text inserted by COMMAND when STRING is most recent kill.
-Pass any ARGS to COMMAND.
-
-Do this in a temporary buffer, so that current buffer is not
-changed or modified.  (Of course, if COMMAND selects a buffer
-itself, this guarantee cannot be enforced.)
-
-Presumably COMMAND is a function that yanks text from the kill
-ring (possibly with some other processing involved).  This
-function effectively transforms that command into a string
-processing command, although `kill-ring' is still changed as a
-side-effect (by the addition of STRING, plus whatever changes are
-made by COMMAND)."
-  (with-temp-buffer
-    (kill-new string)
-    (apply command args)
-    (buffer-string)))
-
-
-;;; Motion Commands
-;;;================
+;;;; Motion Commands
+;;==================
 (defun aph/move-beginning-of-line (&optional arg)
   "Combine `move-beginning-of-line' and `back-to-indentation'.
 
@@ -64,3 +61,4 @@ Return the new value of point."
   (point))
 
 (provide 'aph-simple)
+;;; aph-simple.el ends here
