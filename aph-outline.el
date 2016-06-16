@@ -1,15 +1,36 @@
-;;; -*- lexical-binding: t -*-
+;;; aph-outline.el --- Extensions for `outline-mode'  -*- lexical-binding: t; -*-
 
-;;;; The Emacs init files of Aaron Harris:
-;;;; OUTLINE EXTENSIONS
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-;; Extensions for `outline' module.
+;; Author: Aaron Harris <meerwolf@gmail.com>
+;; Keywords: outlines
+
+;; Dependencies: `outline'
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; Code extending the `outline' module.
+
+;;; Code:
+
 (require 'outline)
 
 
-;;; State Wrappers
-;;;===============
+;;;; State Wrappers
+;;=================
 ;; Functions in this section wrap basic `outline-mode' functions so
 ;; that they have less state-dependence, e.g. so they can be called
 ;; anywhere on the line and without worrying about the match data.
@@ -55,8 +76,8 @@ If before the first heading, return nil and do not move point."
     (apply f args)))
 
 
-;;; General Motion
-;;;===============
+;;;; General Motion
+;;=================
 ;; Functions in this section extend `aph/outline-next-heading' and
 ;; `aph/outline-previous-heading'.
 
@@ -94,8 +115,8 @@ negative).  Otherwise, defer to `outline-previous-visible-heading'."
   (aph/outline--*-heading arg t invisible-ok))
 
 
-;;; Lateral Motion
-;;;===============
+;;;; Lateral Motion
+;;=================
 ;; Functions in this section move within a single level of the
 ;; `outline-mode' hierarchy, extending `outline-forward-same-level'
 ;; and `outline-backward-same-level'.
@@ -161,8 +182,8 @@ not move point."
   (aph/outline--get-*-sibling nil loud))
 
 
-;;; Vertical Motion
-;;;================
+;;;; Vertical Motion
+;;==================
 ;; Functions in this section move upwards or downwards within the
 ;; `outline-mode' hierarchy, extending `outline-up-heading'.
 
@@ -240,5 +261,5 @@ If ARG is negative, move up ARG levels instead."
                 (aph/outline-get-final-child))
       (setq arg (1- arg)))))
 
-
 (provide 'aph-outline)
+;;; aph-outline.el ends here

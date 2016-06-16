@@ -1,31 +1,35 @@
-;;; -*- lexical-binding: t -*-
+;;; jerk-test.el --- Tests for aph-outline.el        -*- lexical-binding: t; -*-
 
-;;;; The Emacs init file of Aaron Harris.
-;;;; OUTLINE TESTS
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
 
-;; Tests for the module aph-outline.el.
+;; Author: Aaron Harris <meerwolf@gmail.com>
+
+;; Dependencies: `aph-outline', `aph-ert'
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Code:
+
 (require 'aph-outline)
+(require 'aph-ert)
 
 
-;;; Testing Apparatus
-;;;==================
-(defmacro aph/outline-test (text &rest body)
-  "Execute BODY in `outline-mode' buffer containing TEXT."
-  (declare (indent 1)
-           (debug (stringp body)))
-  `(with-temp-buffer
-     (insert ,text)
-     (outline-mode)
-     (goto-char (point-min))
-     ,@body))
-
-
-;;; State Wrappers
-;;;===============
+;;;; State Wrappers
+;;=================
 (ert-deftest aph/outline-test-before-first-heading ()
   "Test `aph/outline-before-first-heading'."
-  (aph/outline-test "
+  (aph/ert-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 More text" 
@@ -40,7 +44,7 @@ More text"
 
 (ert-deftest aph/outline-test-level ()
   "Test `aph/outline-level'."
-  (aph/outline-test "
+  (aph/ert-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 Text in H1"
@@ -53,12 +57,12 @@ Text in H1"
                       (aph/outline-level))))))
 
 
-;;; General Motion
-;;;===============
+;;;; General Motion
+;;=================
 (ert-deftest aph/outline-*-heading ()
   "Test `aph/outline-next-heading', `aph/outline-previous-heading'."
   (dolist (invis '(nil t))
-    (aph/outline-test "
+    (aph/ert-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a
@@ -76,11 +80,14 @@ Preamble
       (aph/outline-previous-heading 1 invis)
       (should (bobp)))))
 
+
+;;;; Lateral Motion
+;;=================
 (ert-deftest aph/outline-test-get-*-sibling ()
   "Test `aph/outline--get-*-sibling' and related commands.
 The specific commands tested are `aph/outline-get-first-sibling'
 and `aph/outline-get-final-sibling'."
-  (aph/outline-test "
+  (aph/ert-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a
@@ -105,7 +112,7 @@ Preamble
               (funcall subtest #'aph/outline-get-first-sibling back-hdg)
               (funcall subtest #'aph/outline-get-final-sibling fwd-hdg))))
       (funcall test
-               "\nPreamble"
+               "Preamble"
                nil
                nil)
       (aph/outline-next-heading 1 :invisible-ok)
@@ -126,12 +133,12 @@ Preamble
                nil))))
 
 
-;;; Vertical Motion
-;;;================
+;;;; Vertical Motion
+;;==================
 (ert-deftest aph/outline-test-top-heading ()
   "Test `aph/outline-top-heading'."
   (dolist (invis '(nil t))
-    (aph/outline-test "
+    (aph/ert-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a"
@@ -149,7 +156,7 @@ Preamble
 
 (ert-deftest aph/outline-test-get-first-child ()
   "Test `aph/outline-get-first-child'."
-  (aph/outline-test "
+  (aph/ert-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a
@@ -166,7 +173,7 @@ Preamble
 
 (ert-deftest aph/outline-test-down-heading ()
   "Test `aph/outline-down-heading'."
-  (aph/outline-test "
+  (aph/ert-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a
@@ -183,7 +190,7 @@ Preamble
 
 (ert-deftest aph/outline-test-down-heading-from-end ()
   "Test `aph/outline-down-heading-from-end'."
-  (aph/outline-test "
+  (aph/ert-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a
@@ -199,6 +206,6 @@ Preamble
     (should (looking-at-p "* Heading 2"))
     (aph/outline-down-heading-from-end 3)
     (should (looking-at-p "*** Subsubheading 2b.1"))))
-
       
 (provide 'aph-outline-test)
+;; aph-outline-test.el ends here
