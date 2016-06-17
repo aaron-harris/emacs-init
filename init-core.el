@@ -48,7 +48,7 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(require 'use-package)
+(require 'use-package) 
 
 (use-package aph-autoloads)
 
@@ -662,6 +662,14 @@
   :bind (:map umbra-mode-map
               ("C-<kp-enter>" . kp-motion-mode)))
 
+(use-package latex
+  :defer t
+  :config
+  (add-hook 'LaTeX-mode-hook #'LaTeX-math-mode)
+  (validate-setq
+   LaTeX-math-list
+   '(("'" (lambda () (interactive) (insert "^{\\prime}")) "Math" nil))))
+
 (use-package liberate-key
   :bind (:map umbra-mode-map
               ;; Liberating C-M-[ from legacy of escape
@@ -900,6 +908,13 @@
               ("C-:"   . pp-eval-expression)
               ("C-M-:" . pp-macroexpand-expression)))
 
+(use-package preview
+  :after tex
+  :config
+  (validate-setq preview-image-type          'dvipng
+                 preview-preserve-counters   t
+                 preview-auto-cache-preamble t))
+
 (use-package prog-mode
   :bind (:umbra prog-mode
                 ("M-p" . backward-paragraph)
@@ -945,6 +960,12 @@
   :after rect
   :bind (:map umbra-mode-map
               ("C-M-y" . aph/yank-rectangle-from-kill-ring)))
+
+(use-package reftex
+  :defer t 
+  :init
+  (setq reftex-plug-into-AUCTeX t)
+  (add-hook 'LaTeX-mode-hook #'turn-on-reftex))
 
 (use-package register
   :bind (:map umbra-mode-map
@@ -1001,7 +1022,7 @@
 (use-package aph-simple
   :after simple
   :bind (:map umbra-mode-map
-              ("C-a"             . aph/move-beginning-of-line) 
+              ("C-a"             . aph/move-beginning-of-line)
               ([remap open-line] . aph/open-line)))
 
 (use-package smart-tab
@@ -1010,7 +1031,7 @@
   :config
   (global-smart-tab-mode 1)
   (validate-setq smart-tab-disabled-major-modes
-                 (remove 'org-mode smart-tab-disabled-major-modes)) 
+                 (remove 'org-mode smart-tab-disabled-major-modes))
   (validate-setq smart-tab-using-hippie-expand        t
                  smart-tab-completion-functions-alist nil)
   ;; Use `hippie-expand' in elisp buffers.
@@ -1066,7 +1087,7 @@
                 ("C-S-u '"                . sp-prefix-symbol-object)
                 ("C-S-u ("                . sp-prefix-pair-object)
                 ("C-S-u ["                . sp-prefix-pair-object)
-                ("C-S-u ,"                . sp-prefix-tag-object)) 
+                ("C-S-u ,"                . sp-prefix-tag-object))
   :bind (:umbra smartparens-strict-mode
                 (")" . sp-up-sexp)
                 ("]" . sp-up-sexp)
@@ -1119,7 +1140,7 @@
                    '("C:/Program Files (Portable)/Emacs/share/emacs")))
   (source-lock-mode t))
 
-(use-package tex-site
+(use-package tex
   :ensure auctex
   :defer t
   :config
@@ -1130,24 +1151,16 @@
                  TeX-parse-self t)
   ;; Outline settings
   (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
-  ;; Preview settings
-  (validate-setq preview-image-type          'dvipng
-                 preview-preserve-counters   t
-                 preview-auto-cache-preamble t)
-  ;; Math mode settings
-  (add-hook 'LaTeX-mode-hook #'LaTeX-math-mode)
-  (validate-setq LaTeX-math-list
-                 '(("'" (lambda () (interactive) (insert "^{\\prime}")))))
-  ;; RefTeX settings
-  (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
-  (validate-setq reftex-plug-into-auctex t)
-  ;; Compilation and viewer settings
-  (validate-setq TeX-PDF-mode t)
-  (add-hook 'LaTeX-mode-hook #'aph/LaTeX-use-emacs-as-viewer)
   ;; Miscellaneous settings
   (add-to-list 'aph/help-window-names "*TeX Help*")
-  (setq-mode-local LaTeX-mode
+  (setq-mode-local TeX-mode
     fill-column 75))
+
+(use-package aph-latex
+  :after tex
+  :defer t
+  :config
+  (add-hook 'TeX-mode-hook #'aph/LaTeX-use-emacs-as-viewer))
 
 (use-package text-mode
   :bind (:umbra text-mode
@@ -1217,7 +1230,7 @@
 
 (use-package aph-window
   :bind (:map umbra-mode-map
-              ;; Scrolling and Positioning 
+              ;; Scrolling and Positioning
               ("C-M-v" . aph/hydra-scroll-other/body)
               ;; Sliding windows
               ("<C-[>" . aph/other-window-backward)
