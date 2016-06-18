@@ -622,10 +622,15 @@
   :init
   (which-function-mode 1))
 
+(use-package which-func-header
+  :after which-func
+  :config
+  (add-hook 'prog-mode-hook #'which-func-header-mode)
+  (add-hook 'org-mode-hook  #'which-func-header-mode))
+
 (use-package aph-which-func
   :after which-func
   :config
-  (aph/which-func-use-header-line)
   (add-to-list 'which-func-functions #'aph/which-function-org))
 
 (use-package whitespace
