@@ -5,58 +5,8 @@
 ;;;;============================================================================
 
 ;; Extensions to the `window' module.
+(require 'bfw)
 (require 'hydra)
-
-
-;;; Extensions to `get-window-with-predicate'
-;;;==========================================
-(defun aph/get-nth-window-with-predicate
-    (n predicate &optional minibuf all-frames default)
-  "As `get-window-with-predicate', but return the Nth success.
-
-If N is positive, return the Nth window forward in the cyclic
-ordering of windows that is not dedicated to its current buffer.
-If N is negative, instead return the (- N)th window backwards.
-If N is zero, return selected window if it is not dedicated and
-DEFAULT otherwise (or nil if DEFAULT is not supplied).
-
-The parameters MINIBUF, ALL-FRAMES, and DEFAULT have the same
-meanings as in `get-window-with-predicate'."
-  (cond
-   ((null (get-window-with-predicate predicate minibuf all-frames))
-    default)
-   ((= n 0)
-    (if (funcall predicate (selected-window))
-        (selected-window)
-      default))
-   (t
-    (let*  ((cycler  (cond
-                      ((> n 0) #'next-window)
-                      ((< n 0) #'previous-window)))
-            (cursor  (selected-window))
-            (i        (abs n)))
-      (while (> i 0)
-        (setq cursor (funcall cycler cursor minibuf all-frames))
-        (when (funcall predicate cursor)
-          (setq i (1- i))))
-      cursor))))
-
-(defun aph/get-nth-window-not-dedicated
-    (n &optional minibuf all-frames default)
-  "Return the Nth window forward that is not dedicated.
-
-If N is positive, return the Nth window forward in the cyclic
-ordering of windows that is not dedicated to its current buffer.
-If N is negative, instead return the (- N)th window backwards.
-If N is zero, return selected window if it is not dedicated and
-DEFAULT otherwise (or nil if DEFAULT is not supplied).
-
-The parameters MINIBUF, ALL-FRAMES, and DEFAULT have the same
-meanings as in `get-window-with-predicate'."
-  (aph/get-nth-window-with-predicate
-   n
-   (lambda (win) (not (window-dedicated-p win)))
-   minibuf all-frames default)) 
 
 
 ;;; Extensions to `other-window'
@@ -109,7 +59,7 @@ skipping windows dedicated to their current buffers.  Display in
 the window previously occupied by this buffer the previous buffer
 displayed in that window (using `switch-to-prev-buffer')."
   (interactive "p")
-  (aph/slide-buffer (aph/get-nth-window-not-dedicated count)
+  (aph/slide-buffer (bfw-get-nth-window-not-dedicated count)
                     (selected-window)))
 
 (defun aph/pull-buffer-forward (&optional count)
@@ -133,7 +83,7 @@ t.  This allows the RIDE parameter to be used interactively."
   (interactive "p")
   (if (zerop count) (aph/slide-buffer-forward 1 :ride)
     (aph/slide-buffer (selected-window)
-                      (aph/get-nth-window-not-dedicated count) ride)))
+                      (bfw-get-nth-window-not-dedicated count) ride)))
 
 (defun aph/slide-buffer-backward (&optional count ride)
   "As `aph/slide-buffer-forward' with direction reversed."
@@ -156,7 +106,7 @@ As a special case, if COUNT is zero, treat COUNT as 1 and RIDE as
 t.  This allows the RIDE parameter to be used interactively."
   (interactive "p")
   (if (zerop count) (aph/swap-buffer-forward 1 :ride)
-    (let* ((win (aph/get-nth-window-not-dedicated count)) 
+    (let* ((win (bfw-get-nth-window-not-dedicated count)) 
            (buf (window-buffer win)))
       (aph/swap-buffers (selected-window) win)
       (when ride (select-window win)))))
