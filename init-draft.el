@@ -65,4 +65,59 @@ Bar"
 			   "Foo\n"
 			   "Bar")))))
 
+
+;;;; EIMP
+;;=======
+(defun aph/eimp-fit-image-to-window (&optional arg)
+    "As `eimp-fit-image-to-window', but do not mark buffer as modified.
+Also, ARG is optional, defaulting to nil."
+    (let ((buffer     (current-buffer))
+          (advice-id  (cl-gensym "aph/eimp-fit-image-to-window:")))
+      ;; This is clearly a hack, and I should probably find a better
+      ;; way to do this.
+      (advice-add #'eimp-mogrify-process-sentinel :after
+                  (lambda (proc msg)
+                    (cond
+                     ((not (buffer-live-p buffer))
+                      (advice-remove #'eimp-mogrify-process-sentinel advice-id))
+                     ((eq (process-buffer proc) buffer)
+                      (with-current-buffer buffer
+                        (set-buffer-modified-p nil)))))
+                  `((name . ,advice-id)))
+      ;; This wrapper fixes the situation where the current buffer is
+      ;; not in the selected window, e.g., if we just opened the file
+      ;; using `find-file-other-window'.
+      (if (equal (selected-window) (get-buffer-window buffer))
+          (eimp-fit-image-to-window arg) 
+        (with-selected-window (next-window) ; Super-kludgy!
+          (with-current-buffer buffer
+            (eimp-fit-image-to-window arg))))))
+
+
+;;;; Forms templates
+;;==================
+(defun forms-new-db-from-template (template dir name)
+  "Make a new `forms-mode' database based on TEMPLATE.
+
+Here, TEMPLATE is the path to an existing `forms-mode' control
+file.  A new control file named NAME.ctrl is created in DIR, as
+well as an empty database file NAME.db.  The resulting database
+uses `load-file' to inherit all behavior except the value of
+`forms-file' from TEMPLATE.
+
+After the file is created, open it in `forms-mode'."
+  (interactive "fCreate database from template: 
+DCreate database in directory: 
+sName for new database: ") 
+  (let ((control-file  (expand-file-name (format "%s.ctrl" name) dir)))
+    (with-temp-buffer
+      (insert (concat ";; -*- mode: emacs-lisp -*-\n"
+                      "\n"
+                      (format "(load-file %S)\n" template)
+                      (format "(setq forms-file \"%s.db\")\n" name)
+                      "\n"
+                      (format ";;; %s.ctrl ends here" name)))
+      (write-region nil nil control-file nil nil nil :new))
+    (forms-find-file control-file)))
+
 (provide 'init-draft)
