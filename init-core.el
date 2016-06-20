@@ -256,6 +256,13 @@
              ("<tab>" . company-complete-common-or-cycle))
   (validate-setq company-idle-delay nil))
 
+(use-package deck
+  :bind (:map umbra-mode-map 
+              ("M-["   . deck-surf-swap-buffer-backward)
+              ("M-]"   . deck-surf-swap-buffer-forward)
+              ("C-\\"  . deck-surf-buffer-forward)
+              ("M-\\"  . deck-pull-buffer-backward)))
+
 (use-package doc-view
   :defer t
   :config
@@ -642,16 +649,9 @@
               ("C-S-l" . move-to-window-line-top-bottom)))
 
 (use-package aph-window
-  :bind (:map umbra-mode-map
-              ;; Scrolling and Positioning
-              ("C-M-v" . aph/hydra-scroll-other/body)
-              ;; Sliding windows
+  :bind (:map umbra-mode-map 
               ("<C-[>" . aph/other-window-backward)
-              ("M-["   . aph/pull-buffer-backward)
-              ("M-]"   . aph/slide-buffer-forward)
-              ("C-\\"  . aph/swap-buffer-forward-and-ride)
-              ("M-\\"  . aph/swap-buffer-forward)
-              ;; Other commands
+              ("C-M-v" . aph/hydra-scroll-other/body) 
               ("C-c q" . aph/quit-help-windows)))
 
 (use-package winner
