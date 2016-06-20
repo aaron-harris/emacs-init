@@ -158,7 +158,7 @@ Return the new value of point.
 ;;;***
 
 ;;;### (autoloads nil "aph-smartparens" "aph-smartparens.el" (22371
-;;;;;;  9305 676871 500000))
+;;;;;;  9418 9398 900000))
 ;;; Generated autoloads from aph-smartparens.el
 
 (autoload 'aph/sp-kill-sentence "aph-smartparens" "\
@@ -184,8 +184,8 @@ Outside of strings and comments, this should generally behave as
 
 ;;;***
 
-;;;### (autoloads nil "aph-window" "aph-window.el" (22217 60391 0
-;;;;;;  0))
+;;;### (autoloads nil "aph-window" "aph-window.el" (22376 25102 871907
+;;;;;;  100000))
 ;;; Generated autoloads from aph-window.el
 
 (defvar aph/help-window-names '("*Help*" "*Apropos*" "*Messages*" "*Completions*" "*Command History*" "*Compile-Log*" "*disabled command*") "\
@@ -300,6 +300,99 @@ Note that this is accomplished via advice on the function
 `eval-expression-print-format'.
 
 \(fn &optional ARG)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "deck" "deck.el" (22376 24291 381968 800000))
+;;; Generated autoloads from deck.el
+
+(autoload 'deck-pull-buffer-backward "deck" "\
+Pull buffer from another window.
+
+Display in this buffer the one currently displayed in the window
+COUNT windows forward (in the same ordering as `other-window'),
+skipping windows dedicated to their current buffers.  Display in
+the window previously occupied by this buffer the previous buffer
+displayed in that window (using `switch-to-prev-buffer').
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'deck-pull-buffer-forward "deck" "\
+As `deck-pull-buffer-backward' with direction reversed.
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'deck-push-buffer-forward "deck" "\
+Slide active buffer to another window.
+
+Display this buffer COUNT windows forward (in the same ordering
+as `other-window'), skipping windows dedicated to their current
+buffers, and display in the current window the previous buffer
+displayed here (using `switch-to-prev-buffer').
+
+As a special case, if COUNT is zero, surf forward one window (see
+`deck-surf-buffer-forward').
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'deck-push-buffer-backward "deck" "\
+As `deck-push-buffer-forward' with direction reversed.
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'deck-surf-buffer-forward "deck" "\
+As `deck-push-buffer-forward', but select target window.
+
+As a special case, if COUNT is zero, act as if COUNT were 1 but
+do not select the target window.  This is for convenience in
+interactive usage.
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'deck-surf-buffer-backward "deck" "\
+As `deck-push-buffer-backward', but select target window.
+
+As a special case, if COUNT is zero, act as if COUNT were 1 but
+do not select the target window.  This is for convenience in
+interactive usage.
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'deck-swap-buffer-forward "deck" "\
+Swap active buffer with that in another window.
+
+Display this buffer COUNT forward (in the same ordering as
+`other-window'), skipping windows dedicated to their current
+buffers, and display in this window the buffer that was displayed
+there.
+
+As a special case, if COUNT is zero, act as if COUNT were 1 and
+then select the targeted window (as `deck-surf-swap-buffer-forward').
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'deck-swap-buffer-backward "deck" "\
+As `deck-swap-buffer-forward' with direction reversed.
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'deck-surf-swap-buffer-forward "deck" "\
+As `deck-swap-buffer-forward' but select target window.
+
+As a special case, if COUNT is zero, act as if COUNT were 1 but
+do not select the target window.  This is for convenience in
+interactive usage.
+
+\(fn &optional COUNT)" t nil)
+
+(autoload 'deck-surf-swap-buffer-backward "deck" "\
+As `deck-swap-buffer-backward' but select target window.
+
+As a special case, if COUNT is zero, act as if COUNT were 1 but
+do not select the target window.  This is for convenience in
+interactive usage.
+
+\(fn &optional COUNT)" t nil)
 
 ;;;***
 
@@ -770,18 +863,37 @@ penumbra map instead.
 
 ;;;***
 
+;;;### (autoloads nil "which-func-header" "which-func-header.el"
+;;;;;;  (22372 36444 465014 800000))
+;;; Generated autoloads from which-func-header.el
+
+(autoload 'which-func-header-mode "which-func-header" "\
+Minor mode moving `which-function-mode' info to header.
+
+This minor mode causes information normally shown by
+`which-function-mode' in the mode line to instead be shown in the
+header line.  If `which-function-mode' is disabled, nothing is
+shown in either the header line or the mode line.
+
+Unlike `which-function-mode', this mode is buffer-local.
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
 ;;;;;;  "aph-dash.el" "aph-ert.el" "aph-files.el" "aph-framewin.el"
 ;;;;;;  "aph-haskell.el" "aph-help.el" "aph-latex.el" "aph-lisp-mode.el"
 ;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-silence.el"
-;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "chimera.el"
-;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
-;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "lexy.el" "liberate-key.el"
-;;;;;;  "morgue.el" "org-agenda-skip.el" "org-agenda-sticky.el" "org-barb.el"
-;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
-;;;;;;  "org-multitheme.el" "shr-link-img.el" "vizier-helm.el" "vizier.el")
-;;;;;;  (22371 9315 403037 500000))
+;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "bfw.el"
+;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
+;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
+;;;;;;  "jerk.el" "lexy.el" "liberate-key.el" "morgue.el" "org-agenda-skip.el"
+;;;;;;  "org-agenda-sticky.el" "org-barb.el" "org-compare.el" "org-eww.el"
+;;;;;;  "org-habit-everywhere.el" "org-match.el" "org-multitheme.el"
+;;;;;;  "shr-link-img.el" "vizier-helm.el" "vizier.el") (22376 25109
+;;;;;;  721742 300000))
 
 ;;;***
 
