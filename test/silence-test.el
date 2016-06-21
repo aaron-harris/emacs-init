@@ -72,7 +72,7 @@
 
 (ert-deftest silence-test-nil-message ()
   "Test `silence-advice' on nil and empty messages."
-  (aph/with-advice ((:genname #'message :around #'silence-advice))
+  (vizier-with-advice ((:genname #'message :around #'silence-advice))
     (let ((silence-list      (list #'null))
           (silence-enabled-p t))
       ;; nil and "" are not silenced
