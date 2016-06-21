@@ -388,6 +388,15 @@ penumbra map instead."
 
 ;;;; `bind-keys' Support
 ;;;;====================
+(defun umbra--plist-get-as-list (plist prop)
+  "As `plist-get', but ensure result is a list.
+If `plist-get' would return a list, return that list.  Otherwise,
+return a list containing that value as its sole element."
+  (let ((val (plist-get plist prop)))
+    (if (listp val)
+        val
+      (list val)))) 
+
 (defun umbra--bind-keys-advice (orig &rest args)
   "Advice to add :umbra, :penumbra keywords to `bind-keys'.
 
@@ -412,10 +421,9 @@ is more or less equivalent to
                      baz-mode-map) ...).
 
 Intended as :around advice for `bind-keys'."
-  (require 'aph-plist)                  ; For `aph/plist-get-as-list'
-  (let* ((umbra     (aph/plist-get-as-list args :umbra))
-         (penumbra  (aph/plist-get-as-list args :penumbra))
-         (maps      (aph/plist-get-as-list args :map)))
+  (let* ((umbra     (umbra--plist-get-as-list args :umbra))
+         (penumbra  (umbra--plist-get-as-list args :penumbra))
+         (maps      (umbra--plist-get-as-list args :map)))
     ;; Note that we don't remove our keys.  Instead we're relying on
     ;; undocumented behavior of `bind-keys', specifically that it
     ;; simply ignores keyword arguments it does not recognize (as well
