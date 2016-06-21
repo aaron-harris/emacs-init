@@ -586,6 +586,10 @@
                 ("M-p" . backward-paragraph)
                 ("M-n" . forward-paragraph)))
 
+(use-package tidy
+  :bind (:map umbra-mode-map
+              ("C-c q" . tidy-buffers)))
+
 (use-package tooltip
   :config
   (tooltip-mode -1))
@@ -651,8 +655,7 @@
 (use-package aph-window
   :bind (:map umbra-mode-map 
               ("<C-[>" . aph/other-window-backward)
-              ("C-M-v" . aph/hydra-scroll-other/body) 
-              ("C-c q" . aph/quit-help-windows)))
+              ("C-M-v" . aph/hydra-scroll-other/body)))
 
 (use-package winner
   :config
@@ -1169,7 +1172,8 @@
   ;; Outline settings
   (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
   ;; Miscellaneous settings
-  (add-to-list 'aph/help-window-names "*TeX Help*")
+  (with-eval-after-load 'tidy
+    (add-to-list 'tidy-unwanted-buffer-list "*TeX Help*"))
   (setq-mode-local TeX-mode
     fill-column 75))
 
@@ -1200,8 +1204,9 @@
                  cider-repl-pop-to-buffer-on-connect nil
                  cider-show-error-buffer             'except-in-repl)
   (mode-family-add 'cider-repl-mode 'lisp)
-  (mode-family-add 'cider-repl-mode 'clojure)
-  (add-to-list 'aph/help-window-names "*cider-doc*")
+  (mode-family-add 'cider-repl-mode 'clojure) 
+  (with-eval-after-load 'tidy
+    (add-to-list 'tidy-unwanted-buffer-list "*cider-doc*"))
   ;; Output from the JVM has Windows-style newlines, so we need to
   ;; strip those unless we want to see ^M characters in Cider buffers.
   (require 'cygwinize)

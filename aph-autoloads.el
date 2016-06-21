@@ -184,15 +184,6 @@ Outside of strings and comments, this should generally behave as
 
 ;;;***
 
-;;;### (autoloads nil "aph-window" "aph-window.el" (22376 25102 871907
-;;;;;;  100000))
-;;; Generated autoloads from aph-window.el
-
-(defvar aph/help-window-names '("*Help*" "*Apropos*" "*Messages*" "*Completions*" "*Command History*" "*Compile-Log*" "*disabled command*") "\
-Names of buffers that `aph/quit-help-windows' should quit.")
-
-;;;***
-
 ;;;### (autoloads nil "browse-url-prefix" "browse-url-prefix.el"
 ;;;;;;  (22330 17349 411909 400000))
 ;;; Generated autoloads from browse-url-prefix.el
@@ -798,6 +789,24 @@ When enabled, any file in one of the directories listed in
 
 ;;;***
 
+;;;### (autoloads nil "tidy" "tidy.el" (22377 28853 848553 900000))
+;;; Generated autoloads from tidy.el
+
+(autoload 'tidy-buffers "tidy" "\
+Bury all buffers named in `tidy-unwanted-buffer-list'.
+
+The optional parameters KILL and FRAME are just as in the
+function `quit-windows-on', except FRAME defaults to t (so that
+only windows on the selected frame are considered).
+
+Note that a nil value for FRAME cannot be distinguished from an
+omitted parameter and will be ignored; use some other value if
+you want to quit windows on all frames.
+
+\(fn &optional KILL FRAME)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "umbra" "umbra.el" (22351 14864 363645 0))
 ;;; Generated autoloads from umbra.el
 
@@ -885,15 +894,15 @@ Unlike `which-function-mode', this mode is buffer-local.
 ;;;;;;  "aph-dash.el" "aph-ert.el" "aph-files.el" "aph-framewin.el"
 ;;;;;;  "aph-haskell.el" "aph-help.el" "aph-latex.el" "aph-lisp-mode.el"
 ;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-silence.el"
-;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "bfw.el"
-;;;;;;  "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
+;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "aph-window.el"
+;;;;;;  "bfw.el" "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
 ;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
 ;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
 ;;;;;;  "jerk.el" "lexy.el" "liberate-key.el" "morgue.el" "org-agenda-skip.el"
 ;;;;;;  "org-agenda-sticky.el" "org-barb.el" "org-compare.el" "org-eww.el"
 ;;;;;;  "org-habit-everywhere.el" "org-match.el" "org-multitheme.el"
-;;;;;;  "shr-link-img.el" "vizier-helm.el" "vizier.el") (22376 25109
-;;;;;;  721742 300000))
+;;;;;;  "shr-link-img.el" "vizier-helm.el" "vizier.el") (22377 29177
+;;;;;;  166694 100000))
 
 ;;;***
 
