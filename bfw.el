@@ -28,13 +28,17 @@
 ;; Included functions are as follows.  See individual function
 ;; docstrings for more detailed information.
 
-;;;; Frame functions:
-;;-------------------
+;;;; Frame functions and macros:
+;;------------------------------
 ;;
 ;; `bfw-get-frame-by-name':
 ;;
 ;;     Given a string, return any frame with that string as its name.
 ;;
+;;
+;; `bfw-save-frame-excursion':
+;;
+;;     A version of `save-window-excursion' for frame configurations.
 
 ;;;; Window functions:
 ;;--------------------
@@ -80,6 +84,14 @@
   (seq-find (lambda (frame)
               (equal fname (frame-parameter frame 'name)))
             (frame-list)))
+
+(defmacro bfw-save-frame-excursion (&rest body)
+  "As `save-window-excursion', but for frame configurations."
+  (declare (indent 0) (debug t))
+  (let ((frame-config (make-symbol "frame-config")))
+    `(let ((,frame-config (current-frame-configuration)))
+       (unwind-protect (progn ,@body)
+         (set-frame-configuration ,frame-config)))))
 
 
 ;;;; Windows
