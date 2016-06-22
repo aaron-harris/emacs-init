@@ -1,4 +1,4 @@
-;;; aph-files.el --- Extensions for `help' module    -*- lexical-binding: t; -*-
+;;; aph-help.el --- Extensions for `help' module     -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016  Aaron Harris
 
@@ -24,12 +24,6 @@
 ;; into Emacs.
 
 ;;; Code:
-
-;;; -*- lexical-binding: t -*-
-
-;;;; The Emacs init files of Aaron Harris:
-;;;; HELP EXTENSIONS
-;;;;============================================================================
 
 ;; Extensions for `help' module.
 (require 'help)
