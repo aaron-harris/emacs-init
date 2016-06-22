@@ -1042,9 +1042,9 @@
   :bind (:map umbra-mode-map
               ("C-c c" . org-display-capture-in-popout-frame))
   :config
-  (require 'aph-framewin)
+  (require 'bfw)
   (validate-setq
-   org-display-todo-placement-action '(aph/display-buffer-in-subwindow)))
+   org-display-todo-placement-action '(bfw-display-buffer-in-subwindow)))
 
 (use-package org-eww
   :after org)

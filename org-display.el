@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience, org
 
-;; Dependencies: `aph-framewin' (capture commands only),
+;; Dependencies: `bfw' (capture commands only),
 ;;   `org-capture' (capture commands only), `validate' (optional)
 ;; Advised functions from other packages:
 ;;   org: `org-capture', `org-fast-todo-selection'
@@ -180,10 +180,10 @@ Then remove self from `org-capture-after-finalize-hook'.
 Used as a subroutine to clean up after
 `org-display-capture-in-whole-frame' and
 `org-display-capture-in-popout-frame'."
-  (require 'aph-framewin) ; For `aph/get-frame-by-name'
+  (require 'bfw)
   (when (require 'validate nil :noerror)
     (validate-variable 'org-display-capture-frame-name))
-  (let ((frame  (aph/get-frame-by-name org-display-capture-frame-name)))
+  (let ((frame  (bfw-get-frame-by-name org-display-capture-frame-name)))
     (when frame (delete-frame frame)))
   (remove-hook 'org-capture-after-finalize-hook
 	       #'org-display--delete-capture-frame))
@@ -209,12 +209,12 @@ The capture frame is the frame with name given by
 When capture is completed or aborted, the new frame will be
 deleted."
   (interactive "P") 
-  (require 'aph-framewin)  ; For `aph/display-buffer-in-named-frame'
+  (require 'bfw)
   (when (require 'validate nil :noerror)
     (validate-variable 'org-display-capture-frame-name))
   (if goto (org-capture goto keys)
     (let ((org-display-capture-placement-action
-	   `(aph/display-buffer-in-named-frame
+	   `(bfw-display-buffer-in-named-frame
 	     (named-frame . ,org-display-capture-frame-name))))
       (org-display-capture-closing-frame goto keys))))
 
