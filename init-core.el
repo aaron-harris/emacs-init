@@ -1171,17 +1171,16 @@
                  TeX-parse-self t)
   ;; Outline settings
   (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
+  ;; Use Emacs as viewer
+  (add-to-list 'TeX-view-program-selection
+               '(output-pdf "Emacs"))
+  (add-to-list 'TeX-view-program-list
+               '("Emacs" "emacsclient -n %o"))
   ;; Miscellaneous settings
   (with-eval-after-load 'tidy
     (add-to-list 'tidy-unwanted-buffer-list "*TeX Help*"))
   (setq-mode-local TeX-mode
-    fill-column 75))
-
-(use-package aph-latex
-  :after tex
-  :defer t
-  :config
-  (add-hook 'TeX-mode-hook #'aph/LaTeX-use-emacs-as-viewer))
+    fill-column 75)) 
 
 
 ;;;; Clojure
