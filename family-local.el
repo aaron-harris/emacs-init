@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: extensions
 
-;; Dependencies: `mode-family', `aph-subr'
+;; Dependencies: `mode-family', `alist'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@
 ;;; Code:
 
 (require 'mode-family)
-(require 'aph-subr)			; For `aph/set-assq'
+(require 'alist)
 
 
 ;;;; State Variables
@@ -76,7 +76,7 @@ instead.")
 	    setters))
     `(let ((,plist (assoc-default ',family family-local--alist #'eq)))
        ,@(reverse setters)
-       (aph/set-assq family-local--alist ',family ,plist))))
+       (alist-put family-local--alist ',family ,plist))))
 
 
 ;;;; Implementation
