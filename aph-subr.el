@@ -26,16 +26,4 @@ Interactively, prompt for STRING."
   (interactive "sString to hash: ")
   (insert (md5 string)))
 
-
-;;; Excursions
-;;; ==========
-(defmacro aph/save-frame-excursion (&rest body)
-  "As `save-window-excursion', but for frame configurations."
-  (declare (indent 0) (debug t))
-  (let ((frame-config (make-symbol "frame-config")))
-    `(let ((,frame-config (current-frame-configuration)))
-       (unwind-protect (progn ,@body)
-         (set-frame-configuration ,frame-config)))))
-
-
 (provide 'aph-subr)
