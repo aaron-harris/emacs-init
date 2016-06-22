@@ -26,7 +26,6 @@
 
 ;;; Code:
 
-(require 'window)
 (require 'hydra)
 
 
