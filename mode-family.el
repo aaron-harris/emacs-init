@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: extensions
 
-;; Required features: `dash', `validate' (optional)
+;; Required features: `alist', `dash', `validate' (optional)
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -75,14 +75,12 @@
 
 ;;; Code:
 
-(require 'dash)       ; For `-when-let', `-union', `-reduce-from', `-lambda'
-
-(eval-when-compile (require 'aph-subr))   ; For `aph/set-assq'
-
+(require 'alist)
+(require 'dash)
 
 
-;;; Internal Variables
-;;;===================
+;;;; Internal Variables
+;;=====================
 (defvar mode-family--list nil
   "The list of all mode families.
 
@@ -100,8 +98,8 @@ Do not modify this list directly; use `mode-family-add' and
 `mode-family-remove' instead.")
 
 
-;;; Mode Family Creation
-;;;=====================
+;;;; Mode Family Creation
+;;=======================
 (defgroup mode-family nil
   "Group modes into families."
   :link '(emacs-commentary-link "mode-family")
@@ -160,8 +158,8 @@ hooks."
     (eval `(define-mode-family-hook ,(mode-family--hook family) ,family))))
 
 
-;;; Predicates
-;;;===========
+;;;; Predicates
+;;=============
 (defun mode-family-p (sym)
   "Return non-nil if SYM is the name of a mode family.
 
@@ -182,8 +180,8 @@ See the documentation for `mode-family-create' for more information."
             (mode-family-member-p parent family inherit))))))
 
 
-;;; Membership Lists
-;;;=================
+;;;; Membership Lists
+;;===================
 (defun mode-family-list-families (mode &optional inherit)
   "Return a list of all families to which MODE belongs.
 
@@ -209,8 +207,8 @@ See the documentation for `mode-family-create' for more information."
                 mode-family--alist))
 
 
-;;; Membership Management
-;;;======================
+;;;; Membership Management
+;;========================
 ;;;###autoload
 (defun mode-family-add (mode family)
   "Add MODE to FAMILY.  If FAMILY doesn't exist, create it.
@@ -220,20 +218,20 @@ See the documentation for `mode-family-create' for more information."
   (unless (mode-family-p family) (mode-family-create family))
   (unless (mode-family-member-p mode family)
     (let ((families (assoc-default mode mode-family--alist)))
-      (aph/set-assq mode-family--alist mode (push family families)))))
+      (alist-put mode-family--alist mode (push family families)))))
 
 (defun mode-family-remove (mode family)
   "If MODE is a member of FAMILY, remove it.
 Otherwise, do nothing.
 
 See the documentation for `mode-family-create' for more information."
-  (aph/set-assq mode-family--alist
-                mode
-                (remove family (mode-family-list-families mode))))
+  (alist-put mode-family--alist
+             mode
+             (remove family (mode-family-list-families mode))))
 
 
-;;; Hook Functionality
-;;;===================
+;;;; Hook Functionality
+;;=====================
 (defun mode-family-run-hooks ()
   "Run hooks for all mode families associated with current major mode.
 
@@ -252,8 +250,8 @@ See the documentation for `mode-family-create' for more information."
 (add-hook 'change-major-mode-after-body-hook #'mode-family-run-hooks)
 
 
-;;; Unloading
-;;;==========
+;;;; Unloading
+;;============
 (defun mode-family-unload-function ()
   "Undo changes made to Emacs by mode-family.el.
 

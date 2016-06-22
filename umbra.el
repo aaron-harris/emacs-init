@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience keybinding
 
-;; Dependencies: `aph-symbol', `aph-plist' (only with `bind-key')
+;; Dependencies: `alist', `aph-symbol', `aph-plist' (only with `bind-key')
 ;; Advised functions from other packages:
 ;;   bind-key: `bind-keys'
 
@@ -93,13 +93,13 @@
 
 ;;; Code:
 
-(require 'aph-symbol)
+(require 'alist)
+(require 'aph-symbol) 
 (eval-when-compile (require 'cl-lib))
-(eval-when-compile (require 'aph-subr))
 
 
 ;;;; User Options
-;;;;=============
+;;===============
 (defgroup umbra nil
   "Shadow keybindings without overwriting."
   :prefix "umbra-"
@@ -108,7 +108,7 @@
 
 
 ;;;; Base Keymaps
-;;;;=============
+;;===============
 (defvar umbra-mode-map (make-sparse-keymap)
   "Global keymap for `umbra-mode'.
 
@@ -149,7 +149,7 @@ them to override keys in `helm-map'.")
 
 
 ;;;; Keymap Management
-;;;;==================
+;;====================
 (defvar umbra-map-alist nil
   "Alist containing all augmented (\"umbra\") keymaps.
 
@@ -213,7 +213,7 @@ maintained by the function `umbra--update-major-mode'.")
 
 
 ;;;; Augmented keymaps
-;;;;==================
+;;====================
 (defmacro define-umbra-keymap (name mode &optional penumbra)
   "Define umbra keymap variable with NAME for MODE.
 
@@ -299,7 +299,7 @@ keymaps are named like 'umbra-overriding-mode-map:MODE."
 
 
 ;;;; Mode Definition
-;;;;================ 
+;;================== 
 (defun umbra--set-major-mode-parentage (mode &optional penumbra)
   "Set parentage of umbra keymap for MODE.
 
@@ -387,7 +387,7 @@ penumbra map instead."
 
 
 ;;;; `bind-keys' Support
-;;;;====================
+;;======================
 (defun umbra--plist-get-as-list (plist prop)
   "As `plist-get', but ensure result is a list.
 If `plist-get' would return a list, return that list.  Otherwise,
@@ -440,7 +440,7 @@ Intended as :around advice for `bind-keys'."
 
 
 ;;;; Compatibility Functions
-;;;;========================
+;;==========================
 (defun umbra-default-binding (key)
   "Return the command bound to KEY without `umbra-mode'."
   (let ((umbra-mode                  nil)
@@ -514,7 +514,7 @@ If you intend to bind C-i separately from <tab> in
 
 
 ;;;; Unloading
-;;;;==========
+;;============
 (defun umbra-unload-function ()
   "Undo changes made to Emacs for `umbra-mode'.
 
@@ -527,7 +527,7 @@ Changes reversed are as follows:
   (dolist (elt '(umbra-overriding-map-alist
                  umbra-minor-mode-map-alist
                  umbra-local-map-alist))
-    (aph/assq-delete-in emulation-mode-map-alists elt))
+    (alist-delete emulation-mode-map-alists elt))
   (advice-remove 'bind-keys #'umbra--bind-keys-advice)
   (mapatoms (lambda (sym)
               (dolist (prefix '("umbra-mode-map:"

@@ -33,7 +33,7 @@
 ;;; Code:
 
 (require 'which-func)
-(require 'aph-subr)
+(require 'alist)
 
 (defcustom which-func-header-format
   '(which-function-mode (which-func-header-mode ("" which-func-format)))
@@ -59,8 +59,8 @@ Unlike `which-function-mode', this mode is buffer-local."
   (if (and which-function-mode which-func-header-mode) 
       (let ((construct (assq 'which-func-mode mode-line-misc-info)))
         (when construct
-          (aph/assq-delete-in mode-line-misc-info 'which-func-mode)
-          (aph/assq-delete-in mode-line-misc-info 'which-func-header-mode)
+          (alist-delete mode-line-misc-info 'which-func-mode)
+          (alist-delete mode-line-misc-info 'which-func-header-mode)
           (push `(which-func-header-mode "" ,construct) mode-line-misc-info))
         (setq header-line-format which-func-header-format))
     (kill-local-variable 'header-line-format))
@@ -98,7 +98,7 @@ re-asserts the current value of `which-func-header-mode' in
   ;; Restore changes to `mode-line-misc-info'.
   (let ((construct (nth 2 (assq 'which-func-header-mode mode-line-misc-info))))
     (when construct
-      (aph/assq-delete-in mode-line-misc-info 'which-func-header-mode)
+      (alist-delete mode-line-misc-info 'which-func-header-mode)
       (push construct mode-line-misc-info)))
   ;; Let normal unloading proceed
   nil)
