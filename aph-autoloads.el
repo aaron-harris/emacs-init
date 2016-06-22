@@ -387,8 +387,8 @@ interactive usage.
 
 ;;;***
 
-;;;### (autoloads nil "elfeed-lens" "elfeed-lens.el" (22330 16992
-;;;;;;  645014 100000))
+;;;### (autoloads nil "elfeed-lens" "elfeed-lens.el" (22377 56266
+;;;;;;  511406 200000))
 ;;; Generated autoloads from elfeed-lens.el
 
 (autoload 'elfeed-lens-cycle "elfeed-lens" "\
@@ -457,8 +457,8 @@ to put the number at the end of the line is unavailable.
 
 ;;;***
 
-;;;### (autoloads nil "family-local" "family-local.el" (22340 54590
-;;;;;;  272672 200000))
+;;;### (autoloads nil "family-local" "family-local.el" (22379 3462
+;;;;;;  233788 700000))
 ;;; Generated autoloads from family-local.el
 
 (autoload 'setq-family-local "family-local" "\
@@ -547,6 +547,19 @@ total of this field across all records in the database.
 
 ;;;***
 
+;;;### (autoloads nil "hash" "hash.el" (22379 5037 595963 100000))
+;;; Generated autoloads from hash.el
+
+(autoload 'hash-insert "hash" "\
+Insert the hash of STRING into current buffer.
+Interactively, prompt for STRING.
+
+If HASH is not supplied, it defaults to `hash-default'.
+
+\(fn STRING &optional HASH)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "helm-forms" "helm-forms.el" (22334 17550 859516
 ;;;;;;  200000))
 ;;; Generated autoloads from helm-forms.el
@@ -573,8 +586,8 @@ motion (`next-line') instead of its normal function.
 
 ;;;***
 
-;;;### (autoloads nil "mode-family" "mode-family.el" (22330 16407
-;;;;;;  159146 400000))
+;;;### (autoloads nil "mode-family" "mode-family.el" (22379 3635
+;;;;;;  385785 800000))
 ;;; Generated autoloads from mode-family.el
 
 (autoload 'mode-family-create "mode-family" "\
@@ -661,8 +674,8 @@ If N is negative, goto the (-N)th child from the end (so
 
 ;;;***
 
-;;;### (autoloads nil "org-display" "org-display.el" (22353 51591
-;;;;;;  588280 800000))
+;;;### (autoloads nil "org-display" "org-display.el" (22378 52422
+;;;;;;  441341 200000))
 ;;; Generated autoloads from org-display.el
 
 (autoload 'org-display-capture-in-popout-frame "org-display" "\
@@ -807,7 +820,7 @@ you want to quit windows on all frames.
 
 ;;;***
 
-;;;### (autoloads nil "umbra" "umbra.el" (22351 14864 363645 0))
+;;;### (autoloads nil "umbra" "umbra.el" (22379 3652 249560 800000))
 ;;; Generated autoloads from umbra.el
 
 (autoload 'umbra-keymap "umbra" "\
@@ -873,7 +886,7 @@ penumbra map instead.
 ;;;***
 
 ;;;### (autoloads nil "which-func-header" "which-func-header.el"
-;;;;;;  (22372 36444 465014 800000))
+;;;;;;  (22379 3837 210615 400000))
 ;;; Generated autoloads from which-func-header.el
 
 (autoload 'which-func-header-mode "which-func-header" "\
@@ -890,19 +903,17 @@ Unlike `which-function-mode', this mode is buffer-local.
 
 ;;;***
 
-;;;### (autoloads nil nil ("aph-advice.el" "aph-align.el" "aph-browse-url.el"
-;;;;;;  "aph-dash.el" "aph-ert.el" "aph-files.el" "aph-framewin.el"
-;;;;;;  "aph-haskell.el" "aph-help.el" "aph-latex.el" "aph-lisp-mode.el"
-;;;;;;  "aph-outline.el" "aph-page.el" "aph-plist.el" "aph-silence.el"
-;;;;;;  "aph-subr.el" "aph-symbol.el" "aph-which-func.el" "aph-window.el"
-;;;;;;  "bfw.el" "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
-;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "jerk.el" "lexy.el" "liberate-key.el" "morgue.el" "org-agenda-skip.el"
-;;;;;;  "org-agenda-sticky.el" "org-barb.el" "org-compare.el" "org-eww.el"
-;;;;;;  "org-habit-everywhere.el" "org-match.el" "org-multitheme.el"
-;;;;;;  "shr-link-img.el" "vizier-helm.el" "vizier.el") (22377 29177
-;;;;;;  166694 100000))
+;;;### (autoloads nil nil ("alist.el" "aph-align.el" "aph-ert.el"
+;;;;;;  "aph-files.el" "aph-haskell.el" "aph-help.el" "aph-lisp-mode.el"
+;;;;;;  "aph-outline.el" "aph-page.el" "aph-seq.el" "aph-symbol.el"
+;;;;;;  "aph-which-func.el" "aph-window.el" "bfw.el" "chimera.el"
+;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
+;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
+;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "lexy.el" "liberate-key.el"
+;;;;;;  "morgue.el" "org-agenda-skip.el" "org-agenda-sticky.el" "org-barb.el"
+;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
+;;;;;;  "org-multitheme.el" "shr-link-img.el" "vizier-helm.el" "vizier.el")
+;;;;;;  (22379 5131 38719 500000))
 
 ;;;***
 
