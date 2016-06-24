@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `chimera', `aph-ert'
+;; Dependencies: `chimera', `ert-x', `aph-ert'
 ;; Optional dependencies: `bind-key'
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,8 @@
 ;;; Code:
 
 (require 'chimera)
-(require 'aph-ert)
+(require 'ert-x)
+(require 'aph-ert) 
 
 ;; Test `bind-key' support if possible.
 (require 'bind-key nil :noerror)
@@ -47,7 +48,7 @@ to the key \"a\" in the keymap named `chimera-test-mode-map'.
 The name of this keymap variable is also available as
 `chimera-test-mode-map-name'.
 
-(The testing chimera is not available as a variable, or similar,
+\(The testing chimera is not available as a variable, or similar,
 because we want to make sure this kind of inline use is fully
 supported, e.g. by `bind-key', and the extra level of indirection
 makes that difficult.)
@@ -71,11 +72,11 @@ This macro will do the rest."
            (should (eq 'default (key-binding (kbd "a"))))
            (setq case-fold-search t)
            (should (eq 'chimera (key-binding (kbd "a"))))
-           ;; `personal-keybindings' should not error 
-           (should (aph/ert-protecting-buffer "*Personal Keybindings*"
-                     (and (fboundp 'describe-personal-keybindings)
-                          (describe-personal-keybindings))
-                     :success)))))))
+           ;; `personal-keybindings' should not error
+           (ert-with-buffer-renamed ("*Personal Keybindings*")
+             (and (fboundp 'describe-personal-keybindings)
+                  (describe-personal-keybindings))
+             :success))))))
 
 
 ;;; Tests
@@ -83,9 +84,9 @@ This macro will do the rest."
 (ert-deftest chimera-test-define-key ()
   "Test `chimera' with `define-key'."
   (chimera-test 
-    (define-key chimera-test-mode-map (kbd "a")
-      (chimera "chimera/test"
-        (when case-fold-search 'chimera)))))
+   (define-key chimera-test-mode-map (kbd "a")
+     (chimera "chimera/test"
+       (when case-fold-search 'chimera)))))
 
 (ert-deftest chimera-test-bind-key ()
   "Test `chimera' with `bind-key'."
