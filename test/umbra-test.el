@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `umbra', `dash', `aph-dash', `aph-ert-test'
+;; Dependencies: `umbra', `dash', `symbol', `aph-ert-test'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 ;;; Code:
 
 (require 'umbra)
+(require 'symbol)
 (require 'aph-ert-test)
 
 
@@ -51,7 +52,7 @@ inside BODY, without any additional cleanup required."
   (let ((macro-form     (if (eq parent :minor)
                             `(aph/ert-with-minor-mode ,name)
                           `(aph/ert-with-major-mode ,name ,parent)))
-        (umbra-map      (aph/symbol-concat name "-umbra-map"))
+        (umbra-map      (symbol-concat name "-umbra-map"))
         (umbra-map-var  (make-symbol "umbra-map-var"))
         (other-map-var  (make-symbol "other-map-var"))
         (mode-name      (make-symbol "mode-name")))
@@ -142,18 +143,18 @@ and 'penumbra' is either the keyword :penumbra or nil."
 ;;;=============
 (ert-deftest umbra-test-keymap-creation ()
   "Test `umbra-keymap' and `umbra-keymap-var'."
-  (require 'aph-dash)                   ; For `aph/eq'
   (umbra-test-with-mode--all-params
-   (unless (and penumbra (eq parent :minor))
-     (umbra-with-mode mode parent penumbra
-       (should (aph/eq mode-umbra-map
-                       (umbra-keymap mode penumbra)
-                       (symbol-value (umbra-keymap-var mode penumbra))))
-       (should (equal (umbra-keymap-var mode penumbra)
-                      (umbra-keymap-name mode penumbra)))
-       (define-key mode-umbra-map (kbd "a") #'ignore)
-       (should (eq (lookup-key (umbra-keymap mode penumbra) (kbd "a"))
-                   #'ignore))))))
+    (unless (and penumbra (eq parent :minor))
+      (umbra-with-mode mode parent penumbra
+        (should (eq mode-umbra-map
+                    (umbra-keymap mode penumbra)))
+        (should (eq mode-umbra-map
+                    (symbol-value (umbra-keymap-var mode penumbra))))
+        (should (equal (umbra-keymap-var mode penumbra)
+                       (umbra-keymap-name mode penumbra)))
+        (define-key mode-umbra-map (kbd "a") #'ignore)
+        (should (eq (lookup-key (umbra-keymap mode penumbra) (kbd "a"))
+                    #'ignore))))))
 
 (ert-deftest umbra-test-has-keymap-p ()
   "Test `umbra-has-keymap-p'."
@@ -269,8 +270,8 @@ and 'penumbra' is either the keyword :penumbra or nil."
         (aph/ert-with-minor-mode baz-mode
           (aph/ert-with-minor-mode quux-mode
             (let ((personal-keybindings nil)
-                  (baz-mode-map-var    (aph/symbol-concat baz-mode "-map"))
-                  (quux-mode-map-var   (aph/symbol-concat quux-mode "-map")))
+                  (baz-mode-map-var    (symbol-concat baz-mode "-map"))
+                  (quux-mode-map-var   (symbol-concat quux-mode "-map")))
               (eval `(bind-keys :umbra ,foo-mode
                                 :penumbra ,bar-mode
                                 :map (,baz-mode-map-var ,quux-mode-map-var)

@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience keybinding
 
-;; Dependencies: `alist', `aph-symbol', `aph-plist' (only with `bind-key')
+;; Dependencies: `alist', `symbol', `aph-plist' (only with `bind-key')
 ;; Advised functions from other packages:
 ;;   bind-key: `bind-keys'
 
@@ -94,7 +94,7 @@
 ;;; Code:
 
 (require 'alist)
-(require 'aph-symbol) 
+(require 'symbol)
 (eval-when-compile (require 'cl-lib))
 
 
@@ -249,9 +249,9 @@ instead.
 The returned symbol is the name of the variable that would
 contain the umbra keymap for MODE, if one exists.  See
 `umbra-keymap' for more information."
-  (aph/symbol-concat 'umbra (format "%s-mode-map:%s"
-                                    (if penumbra "-overriding" "")
-                                    mode)))
+  (intern (format "umbra-%s-mode-map:%s"
+                  (if penumbra "-overriding" "")
+                  mode)))
 
 (defun umbra-has-keymap-p (mode &optional penumbra)
   "Return non-nil if MODE has an umbra keymap.

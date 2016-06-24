@@ -6,6 +6,7 @@
 
 ;; Functions implementing general-purpose testing apparatus for use
 ;; with `ert'.
+(require 'symbol)
 (require 'ert)
 
 
@@ -114,12 +115,12 @@ More specifically:
   nonlocal exit from BODY."
   (declare (debug (symbolp form body))
            (indent 2))
-  (let ((hook        (aph/symbol-concat name "-hook"))
+  (let ((hook        (symbol-concat name "-hook"))
         (keymap-var  (make-symbol "keymap-var"))
-        (keymap      (aph/symbol-concat name "-map")))
+        (keymap      (symbol-concat name "-map")))
     `(let* ((,name        (cl-gensym "mode"))
-            (,hook        (aph/symbol-concat ,name "-hook"))
-            (,keymap-var  (aph/symbol-concat ,name "-map")) 
+            (,hook        (symbol-concat ,name "-hook"))
+            (,keymap-var  (symbol-concat ,name "-map")) 
             ,keymap)
        (unwind-protect
            (progn (funcall ,maker ,name)
@@ -127,8 +128,8 @@ More specifically:
                   ,@body)
          (unintern ,hook)
          (unintern ,keymap-var)
-         (unintern (aph/symbol-concat ,name "-syntax-table"))
-         (unintern (aph/symbol-concat ,name "-abbrev-table"))))))
+         (unintern (symbol-concat ,name "-syntax-table"))
+         (unintern (symbol-concat ,name "-abbrev-table"))))))
 
 (defmacro aph/ert-with-major-mode (name parent &rest body)
   "Execute BODY in an environment with a temporarily-defined major mode.
