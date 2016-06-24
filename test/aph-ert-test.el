@@ -6,6 +6,7 @@
 
 ;; Tests for the module `aph-ert'.
 (require 'aph-ert)
+(require 'symbol)
 
 
 ;;; Macro Testing Apparatus Tests
@@ -73,10 +74,10 @@ error using `should'."
          `(,macro mode ,@other-args
                   (should (fboundp mode))
                   (should (eq mode-hook
-                              (aph/symbol-concat mode "-hook")))
+                              (symbol-concat mode "-hook")))
                   (should (boundp mode-hook))
                   (should (eq mode-map
-                              (symbol-value (aph/symbol-concat mode "-map"))))
+                              (symbol-value (symbol-concat mode "-map"))))
                   (should (keymapp mode-map)))))
     (eval test)))
 
@@ -98,7 +99,7 @@ using `should'."
   (let ((args      (cons 'mode other-args))
         (var-forms '(mode
                      mode-hook
-                     (aph/symbol-concat mode "-map"))))
+                     (symbol-concat mode "-map"))))
     (dolist (v var-forms t)
       (should (aph/ert-macro-does-not-leak macro v args)))))
 
