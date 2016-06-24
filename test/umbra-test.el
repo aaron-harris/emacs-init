@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `umbra', `dash', `symbol', `aph-ert-test'
+;; Dependencies: `umbra', `dash', `proctor', `symbol', `aph-ert-test'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 (require 'umbra)
 (require 'symbol)
+(require 'proctor)
 (require 'aph-ert-test)
 
 
@@ -86,7 +87,7 @@ and 'penumbra' is either the keyword :penumbra or nil."
 (ert-deftest umbra-test-with-mode--body ()
   "Test that `umbra-with-mode' evaluates its body."
   (umbra-test-with-mode--all-params
-   (should (aph/ert-macro-executes-body
+   (should (proctor-macro-executes-body
             'umbra-with-mode
             `(mode ,parent ,penumbra)))))
 
@@ -105,7 +106,7 @@ and 'penumbra' is either the keyword :penumbra or nil."
     (should (aph/ert-test-mode-wrapper--cleanup
              'umbra-with-mode
              `(,parent ,penumbra)))
-    (should (aph/ert-macro-does-not-leak
+    (should (proctor-macro-does-not-leak
              'umbra-with-mode
              ''mode-umbra-map
              `(mode ,parent ,penumbra))) 
