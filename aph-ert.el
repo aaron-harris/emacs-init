@@ -10,47 +10,6 @@
 (require 'ert)
 
 
-;;; Macro Testing Apparatus
-;;;========================
-(defun aph/ert-macro-executes-body (macro &optional other-args)
-  "Execute a standard test to check that MACRO executes a body.
-
-Apply MACRO to a body form, prepending any OTHER-ARGS, and check
-both that this body was executed, and that the value returned is
-the return value of its last form.  Return t if both conditions
-hold, and signal an error with `should' otherwise."
-  (let* ((canary  (make-symbol "canary"))
-         (test    `(let (,canary)
-                     (should (= 7 (,macro ,@other-args
-                                          (setq ,canary t)
-                                          (+ 1 6))))
-                     (should ,canary))))
-    (eval test)))
-
-(defun aph/ert-macro-does-not-leak (macro var-form &optional other-args)
-  "Test to ensure that MACRO does not leak binding for VAR-FORM.
-
-Apply MACRO to a body form, prepending any OTHER-ARGS, and check
-that the symbol whose name is given by VAR-FORM inside BODY is
-not defined as either a variable or a function after BODY exits.
-
-Note that it is acceptable for VAR-FORM to name a symbol that is
-either `boundp' or `fboundp', so long as it is not interned."
-  (let* ((var-x  (make-symbol "var-x"))
-         (subtest (lambda (wrap form)
-                    `(let (,var-x)
-                       (,wrap
-                        (,macro ,@other-args
-                                (setq ,var-x ,var-form)
-                                ,form)
-                        (should-not (and (intern-soft ,var-x)
-                                         (or (boundp ,var-x)
-                                             (fboundp ,var-x)))))))))
-    (eval (funcall subtest 'progn         '(ignore)))
-    (eval (funcall subtest 'ignore-errors '(error "Triggered error"))) 
-    t))
-
-
 ;;; Buffer Handling Apparatus
 ;;;==========================
 (defmacro aph/ert-with-buffer (mode text &rest body)
