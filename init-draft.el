@@ -1,11 +1,14 @@
-;;; -*- lexical-binding: t -*-
+;;; init-draft.el --- Draft code for Emacs config    -*- lexical-binding: t; -*-
 
-;;;; The Emacs init file of Aaron Harris.
-;;;; DRAFT AREA
-;;;;============================================================================
+;; Copyright (C) 2016  Aaron Harris
+;; Author: Aaron Harris <meerwolf@gmail.com>
+
+;;; Commentary:
 
 ;; This file is for drafting new portions of the init files. It is not
 ;; automatically loaded on initialization.
+
+;;; Code:
 
 
 ;;;; Populate Region
@@ -121,3 +124,4 @@ sName for new database: ")
     (forms-find-file control-file)))
 
 (provide 'init-draft)
+;; init-draft.el ends here
