@@ -28,6 +28,18 @@
 ;; Included functions are as follows.  See individual function
 ;; docstrings for more detailed information.
 
+;;;; Buffer functions:
+;;--------------------
+;;
+;; `bfw-kill-buffer-if-any':
+;;
+;;     Kill the specified buffer if it exists, but don't signal an
+;;     error if it doesn't.
+;;
+;; `bfw-kill-buffer-nowarn':
+;;
+;;     Kill the specified buffer, bypassing all normal protections.
+
 ;;;; Frame functions and macros:
 ;;------------------------------
 ;;
@@ -75,6 +87,38 @@
 ;;; Code:
 
 (require 'seq)
+
+
+;;;; Buffers
+;;==========
+(defun bfw-kill-buffer-nowarn (&optional buffer-or-name)
+  "Kill buffer specified by BUFFER-OR-NAME, without asking.
+
+As `kill-buffer', but do not ask for confirmation before killing
+a modified buffer.  Also bypass all the functions named in
+`kill-buffer-query-functions'.  (With the default value, this
+will bypass confirmation before killing buffers with running
+processes.)"
+  (let* ((buffer-or-name  (or buffer-or-name (current-buffer)))
+         (buffer          (get-buffer buffer-or-name)))
+    (when (buffer-live-p buffer)
+      (with-current-buffer buffer
+        (restore-buffer-modified-p nil)
+        (let ((kill-buffer-query-functions nil))
+          (kill-buffer buffer))))))
+
+(defun bfw-kill-buffer-if-any (buffer-or-name &optional nowarn)
+  "Kill BUFFER-OR-NAME if it exists.
+
+As `kill-buffer', except no error is signaled if BUFFER-OR-NAME
+is a buffer that has already been killed, or the name of a buffer
+that does not exist.
+
+If the optional parameter NOWARN is non-nil, also bypass all
+confirmations as `bfw-kill-buffer-nowarn'."
+  (when (get-buffer buffer-or-name)
+    (if nowarn (bfw-kill-buffer-nowarn buffer-or-name)
+      (kill-buffer buffer-or-name))))
 
 
 ;;;; Frames
