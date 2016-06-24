@@ -52,35 +52,6 @@ the optional parameter NOCONFIRM is non-nil."
                (y-or-n-p (format "Really delete file %s? " file)))
       (delete-file file))))
 
-(defun aph/kill-buffer-nowarn (&optional buffer-or-name)
-  "Kill buffer specified by BUFFER-OR-NAME, without asking.
-
-As `kill-buffer', but do not ask for confirmation before killing
-a modified buffer.  Also bypass all the functions named in
-`kill-buffer-query-functions'.  (With the default value, this
-will bypass confirmation before killing buffers with running
-processes.)"
-  (setq buffer-or-name (or buffer-or-name (current-buffer)))
-  (let ((buffer (get-buffer buffer-or-name)))
-    (when (buffer-live-p buffer)
-      (with-current-buffer buffer
-        (restore-buffer-modified-p nil)
-        (let ((kill-buffer-query-functions nil))
-          (kill-buffer buffer))))))
-
-(defun aph/kill-buffer-if-any (buffer-or-name &optional nowarn)
-  "Kill BUFFER-OR-NAME if it exists.
-
-As `kill-buffer', except no error is signaled if BUFFER-OR-NAME
-is a buffer that has already been killed, or the name of a buffer
-that does not exist.
-
-If the optional parameter NOWARN is non-nil, also bypass all
-confirmations as `aph/kill-buffer-nowarn'."
-  (when (get-buffer buffer-or-name)
-    (if nowarn (aph/kill-buffer-nowarn buffer-or-name)
-      (kill-buffer buffer-or-name))))
-
 
 ;;;; Extensions to `save-buffers-kill-emacs'
 ;;==========================================
