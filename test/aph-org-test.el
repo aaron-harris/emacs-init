@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `aph-org', `ert'
+;; Dependencies: `aph-org', `proctor'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,14 +22,14 @@
 ;;; Code:
 
 (require 'aph-org)
-(eval-when-compile (require 'aph-ert))
+(require 'proctor)
 
 
 ;;;; Number Twiddling
 ;;===================
 (ert-deftest aph/org-increase-number ()
   "Test `aph/org-increase-number'."
-  (aph/ert-with-buffer 'org-mode "
+  (proctor-with-buffer 'org-mode "
 | A  | B   |
 |----+-----|
 |  1 | foo |
