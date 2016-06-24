@@ -260,7 +260,7 @@
   :bind (:map umbra-mode-map 
               ("M-["   . deck-surf-swap-buffer-backward)
               ("M-]"   . deck-surf-swap-buffer-forward)
-              ("C-\\"  . deck-surf-buffer-forward)
+              ("C-\\"  . deck-push-buffer-forward)
               ("M-\\"  . deck-pull-buffer-backward)))
 
 (use-package doc-view
