@@ -21,9 +21,11 @@
 
 ;;; Code:
 
+(require 'proctor)
+
 
-;;; Macro Testing
-;;;==============
+;;;; Macro Testing
+;;================
 (ert-deftest proctor-test-macro-executes-body ()
   "Test `proctor-macro-executes-body'." 
   (should (proctor-macro-executes-body 'with-temp-buffer))
@@ -35,6 +37,18 @@
   (should (proctor-macro-does-not-leak 'let 'var-x '((var-x))))
   (should-error (proctor-macro-does-not-leak-p
                  'let ''emacs-version '((var-x)))))
+
+
+;;;; Buffer Handling
+;;==================
+(ert-deftest proctor-test-with-buffer ()
+  "Test `proctor-with-buffer'."
+  (should (proctor-macro-executes-body 'proctor-with-buffer
+                                       '('text-mode "Foo")))
+  (dolist (text '("Foo" "\nFoo"))
+    (proctor-with-buffer 'text-mode text
+      (should (eq major-mode 'text-mode))
+      (should (looking-at-p "Foo")))))
 
 (provide 'proctor-test)
 ;;; proctor-test.el ends here

@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `aph-smartparens', `aph-ert'
+;; Dependencies: `aph-smartparens', `proctor'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 ;;; Code:
 
 (require 'aph-smartparens)
-(require 'aph-ert)
+(require 'proctor)
 
 (defun aph/sp-test-kill-sentence-1 (lines words chars arg start desired)
   "Subroutine for `aph/sp-test-kill-sentence'.
@@ -40,7 +40,7 @@ ARG; and finally check that we're `looking-at-p' DESIRED."
 
 (ert-deftest aph/sp-test-kill-sentence ()
   "Test `aph/sp-kill-sentence'."
-  (aph/ert-with-buffer 'emacs-lisp-mode "
+  (proctor-with-buffer 'emacs-lisp-mode "
 \(defun foo (arglist)
   \"This is a docstring.\"
   (do-stuff-here)
@@ -58,7 +58,7 @@ ARG; and finally check that we're `looking-at-p' DESIRED."
     (aph/sp-test-kill-sentence-1 1 1 2 1
       "foo\" \"bar\")" 
       "\" \"bar\")"))
-  (aph/ert-with-buffer 'text-mode "
+  (proctor-with-buffer 'text-mode "
 Sentence one.  Sentence two."
     (aph/sp-kill-sentence)
     (should (looking-at-p "  Sentence two."))))

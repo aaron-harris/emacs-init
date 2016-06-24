@@ -6,7 +6,7 @@
 
 ;; Tests for the module `aph-which-func'.
 (require 'aph-which-func)
-(require 'aph-ert)
+(require 'proctor)
 
 
 ;;; Org Mode Support Tests
@@ -20,7 +20,7 @@ and that `aph/which-function-org' returns EXPECTED."
 
 (ert-deftest aph/which-function-test-org ()
   "Test `aph/which-function-org'."
-  (aph/ert-with-buffer 'org-mode "
+  (proctor-with-buffer 'org-mode "
 Preface
 * Heading 1
 Text under Heading 1"

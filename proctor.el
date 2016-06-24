@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: tools, lisp
 
-;; Dependencies: `ert'
+;; Dependencies: `ert-x'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,7 +27,8 @@
 
 ;;; Code:
 
-(require 'ert)
+(require 'ert-x)
+(eval-when-compile (require 'subr-x))
 
 
 ;;;; Macro Testing
@@ -69,6 +70,36 @@ either `boundp' or `fboundp', so long as it is not interned."
     (eval (funcall subtest 'progn         '(ignore)))
     (eval (funcall subtest 'ignore-errors '(error "Triggered error"))) 
     t))
+
+
+;;;; Buffer Handling
+;;==================
+(defmacro proctor-with-buffer (mode text &rest body)
+  "Execute BODY in temp buffer in MODE that contains TEXT.
+
+Create a temporary buffer, insert TEXT, and enable
+MODE (typically a major mode).  Move point to the beginning of
+this buffer and execute BODY.
+
+The buffer is created with `ert-with-test-buffer', so it will
+persist in the event of an error in BODY.
+
+For convenience, if TEXT begins with a newline, that newline is
+not included in the buffer text.  This allows for the following
+sort of layout, which avoids both problematic indentation and the
+need to skip over the leading newline.
+
+  (proctor-with-buffer text-mode \"
+Buffer line 1
+Buffer line 2\"
+    (should (looking-at-p \"Buffer line 1\")))"
+  (declare (indent 2)
+           (debug t))
+  `(ert-with-test-buffer ()
+     (insert (string-remove-prefix "\n" ,text))
+     (funcall ,mode)
+     (goto-char (point-min))
+     ,@body))
 
 (provide 'proctor)
 ;;; proctor.el ends here

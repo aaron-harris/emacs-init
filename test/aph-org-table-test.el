@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `aph-org-table', `ert'
+;; Dependencies: `aph-org-table', `proctor'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,14 +22,14 @@
 ;;; Code:
 
 (require 'aph-org-table)
-(eval-when-compile (require 'aph-ert))
+(require 'proctor)
 
 
 ;;;; Subroutines
 ;;==============
 (ert-deftest aph/org-table-test-end-of-this-field ()
   "Test `aph/org-table-end-of-this-field'."
-  (aph/ert-with-buffer 'org-mode "
+  (proctor-with-buffer 'org-mode "
 | A | B   |
 |---+-----|
 | 1 | foo |"
@@ -45,7 +45,7 @@
 ;;====================
 (ert-deftest aph/org-table-test-clear-row-forward ()
   "Test `aph/org-table-clear-row-forward'."
-  (aph/ert-with-buffer 'org-mode "
+  (proctor-with-buffer 'org-mode "
 | A | B     | C     |
 |---+-------+-------|
 | 1 | foo   | bar   |

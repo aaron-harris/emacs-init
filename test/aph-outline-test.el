@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `aph-outline', `aph-ert'
+;; Dependencies: `aph-outline'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,14 +22,14 @@
 ;;; Code:
 
 (require 'aph-outline)
-(require 'aph-ert)
+(require 'proctor)
 
 
 ;;;; State Wrappers
 ;;=================
 (ert-deftest aph/outline-test-before-first-heading ()
   "Test `aph/outline-before-first-heading'."
-  (aph/ert-with-buffer 'outline-mode "
+  (proctor-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 More text" 
@@ -44,7 +44,7 @@ More text"
 
 (ert-deftest aph/outline-test-level ()
   "Test `aph/outline-level'."
-  (aph/ert-with-buffer 'outline-mode "
+  (proctor-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 Text in H1"
@@ -62,7 +62,7 @@ Text in H1"
 (ert-deftest aph/outline-*-heading ()
   "Test `aph/outline-next-heading', `aph/outline-previous-heading'."
   (dolist (invis '(nil t))
-    (aph/ert-with-buffer 'outline-mode "
+    (proctor-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a
@@ -87,7 +87,7 @@ Preamble
   "Test `aph/outline--get-*-sibling' and related commands.
 The specific commands tested are `aph/outline-get-first-sibling'
 and `aph/outline-get-final-sibling'."
-  (aph/ert-with-buffer 'outline-mode "
+  (proctor-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a
@@ -138,7 +138,7 @@ Preamble
 (ert-deftest aph/outline-test-top-heading ()
   "Test `aph/outline-top-heading'."
   (dolist (invis '(nil t))
-    (aph/ert-with-buffer 'outline-mode "
+    (proctor-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a"
@@ -156,7 +156,7 @@ Preamble
 
 (ert-deftest aph/outline-test-get-first-child ()
   "Test `aph/outline-get-first-child'."
-  (aph/ert-with-buffer 'outline-mode "
+  (proctor-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a
@@ -173,7 +173,7 @@ Preamble
 
 (ert-deftest aph/outline-test-down-heading ()
   "Test `aph/outline-down-heading'."
-  (aph/ert-with-buffer 'outline-mode "
+  (proctor-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a
@@ -190,7 +190,7 @@ Preamble
 
 (ert-deftest aph/outline-test-down-heading-from-end ()
   "Test `aph/outline-down-heading-from-end'."
-  (aph/ert-with-buffer 'outline-mode "
+  (proctor-with-buffer 'outline-mode "
 Preamble
 * Heading 1
 ** Subheading 1a

@@ -51,7 +51,7 @@ the line be completely empty."
 
 (ert-deftest draft-test-populate-lines-in-region ()
   "Test functionality of `populate-lines-in-region'."
-  (aph/ert-with-buffer 'fundamental-mode "
+  (proctor-with-buffer 'fundamental-mode "
 
 Foo
 \t
