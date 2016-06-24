@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: tools, lisp
 
-;; Dependencies: `ert-x'
+;; Dependencies: `ert-x', `alist', `symbol'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,6 +28,10 @@
 ;;; Code:
 
 (require 'ert-x)
+
+(require 'alist)
+(require 'symbol)
+
 (eval-when-compile (require 'subr-x))
 
 
@@ -100,6 +104,154 @@ Buffer line 2\"
      (funcall ,mode)
      (goto-char (point-min))
      ,@body))
+
+
+;;;; Temporary Modes
+;;==================
+(defmacro proctor--with-temp-mode (name maker &rest body)
+  "Subroutine used to generate temporary modes for testing.
+
+More specifically:
+
+- Use `cl-gensym' to construct a name guaranteed not to already be in
+  use, and call MAKER (a function) with that name as an argument.
+  MAKER should create a mode (either major or minor) in some way.
+
+- Execute BODY, with the name of the new mode bound to NAME (a
+  symbol).  Also bind the hook variable associated with the mode to
+  the symbol NAME-hook, and the keymap to NAME-map.
+
+- Make sure the mode created does not persist outside this form,
+  using `unwind-protect' to ensure it is deleted in the event of
+  an error or nonlocal exit from BODY."
+  (declare (debug (symbolp form body))
+           (indent 2))
+  (let ((hook        (symbol-concat name "-hook"))
+        (keymap-var  (make-symbol "keymap-var"))
+        (keymap      (symbol-concat name "-map")))
+    `(let* ((,name        (cl-gensym "mode"))
+            (,hook        (symbol-concat ,name "-hook"))
+            (,keymap-var  (symbol-concat ,name "-map")) 
+            ,keymap)
+       (unwind-protect
+           (progn (funcall ,maker ,name)
+                  (setq ,keymap (symbol-value ,keymap-var))
+                  ,@body)
+         (unintern ,hook)
+         (unintern ,keymap-var)
+         (unintern (symbol-concat ,name "-syntax-table"))
+         (unintern (symbol-concat ,name "-abbrev-table"))))))
+
+(defun proctor-test-mode-wrapper-bindings (macro &optional other-args)
+  "Test that MACRO binds variables per `proctor--with-temp-mode'.
+
+Here MACRO should be a symbol naming a macro with the same
+general contract as `proctor--with-temp-mode'.  That is:
+
+- MACRO should have a signature like
+  (MACRO NAME [OTHER-ARGS ...] &rest BODY).
+
+- Inside BODY, the variables NAME, NAME-hook, and NAME-map should be
+  respectively bound to a mode of some kind, that mode's hook
+  variable, and the mode's keymap.
+
+- The above bindings should not persist outside of BODY.
+
+Run a test confirming that the bindings are all appropriately
+made inside BODY.  If they are, return t.  Otherwise, signal an
+error using `should'."
+  (let ((test
+         `(,macro mode ,@other-args
+                  (should (fboundp mode))
+                  (should (eq mode-hook
+                              (symbol-concat mode "-hook")))
+                  (should (boundp mode-hook))
+                  (should (eq mode-map
+                              (symbol-value (symbol-concat mode "-map"))))
+                  (should (keymapp mode-map)))))
+    (eval test)))
+
+(defun proctor-test-mode-wrapper-cleanup (macro &optional other-args)
+  "Test that MACRO cleans up after itself.
+
+Here MACRO should be a symbol naming a macro with the same
+general contract as `proctor--with-temp-mode'.  That is:
+
+ - MACRO should have a signature like
+  (MACRO NAME [OTHER-ARGS ...] &rest BODY).
+
+- Inside BODY, the variables NAME, NAME-hook, and NAME-map should be
+  respectively bound to a mode of some kind, that mode's hook
+  variable, and the mode's keymap.
+
+- The above bindings should not persist outside of BODY.
+
+Run a test confirming that the bindings do not persist after BODY
+exits.  If they do not, return t.  Otherwise, signal an error
+using `should'."
+  (let ((args      (cons 'mode other-args))
+        (var-forms '(mode
+                     mode-hook
+                     (symbol-concat mode "-map"))))
+    (dolist (v var-forms t)
+      (should (proctor-macro-does-not-leak macro v args)))))
+
+(defmacro proctor-with-major-mode (name parent &rest body)
+  "Execute BODY in an environment with a temporarily-defined major mode.
+
+More specifically:
+
+- Use `cl-gensym' to construct a name guaranteed not to already be in
+  use, and create a major mode (using `define-derived-mode') with this
+  name.  Evaluate PARENT to get the name of the parent mode.
+
+- Execute BODY, with the name of the new mode bound to NAME (a
+  symbol).  Also bind the hook variable associated with the mode to
+  the symbol NAME-hook, and the keymap to NAME-map.
+
+- Make sure the mode created does not persist outside this form,
+  using `unwind-protect' to ensure it is deleted in the event of
+  an error or nonlocal exit from BODY.
+
+Note that the major mode constructed in this block doesn't actually do
+anything (i.e., its body is empty)."
+  (declare (debug (symbolp form body))
+           (indent 2))
+  `(proctor--with-temp-mode ,name
+       (lambda (child)
+         (eval `(define-derived-mode ,child ,,parent "Lighter")))
+     ,@body))
+
+(defmacro proctor-with-minor-mode (name &rest body)
+  "Execute BODY in an environment with a temporarily-defined minor mode.
+
+More specifically:
+
+- Use `cl-gensym' to construct a name guaranteed not to already be in
+  use, and create a minor mode (using `define-minor-mode') with this
+  name.
+
+- Execute BODY, with the name of the new mode bound to NAME (a
+  symbol).  Also bind the hook variable associated with the mode to
+  the symbol NAME-hook, and the keymap to NAME-map.
+
+- Make sure the mode created does not persist outside this form, using
+  `unwind-protect' to ensure it is deleted in the event of an error or
+  nonlocal exit from BODY.
+
+Note that the minor mode constructed in this block doesn't actually do
+anything (i.e., its body is empty)."
+  (declare (debug (symbolp body))
+           (indent 1))
+  (let ((mode-name  (make-symbol "mode-name")))
+    `(let (,mode-name)
+       (proctor--with-temp-mode ,name
+           (lambda (mode)
+             (eval `(define-minor-mode ,mode "Doc"
+                      :keymap (make-sparse-keymap))))
+         (unwind-protect (progn (setq ,mode-name ,name)
+                                ,@body)
+           (alist-delete minor-mode-map-alist ,mode-name))))))
 
 (provide 'proctor)
 ;;; proctor.el ends here

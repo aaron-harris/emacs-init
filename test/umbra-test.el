@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `umbra', `dash', `proctor', `symbol', `aph-ert-test'
+;; Dependencies: `umbra', `dash', `proctor', `symbol'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 (require 'umbra)
 (require 'symbol)
 (require 'proctor)
-(require 'aph-ert-test)
 
 
 ;;; Testing Apparatus
@@ -32,27 +31,27 @@
 (defmacro umbra-with-mode (name parent penumbra &rest body)
   "Execute BODY with temporarily-defined umbra mode.
 
-As `aph/ert-with-major-mode', but in addition an umbra keymap is
+As `proctor-with-major-mode', but in addition an umbra keymap is
 created with `umbra-keymap', and inside BODY the variable
 NAME-umbra-map is bound to the mode's umbra keymap.
 
 As a special case, if PARENT is the keyword :minor, then the mode
-instantiated is a minor mode; see `aph/ert-with-minor-mode'.
+instantiated is a minor mode; see `proctor-with-minor-mode'.
 
 If PENUMBRA is non-nil, the penumbra keymap used instead (see
 `umbra-keymap' for more details on this); otherwise, it is the
-ordinary, non-overriding keymap. The same name (NAME-umbra-map)
+ordinary, non-overriding keymap.  The same name (NAME-umbra-map)
 is used, even for the penumbra keymap.
 
 Note that, even though only one keymap (either the umbra or the
 penumbra) is bound, both keymap variables are uninterned during
 cleanup.  This means that you can safely create the other keymap
 inside BODY, without any additional cleanup required."
-  (declare (debug aph/ert-with-major-mode)
+  (declare (debug proctor-with-major-mode)
            (indent 3))
   (let ((macro-form     (if (eq parent :minor)
-                            `(aph/ert-with-minor-mode ,name)
-                          `(aph/ert-with-major-mode ,name ,parent)))
+                            `(proctor-with-minor-mode ,name)
+                          `(proctor-with-major-mode ,name ,parent)))
         (umbra-map      (symbol-concat name "-umbra-map"))
         (umbra-map-var  (make-symbol "umbra-map-var"))
         (other-map-var  (make-symbol "other-map-var"))
@@ -94,7 +93,7 @@ and 'penumbra' is either the keyword :penumbra or nil."
 (ert-deftest umbra-test-with-mode--bindings ()
   "Test bindings of `umbra-with-mode'."
   (umbra-test-with-mode--all-params
-    (should (aph/ert-test-mode-wrapper--bindings
+    (should (proctor-test-mode-wrapper-bindings
              'umbra-with-mode
              `(,parent ,penumbra)))
     (umbra-with-mode mode parent penumbra
@@ -103,7 +102,7 @@ and 'penumbra' is either the keyword :penumbra or nil."
 (ert-deftest umbra-test-with-mode--cleanup ()
   "Test cleanup for `umbra-with-mode'."
   (umbra-test-with-mode--all-params
-    (should (aph/ert-test-mode-wrapper--cleanup
+    (should (proctor-test-mode-wrapper-cleanup
              'umbra-with-mode
              `(,parent ,penumbra)))
     (should (proctor-macro-does-not-leak
@@ -225,7 +224,7 @@ and 'penumbra' is either the keyword :penumbra or nil."
   (umbra-with-mode mode1 'fundamental-mode nil
     (let ((umbra-mode t)
           mode2-name)
-      (aph/ert-with-major-mode mode2 mode1
+      (proctor-with-major-mode mode2 mode1
         (setq mode2-name mode2)
         (unwind-protect
             (with-temp-buffer
@@ -257,7 +256,7 @@ and 'penumbra' is either the keyword :penumbra or nil."
         (umbra-with-mode foo-mode param penumbra
           (funcall test foo-mode penumbra)))
       ;; With mode not previously augmented
-      (aph/ert-with-minor-mode foo-mode
+      (proctor-with-minor-mode foo-mode
         (setq var (umbra-keymap-name foo-mode penumbra))
         (unwind-protect (funcall test foo-mode penumbra)
           (unintern var)
@@ -268,8 +267,8 @@ and 'penumbra' is either the keyword :penumbra or nil."
   "Test `bind-keys' keywords :umbra and :penumbra with multiple maps."
     (umbra-with-mode foo-mode :minor nil
       (umbra-with-mode bar-mode :minor :penumbra
-        (aph/ert-with-minor-mode baz-mode
-          (aph/ert-with-minor-mode quux-mode
+        (proctor-with-minor-mode baz-mode
+          (proctor-with-minor-mode quux-mode
             (let ((personal-keybindings nil)
                   (baz-mode-map-var    (symbol-concat baz-mode "-map"))
                   (quux-mode-map-var   (symbol-concat quux-mode "-map")))
