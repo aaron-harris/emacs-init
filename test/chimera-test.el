@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `chimera', `ert-x', `aph-ert'
+;; Dependencies: `chimera', `ert-x', `proctor'
 ;; Optional dependencies: `bind-key'
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 
 (require 'chimera)
 (require 'ert-x)
-(require 'aph-ert) 
+(require 'proctor)
 
 ;; Test `bind-key' support if possible.
 (require 'bind-key nil :noerror)
@@ -56,8 +56,8 @@ makes that difficult.)
 This macro will do the rest."
   (declare (indent 0)
            (debug body))
-  `(aph/ert-with-major-mode ambient-mode 'fundamental-mode
-     (aph/ert-with-minor-mode chimera-test-mode
+  `(proctor-with-major-mode ambient-mode 'fundamental-mode
+     (proctor-with-minor-mode chimera-test-mode
        (let ((chimera-test-mode-map-name
               (intern (concat (symbol-name chimera-test-mode) "-map")))
              case-fold-search
@@ -83,7 +83,7 @@ This macro will do the rest."
 ;;;======
 (ert-deftest chimera-test-define-key ()
   "Test `chimera' with `define-key'."
-  (chimera-test 
+  (chimera-test
    (define-key chimera-test-mode-map (kbd "a")
      (chimera "chimera/test"
        (when case-fold-search 'chimera)))))
@@ -91,7 +91,7 @@ This macro will do the rest."
 (ert-deftest chimera-test-bind-key ()
   "Test `chimera' with `bind-key'."
   (skip-unless (featurep 'bind-key))
-  (chimera-test 
+  (chimera-test
     (eval `(bind-key "a"
                      (chimera "chimera/test"
                        (when case-fold-search 'chimera))
@@ -100,7 +100,7 @@ This macro will do the rest."
 (ert-deftest chimera-test-bind-keys ()
   "Test `chimera' with `bind-keys'."
   (skip-unless (featurep 'bind-key))
-  (chimera-test 
+  (chimera-test
     (eval `(bind-keys :map ,chimera-test-mode-map-name
                       ("a" . (chimera "chimera/test"
                                (when case-fold-search 'chimera)))))))

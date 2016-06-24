@@ -27,7 +27,7 @@
 ;;;; Macro Testing
 ;;================
 (ert-deftest proctor-test-macro-executes-body ()
-  "Test `proctor-macro-executes-body'." 
+  "Test `proctor-macro-executes-body'."
   (should (proctor-macro-executes-body 'with-temp-buffer))
   (should (proctor-macro-executes-body 'let '((canary))))
   (should-error (proctor-macro-executes-body 'ignore)))
@@ -49,6 +49,38 @@
     (proctor-with-buffer 'text-mode text
       (should (eq major-mode 'text-mode))
       (should (looking-at-p "Foo")))))
+
+
+;;;; Temporary Modes
+;;==================
+(ert-deftest proctor-test-with-major-mode ()
+  "Test `proctor-with-major-mode'."
+  (should (proctor-macro-executes-body
+           'proctor-with-major-mode '(mode 'fundamental-mode)))
+  (should (proctor-test-mode-wrapper-bindings
+           'proctor-with-major-mode '('fundamental-mode)))
+  (should (proctor-test-mode-wrapper-cleanup
+           'proctor-with-major-mode '('fundamental-mode)))
+  ;; Test that modes can be nested
+  (proctor-with-major-mode mode1 'text-mode
+    (proctor-with-major-mode mode2 mode1
+      (should (eq 'text-mode (get mode1 'derived-mode-parent)))
+      (should (eq mode1      (get mode2 'derived-mode-parent))))))
+
+(ert-deftest proctor-test-with-minor-mode ()
+  "Test `proctor-with-minor-mode'."
+  (should (proctor-macro-executes-body 'proctor-with-minor-mode '(mode)))
+  (should (proctor-test-mode-wrapper-bindings 'proctor-with-minor-mode))
+  (should (proctor-test-mode-wrapper-cleanup  'proctor-with-minor-mode))
+  ;; Check for presence of minor mode control variable:
+  (proctor-with-minor-mode mode
+    (should (boundp mode)))
+  ;; Make sure `minor-mode-map-alist' gets cleaned up, too:
+  (let (mode-x)
+    (proctor-with-minor-mode mode
+      (setq mode-x mode)
+      (should (assoc mode-x minor-mode-map-alist)))
+    (should-not (assoc mode-x minor-mode-map-alist))))
 
 (provide 'proctor-test)
 ;;; proctor-test.el ends here

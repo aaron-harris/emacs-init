@@ -47,7 +47,7 @@ the line be completely empty."
 (bind-keys :map umbra-mode-map
 	   ("s-<apps> p" . populate-lines-in-region))
 
-(require 'aph-ert)
+(require 'proctor)
 
 (ert-deftest draft-test-populate-lines-in-region ()
   "Test functionality of `populate-lines-in-region'."

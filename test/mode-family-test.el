@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Required features: `mode-family', `aph-ert'
+;; Required features: `mode-family', `proctor'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 ;;; Code:
 
 (require 'mode-family)
-(require 'aph-ert)                      ; For `aph/ert-with-major-mode'
+(require 'proctor)
 
 (eval-when-compile (require 'dash))     ; For `->>', `-lambda'
 
@@ -73,7 +73,7 @@ Also test adding hooks out-of-order."
   (mode-family-test
    (add-hook 'foo-family-hook #'ignore)
    (mode-family-create 'foo)
-   (aph/ert-with-major-mode mode 'text-mode
+   (proctor-with-major-mode mode 'text-mode
      (mode-family-add mode 'foo)
      (mode-family-create 'foo)
      (should (mode-family-p 'foo))
@@ -88,7 +88,7 @@ This test confirms basic functionality of the functions
 `mode-family-member-p'." 
   (mode-family-test
    (mode-family-create 'foo)
-    (aph/ert-with-major-mode mode 'text-mode
+    (proctor-with-major-mode mode 'text-mode
       (mode-family-add mode 'foo)
       (should (mode-family-member-p mode 'foo))
       (mode-family-remove mode 'foo)
@@ -97,7 +97,7 @@ This test confirms basic functionality of the functions
 (ert-deftest mode-family-test-add--new ()
   "Test `mode-family-add' when family doesn't yet exist."
   (mode-family-test
-   (aph/ert-with-major-mode mode 'text-mode
+   (proctor-with-major-mode mode 'text-mode
      (mode-family-add mode 'foo)
      (should (mode-family-p 'foo))
      (should (mode-family-member-p mode 'foo)))))
@@ -106,8 +106,8 @@ This test confirms basic functionality of the functions
   "Test `mode-family-member-p' on inherited mode families."
   (mode-family-test
    (mode-family-create 'foo)
-   (aph/ert-with-major-mode mode1 'text-mode
-     (aph/ert-with-major-mode mode2 mode1
+   (proctor-with-major-mode mode1 'text-mode
+     (proctor-with-major-mode mode2 mode1
        (mode-family-add mode1 'foo)
        (should (mode-family-member-p mode1 'foo))
        (should-not (mode-family-member-p mode2 'foo))
@@ -120,7 +120,7 @@ These functions are `mode-family-list-families' and
 `mode-family-list-members'."
   (mode-family-test
    (mode-family-create 'foo)
-    (aph/ert-with-major-mode mode 'text-mode
+    (proctor-with-major-mode mode 'text-mode
       (mode-family-add mode 'foo)
       (should (memq mode (mode-family-list-members 'foo)))
       (should (memq 'foo (mode-family-list-families mode)))
@@ -132,7 +132,7 @@ These functions are `mode-family-list-families' and
   "Test that a mode runs its families' hooks."
   (mode-family-test
    (let (log)
-     (aph/ert-with-major-mode mode 'fundamental-mode
+     (proctor-with-major-mode mode 'fundamental-mode
        (mode-family-create 'foo)
        (mode-family-create 'bar)
        (add-hook 'foo-family-hook (lambda () (push :foo log)))
@@ -148,7 +148,7 @@ These functions are `mode-family-list-families' and
   "Test that a mode doesn't run family hooks after removal."
   (mode-family-test
    (let (log)
-     (aph/ert-with-major-mode mode 'fundamental-mode
+     (proctor-with-major-mode mode 'fundamental-mode
        (mode-family-create 'foo)
        (add-hook 'foo-family-hook (lambda () (push :hook log)))
        (mode-family-add mode 'foo)
@@ -161,7 +161,7 @@ These functions are `mode-family-list-families' and
   "Test that removing a family doesn't remove all family hooks."
   (mode-family-test 
    (let (log)
-     (aph/ert-with-major-mode mode 'fundamental-mode
+     (proctor-with-major-mode mode 'fundamental-mode
        (mode-family-create 'foo)
        (mode-family-create 'bar)
        (add-hook 'foo-family-hook (lambda () (push :foo log)))
@@ -179,9 +179,9 @@ These functions are `mode-family-list-families' and
   (mode-family-test 
    (mode-family-create 'foo) 
    (let (log)
-     (aph/ert-with-major-mode     mode1  'fundamental-mode
-       (aph/ert-with-major-mode   mode2  mode1
-         (aph/ert-with-major-mode mode3  mode2
+     (proctor-with-major-mode     mode1  'fundamental-mode
+       (proctor-with-major-mode   mode2  mode1
+         (proctor-with-major-mode mode3  mode2
            (add-hook 'foo-family-hook (lambda () (push :hook log)))
            (mode-family-add mode1 'foo)
            (mode-family-add mode2 'foo)

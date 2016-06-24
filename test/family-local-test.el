@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `family-local', `aph-ert', `mode-family-test'
+;; Dependencies: `family-local', `proctor', `mode-family-test'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 ;;; Code:
 
 (require 'family-local)
-(require 'aph-ert)			; For `aph/ert-with-major-mode'
-(require 'mode-family-test)		; For `mode-family-test' macro
+(require 'proctor)
+(require 'mode-family-test)
 
 
 ;;;; Testing Apparatus
@@ -48,7 +48,7 @@
      (mode-family-create 'foo)
      (setq-family-local foo
        case-fold-search test-value)
-     (aph/ert-with-major-mode mode 'fundamental-mode
+     (proctor-with-major-mode mode 'fundamental-mode
        (mode-family-add mode 'foo)
        (with-temp-buffer
 	 (funcall mode)
