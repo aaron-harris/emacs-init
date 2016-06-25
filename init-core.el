@@ -1054,8 +1054,7 @@
 
 (use-package org-spin
   :bind (:umbra org-mode
-                ("C-c s"     . org-spin)
-                ("C-c C-M-s" . org-spin-weighted)))
+                ("C-c s"     . org-spin-weighted)))
 
 
 ;;;; Web Browsing
