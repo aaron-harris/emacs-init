@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience
 
-;; Dependencies: `dash'
+;; Dependencies: `dash', `trinket'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -39,33 +39,7 @@
 ;;; Code:
 
 (require 'dash)
-
-
-;;; Subroutines
-;;;============
-(defun enumerate--bol (&optional pos)
-  "Return position of first character on line containing POS.
-If POS is omitted, use position of point.
-
-Do not move point."
-  (save-excursion
-    (let ((pos (or pos (point))))
-      (goto-char pos)
-      (line-beginning-position))))
-
-(defun enumerate--eol (&optional pos)
-  "Return position of last character on line containing POS.
-If POS is omitted, use position of point.
-
-Do not move point."
-  (save-excursion
-    (let ((pos (or pos (point))))
-      (goto-char pos)
-      (line-end-position))))
-
-
-;;; Commands
-;;;=========
+(require 'trinket)
 
 ;;;###autoload
 (defun enumerate-lines (beg end &optional offset eol sep format-str)
@@ -97,8 +71,8 @@ will be replaced with the maximum number of digits of any line
 number before the other escapes are interpreted.  The default
 value for FORMAT-STR is \"%%%nd\"."
   (interactive "r\np")
-  (let* ((beg        (if (use-region-p) (enumerate--bol beg) (point-min)))
-         (end        (if (use-region-p) (enumerate--eol end) (point-max)))
+  (let* ((beg        (if (use-region-p) (trinket-bol beg) (point-min)))
+         (end        (if (use-region-p) (trinket-eol end) (point-max)))
          (offset     (1- (or offset 1)))
          (sep        (or sep " "))
          (format-str (or format-str "%%%nd"))
@@ -130,8 +104,8 @@ As `enumerate-lines', except lines are numbered according to
 their alphabetic order instead of their position, and the option
 to put the number at the end of the line is unavailable."
   (interactive "r\np")
-  (let* ((beg (if (use-region-p) (enumerate--bol beg) (point-min)))
-         (end (if (use-region-p) (enumerate--eol end) (point-max))))
+  (let* ((beg (if (use-region-p) (trinket-bol beg) (point-min)))
+         (end (if (use-region-p) (trinket-eol end) (point-max))))
     (save-excursion
       (save-restriction
         (narrow-to-region beg end)

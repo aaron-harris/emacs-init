@@ -23,36 +23,6 @@
 (require 'enumerate)
 (require 'ert)
 
-
-;;; Subroutine Tests
-;;;=================
-(ert-deftest enumerate-test-bol/-eol ()
-  "Test functions `enumerate--bol' and `enumerate--eol'."
-  (with-temp-buffer
-    (should (= (enumerate--bol) (enumerate--bol (point))
-               (enumerate--eol) (enumerate--eol (point))
-               (point) (point-min) (point-max)))
-    (insert "A")
-    (should (= (enumerate--bol) (enumerate--bol (point)) 1))
-    (should (= (enumerate--eol) (enumerate--eol (point)) 2 (point)))
-    (insert "B") 
-    (should (= (enumerate--bol) (enumerate--bol (point)) 1))
-    (should (= (enumerate--eol) (enumerate--eol (point)) 3 (point)))
-    (insert "\n")
-    (should (= (enumerate--bol 1) (enumerate--bol 3) 1))
-    (should (= (enumerate--eol 1) (enumerate--eol 3) 3)) 
-    (should (= (enumerate--bol) (enumerate--bol (point))
-               (enumerate--eol) (enumerate--eol (point)) 4 (point)))
-    (insert "foo\n\nbar")
-    (should (= (enumerate--bol 4) (enumerate--bol 6) 4))
-    (should (= (enumerate--eol 4) (enumerate--eol 6) 7))
-    (should (= (enumerate--bol 8) (enumerate--eol 8) 8))
-    (should (= (enumerate--bol 9) (enumerate--bol) 9))
-    (should (= (enumerate--eol 9) (enumerate--eol) 12 (point)))))
-
-
-;;; Command Tests
-;;;==============
 (ert-deftest enumerate-test-lines ()
   "Test `enumerate-lines'."
   (with-temp-buffer
