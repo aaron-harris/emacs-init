@@ -385,6 +385,10 @@
   :config
   (show-paren-mode))
 
+(use-package populate
+  :bind (:map umbra-mode-map
+              ("s-<apps> p" . populate-downwards-in-region)))
+
 (use-package prog-mode
   :bind (:umbra prog-mode
                 ("M-p" . backward-paragraph)
