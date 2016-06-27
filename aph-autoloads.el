@@ -411,8 +411,8 @@ informing the user of the newly applied filter.
 
 ;;;***
 
-;;;### (autoloads nil "enumerate" "enumerate.el" (22306 21552 766542
-;;;;;;  300000))
+;;;### (autoloads nil "enumerate" "enumerate.el" (22385 24636 921787
+;;;;;;  200000))
 ;;; Generated autoloads from enumerate.el
 
 (autoload 'enumerate-lines "enumerate" "\
@@ -547,7 +547,7 @@ total of this field across all records in the database.
 
 ;;;***
 
-;;;### (autoloads nil "hash" "hash.el" (22379 5037 595963 100000))
+;;;### (autoloads nil "hash" "hash.el" (22379 5353 875746 800000))
 ;;; Generated autoloads from hash.el
 
 (autoload 'hash-insert "hash" "\
@@ -745,6 +745,30 @@ of `org-spin-weight-property' is used.
 
 ;;;***
 
+;;;### (autoloads nil "populate" "populate.el" (22385 25150 801852
+;;;;;;  400000))
+;;; Generated autoloads from populate.el
+
+(autoload 'populate-downwards-in-region "populate" "\
+Copy non-blank lines downward in region.
+
+Replace each blank line between BEG and END with the last
+non-blank line appearing above it.  Leading blank lines are left
+untouched.
+
+Interactively, operate on the region if the region is active.  If
+the region begins or ends mid-line, consider it to include that
+entire line.  If there is no active region, operate on the entire
+buffer.
+
+A blank line for the purposes of this command is a line that
+contains only whitespace characters.  It is not necessary that
+the line be completely empty.
+
+\(fn BEG END)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "silence" "silence.el" (22341 65274 644268
 ;;;;;;  100000))
 ;;; Generated autoloads from silence.el
@@ -820,7 +844,7 @@ you want to quit windows on all frames.
 
 ;;;***
 
-;;;### (autoloads nil "umbra" "umbra.el" (22379 3652 249560 800000))
+;;;### (autoloads nil "umbra" "umbra.el" (22381 26900 635588 400000))
 ;;; Generated autoloads from umbra.el
 
 (autoload 'umbra-keymap "umbra" "\
@@ -903,17 +927,17 @@ Unlike `which-function-mode', this mode is buffer-local.
 
 ;;;***
 
-;;;### (autoloads nil nil ("alist.el" "aph-align.el" "aph-ert.el"
-;;;;;;  "aph-files.el" "aph-haskell.el" "aph-help.el" "aph-lisp-mode.el"
-;;;;;;  "aph-outline.el" "aph-page.el" "aph-seq.el" "aph-symbol.el"
-;;;;;;  "aph-which-func.el" "aph-window.el" "bfw.el" "chimera.el"
-;;;;;;  "cygwinize.el" "elfeed-barb.el" "elfeed-link.el" "formation.el"
-;;;;;;  "forms-barb.el" "init-core.el" "init-draft.el" "init-org-agenda.el"
-;;;;;;  "init-org-capture.el" "init-org.el" "jerk.el" "lexy.el" "liberate-key.el"
-;;;;;;  "morgue.el" "org-agenda-skip.el" "org-agenda-sticky.el" "org-barb.el"
-;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
-;;;;;;  "org-multitheme.el" "shr-link-img.el" "vizier-helm.el" "vizier.el")
-;;;;;;  (22379 5131 38719 500000))
+;;;### (autoloads nil nil ("alist.el" "aph-align.el" "aph-files.el"
+;;;;;;  "aph-haskell.el" "aph-help.el" "aph-lisp-mode.el" "aph-outline.el"
+;;;;;;  "aph-page.el" "aph-seq.el" "aph-which-func.el" "aph-window.el"
+;;;;;;  "bfw.el" "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
+;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
+;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
+;;;;;;  "jerk.el" "lexy.el" "liberate-key.el" "morgue.el" "org-agenda-skip.el"
+;;;;;;  "org-agenda-sticky.el" "org-barb.el" "org-compare.el" "org-eww.el"
+;;;;;;  "org-habit-everywhere.el" "org-match.el" "org-multitheme.el"
+;;;;;;  "proctor.el" "shr-link-img.el" "symbol.el" "trinket.el" "vizier-helm.el"
+;;;;;;  "vizier.el") (22385 25321 149618 700000))
 
 ;;;***
 
