@@ -38,32 +38,5 @@ Also, ARG is optional, defaulting to nil."
           (with-current-buffer buffer
             (eimp-fit-image-to-window arg))))))
 
-
-;;;; Forms templates
-;;==================
-(defun forms-new-db-from-template (template dir name)
-  "Make a new `forms-mode' database based on TEMPLATE.
-
-Here, TEMPLATE is the path to an existing `forms-mode' control
-file.  A new control file named NAME.ctrl is created in DIR, as
-well as an empty database file NAME.db.  The resulting database
-uses `load-file' to inherit all behavior except the value of
-`forms-file' from TEMPLATE.
-
-After the file is created, open it in `forms-mode'."
-  (interactive "fCreate database from template: 
-DCreate database in directory: 
-sName for new database: ") 
-  (let ((control-file  (expand-file-name (format "%s.ctrl" name) dir)))
-    (with-temp-buffer
-      (insert (concat ";; -*- mode: emacs-lisp -*-\n"
-                      "\n"
-                      (format "(load-file %S)\n" template)
-                      (format "(setq forms-file \"%s.db\")\n" name)
-                      "\n"
-                      (format ";;; %s.ctrl ends here" name)))
-      (write-region nil nil control-file nil nil nil :new))
-    (forms-find-file control-file)))
-
 (provide 'init-draft)
 ;; init-draft.el ends here
