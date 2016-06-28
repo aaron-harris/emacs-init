@@ -5,6 +5,8 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: multimedia
 
+;; Dependencies: `eimp', `noflet'
+
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
@@ -23,12 +25,33 @@
 ;; By default, applying any EIMP transformation to an image marks the
 ;; image buffer as modified.  This can be inconvenient if you do not
 ;; want to save the effect of the transformation.  This module
-;; provides commands that invoke EIMP transformations without marking
-;; the image buffer as modified.
+;; provides the wrapper function `eimp-ephemeral-apply'; any EIMP
+;; transformation invoked with this function will not mark the image
+;; buffer as modified.
 
 ;;; Code:
 
-(require 'eimp)
+(require 'eimp) 
+(require 'noflet)
+
+(defun eimp-ephemeral-process-sentinel (proc msg)
+  "Process sentinel for `eimp-ephemeral-apply'.
+
+As `eimp-mogrify-process-sentinel', but do not mark buffer as
+modified."
+  (eimp-mogrify-process-sentinel proc msg)
+  (let ((buf (process-buffer proc)))
+    (when (buffer-live-p buf)
+      (with-current-buffer buf
+        (set-buffer-modified-p nil)))))
+
+(defun eimp-ephemeral-apply (transform &rest args)
+  "Apply TRANSFORM to ARGS, without marking buffer as modified."
+  (noflet
+    ((set-process-sentinel
+      (process sentinel)
+      (funcall this-fn process #'eimp-ephemeral-process-sentinel)))
+    (apply transform args)))
 
 (provide 'eimp-ephemeral)
 ;;; eimp-ephemeral.el ends here

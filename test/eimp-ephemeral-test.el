@@ -4,6 +4,8 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
+;; Dependencies: `eimp-ephemeral', `ert-x'
+
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
@@ -20,7 +22,7 @@
 ;;; Code:
 
 (require 'eimp-ephemeral)
-(require 'ert)
+(require 'ert-x)
 
 
 ;;;; Test Apparatus
@@ -29,18 +31,25 @@
   "The path to the standard test image.")
 
 (defmacro eimp-ephemeral-test-fixture (&rest body)
-  "Evaluate BODY in a buffer containing a standard test image. 
+  "Evaluate BODY in a buffer containing a standard test image.
 
-Use `ert-with-test-buffer' to ensure that the buffer is deleted
-in the case of a successful test.
+The buffer used has the following properties:
 
-See `eimp-ephemeral-test-image' for the path to this test
-image (a 32 x 32 solid blue square)."
+- It contains the image found in `eimp-ephemeral-test-image' (a
+  32 x 32 solid blue square).
+
+- It is in `image-mode'.
+
+- It is not considered modified (per `buffer-modified-p').
+
+- It has been created with `ert-with-test-buffer', so that it
+  will persist only in the event of a failed test."
   (declare (indent 0)
-           (debug body))
+           (debug  t))
   `(ert-with-test-buffer ()
     (insert-file-contents-literally eimp-ephemeral-test-image)
     (image-mode)
+    (set-buffer-modified-p nil)
     ,@body))
 
 (defun eimp-ephemeral-test-transform (transform &rest args)
@@ -55,10 +64,21 @@ Here TRANSFORM is an EIMP transform."
 ;;;; Tests
 ;;========
 (ert-deftest eimp-ephemeral-test-control ()
-  "Test that EIMP itself is working as expected."
+  "Test that EIMP itself is working as expected.
+This doubles as a test for `eimp-ephemeral-test-fixture'."
   (eimp-ephemeral-test-fixture
+    (should-not (buffer-modified-p))
     (eimp-ephemeral-test-transform #'eimp-increase-image-size 150)
-    (should (equal '(48 . 48) (image-size (eimp-get-image) :pixels)))))
+    (should (equal '(48 . 48) (image-size (eimp-get-image) :pixels)))
+    (should (buffer-modified-p))))
+
+(ert-deftest eimp-ephemeral-test-apply ()
+  "Test `eimp-ephemeral-apply'."
+  (eimp-ephemeral-test-fixture
+    (eimp-ephemeral-test-transform #'eimp-ephemeral-apply
+                                   #'eimp-increase-image-size 150)
+    (should (equal '(48 . 48) (image-size (eimp-get-image) :pixels)))
+    (should-not (buffer-modified-p))))
 
 (provide 'eimp-ephemeral-test)
 ;;; eimp-ephemeral-test.el ends here
