@@ -1242,6 +1242,11 @@
 
 (use-package shm
   :ensure t
+  :bind (:umbra structured-haskell-mode
+                ("C-M-a" . backward-paragraph)
+                ("C-M-e" . forward-paragraph)
+                ("C-M-p" . shm/backward-paragraph)
+                ("C-M-n" . shm/forward-paragraph))
   :init
   (add-hook 'haskell-mode-hook #'structured-haskell-mode)
   :config
