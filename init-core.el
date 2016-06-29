@@ -1226,7 +1226,8 @@
   (validate-setq haskell-process-show-debug-tips nil
                  haskell-process-log             t)
   ;; Auxiliary features
-  (add-hook 'haskell-mode-hook #'haskell-decl-scan-mode))
+  (add-hook 'haskell-mode-hook #'haskell-decl-scan-mode)
+  (add-hook 'haskell-mode-hook #'haskell-doc-mode))
 
 (use-package haskell-compile
   :bind (:umbra haskell-mode
