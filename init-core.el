@@ -1075,6 +1075,7 @@
 (use-package eww
   :bind (:map umbra-mode-map ("C-z C-w" . eww))
   :bind (:umbra eww-mode
+                ("x"       . aph/kill-active-buffer)
                 ("S-<tab>" . shr-previous-link)
                 ("["       . eww-previous-url)
                 ("]"       . eww-next-url)
