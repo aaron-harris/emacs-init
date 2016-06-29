@@ -1219,12 +1219,14 @@
 ;;==========
 (use-package haskell-mode
   :ensure t
-  :bind (:umbra haskell-mode 
+  :bind (:umbra haskell-mode
                 ("C-c C-z" . haskell-interactive-switch))
   :config 
   ;; REPL setup
   (validate-setq haskell-process-show-debug-tips nil
-                 haskell-process-log             t))
+                 haskell-process-log             t)
+  ;; Auxiliary features
+  (add-hook 'haskell-mode-hook #'haskell-decl-scan-mode))
 
 (use-package haskell-compile
   :bind (:umbra haskell-mode
@@ -1240,9 +1242,7 @@
 
 (use-package shm
   :ensure t
-  :bind (:umbra structured-haskell-mode
-                ("C-M-a" . backward-paragraph)
-                ("C-M-e" . forward-paragraph)
+  :bind (:umbra structured-haskell-mode 
                 ("C-M-p" . shm/backward-paragraph)
                 ("C-M-n" . shm/forward-paragraph))
   :init
