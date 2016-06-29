@@ -29,6 +29,14 @@
 (require 'help)
 
 
+;;;; Replace `help-for-help'
+;;==========================
+(defun aph/help-describe-bindings ()
+  "As `describe-bindings' for \"C-h\" prefix only."
+  (interactive)
+  (describe-bindings (kbd "C-h")))
+
+
 ;;;; No-Confirmation Revert
 ;;=========================
 (defun aph/help-mode-revert-buffer (ignore-auto _noconfirm)
