@@ -1254,7 +1254,8 @@
   :ensure t
   :bind (:umbra structured-haskell-mode 
                 ("C-M-p" . shm/backward-paragraph)
-                ("C-M-n" . shm/forward-paragraph))
+                ("C-M-n" . shm/forward-paragraph)
+                ("C-M-h" . mark-paragraph))
   :init
   (add-hook 'haskell-mode-hook #'structured-haskell-mode)
   :config
