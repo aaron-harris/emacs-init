@@ -1228,6 +1228,11 @@
   ;; Auxiliary features
   (add-hook 'haskell-mode-hook #'haskell-decl-scan-mode))
 
+(use-package aph-haskell
+  :after haskell-mode
+  :bind (:umbra haskell-mode
+                ("C-c C-l" . aph/haskell-process-load-file-cygwin)))
+
 (use-package haskell-compile
   :bind (:umbra haskell-mode
                 ("C-c C-c" . haskell-compile))
@@ -1235,10 +1240,9 @@
   (validate-setq haskell-compile-cabal-build-command "stack build")
   (add-to-list 'process-coding-system-alist '("stack" . utf-8-dos)))
 
-(use-package aph-haskell
-  :after haskell-mode
-  :bind (:umbra haskell-mode
-                ("C-c C-l" . aph/haskell-process-load-file-cygwin)))
+(use-package haskell-interactive-mode
+  :bind (:umbra haskell-interactive-mode
+                ("C-c M-o" . haskell-interactive-mode-clear)))
 
 (use-package shm
   :ensure t
