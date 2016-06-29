@@ -851,12 +851,10 @@
               ("C-h M-F"   . find-face-definition)
               ("C-h C-M-l" . find-library)))
 
-(use-package help
-  :bind (:map umbra-mode-map
-              ("C-h C-h" . undefined)))
-
 (use-package aph-help
   :after help
+  :bind (:map umbra-mode-map
+              ("C-h C-h" . aph/help-describe-bindings))
   :config
   (add-hook 'help-mode-hook #'activate-mode-local-bindings)
   (setq-mode-local help-mode
