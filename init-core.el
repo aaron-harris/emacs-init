@@ -1221,6 +1221,11 @@
 (use-package haskell-mode
   :ensure t
   :bind (:umbra haskell-mode
+                ;; The `align-regexp' binding duplicates the one for
+                ;; `prog-mode' because `umbra-mode' cannot currently
+                ;; resolve the `haskell-parent-mode' -> `prog-mode'
+                ;; alias.
+                ("C-M-i"   . align-regexp)
                 ("C-c C-z" . haskell-interactive-switch))
   :config 
   ;; REPL setup
