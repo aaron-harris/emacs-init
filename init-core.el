@@ -1221,16 +1221,19 @@
 ;;==========
 (use-package haskell-mode
   :ensure t
-  :bind (:umbra haskell-mode
-                ("C-c C-c" . haskell-compile)
+  :bind (:umbra haskell-mode 
                 ("C-c C-z" . haskell-interactive-switch))
-  :config
-  ;; Stack setup
-  (validate-setq haskell-compile-cabal-build-command "stack build")
-  (add-to-list 'process-coding-system-alist '("stack" . utf-8-dos))
+  :config 
   ;; REPL setup
   (validate-setq haskell-process-show-debug-tips nil
-                 haskell-process-log t))
+                 haskell-process-log             t))
+
+(use-package haskell-compile
+  :bind (:umbra haskell-mode
+                ("C-c C-c" . haskell-compile))
+  :config
+  (validate-setq haskell-compile-cabal-build-command "stack build")
+  (add-to-list 'process-coding-system-alist '("stack" . utf-8-dos)))
 
 (use-package aph-haskell
   :after haskell-mode
