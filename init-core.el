@@ -1230,6 +1230,7 @@
   (validate-setq haskell-process-show-debug-tips nil
                  haskell-process-log             t)
   ;; Auxiliary features
+  (add-hook 'haskell-mode-hook #'eldoc-mode)
   (add-hook 'haskell-mode-hook #'haskell-decl-scan-mode))
 
 (use-package aph-haskell
