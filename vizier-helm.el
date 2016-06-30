@@ -23,9 +23,17 @@
 ;;; Commentary:
 
 ;; This module contains advice-like tools for modifying existing Helm
-;; commands.  For the most part, these "advisors" should be called
-;; immediately before the `helm' invocation you want to modify.
+;; commands.
 ;;
+;; First, there is the macro `vizier-with-helm'.  This allows you to
+;; execute code that will start a `helm' instance, then execute
+;; further code inside that instance, immediately before control
+;; returns to the user.  In principle this is similar to using
+;; `helm-after-initialize-hook', but does a better job of abstracting
+;; the machinery away.
+;;
+;; Next, we have several "advisors".  These functions should be called
+;; immediately before a `helm' invocation and modify that invocation.
 ;; Advisors included are as follows:
 ;;
 ;; `vizier-helm-append-keyword':
@@ -60,6 +68,26 @@
 
 (require 'vizier)
 (require 'helm)
+
+
+;;;; Macros
+;;=========
+(defmacro vizier-with-helm (trigger &rest body)
+  "Evaluate BODY in `helm' instance created by TRIGGER.
+
+Evaluate TRIGGER; if TRIGGER calls `helm', evaluate BODY
+immediately after the `helm' session is initialized, with current
+buffer the `helm' buffer.
+
+If TRIGGER does not call `helm', BODY is not evaluated.  If
+TRIGGER calls `helm' more than once, BODY is only evaluated the
+first time."
+  (declare (indent 1)
+           (debug  t))
+  `(vizier-with-advice
+       ((:once helm-read-pattern-maybe :before
+               (lambda (&rest _) (with-helm-buffer ,@body))))
+     ,trigger))
 
 
 ;;;; Advisor Functions
