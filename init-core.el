@@ -771,11 +771,7 @@
               ("<tab>"    . helm-execute-persistent-action)
               ("C-j"      . undefined)
               ("C-z"      . undefined)
-              ("s-<apps>" . helm-select-action)))
-
-(use-package aph-helm
-  :bind (:map umbra-mode-map
-              ("C-x M-p" . aph/helm-browse-project)))
+              ("s-<apps>" . helm-select-action))) 
 
 (use-package helm-config
   :after helm
@@ -814,6 +810,8 @@
 (use-package projectile
   :after helm
   :ensure t
+  :bind (:map umbra-mode-map
+              ("C-x M-p" . projectile-switch-project)) 
   :config
   (projectile-global-mode)
   (validate-setq projectile-completion-system     'helm
