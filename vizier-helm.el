@@ -79,15 +79,15 @@ Evaluate TRIGGER; if TRIGGER calls `helm', evaluate BODY
 immediately after the `helm' session is initialized, with current
 buffer the `helm' buffer.
 
-If TRIGGER does not call `helm', BODY is not evaluated.  If
-TRIGGER calls `helm' more than once, BODY is only evaluated the
-first time."
+If TRIGGER calls `helm' more than once, BODY will be evaluated
+each time."
   (declare (indent 1)
            (debug  t))
-  `(vizier-with-advice
-       ((:once helm-read-pattern-maybe :before
-               (lambda (&rest _) (with-helm-buffer ,@body))))
-     ,trigger))
+  (let ((hook  (make-symbol "hook")))
+    `(let ((,hook  (lambda () ,@body)))
+       (add-hook 'helm-update-hook ,hook)
+       (unwind-protect ,trigger
+         (remove-hook 'helm-update-hook ,hook))))) 
 
 
 ;;;; Advisor Functions
