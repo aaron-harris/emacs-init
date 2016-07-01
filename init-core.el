@@ -48,7 +48,7 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(require 'use-package) 
+(require 'use-package)
 
 (use-package aph-autoloads)
 
@@ -257,7 +257,7 @@
   (validate-setq company-idle-delay nil))
 
 (use-package deck
-  :bind (:map umbra-mode-map 
+  :bind (:map umbra-mode-map
               ("M-["   . deck-surf-swap-buffer-backward)
               ("M-]"   . deck-surf-swap-buffer-forward)
               ("C-\\"  . deck-push-buffer-forward)
@@ -657,7 +657,7 @@
               ("C-S-l" . move-to-window-line-top-bottom)))
 
 (use-package aph-window
-  :bind (:map umbra-mode-map 
+  :bind (:map umbra-mode-map
               ("<C-[>" . aph/other-window-backward)
               ("C-M-v" . aph/hydra-scroll-other/body)))
 
@@ -771,7 +771,7 @@
               ("<tab>"    . helm-execute-persistent-action)
               ("C-j"      . undefined)
               ("C-z"      . undefined)
-              ("s-<apps>" . helm-select-action))) 
+              ("s-<apps>" . helm-select-action)))
 
 (use-package helm-config
   :after helm
@@ -811,7 +811,7 @@
   :after helm
   :ensure t
   :bind (:map umbra-mode-map
-              ("C-x M-p" . projectile-switch-project)) 
+              ("C-x M-p" . projectile-switch-project))
   :config
   (projectile-global-mode)
   (validate-setq projectile-completion-system     'helm
@@ -823,8 +823,9 @@
   :ensure t
   :defer t)
 
-(use-package aph-helm-projectile
+(use-package aph-helm
   :bind (:map umbra-mode-map
+              ("M-."     . aph/helm-semantic-or-imenu)
               ("C-x p"   . aph/helm-projectile)
               ("M-s M-g" . aph/helm-projectile-grep)))
 
@@ -1156,7 +1157,7 @@
                  preview-auto-cache-preamble t))
 
 (use-package reftex
-  :defer t 
+  :defer t
   :init
   (setq reftex-plug-into-AUCTeX t)
   (add-hook 'LaTeX-mode-hook #'turn-on-reftex))
@@ -1164,7 +1165,7 @@
 (use-package tex
   :ensure auctex
   :defer t
-  :config 
+  :config
   (setq-default TeX-master nil)
   ;; Caching settings
   (validate-setq TeX-auto-save  t
@@ -1180,7 +1181,7 @@
   (with-eval-after-load 'tidy
     (add-to-list 'tidy-unwanted-buffer-list "*TeX Help*"))
   (setq-mode-local TeX-mode
-    fill-column 75)) 
+    fill-column 75))
 
 
 ;;;; Clojure
@@ -1203,7 +1204,7 @@
                  cider-repl-pop-to-buffer-on-connect nil
                  cider-show-error-buffer             'except-in-repl)
   (mode-family-add 'cider-repl-mode 'lisp)
-  (mode-family-add 'cider-repl-mode 'clojure) 
+  (mode-family-add 'cider-repl-mode 'clojure)
   (with-eval-after-load 'tidy
     (add-to-list 'tidy-unwanted-buffer-list "*cider-doc*"))
   ;; Output from the JVM has Windows-style newlines, so we need to
@@ -1225,7 +1226,7 @@
                 ;; alias.
                 ("C-M-i"   . align-regexp)
                 ("C-c C-z" . haskell-interactive-switch))
-  :config 
+  :config
   ;; REPL setup
   (validate-setq haskell-process-show-debug-tips nil
                  haskell-process-log             t)
@@ -1251,7 +1252,7 @@
 
 (use-package shm
   :ensure t
-  :bind (:umbra structured-haskell-mode 
+  :bind (:umbra structured-haskell-mode
                 ("C-M-p" . shm/backward-paragraph)
                 ("C-M-n" . shm/forward-paragraph)
                 ("C-M-h" . mark-paragraph))

@@ -29,14 +29,46 @@
 (require 'vizier-helm)
 
 
-;;;; Helm Commands
-;;================
+;;;; Imenu
+;;========
+;;;###autoload
+(defun aph/helm-semantic-or-imenu (arg)
+  "As `helm-semantic-or-imenu', but always show all candidates.
+
+If the symbol at point is a valid candidate, go ahead and select
+it, but still show all the other candidates.
+
+Also, never jump directly to the definition for symbol at
+point (overriding `helm-imenu-execute-action-at-once-if-one'),
+even if there's only one candidate in the buffer."
+  (interactive "P")
+  (vizier-helm-append-keyword :input "")
+  (let ((helm-imenu-execute-action-at-once-if-one nil))
+    (helm-semantic-or-imenu arg)))
+
+
+;;;; Projectile
+;;=============
 ;;;###autoload
 (defun aph/helm-browse-project (arg)
   "As `helm-browse-project', but truncate lines."
   (interactive "P")
   (vizier-helm-append-keyword :truncate-lines t)
   (helm-browse-project arg))
+
+;;;###autoload
+(defun aph/helm-projectile (&optional arg)
+  "As `helm-projectile', but truncate lines."
+  (interactive "P")
+  (vizier-helm-append-keyword :truncate-lines t)
+  (helm-projectile arg))
+
+;;;###autoload
+(defun aph/helm-projectile-grep (&optional dir)
+  "As `helm-projectile-grep', but suspend updates initially."
+  (interactive)
+  (vizier-helm-toggle-initial-updates)
+  (helm-projectile-grep dir))
 
 (provide 'aph-helm)
 ;;; aph-helm.el ends here
