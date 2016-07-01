@@ -3,14 +3,55 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-helm" "aph-helm.el" (22335 35426 611881
-;;;;;;  300000))
+;;;### (autoloads nil "aph-forms" "aph-forms.el" (22385 39771 564420
+;;;;;;  0))
+;;; Generated autoloads from aph-forms.el
+
+(autoload 'aph/forms-create-from-template "aph-forms" "\
+Make a new `forms-mode' database based on TEMPLATE.
+
+Here, TEMPLATE is the path to an existing `forms-mode' control
+file.  A new control file named NAME.ctrl is created in DIR, as
+well as an empty database file NAME.db.  The resulting database
+uses `load-file' to inherit all behavior except the value of
+`forms-file' from TEMPLATE.
+
+After the file is created, open it in `forms-mode'.
+
+\(fn TEMPLATE DIR NAME)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "aph-helm" "aph-helm.el" (22390 60803 447400
+;;;;;;  0))
 ;;; Generated autoloads from aph-helm.el
+
+(autoload 'aph/helm-semantic-or-imenu "aph-helm" "\
+As `helm-semantic-or-imenu', but always show all candidates.
+
+If the symbol at point is a valid candidate, go ahead and select
+it, but still show all the other candidates.
+
+Also, never jump directly to the definition for symbol at
+point (overriding `helm-imenu-execute-action-at-once-if-one'),
+even if there's only one candidate in the buffer.
+
+\(fn ARG)" t nil)
 
 (autoload 'aph/helm-browse-project "aph-helm" "\
 As `helm-browse-project', but truncate lines.
 
 \(fn ARG)" t nil)
+
+(autoload 'aph/helm-projectile "aph-helm" "\
+As `helm-projectile', but truncate lines.
+
+\(fn &optional ARG)" t nil)
+
+(autoload 'aph/helm-projectile-grep "aph-helm" "\
+As `helm-projectile-grep', but suspend updates initially.
+
+\(fn &optional DIR)" t nil)
 
 ;;;***
 
@@ -745,8 +786,8 @@ of `org-spin-weight-property' is used.
 
 ;;;***
 
-;;;### (autoloads nil "populate" "populate.el" (22385 25150 801852
-;;;;;;  400000))
+;;;### (autoloads nil "populate" "populate.el" (22385 25487 906974
+;;;;;;  500000))
 ;;; Generated autoloads from populate.el
 
 (autoload 'populate-downwards-in-region "populate" "\
@@ -930,14 +971,15 @@ Unlike `which-function-mode', this mode is buffer-local.
 ;;;### (autoloads nil nil ("alist.el" "aph-align.el" "aph-files.el"
 ;;;;;;  "aph-haskell.el" "aph-help.el" "aph-lisp-mode.el" "aph-outline.el"
 ;;;;;;  "aph-page.el" "aph-seq.el" "aph-which-func.el" "aph-window.el"
-;;;;;;  "bfw.el" "chimera.el" "cygwinize.el" "elfeed-barb.el" "elfeed-link.el"
-;;;;;;  "formation.el" "forms-barb.el" "init-core.el" "init-draft.el"
-;;;;;;  "init-org-agenda.el" "init-org-capture.el" "init-org.el"
-;;;;;;  "jerk.el" "lexy.el" "liberate-key.el" "morgue.el" "org-agenda-skip.el"
-;;;;;;  "org-agenda-sticky.el" "org-barb.el" "org-compare.el" "org-eww.el"
-;;;;;;  "org-habit-everywhere.el" "org-match.el" "org-multitheme.el"
-;;;;;;  "proctor.el" "shr-link-img.el" "symbol.el" "trinket.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22385 25321 149618 700000))
+;;;;;;  "bfw.el" "chimera.el" "cygwinize.el" "eimp-ephemeral.el"
+;;;;;;  "elfeed-barb.el" "elfeed-link.el" "formation.el" "forms-barb.el"
+;;;;;;  "init-core.el" "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
+;;;;;;  "init-org.el" "jerk.el" "lexy.el" "liberate-key.el" "morgue.el"
+;;;;;;  "org-agenda-skip.el" "org-agenda-sticky.el" "org-barb.el"
+;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
+;;;;;;  "org-multitheme.el" "proctor-helm.el" "proctor.el" "shr-link-img.el"
+;;;;;;  "symbol.el" "trinket.el" "vizier-helm.el" "vizier.el") (22390
+;;;;;;  61443 716830 300000))
 
 ;;;***
 
