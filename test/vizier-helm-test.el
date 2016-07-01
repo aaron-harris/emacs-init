@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `vizier-helm', `ert'
+;; Dependencies: `vizier-helm', `ert', `proctor-helm'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,50 +22,18 @@
 ;;; Code:
 
 (require 'vizier-helm)
+
 (require 'ert)
-
-
-;;;; Testing Apparatus
-;;====================
-(defvar vizier-helm-test-source
-  (helm-build-dummy-source "Test"
-    :action #'ignore)
-  "A Helm source for testing purposes.")
-
-(defun vizier-helm-test ()
-  "Invoke `helm' and immediately quit.  For testing."
-  (add-hook 'helm-update-hook #'keyboard-quit)
-  (unwind-protect (helm :sources vizier-helm-test-source)
-    (remove-hook 'helm-update-hook #'keyboard-quit)))
+(require 'proctor-helm)
 
 
 ;;;; Macros
 ;;=========
-(ert-deftest vizier-helm-test-macro--once ()
-  "Test `vizier-with-helm' when `helm' is invoked once."
-  (let (canary)
-    (vizier-with-helm (vizier-helm-test)
-      (should helm-alive-p)
-      (should (equal (buffer-name) helm-buffer))
-      (setq canary t))
-    (should canary)
-    (should-not helm-alive-p)))
-
-(ert-deftest vizier-helm-test-macro--none ()
-  "Test `vizier-with-helm' when `helm' is not invoked."
-  (let (canary)
-    (vizier-with-helm (ignore)
-      (setq canary t))
-    (should-not canary)))
-
-(ert-deftest vizier-helm-test-macro--twice ()
-  "Test `vizier-with-helm' when `helm' is invoked twice."
-  (let ((canary 0))
-    (vizier-with-helm
-        (progn (vizier-helm-test)
-               (vizier-helm-test))
-      (setq canary (1+ canary)))
-    (should (= canary 1))))
+;;; Since `vizier-with-helm' is the critical component of
+;;; `proctor-with-helm' and we need the latter to write any decent
+;;; tests of `vizier-with-helm', the tests for `proctor-with-helm' (in
+;;; the module `proctor-helm-tests') should also suffice for testing
+;;; `vizier-with-helm'.
 
 (provide 'vizier-helm-test)
 ;;; vizier-helm-test.el ends here
