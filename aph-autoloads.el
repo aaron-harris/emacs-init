@@ -22,8 +22,7 @@ After the file is created, open it in `forms-mode'.
 
 ;;;***
 
-;;;### (autoloads nil "aph-helm" "aph-helm.el" (22390 60803 447400
-;;;;;;  0))
+;;;### (autoloads nil "aph-helm" "aph-helm.el" (22390 61454 0 0))
 ;;; Generated autoloads from aph-helm.el
 
 (autoload 'aph/helm-semantic-or-imenu "aph-helm" "\
@@ -49,22 +48,6 @@ As `helm-projectile', but truncate lines.
 \(fn &optional ARG)" t nil)
 
 (autoload 'aph/helm-projectile-grep "aph-helm" "\
-As `helm-projectile-grep', but suspend updates initially.
-
-\(fn &optional DIR)" t nil)
-
-;;;***
-
-;;;### (autoloads nil "aph-helm-projectile" "aph-helm-projectile.el"
-;;;;;;  (22335 35414 770211 300000))
-;;; Generated autoloads from aph-helm-projectile.el
-
-(autoload 'aph/helm-projectile "aph-helm-projectile" "\
-As `helm-projectile', but truncate lines.
-
-\(fn &optional ARG)" t nil)
-
-(autoload 'aph/helm-projectile-grep "aph-helm-projectile" "\
 As `helm-projectile-grep', but suspend updates initially.
 
 \(fn &optional DIR)" t nil)
@@ -978,8 +961,8 @@ Unlike `which-function-mode', this mode is buffer-local.
 ;;;;;;  "org-agenda-skip.el" "org-agenda-sticky.el" "org-barb.el"
 ;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
 ;;;;;;  "org-multitheme.el" "proctor-helm.el" "proctor.el" "shr-link-img.el"
-;;;;;;  "symbol.el" "trinket.el" "vizier-helm.el" "vizier.el") (22390
-;;;;;;  61443 716830 300000))
+;;;;;;  "symbol.el" "trinket.el" "vizier-helm.el" "vizier.el") (22391
+;;;;;;  3083 472514 500000))
 
 ;;;***
 

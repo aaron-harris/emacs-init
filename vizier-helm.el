@@ -84,10 +84,12 @@ each time."
   (declare (indent 1)
            (debug  t))
   (let ((hook  (make-symbol "hook")))
-    `(let ((,hook  (lambda () ,@body)))
+    `(let ((,hook  (lambda ()
+                     ,@body
+                     (remove-hook 'helm-update-hook ,hook))))
        (add-hook 'helm-update-hook ,hook)
        (unwind-protect ,trigger
-         (remove-hook 'helm-update-hook ,hook))))) 
+         (remove-hook 'helm-update-hook ,hook)))))
 
 
 ;;;; Advisor Functions
@@ -96,7 +98,7 @@ each time."
   "Add KEYWORD and VALUE as args to next `helm' invocation."
   (vizier-advise-once
    #'helm :filter-args
-   (lambda (args) 
+   (lambda (args)
      (append args (list keyword value)))))
 
 
@@ -104,10 +106,10 @@ each time."
 ;;====================
 (defun vizier-helm-toggle-initial-updates--hook-fn ()
   "Toggle updates; remove self from `helm-after-initialize-hook'.
-Subroutine used by `vizier-helm-toggle-initial-updates'." 
+Subroutine used by `vizier-helm-toggle-initial-updates'."
   (unwind-protect
       (silence ("^Helm update suspended!$")
-        (helm-toggle-suspend-update)) 
+        (helm-toggle-suspend-update))
     (remove-hook 'helm-after-initialize-hook
                  #'vizier-helm-toggle-initial-updates--hook-fn)))
 
@@ -122,7 +124,7 @@ case cause it to start with updates suspended."
 
 (defun vizier-helm-resume-update-or-exit-minibuffer ()
   "Resume updates if suspended, else `helm-maybe-exit-minibuffer'."
-  (interactive) 
+  (interactive)
   (if helm-suspend-update-flag
       (silence ("^Helm update reenabled!$")
         (helm-toggle-suspend-update))
