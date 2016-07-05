@@ -606,6 +606,12 @@
                  uniquify-after-kill-buffer-p t
                  uniquify-ignore-buffers-re   "^\\*"))
 
+(use-package vc
+  :bind (:map umbra-mode-map
+              ("C-x v <delete>" . vc-delete-file))
+  :bind (:umbra vc-dir-mode
+               ("<delete>" . vc-dir-delete-file)))
+
 (use-package visible-mark
   :ensure t
   :init
