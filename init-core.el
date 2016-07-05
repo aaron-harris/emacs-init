@@ -1146,6 +1146,10 @@
   (validate-setq elfeed-link-tag              'link
                  elfeed-link-browser-function #'eww-browse-url))
 
+(use-package elfeed-sync
+  :bind (:umbra elfeed-search-mode
+                ("C-x C-s" . elfeed-sync-save)))
+
 
 ;;;; AUCTeX
 ;;=========
