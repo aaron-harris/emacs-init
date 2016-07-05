@@ -738,7 +738,7 @@
 
 (use-package aph-lisp-mode
   :bind (:umbra emacs-lisp-mode
-                ("C-c C-c" . aph/eval-region-or-buffer)))
+                ("C-c C-l" . aph/eval-region-or-buffer)))
 
 (use-package pp
   :bind (:umbra emacs-lisp-mode
@@ -1203,8 +1203,9 @@
 (use-package cider
   :ensure t
   :bind (:umbra cider-mode
-                ("C-h A" . cider-apropos)
-                ("C-h D" . cider-apropos-documentation))
+                ("C-c C-l" . cider-load-buffer)
+                ("C-h A"   . cider-apropos)
+                ("C-h D"   . cider-apropos-documentation))
   :config
   (validate-setq cider-auto-select-error-buffer      nil
                  cider-repl-pop-to-buffer-on-connect nil
