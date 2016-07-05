@@ -714,6 +714,8 @@
                 ("C-c C-w" . aph/ielm-copy-last-output)))
 
 (use-package lisp-mode
+  :bind (:umbra emacs-lisp-mode
+                ("C-c p C-u" . update-directory-autoloads))
   :config
   ;; Mode tags
   (mode-family-add 'lisp-mode             'lisp)
