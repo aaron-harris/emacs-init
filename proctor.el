@@ -35,6 +35,28 @@
 (eval-when-compile (require 'subr-x))
 
 
+;;;; Basic Test Wrappers
+;;======================
+(defmacro proctor-test-all (function test &rest pairs)
+  "Test FUNCTION with each of the PAIRS.  Compare with TEST.
+
+Call FUNCTION with the car of each PAIR (a list of arguments),
+and check that the value returned is the cdr of that PAIR.
+
+Example usage:
+
+    (proctor-test-all #'+ #'=
+        (nil   . 0)
+        ((1)   . 1)
+        ((1 2) . 3))"
+  (declare (debug t)
+           (indent 2))
+  `(dolist (pair ',pairs)
+     (should (funcall ,test
+                      (apply ,function (car pair))
+                      (cdr pair)))))
+
+
 ;;;; Macro Testing
 ;;================
 (defun proctor-macro-executes-body (macro &optional other-args)

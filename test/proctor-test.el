@@ -24,6 +24,16 @@
 (require 'proctor)
 
 
+;;;; Basic Test Wrappers
+;;======================
+(ert-deftest proctor-test-all ()
+  "Test `proctor-test-all'."
+  (proctor-test-all #'+ #'=
+    (nil   . 0)
+    ((1)   . 1)
+    ((1 2) . 3)))
+
+
 ;;;; Macro Testing
 ;;================
 (ert-deftest proctor-test-macro-executes-body ()
