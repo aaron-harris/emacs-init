@@ -28,7 +28,25 @@
 ;;; Code:
 
 (require 'seq)
+(eval-when-compile (require 'dash))
 
+
+;;;; Type Introspection
+;;=====================
+(defun aph/seq-type (sequence)
+  "Return the type of SEQUENCE.
+
+This is a symbol: vector, string, or list.  If SEQUENCE is not
+one of these types, an error is signaled."
+  (cond
+   ((listp sequence)   'list)
+   ((stringp sequence) 'string)
+   ((vectorp sequence) 'vector)
+   (:else              (signal 'wrong-type-argument `(seq-p ,sequence)))))
+
+
+;;;; Search
+;;=========
 (defun aph/seq-successor (sequence elt &optional testfn circular)
   "If ELT is in SEQUENCE, return its successor; else, nil.
 
@@ -48,6 +66,24 @@ of SEQUENCE instead of nil."
     (or (seq--elt-safe tail 1)
         (and circular tail (elt sequence 0))
         nil)))
+
+
+;;;; Reduction
+;;============
+(defun aph/seq-reductions (function sequence initial-value)
+  "Return sequence of partial results from `seq-reduce'.
+
+The first element of the returned sequence is INITIAL-VALUE, the
+second element is the result of calling FUNCTION with
+INITIAL-VALUE and the first element of SEQUENCE, and so forth.
+The last element is the value that would be returned by
+`seq-reduce' if it were called with these arguments." 
+  (-> (lambda (acc val)
+        (cons (funcall function (car acc) val)
+              acc))
+      (seq-reduce sequence (list initial-value))
+      reverse
+      (seq-into (aph/seq-type sequence))))
 
 (provide 'aph-seq)
 ;;; aph-seq.el ends here

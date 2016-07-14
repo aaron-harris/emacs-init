@@ -24,17 +24,31 @@
 (require 'aph-seq)
 (require 'ert)
 
+(ert-deftest aph/seq-test-type ()
+  "Test `aph/seq-type'."
+  (proctor-test-all #'aph/seq-type #'eq
+    (((1 2 3)) . list)
+    (([1 2 3]) . vector)
+    (("Foo")   . string)
+    ((nil)     . list))
+  (should-error (aph/seq-type 3) :type 'wrong-type-argument))
+
+(ert-deftest aph/seq-test-reductions ()
+  "Test `aph/seq-reductions'."
+  (proctor-test-all #'aph/seq-reductions #'equal
+    ((+ (1 2 3) 4) . (4 5 7 10))))
+
 (ert-deftest aph/seq-test-successor ()
   "Test `aph/seq-successor'."
-  (dolist (pair '((((a b c) a)       . b)
-                  (((a b c) a nil t) . b)
-                  (((a b c) b)       . c)
-                  (((a b c) c)       . nil)
-                  (((a b c) c nil t) . a)
-                  (((a b c) d)       . nil)
-                  (((a b c) d nil t) . nil)
-                  ((nil     a)       . nil)))
-    (should (eq (apply #'aph/seq-successor (car pair)) (cdr pair)))))
+  (proctor-test-all #'aph/seq-successor #'eq
+    (((a b c) a)       . b)
+    (((a b c) a nil t) . b)
+    (((a b c) b)       . c)
+    (((a b c) c)       . nil)
+    (((a b c) c nil t) . a)
+    (((a b c) d)       . nil)
+    (((a b c) d nil t) . nil)
+    ((nil     a)       . nil)))
 
 (provide 'aph-seq-test)
 ;;; aph-seq-test.el ends here
