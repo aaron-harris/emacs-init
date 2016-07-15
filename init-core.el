@@ -598,6 +598,11 @@
   :config
   (tooltip-mode -1))
 
+(use-package unicode-fonts
+  :ensure t
+  :config
+  (unicode-fonts-setup))
+
 (use-package uniquify
   :config
   ;; Snippet from http://pragmaticemacs.com/emacs/uniquify-your-buffer-names/
