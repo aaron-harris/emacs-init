@@ -22,7 +22,8 @@ After the file is created, open it in `forms-mode'.
 
 ;;;***
 
-;;;### (autoloads nil "aph-helm" "aph-helm.el" (22390 61454 0 0))
+;;;### (autoloads nil "aph-helm" "aph-helm.el" (22396 17953 911818
+;;;;;;  900000))
 ;;; Generated autoloads from aph-helm.el
 
 (autoload 'aph/helm-semantic-or-imenu "aph-helm" "\
@@ -205,6 +206,29 @@ Outside of strings and comments, this should generally behave as
 ;;; Generated autoloads from aph-theme.el
 
 (and load-file-name (boundp 'custom-theme-load-path) (add-to-list 'custom-theme-load-path (file-name-as-directory (file-name-directory load-file-name))))
+
+;;;***
+
+;;;### (autoloads nil "aph-vc" "aph-vc.el" (22409 29765 229868 400000))
+;;; Generated autoloads from aph-vc.el
+
+(autoload 'aph/vc-delete-file "aph-vc" "\
+As `vc-delete-file', but delete unregistered files.
+
+If the command `vc-delete-file' is invoked on a file which is not
+under version control, an error is signaled.  This command
+instead deletes the file, requesting confirmation from the user.
+In all other circumstances, it behaves as `vc-delete-file'.
+
+\(fn FILE)" t nil)
+
+(autoload 'aph/vc-dir-delete-file "aph-vc" "\
+As `vc-dir-delete-file', but delete unregistered files.
+
+See `aph/vc-delete-file' for more details; this is just a simple
+wrapper around that function for use in the `vc-dir' buffer.
+
+\(fn)" t nil)
 
 ;;;***
 
@@ -432,6 +456,19 @@ optional VERBOSE parameter is non-nil, also print a message
 informing the user of the newly applied filter.
 
 \(fn &optional VERBOSE)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "elfeed-sync" "elfeed-sync.el" (22395 63212
+;;;;;;  595255 0))
+;;; Generated autoloads from elfeed-sync.el
+
+(autoload 'elfeed-sync-save "elfeed-sync" "\
+Save `elfeed' database.
+
+This is just an interactive version of `elfeed-db-save'.
+
+\(fn)" t nil)
 
 ;;;***
 
@@ -961,8 +998,8 @@ Unlike `which-function-mode', this mode is buffer-local.
 ;;;;;;  "org-agenda-skip.el" "org-agenda-sticky.el" "org-barb.el"
 ;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
 ;;;;;;  "org-multitheme.el" "proctor-helm.el" "proctor.el" "shr-link-img.el"
-;;;;;;  "symbol.el" "trinket.el" "vizier-helm.el" "vizier.el") (22391
-;;;;;;  3083 472514 500000))
+;;;;;;  "symbol.el" "trinket.el" "vizier-helm.el" "vizier.el") (22409
+;;;;;;  30156 693987 800000))
 
 ;;;***
 
