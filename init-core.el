@@ -611,11 +611,11 @@
                  uniquify-after-kill-buffer-p t
                  uniquify-ignore-buffers-re   "^\\*"))
 
-(use-package vc
+(use-package aph-vc 
   :bind (:map umbra-mode-map
-              ("C-x v <delete>" . vc-delete-file))
+              ("C-x v <delete>" . aph/vc-delete-file))
   :bind (:umbra vc-dir-mode
-               ("<delete>" . vc-dir-delete-file)))
+                ("<delete>" . aph/vc-dir-delete-file)))
 
 (use-package visible-mark
   :ensure t
