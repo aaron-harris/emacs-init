@@ -49,8 +49,8 @@
                  'let ''emacs-version '((var-x)))))
 
 
-;;;; Buffer Handling
-;;==================
+;;;; Buffer and File Handling
+;;===========================
 (ert-deftest proctor-test-with-buffer ()
   "Test `proctor-with-buffer'."
   (should (proctor-macro-executes-body 'proctor-with-buffer
@@ -59,6 +59,19 @@
     (proctor-with-buffer 'text-mode text
       (should (eq major-mode 'text-mode))
       (should (looking-at-p "Foo")))))
+
+(ert-deftest proctor-test-with-file ()
+  "Test `proctor-with-file'."
+  (should (proctor-macro-executes-body 'proctor-with-file
+                                       '("foo" "Foo")))
+  (let ((abs-file  (expand-file-name "foo" proctor-directory)))
+    (dolist (text '("Foo" "\nFoo"))
+      (proctor-with-file "foo" text
+        (should (file-exists-p abs-file))
+        (with-temp-buffer
+          (insert-file-contents abs-file)
+          (should (equal (buffer-string) "Foo"))))
+      (should-not (file-exists-p abs-file)))))
 
 
 ;;;; Temporary Modes
