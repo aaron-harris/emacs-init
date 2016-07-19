@@ -120,8 +120,8 @@ either `boundp' or `fboundp', so long as it is not interned."
     t))
 
 
-;;;; Buffer Handling
-;;==================
+;;;; Buffer and File Handling
+;;===========================
 (defmacro proctor-with-buffer (mode text &rest body)
   "Execute BODY in temp buffer in MODE that contains TEXT.
 
@@ -148,6 +148,33 @@ Buffer line 2\"
      (funcall ,mode)
      (goto-char (point-min))
      ,@body))
+
+(defmacro proctor-with-file (file text &rest body)
+  "Create FILE with TEXT, evaluate BODY, then delete FILE.
+
+If FILE is relative, it is created inside `proctor-directory'.
+If its parent directory does not already exist, it is created,
+but that directory will not be deleted after BODY exits.
+
+As with `proctor-with-buffer', if TEXT begins with a newline,
+that newline is not included in the file text.
+
+Note that the current buffer is not changed, and FILE is not
+guaranteed to be open in any buffer."
+  (declare (indent 2)
+           (debug t)) 
+  (let ((abs-file  (make-symbol "abs-file"))
+        (file-dir  (make-symbol "file-dir")))
+    `(let* ((,abs-file  (expand-file-name ,file proctor-directory))
+            (,file-dir  (file-name-directory ,abs-file)))
+       (unwind-protect
+           (progn (unless (file-exists-p ,file-dir)
+                    (make-directory ,file-dir))
+                  (with-temp-file ,abs-file
+                    (insert (string-remove-prefix "\n" ,text)))
+                  ,@body)
+         (when (file-exists-p ,abs-file)
+           (delete-file ,abs-file))))))
 
 
 ;;;; Temporary Modes
