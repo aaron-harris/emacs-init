@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `aph-vc', `ert'
+;; Dependencies: `aph-vc', `proctor'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,11 +24,14 @@
 (require 'aph-vc)
 (eval-when-compile (require 'cl-lib))
 
+(require 'proctor)
+
 
 ;;;; Test Apparatus
 ;;=================
 (defvar aph/vc-test-file "aph-vc-test.temp"
-  "The filename to use for testing functions from `aph-vc'.")
+  "The filename to use for testing functions from `aph-vc'.
+This is relative to `proctor-directory'.")
 
 (defvar aph/vc-test-canary nil
   "Variable used for reporting by testing mocks for `aph-vc'.")
@@ -67,15 +70,21 @@ from the module `aph-vc'.  In this environment:
 
 * The functions `vc-backend' and `y-or-n-p' are mocked by
   constant functions that return the values of the variables
-  `aph/vc-test-use-vc' and `aph/test-confirm-deletion',
+  `aph/vc-test-use-vc' and `aph/vc-test-confirm-deletion',
   respectively.
 
 * The variable `aph/vc-test-canary' (which is used by
   `aph/vc-test-delete-mock') is reset to nil.
 
-* A file exists at the filename `aph/vc-test-file'.  If this file
-  still exists after BODY finishes, it will be deleted.  This is
-  still true in the event of an error or nonlocal exit."
+* A file exists at the filename given by `aph/vc-test-file',
+  relative to `proctor-directory'.  If this file still exists
+  after BODY finishes, it will be deleted.  This is still true in
+  the event of an error or nonlocal exit.
+
+* For convenience, the current directory is set to
+  `proctor-directory', so that `aph/vc-test-file' can be
+  referenced without having to expand the filename.  This is
+  reset after BODY exits."
   (declare (indent 0))
   `(cl-letf*
        (((symbol-function 'vc-delete-file)
@@ -83,13 +92,11 @@ from the module `aph-vc'.  In this environment:
         ((symbol-function 'vc-backend)
          (lambda (_) aph/vc-test-use-vc))
         ((symbol-function 'y-or-n-p)
-         (lambda (_) aph/vc-test-confirm-deletion)))
-     (unwind-protect
-         (progn (setq aph/vc-test-canary nil)
-                (with-temp-file aph/vc-test-file (insert "Foo"))
-                ,@body)
-       (when (file-exists-p aph/vc-test-file)
-         (delete-file aph/vc-test-file)))))
+         (lambda (_) aph/vc-test-confirm-deletion))
+        (default-directory  proctor-directory))
+     (setq aph/vc-test-canary nil)
+     (proctor-with-file aph/vc-test-file "Foo"
+       ,@body)))
 
 (ert-deftest aph/vc-test-delete-fixture ()
   "Test that `aph/vc-test-delete-fixture' works correctly."
