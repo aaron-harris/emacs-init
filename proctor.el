@@ -24,6 +24,11 @@
 
 ;; This module contains macros and functions for general-purpose use
 ;; inside ERT tests, as fixtures, mocks, etc.
+;;
+;; Some tests generate temporary files, for testing interaction with
+;; the filesystem.  To choose where these files will be created,
+;; customize `proctor-directory'; the default is a directory
+;; ".proctor" inside `user-emacs-directory'.
 
 ;;; Code:
 
@@ -33,6 +38,23 @@
 (require 'symbol)
 
 (eval-when-compile (require 'subr-x))
+
+
+;;;; User Options
+;;===============
+(defgroup proctor nil
+  "Extra ERT test apparatus"
+  :prefix "proctor-"
+  :link '(emacs-commentary-link "proctor")
+  :group 'ert)
+
+(defcustom proctor-directory
+  (expand-file-name ".proctor/" user-emacs-directory)
+  "Directory that `proctor' should use for temporary files.
+
+These files will be generated as part of individual tests and
+should not persist outside of those tests."
+  :type 'string)
 
 
 ;;;; Basic Test Wrappers
