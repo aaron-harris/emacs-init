@@ -149,6 +149,40 @@ Buffer line 2\"
      (goto-char (point-min))
      ,@body))
 
+(defmacro proctor-with-buffer-renamed (buffer &rest body)
+  "As `ert-with-buffer-renamed', with an improved signature.
+
+The macro `ert-with-buffer-renamed' has a slightly awkward
+signature that is inconsistent with the other `proctor' macros.
+This is a thin wrapper around `ert-with-buffer-renamed' that
+normalizes the signature.  Contrast:
+
+    (ert-with-buffer-renamed (\"Foo\")
+        (do-stuff-here))
+
+with
+
+    (proctor-with-buffer-renamed \"Foo\"
+      (do-stuff-here))"
+  (declare (indent 1))
+  `(ert-with-buffer-renamed (,buffer) ,@body))
+
+(defmacro proctor-with-buffers-renamed (buffers &rest body)
+  "As `proctor-with-buffer-renamed', for multiple BUFFERS.
+
+BUFFERS should be a form returning a list of buffer names.  Each
+buffer will be protected as in `ert-with-buffer-renamed'."
+  (declare (indent 1))
+  (let ((buffer-list (make-symbol "buffer-list")))
+    `(let ((,buffer-list  ,buffers))
+       (if (null ,buffer-list)
+           (progn ,@body)
+         (ert-call-with-buffer-renamed
+          (car ,buffer-list)
+          (lambda ()
+            (macroexpand '(proctor-with-buffers-renamed
+                              (cdr ,buffer-list))) ,@body))))))
+
 (defmacro proctor-with-file (file text &rest body)
   "Create FILE with TEXT, evaluate BODY, then delete FILE.
 

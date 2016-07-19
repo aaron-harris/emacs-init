@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `proctor'
+;; Dependencies: `proctor', `bfw'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 ;;; Code:
 
 (require 'proctor)
+
+(require 'bfw)
 
 
 ;;;; Basic Test Wrappers
@@ -59,6 +61,22 @@
     (proctor-with-buffer 'text-mode text
       (should (eq major-mode 'text-mode))
       (should (looking-at-p "Foo")))))
+
+(ert-deftest proctor-test-with-buffers-renamed ()
+  "Test `proctor-with-buffers-renamed'."
+  (should (proctor-macro-executes-body 'proctor-with-buffers-renamed
+                                       '((list "*Messages*"))))
+  (let* ((buf-foo   (get-buffer-create "Foo"))
+         (buf-bar   (get-buffer-create "Bar"))
+         (name-foo  (buffer-name buf-foo))
+         (name-bar  (buffer-name buf-bar)))
+    (unwind-protect
+        (proctor-with-buffers-renamed
+            (list name-foo name-bar)
+          (should-not (buffer-live-p name-foo))
+          (should-not (buffer-live-p name-bar)))
+      (bfw-kill-buffer-if-any buf-foo)
+      (bfw-kill-buffer-if-any buf-bar))))
 
 (ert-deftest proctor-test-with-file ()
   "Test `proctor-with-file'."
