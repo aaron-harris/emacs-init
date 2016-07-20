@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `bfw', `ert'
+;; Dependencies: `bfw', `ert', `seq'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,9 +24,25 @@
 (require 'bfw)
 (require 'ert)
 
+(require 'seq)
+
 
 ;;;; Buffers
 ;;==========
+(ert-deftest bfw-test-get-buffers-by-regexp ()
+  "Test `bfw-get-buffers-by-regexp'."
+  (let ((foo  (get-buffer-create "Foo"))
+        (bar  (get-buffer-create "Bar")))
+    (unwind-protect
+        (let* ((regexp  (regexp-opt (list (buffer-name foo)
+                                          (buffer-name bar))))
+               (result  (bfw-get-buffers-by-regexp regexp)))
+          (should (= 2 (length result)))
+          (should (seq-contains result foo #'eq))
+          (should (seq-contains result bar #'eq)))
+      (kill-buffer foo)
+      (kill-buffer bar))))
+
 (ert-deftest bfw-test-kill-buffer-if-any ()
   "Test `bfw-kill-buffer-if-any'."
   (with-temp-buffer
