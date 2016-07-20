@@ -167,21 +167,24 @@ with
   (declare (indent 1))
   `(ert-with-buffer-renamed (,buffer) ,@body))
 
+(defun proctor--call-with-buffers-renamed (buffer-names thunk)
+  "As `ert-call-with-buffer-renamed', for multiple buffers.
+
+Here BUFFER-NAMES is a list of buffer names."
+  (if (null buffer-names)
+      (funcall thunk)
+    (ert-call-with-buffer-renamed
+     (car buffer-names)
+     (lambda ()
+       (proctor--call-with-buffers-renamed (cdr buffer-names) thunk)))))
+
 (defmacro proctor-with-buffers-renamed (buffers &rest body)
   "As `proctor-with-buffer-renamed', for multiple BUFFERS.
 
 BUFFERS should be a form returning a list of buffer names.  Each
 buffer will be protected as in `ert-with-buffer-renamed'."
   (declare (indent 1))
-  (let ((buffer-list (make-symbol "buffer-list")))
-    `(let ((,buffer-list  ,buffers))
-       (if (null ,buffer-list)
-           (progn ,@body)
-         (ert-call-with-buffer-renamed
-          (car ,buffer-list)
-          (lambda ()
-            (macroexpand '(proctor-with-buffers-renamed
-                              (cdr ,buffer-list))) ,@body))))))
+  `(proctor--call-with-buffers-renamed ,buffers (lambda () ,@body)))
 
 (defmacro proctor-with-file (file text &rest body)
   "Create FILE with TEXT, evaluate BODY, then delete FILE.
