@@ -31,6 +31,11 @@
 ;;;; Buffer functions:
 ;;--------------------
 ;;
+;; `bfw-get-buffers-by-regexp':
+;;
+;;     Return a list of all active buffers whose names match the
+;;     specified regexp.
+;;
 ;; `bfw-kill-buffer-if-any':
 ;;
 ;;     Kill the specified buffer if it exists, but don't signal an
@@ -91,6 +96,12 @@
 
 ;;;; Buffers
 ;;==========
+(defun bfw-get-buffers-by-regexp (regexp)
+  "Return a list of all buffers whose names match REGEXP."
+  (seq-filter (lambda (buf)
+                (string-match-p regexp (buffer-name buf)))
+              (buffer-list)))
+
 (defun bfw-kill-buffer-nowarn (&optional buffer-or-name)
   "Kill buffer specified by BUFFER-OR-NAME, without asking.
 
