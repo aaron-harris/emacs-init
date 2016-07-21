@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: tools, lisp
 
-;; Dependencies: `proctor', `bfw'
+;; Dependencies: `proctor', `bfw', `org-capture'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 (require 'proctor)
 
 (require 'bfw)
+(require 'org-capture)
 
 
 ;;;; Agenda
@@ -64,6 +65,12 @@ kill any agenda buffers that were created inside BODY.
 ITEMS should be a string or a list of strings; in the latter
 case, the elements are concatenated, separated by newlines.
 
+All %-escapes that are valid in capture templates are then
+expanded, although many of those don't make sense outside of the
+capture process; at the present time, the only escapes that have
+been tested and are known to work as expected are the timestamp
+escapes (%t, %T, %u, and %U).
+
 Care is taken to insulate the BODY environment from the user's
 default Org setup.  In particular, all currently open agendas are
 preserved using `proctor-with-buffers-renamed'."
@@ -71,12 +78,14 @@ preserved using `proctor-with-buffers-renamed'."
            (debug ([&or stringp (&rest stringp)] &body)))
   (when (listp items)
     (setq items (mapconcat #'identity items "\n")))
-  `(proctor-with-file ,proctor-org-temp-agenda-file ,items
-     (proctor-with-buffers-renamed
-         (mapcar #'buffer-name (proctor-org-list-agendas))
-       (let ((org-agenda-files
-              (list (expand-file-name ,proctor-org-temp-agenda-file
-                                      proctor-directory))))
+  `(let ((org-agenda-files
+          (list (expand-file-name ,proctor-org-temp-agenda-file
+                                  proctor-directory)))
+         org-capture-plist)
+     (proctor-with-file ,proctor-org-temp-agenda-file
+         (org-capture-fill-template ,items)
+       (proctor-with-buffers-renamed
+           (mapcar #'buffer-name (proctor-org-list-agendas))
          (unwind-protect (progn ,@body)
            (mapcar #'bfw-kill-buffer-if-any (proctor-org-list-agendas)))))))
 
