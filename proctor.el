@@ -65,15 +65,19 @@ should not persist outside of those tests."
 Call FUNCTION with the car of each PAIR (a list of arguments),
 and check that the value returned is the cdr of that PAIR.
 
+Note that the PAIRS are inserted under a backquote.  This means
+that you don't need to quote each pair, but you can still use the
+comma operator to evaluate pieces that need to be calculated.
+
 Example usage:
 
     (proctor-test-all #'+ #'=
         (nil   . 0)
-        ((1)   . 1)
+        ((1)   . ,(- 2 1))
         ((1 2) . 3))"
   (declare (debug t)
-           (indent 2))
-  `(dolist (pair ',pairs)
+           (indent 2)) 
+  `(dolist (pair (backquote ,pairs))
      (should (funcall ,test
                       (apply ,function (car pair))
                       (cdr pair)))))
