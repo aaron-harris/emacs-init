@@ -27,7 +27,7 @@
 ;;;; Agenda
 ;;=========
 (ert-deftest proctor-org-test-agenda ()
-  "Test `proctor-org-with-agenda'."
+  "Test `proctor-org-with-agenda-items'."
   (let ((agendas (proctor-org-list-agendas)))
     (proctor-org-with-agenda-items
         ("* TODO Foo"
@@ -40,6 +40,27 @@
       (goto-char (point-min))
       (should-not (re-search-forward "DONE Baz" nil :noerror)))
     (should (equal agendas (proctor-org-list-agendas)))))
+
+(ert-deftest proctor-org-test-agenda:timestamps ()
+  "Test timestamp escapes in `proctor-org-with-agenda-items'."
+  (proctor-org-with-agenda-items
+      ("* Foo\n  %t"
+       "* Bar\n  %T"
+       "* Baz\n  %u"
+       "* Quux\n  %U")
+    (let* ((ct   (current-time))
+           (v-t  (format-time-string (car org-time-stamp-formats) ct))
+           (v-T  (format-time-string (cdr org-time-stamp-formats) ct))
+           (v-u  (concat "[" (substring v-t 1 -1) "]"))
+           (v-U  (concat "[" (substring v-T 1 -1) "]")))
+      (with-temp-buffer
+        (insert-file-contents (expand-file-name proctor-org-temp-agenda-file
+                                                proctor-directory))
+        (message "%s" (substring-no-properties (buffer-string)))
+        (should (search-forward (format "* Foo\n  %s"  v-t)))
+        (should (search-forward (format "* Bar\n  %s"  v-T)))
+        (should (search-forward (format "* Baz\n  %s"  v-u)))
+        (should (search-forward (format "* Quux\n  %s" v-U)))))))
 
 (provide 'proctor-org-test)
 ;;; proctor-org-test.el ends here
