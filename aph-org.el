@@ -31,6 +31,26 @@
 (eval-when-compile (require 'vizier))
 
 
+;;;; Timestamps
+;;=============
+(defun aph/org-relative-timestamp (&optional days hours inactive)
+  "Return a properly-formatted Org timestamp relative to today.
+
+The timestamp differs from the current time by DAYS and HOURS;
+positive values are in the future.  The hours are only included
+in the timestamp if HOURS is supplied.  (To get the current
+timestamp, including the hour, supply 0 for HOURS.)
+
+The timestamp is active unless INACTIVE is non-nil."
+  (let* ((format  (funcall (if hours #'cdr #'car) org-time-stamp-formats))
+         (time    (current-time))
+         (hours   (+ (or hours 0) (* 24 (or days 0)))))
+    (cl-incf (nth 1 time) (* 60 60 hours))
+    (when inactive
+      (setq format (concat "[" (substring format 1 -1) "]")))
+    (format-time-string format time)))
+
+
 ;;;; Multimodal Commands
 ;;======================
 (defun aph/org-cycle-with-smart-tab (&optional arg)
@@ -67,6 +87,7 @@ space)."
   (interactive "p")
   (when (and (org-table-p)
              (not (number-at-point)))
+    (require 'aph-org-table)
     (aph/org-table-end-of-this-field))
   (org-increase-number-at-point inc))
 

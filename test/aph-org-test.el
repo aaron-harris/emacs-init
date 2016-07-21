@@ -25,10 +25,57 @@
 (require 'proctor)
 
 
+;;;; Timestamps
+;;=============
+(ert-deftest aph/org-test-relative-timestamp:days ()
+  "Test `aph/org-relative-timestamp' for differences of days."
+  (proctor-test-all
+      (lambda (&rest args)
+        (org-time-stamp-to-now (apply #'aph/org-relative-timestamp args)))
+      #'=
+    (nil    . 0)
+    ((0)    . 0)
+    ((0 0)  . 0)
+    ((0 24) . 1)
+    ((1)    . 1)
+    ((-1)   . -1)
+    ((5)    . 5)))
+
+(ert-deftest aph/org-test-relative-timestamp:hours ()
+  "Test `aph/org-relative-timestamp' for differences of hours."
+  (proctor-test-all
+      (lambda (&rest args)
+        (org-time-stamp-to-now (apply #'aph/org-relative-timestamp args)
+                               :seconds))
+      (lambda (x y)
+        (<= (- x 60) y (+ x 60)))
+    ((nil 1) . ,(* 1  60 60))
+    ((1   3) . ,(* 27 60 60))))
+
+(ert-deftest aph/org-test-relative-timestamp:specificity ()
+  "Test that `aph/org-relative-timestamp' omits hours correctly."
+  (let ((regexp "[0-9][0-9]:[0-9][0-9]>$"))
+    (should-not (string-match-p regexp (aph/org-relative-timestamp)))
+    (should     (string-match-p regexp (aph/org-relative-timestamp nil 0)))))
+
+(ert-deftest aph/org-test-relative-timestamp:inactive ()
+  "Test `aph/org-relative-timestamp' for inactive timestamps."
+  (proctor-test-all
+      (lambda (type &rest args) 
+        (string-match-p (org-re-timestamp type)
+                        (apply #'aph/org-relative-timestamp args)))
+      (lambda (a b)
+        (not (org-xor a b)))
+    ((active   nil nil nil) . 0)
+    ((active   0   0   nil) . 0)
+    ((inactive nil nil t)   . 0)
+    ((inactive 3   5   t)   . 0)))
+
+
 ;;;; Number Twiddling
 ;;===================
 (ert-deftest aph/org-increase-number ()
-  "Test `aph/org-increase-number'."
+  "Test `aph/org-increase-number'." 
   (proctor-with-buffer 'org-mode "
 | A  | B   |
 |----+-----|
