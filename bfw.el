@@ -102,6 +102,12 @@
                 (string-match-p regexp (buffer-name buf)))
               (buffer-list)))
 
+(defun bfw-get-buffer-for-file (file)
+  "Return the buffer visiting FILE, if any; else, nil."
+  (seq-find (lambda (buf)
+              (equal file (buffer-file-name buf)))
+            (buffer-list)))
+
 (defun bfw-kill-buffer-nowarn (&optional buffer-or-name)
   "Kill buffer specified by BUFFER-OR-NAME, without asking.
 

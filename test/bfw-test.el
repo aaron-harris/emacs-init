@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `bfw', `ert', `seq'
+;; Dependencies: `bfw', `proctor', `seq'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 ;;; Code:
 
 (require 'bfw)
-(require 'ert)
+(require 'proctor)
 
 (require 'seq)
 
@@ -42,6 +42,17 @@
           (should (seq-contains result bar #'eq)))
       (kill-buffer foo)
       (kill-buffer bar))))
+
+(ert-deftest bfw-get-buffer-for-file ()
+  "Test `bfw-get-buffer-for-file'."
+  (let ((file (expand-file-name "foo" proctor-directory))
+        buffer) 
+    (proctor-with-file "foo" "Foo"
+      (should-not (bfw-get-buffer-for-file file))
+      (setq buffer (find-file file))
+      (unwind-protect
+          (should (eq buffer (bfw-get-buffer-for-file file)))
+        (bfw-kill-buffer-if-any buffer)))))
 
 (ert-deftest bfw-test-kill-buffer-if-any ()
   "Test `bfw-kill-buffer-if-any'."
