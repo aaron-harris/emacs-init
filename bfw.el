@@ -97,7 +97,7 @@
 ;;;; Buffers
 ;;==========
 (defun bfw-get-buffers-by-regexp (regexp)
-  "Return a list of all buffers whose names match REGEXP."
+  "Return a list of all buffers whose names match REGEXP." 
   (seq-filter (lambda (buf)
                 (string-match-p regexp (buffer-name buf)))
               (buffer-list)))

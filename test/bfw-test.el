@@ -36,7 +36,8 @@
     (unwind-protect
         (let* ((regexp  (regexp-opt (list (buffer-name foo)
                                           (buffer-name bar))))
-               (result  (bfw-get-buffers-by-regexp regexp)))
+               (case-fold-search nil)
+               (result  (bfw-get-buffers-by-regexp regexp))) 
           (should (= 2 (length result)))
           (should (seq-contains result foo #'eq))
           (should (seq-contains result bar #'eq)))
