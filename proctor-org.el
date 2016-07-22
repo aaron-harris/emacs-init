@@ -75,14 +75,14 @@ Care is taken to insulate the BODY environment from the user's
 default Org setup.  In particular, all currently open agendas are
 preserved using `proctor-with-buffers-renamed'."
   (declare (indent 1)
-           (debug ([&or stringp (&rest stringp)] &body)))
+           (debug ([&or stringp (&rest stringp)] body)))
   (when (listp items)
     (setq items (mapconcat #'identity items "\n")))
   `(let ((org-agenda-files
-          (list (expand-file-name ,proctor-org-temp-agenda-file
+          (list (expand-file-name proctor-org-temp-agenda-file
                                   proctor-directory)))
          org-capture-plist)
-     (proctor-with-file ,proctor-org-temp-agenda-file
+     (proctor-with-file proctor-org-temp-agenda-file
          (org-capture-fill-template ,items)
        (proctor-with-buffers-renamed
            (mapcar #'buffer-name (proctor-org-list-agendas))
