@@ -55,8 +55,7 @@
            (v-U  (concat "[" (substring v-T 1 -1) "]")))
       (with-temp-buffer
         (insert-file-contents (expand-file-name proctor-org-temp-agenda-file
-                                                proctor-directory))
-        (message "%s" (substring-no-properties (buffer-string)))
+                                                proctor-directory)) 
         (should (search-forward (format "* Foo\n  %s"  v-t)))
         (should (search-forward (format "* Bar\n  %s"  v-T)))
         (should (search-forward (format "* Baz\n  %s"  v-u)))
