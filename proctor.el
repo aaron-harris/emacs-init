@@ -201,7 +201,8 @@ As with `proctor-with-buffer', if TEXT begins with a newline,
 that newline is not included in the file text.
 
 Note that the current buffer is not changed, and FILE is not
-guaranteed to be open in any buffer."
+guaranteed to be open in any buffer.  However, if FILE is opened
+in a buffer inside BODY, it is deleted on exit."
   (declare (indent 2)
            (debug t)) 
   (let ((abs-file  (make-symbol "abs-file"))
@@ -214,6 +215,9 @@ guaranteed to be open in any buffer."
                   (with-temp-file ,abs-file
                     (insert (string-remove-prefix "\n" ,text)))
                   ,@body)
+         (let ((buf (bfw-get-buffer-for-file ,abs-file)))
+           (when (buffer-live-p buf)
+             (kill-buffer buf)))
          (when (file-exists-p ,abs-file)
            (delete-file ,abs-file))))))
 

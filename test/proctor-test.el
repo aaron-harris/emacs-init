@@ -92,6 +92,17 @@
           (should (equal (buffer-string) "Foo"))))
       (should-not (file-exists-p abs-file)))))
 
+(ert-deftest proctor-test-with-file:buffer ()
+  "Test `proctor-with-file' with an open buffer."
+  (let (buffer)
+    (unwind-protect
+        (progn
+          (proctor-with-file "foo" "Foo"
+            (setq buffer
+                  (find-file (expand-file-name "foo" proctor-directory))))
+          (should-not (buffer-live-p buffer)))
+      (bfw-kill-buffer-if-any buffer))))
+
 
 ;;;; Temporary Modes
 ;;==================

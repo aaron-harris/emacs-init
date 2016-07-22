@@ -34,11 +34,11 @@
          "* TODO Bar\n  More text"
          "* DONE Baz") 
       (org-todo-list "TODO")
-      (should (re-search-forward "TODO Foo"))
+      (should (search-forward "TODO Foo"))
       (goto-char (point-min))
-      (should (re-search-forward "TODO Bar"))
+      (should (search-forward "TODO Bar"))
       (goto-char (point-min))
-      (should-not (re-search-forward "DONE Baz" nil :noerror)))
+      (should-not (search-forward "DONE Baz" nil :noerror)))
     (should (equal agendas (proctor-org-list-agendas)))))
 
 (ert-deftest proctor-org-test-agenda:timestamps ()
