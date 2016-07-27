@@ -36,11 +36,9 @@
 ;;;; Agenda
 ;;=========
 (defcustom proctor-org-temp-agenda-file
-  "temp.org"
-  "Filename that `proctor-org-with-agenda-items' should use.
-
-If the filename is relative, it will be placed inside
-`proctor-directory'."
+  (expand-file-name "temp.org" proctor-directory)
+  "Path to temp agenda file for `proctor-org-with-agenda-items'.
+This should be an absolute path."
   :group 'proctor
   :type 'string)
 
@@ -79,8 +77,7 @@ preserved using `proctor-with-buffers-renamed'."
   (when (listp items)
     (setq items (mapconcat #'identity items "\n")))
   `(let ((org-agenda-files
-          (list (expand-file-name proctor-org-temp-agenda-file
-                                  proctor-directory)))
+          (list proctor-org-temp-agenda-file))
          org-capture-plist)
      (proctor-with-file proctor-org-temp-agenda-file
          (org-capture-fill-template ,items)
