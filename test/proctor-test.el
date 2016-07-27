@@ -103,6 +103,23 @@
           (should-not (buffer-live-p buffer)))
       (bfw-kill-buffer-if-any buffer))))
 
+(ert-deftest proctor-test-with-file:modified ()
+  "Test `proctor-with-file' when buffer is modified.
+
+The macro `proctor-with-file' should kill any buffer visiting the
+temporary file without prompting when its body exits, even if
+that buffer is modified.  Therefore, we consider any call to
+`y-or-n-p' or `yes-or-no-p' will fail this test."
+  (cl-letf (((symbol-function #'y-or-n-p)    #'error)
+            ((symbol-function #'yes-or-no-p) #'error)
+            (buffer nil))
+    (proctor-with-file "temp" "Foo"
+      (setq buffer (find-file (expand-file-name "temp" proctor-directory)))
+      (with-current-buffer buffer
+        (insert "Bar")
+        (should (buffer-modified-p buffer))))
+    (should-not (buffer-live-p buffer))))
+
 
 ;;;; Temporary Modes
 ;;==================
