@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `proctor-org'
+;; Dependencies: `proctor-org', `bfw'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 
 (require 'proctor-org)
 
+(require 'bfw)
+
 
 ;;;; Agenda
 ;;=========
@@ -39,7 +41,8 @@
       (should (search-forward "TODO Bar"))
       (goto-char (point-min))
       (should-not (search-forward "DONE Baz" nil :noerror)))
-    (should (equal agendas (proctor-org-list-agendas)))))
+    (should (equal agendas (proctor-org-list-agendas)))
+    (should-not (bfw-get-buffer-for-file proctor-org-temp-agenda-file))))
 
 (ert-deftest proctor-org-test-agenda:timestamps ()
   "Test timestamp escapes in `proctor-org-with-agenda-items'."
@@ -54,8 +57,7 @@
            (v-u  (concat "[" (substring v-t 1 -1) "]"))
            (v-U  (concat "[" (substring v-T 1 -1) "]")))
       (with-temp-buffer
-        (insert-file-contents (expand-file-name proctor-org-temp-agenda-file
-                                                proctor-directory)) 
+        (insert-file-contents proctor-org-temp-agenda-file)
         (should (search-forward (format "* Foo\n  %s"  v-t)))
         (should (search-forward (format "* Bar\n  %s"  v-T)))
         (should (search-forward (format "* Baz\n  %s"  v-u)))
