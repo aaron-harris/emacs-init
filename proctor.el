@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: tools, lisp
 
-;; Dependencies: `ert-x', `alist', `symbol'
+;; Dependencies: `ert-x', `alist', `bfw', `symbol'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@
 (require 'ert-x)
 
 (require 'alist)
+(require 'bfw)
 (require 'symbol)
 
 (eval-when-compile (require 'subr-x))
@@ -202,7 +203,9 @@ that newline is not included in the file text.
 
 Note that the current buffer is not changed, and FILE is not
 guaranteed to be open in any buffer.  However, if FILE is opened
-in a buffer inside BODY, it is deleted on exit."
+in a buffer inside BODY, that buffer will be killed on exit,
+bypassing all of the usual warnings (e.g., if the buffer is
+modified)."
   (declare (indent 2)
            (debug t)) 
   (let ((abs-file  (make-symbol "abs-file"))
@@ -217,7 +220,7 @@ in a buffer inside BODY, it is deleted on exit."
                   ,@body)
          (let ((buf (bfw-get-buffer-for-file ,abs-file)))
            (when (buffer-live-p buf)
-             (kill-buffer buf)))
+             (bfw-kill-buffer-nowarn buf)))
          (when (file-exists-p ,abs-file)
            (delete-file ,abs-file))))))
 
