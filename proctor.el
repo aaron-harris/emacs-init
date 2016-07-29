@@ -76,7 +76,7 @@ Example usage:
         (nil   . 0)
         ((1)   . ,(- 2 1))
         ((1 2) . 3))"
-  (declare (debug t)
+  (declare (debug (function-form function-form &rest sexp))
            (indent 2)) 
   `(dolist (pair (backquote ,pairs))
      (should (funcall ,test
