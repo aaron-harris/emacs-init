@@ -25,6 +25,20 @@
 (require 'proctor)
 
 
+;;;; Narrowing
+;;============
+(ert-deftest aph/org-test-narrow-to-entry ()
+  "Test `aph/org-narrow-to-entry'."
+  (proctor-with-buffer 'org-mode "
+* Foo
+  Foo entry text
+** Bar
+   Bar entry text"
+    (aph/org-narrow-to-entry)
+    (should (equal (buffer-string)
+                   "* Foo\n  Foo entry text\n"))))
+
+
 ;;;; Timestamps
 ;;=============
 (ert-deftest aph/org-test-timestamp-date-only ()
@@ -61,6 +75,17 @@
     (should-not (aph/org-get-entry-timestamp-marker
                  nil nil "<2016-07-24 Sun>"))
     (should (= (point) (point-min)))))
+
+(ert-deftest aph/org-test-find-timestamp:nested ()
+  "Test `aph/org-find-timestamp' on nested items.
+
+This is a regression test for a bug wherein
+`aph/org-find-timestamp' could find a timestamp in a sub-item."
+  (proctor-with-buffer 'org-mode "
+* TODO Foo
+** TODO Bar
+   <2016-07-29 Fri>"
+    (should-not (aph/org-find-timestamp (point-min) 'active))))
 
 (ert-deftest aph/org-test-relative-timestamp:days ()
   "Test `aph/org-relative-timestamp' for differences of days."

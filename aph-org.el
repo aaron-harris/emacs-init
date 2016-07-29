@@ -31,6 +31,21 @@
 (eval-when-compile (require 'vizier))
 
 
+;;;; Narrowing
+;;============
+(defun aph/org-narrow-to-entry ()
+  "Narrow buffer to current entry.
+
+An entry is the text between a heading and the start of its first
+child."
+  (interactive)
+  (save-excursion
+    (outline-show-subtree)
+    (narrow-to-region
+     (progn (org-back-to-heading)        (point))
+     (progn (org-next-visible-heading 1) (point)))))
+
+
 ;;;; Timestamps
 ;;=============
 (defun aph/org-timestamp-date-only (timestamp)
@@ -56,7 +71,7 @@ date are considered."
              (widen)
              (goto-char (or pos (point)))
              (org-back-to-heading)
-             (org-narrow-to-element)
+             (aph/org-narrow-to-entry) 
              (let ((regexp (org-re-timestamp type)))
                (catch 'found
                  (while (re-search-forward regexp nil :noerror)
