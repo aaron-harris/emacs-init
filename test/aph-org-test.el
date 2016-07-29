@@ -27,6 +27,41 @@
 
 ;;;; Timestamps
 ;;=============
+(ert-deftest aph/org-test-timestamp-date-only ()
+  "Test `aph/org-timestamp-date-only'."
+  (proctor-test-all #'aph/org-timestamp-date-only #'equal
+    (("<2016-07-22 Fri 16:00>") . "<2016-07-22 Fri>")
+    (("[2016-07-22 Fri]")       . "[2016-07-22 Fri]")))
+
+(ert-deftest aph/org-test-find-timestamp ()
+  "Test `aph/org-find-timestamp'."
+  (proctor-with-buffer 'org-mode "
+* TODO Foo
+  SCHEDULED: <2016-07-22 Fri>
+  DEADLINE: <2016-07-23 Sat>
+  CLOSED: [2016-07-25 Mon]
+  <2016-07-24 Sun 06:00> [2016-07-23 Sat]
+  <2016-07-22 Fri>" 
+    ;; Success cases
+    (proctor-test-all
+        #'aph/org-find-timestamp
+        (lambda (return expected)
+          (should (numberp return))
+          (should (= return (point)))
+          (should (looking-back expected)))
+      (()                              . "<2016-07-22 Fri>")
+      ((nil all)                       . "<2016-07-22 Fri>")
+      ((nil active)                    . "<2016-07-22 Fri>")
+      ((nil inactive)                  . "[[]2016-07-25 Mon[]]")
+      ((nil scheduled)                 . "<2016-07-22 Fri>")
+      ((nil deadline)                  . "<2016-07-23 Sat>")
+      ((nil active "<2016-07-24 Sun>") . "<2016-07-24 Sun 06:00>"))
+    ;; Failure cases
+    (goto-char (point-min))
+    (should-not (aph/org-get-entry-timestamp-marker
+                 nil nil "<2016-07-24 Sun>"))
+    (should (= (point) (point-min)))))
+
 (ert-deftest aph/org-test-relative-timestamp:days ()
   "Test `aph/org-relative-timestamp' for differences of days."
   (proctor-test-all

@@ -33,6 +33,40 @@
 
 ;;;; Timestamps
 ;;=============
+(defun aph/org-timestamp-date-only (timestamp)
+  "Remove time info from TIMESTAMP and return new timestamp.
+TIMESTAMP is not modified."
+  (replace-regexp-in-string " ?[0-9][0-9]:[0-9][0-9]" "" timestamp))
+
+(defun aph/org-find-timestamp (&optional pos type date)
+  "Move point to timestamp in entry at POS, and return point. 
+If no timestamp is found, return nil and do not move point.
+
+POS defaults to point if omitted.
+
+The TYPE parameter has the same meaning as in `org-re-timestamp'
+and restricts which timestamps are considered.  The
+first (earliest appearing) allowable timestamp is used.
+
+If DATE is supplied (as a timestamp), only timestamps for that
+date are considered." 
+  (let ((target
+         (save-excursion
+           (save-restriction
+             (widen)
+             (goto-char (or pos (point)))
+             (org-back-to-heading)
+             (org-narrow-to-element)
+             (let ((regexp (org-re-timestamp type)))
+               (catch 'found
+                 (while (re-search-forward regexp nil :noerror)
+                   (when (or (not date)
+                             (org-time=
+                              (aph/org-timestamp-date-only (match-string 1))
+                              (aph/org-timestamp-date-only date)))
+                     (throw 'found (point))))))))))
+    (when target (goto-char target))))
+
 (defun aph/org-relative-timestamp (&optional days hours inactive)
   "Return a properly-formatted Org timestamp relative to today.
 
