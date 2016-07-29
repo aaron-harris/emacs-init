@@ -980,7 +980,6 @@
 
 ;; Agenda
 (use-package org-agenda
-  :defer t
   :bind (:map umbra-mode-map
               ("C-c a" . org-agenda))
   :bind (:umbra org-agenda-mode
@@ -1015,6 +1014,11 @@
      (search   . " %i %-13:c")))
 
   (require 'init-org-agenda))
+
+(use-package aph-org-agenda
+  :bind (:umbra org-agenda-mode
+                ("<S-right>" . aph/org-agenda-date-later)
+                ("<S-left>"  . aph/org-agenda-date-earlier)))
 
 (use-package org-smart-agenda
   :bind (:map umbra-mode-map
