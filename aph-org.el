@@ -53,6 +53,15 @@ child."
 TIMESTAMP is not modified."
   (replace-regexp-in-string " ?[0-9][0-9]:[0-9][0-9]" "" timestamp))
 
+(defun aph/org-timestamp-at-point (&optional pos)
+  "Return timestamp at point, or nil if none.
+
+If POS is non-nil, it is used in place of point."
+  (save-excursion
+    (goto-char (or pos (point)))
+    (when (org-at-timestamp-p)
+      (match-string 0))))
+
 (defun aph/org-find-timestamp (&optional pos type date)
   "Move point to timestamp in entry at POS, and return point. 
 If no timestamp is found, return nil and do not move point.

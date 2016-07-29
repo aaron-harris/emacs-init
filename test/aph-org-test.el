@@ -47,6 +47,17 @@
     (("<2016-07-22 Fri 16:00>") . "<2016-07-22 Fri>")
     (("[2016-07-22 Fri]")       . "[2016-07-22 Fri]")))
 
+(ert-deftest aph/org-test-timestamp-at-point ()
+  "Test `aph/org-timestamp-at-point'."
+  (proctor-with-buffer 'org-mode "
+* Foo
+  <2016-07-29 Fri>"
+    (proctor-test-all
+        #'aph/org-timestamp-at-point
+        #'string=
+      ((,(point-min)) . nil)
+      ((,(point-max)) . "<2016-07-29 Fri>"))))
+
 (ert-deftest aph/org-test-find-timestamp ()
   "Test `aph/org-find-timestamp'."
   (proctor-with-buffer 'org-mode "
