@@ -1245,9 +1245,15 @@
                 ;; The `align-regexp' binding duplicates the one for
                 ;; `prog-mode' because `umbra-mode' cannot currently
                 ;; resolve the `haskell-parent-mode' -> `prog-mode'
-                ;; alias.
-                ("C-M-i"   . align-regexp)
+                ;; alias. 
                 ("C-c C-z" . haskell-interactive-switch))
+  :bind (:umbra haskell-parent-mode
+                ;; These bindings duplicate those for `prog-mode'
+                ;; because `umbra-mode' cannot currently resolve the
+                ;; `haskell-parent-mode' -> `prog-mode' alias.
+                ("C-M-i" . align-regexp)
+                ("M-p"   . backward-paragraph)
+                ("M-n"   . forward-paragraph))
   :config
   ;; REPL setup
   (validate-setq haskell-process-show-debug-tips nil
