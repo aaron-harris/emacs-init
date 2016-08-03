@@ -1290,7 +1290,7 @@
   (add-hook 'structured-haskell-mode-hook
             #'aph/haskell-indentation-mode:off)
   (add-hook 'structured-haskell-mode-hook #'turn-off-smartparens-mode)
-  (add-hook 'structured-haskell-mode-hook #'electric-indent-local-mode))
+  (add-hook 'structured-haskell-mode-hook #'aph/electric-indent-local-mode:off))
 
 
 ;;;; Themes
