@@ -3,6 +3,17 @@
 ;;; Code:
 
 
+;;;### (autoloads nil "aph-electric" "aph-electric.el" (22434 22631
+;;;;;;  503147 800000))
+;;; Generated autoloads from aph-electric.el
+
+(autoload 'electric-indent-local-mode:off "aph-electric" "\
+Turn off `electric-indent-mode' only in this buffer.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "aph-forms" "aph-forms.el" (22385 39771 564420
 ;;;;;;  0))
 ;;; Generated autoloads from aph-forms.el
@@ -108,8 +119,8 @@ standalone info application.
 
 ;;;***
 
-;;;### (autoloads nil "aph-org" "aph-org.el" (22369 52842 151102
-;;;;;;  800000))
+;;;### (autoloads nil "aph-org" "aph-org.el" (22427 52632 620344
+;;;;;;  600000))
 ;;; Generated autoloads from aph-org.el
 
 (autoload 'aph/org-goto-last-refile "aph-org" "\
@@ -989,17 +1000,17 @@ Unlike `which-function-mode', this mode is buffer-local.
 ;;;***
 
 ;;;### (autoloads nil nil ("alist.el" "aph-align.el" "aph-files.el"
-;;;;;;  "aph-haskell.el" "aph-help.el" "aph-lisp-mode.el" "aph-outline.el"
-;;;;;;  "aph-page.el" "aph-seq.el" "aph-which-func.el" "aph-window.el"
-;;;;;;  "bfw.el" "chimera.el" "cygwinize.el" "eimp-ephemeral.el"
+;;;;;;  "aph-haskell.el" "aph-help.el" "aph-lisp-mode.el" "aph-org-agenda.el"
+;;;;;;  "aph-outline.el" "aph-page.el" "aph-seq.el" "aph-which-func.el"
+;;;;;;  "aph-window.el" "bfw.el" "chimera.el" "cygwinize.el" "eimp-ephemeral.el"
 ;;;;;;  "elfeed-barb.el" "elfeed-link.el" "formation.el" "forms-barb.el"
 ;;;;;;  "init-core.el" "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
 ;;;;;;  "init-org.el" "jerk.el" "lexy.el" "liberate-key.el" "morgue.el"
 ;;;;;;  "org-agenda-skip.el" "org-agenda-sticky.el" "org-barb.el"
 ;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
-;;;;;;  "org-multitheme.el" "proctor-helm.el" "proctor.el" "shr-link-img.el"
-;;;;;;  "symbol.el" "trinket.el" "vizier-helm.el" "vizier.el") (22409
-;;;;;;  30156 693987 800000))
+;;;;;;  "org-multitheme.el" "proctor-helm.el" "proctor-org.el" "proctor.el"
+;;;;;;  "shr-link-img.el" "symbol.el" "trinket.el" "vizier-helm.el"
+;;;;;;  "vizier.el") (22434 22682 177964 300000))
 
 ;;;***
 
