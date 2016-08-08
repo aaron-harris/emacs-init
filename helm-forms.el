@@ -26,25 +26,50 @@
 ;; This command, when called from a `forms-mode' database, allows you
 ;; to browse all records in the database and jump to any one of them.
 ;;
-;; To select the field shown by `helm-forms-records' as the record
-;; title, use the variable `helm-forms-name-field'.  By default, the
-;; first field is used.
+;; To change which field is displayed as the record's name, set the
+;; variable `helm-forms-name-field'; the default is the first field.
+;; To use a string which is not stored in any single field, set
+;; `helm-forms-name-function' to any custom function.
 
 ;;; Code:
 
 (require 'formation)
 (require 'helm)
 
+(defvar-local helm-forms-name-function
+  #'helm-forms-get-name-from-field
+  "Function used to get the name of the current record.
+Used by `helm-forms-records'.
+
+This function should return the name of the current record,
+typically by examining `forms-fields'.  It is called with no
+arguments.
+
+If the name is stored in a single field, leave this variable at
+the default (`helm-get-name-from-field') and set the variable
+`helm-forms-name-field' to the desired field number.")
+
 (defvar-local helm-forms-name-field 1
   "Field number containing the name of the current record.
-This is used as a description by `helm-forms-records'.")
+Used by `helm-forms-get-name-from-field'.
+
+If there is no single field containing the desired name, you
+should change `helm-forms-name-function' instead of this
+variable.")
+
+(defun helm-forms-get-name-from-field ()
+  "Return the string in field number `helm-forms-name-field'.
+
+This is the default implementation for `helm-forms-name-function'
+and is used by `helm-forms-records' to generate record names."
+  (nth helm-forms-name-field forms-fields))
 
 (defun helm-forms-record-candidates ()
   "Compile a list of records in current database for Helm."
   (with-helm-current-buffer
     (formation-map
      (lambda ()
-       `(,(nth helm-forms-name-field forms-fields)
+       `(,(funcall helm-forms-name-function)
          . ,forms--current-record)))))
 
 (defvar helm-source-forms-records
