@@ -302,6 +302,8 @@
                 ("C-M-n"      . forms-next-record)
                 ("C-M-a"      . forms-first-record)
                 ("C-M-e"      . forms-last-record)
+                ("C-c C-a"    . forms-first-record)
+                ("C-c C-e"    . forms-last-record)
                 ("C-<return>" . forms-insert-record))
   :config
   (validate-setq forms-insert-after t))
@@ -1257,7 +1259,7 @@
   :config
   ;; REPL setup
   (validate-setq haskell-process-show-debug-tips nil
-                 haskell-process-log             t)
+                 haskell-process-log             t) 
   ;; Auxiliary features
   (add-hook 'haskell-mode-hook #'eldoc-mode)
   (add-hook 'haskell-mode-hook #'haskell-decl-scan-mode))
