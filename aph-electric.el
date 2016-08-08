@@ -28,10 +28,10 @@
 ;;;; Mode Switches
 ;;================
 ;;;###autoload
-(defun electric-indent-local-mode:off ()
+(defun aph/electric-indent-local-mode:off ()
   "Turn off `electric-indent-mode' only in this buffer."
   (interactive)
-  (aph/electric-indent-local-mode -1))
+  (electric-indent-local-mode -1))
 
 (provide 'aph-electric)
 ;;; aph-electric.el ends here
