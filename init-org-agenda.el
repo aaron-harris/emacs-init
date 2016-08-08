@@ -110,7 +110,9 @@ tasks will be displayed."
                (,(aph/org-agenda-block-scheduled-tasks
                   "Scheduled Tasks" "+computer-review/TODO|ACTIVE")
                 ,(aph/org-agenda-block-random-tasks
-                  "Random Tasks" "+computer/TODO" 10))))
+                  "Random Tasks" "+computer/TODO" 10)
+                ,(aph/org-agenda-block-random-tasks
+                  "Reading Material" "+computer/MEDIA" 5))))
 
 (add-to-list 'org-agenda-custom-commands
              `("e" "Emacs Agenda"
