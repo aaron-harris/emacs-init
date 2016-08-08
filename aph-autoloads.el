@@ -3,11 +3,11 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-electric" "aph-electric.el" (22434 22631
-;;;;;;  503147 800000))
+;;;### (autoloads nil "aph-electric" "aph-electric.el" (22435 44885
+;;;;;;  133559 700000))
 ;;; Generated autoloads from aph-electric.el
 
-(autoload 'electric-indent-local-mode:off "aph-electric" "\
+(autoload 'aph/electric-indent-local-mode:off "aph-electric" "\
 Turn off `electric-indent-mode' only in this buffer.
 
 \(fn)" t nil)
@@ -1010,7 +1010,7 @@ Unlike `which-function-mode', this mode is buffer-local.
 ;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
 ;;;;;;  "org-multitheme.el" "proctor-helm.el" "proctor-org.el" "proctor.el"
 ;;;;;;  "shr-link-img.el" "symbol.el" "trinket.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22434 22682 177964 300000))
+;;;;;;  "vizier.el") (22435 44892 381793 400000))
 
 ;;;***
 
