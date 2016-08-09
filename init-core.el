@@ -296,22 +296,6 @@
               ("C-x C-c"      . aph/delete-frame-or-exit)
               ("C-x <delete>" . aph/kill-active-buffer-delete-file)))
 
-(use-package forms
-  :bind (:umbra forms-mode
-                ("C-M-p"      . forms-prev-record)
-                ("C-M-n"      . forms-next-record)
-                ("C-M-a"      . forms-first-record)
-                ("C-M-e"      . forms-last-record)
-                ("C-c C-a"    . forms-first-record)
-                ("C-c C-e"    . forms-last-record)
-                ("C-<return>" . forms-insert-record))
-  :config
-  (validate-setq forms-insert-after t))
-
-(use-package forms-random
- :bind (:umbra forms-mode
-               ("C-M-." . forms-random-record-weighted)))
-
 (use-package hippie-exp
   :bind (:map umbra-mode-map
               ([remap dabbrev-expand] . hippie-expand))
@@ -848,11 +832,7 @@
 (use-package helm-descbinds
   :ensure t
   :after helm
-  :config (helm-descbinds-mode))
-
-(use-package helm-forms
-  :bind (:umbra forms-mode
-                ("M-." . helm-forms-records)))
+  :config (helm-descbinds-mode)) 
 
 
 ;;;; Help and Info
@@ -1075,6 +1055,32 @@
 (use-package org-spin
   :bind (:umbra org-mode
                 ("C-c s"     . org-spin-weighted)))
+
+
+;;;; Forms Mode
+;;=============
+(use-package forms
+  :bind (:umbra forms-mode
+                ("C-M-p"      . forms-prev-record)
+                ("C-M-n"      . forms-next-record)
+                ("C-M-a"      . forms-first-record)
+                ("C-M-e"      . forms-last-record)
+                ("C-c C-a"    . forms-first-record)
+                ("C-c C-e"    . forms-last-record)
+                ("C-<return>" . forms-insert-record))
+  :config
+  (validate-setq forms-insert-after t))
+
+(use-package forms-random
+ :bind (:umbra forms-mode
+               ("C-M-." . forms-random-record-weighted)))
+
+(use-package forms-skip
+  :after forms)
+
+(use-package helm-forms
+  :bind (:umbra forms-mode
+                ("M-." . helm-forms-records)))
 
 
 ;;;; Web Browsing
