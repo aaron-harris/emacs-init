@@ -1075,7 +1075,7 @@
  :bind (:umbra forms-mode
                ("C-M-." . forms-random-record-weighted)))
 
-(use-package forms-skip
+(use-package forms-narrow
   :after forms)
 
 (use-package helm-forms

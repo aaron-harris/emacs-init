@@ -1,4 +1,4 @@
-;;; forms-skip-test.el --- Tests for forms-skip.el   -*- lexical-binding: t; -*-
+;;; forms-narrow-test.el --- Tests for forms-narrow.el  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016  Aaron Harris
 
@@ -19,34 +19,34 @@
 
 ;;; Code:
 
-(require 'forms-skip)
+(require 'forms-narrow)
 (require 'proctor)
 
 
 ;;;; Navigation Commands
 ;;======================
-(ert-deftest forms-skip-test-forward/backward ()
-  "Test `forms-skip-forward', `forms-skip-backward'."
+(ert-deftest forms-narrow-test-next/prev-record ()
+  "Test `forms-narrow-next-record', `forms-narrow-prev-record'."
   (proctor-forms-with-db nil
       (("1" "foo") ("2" "") ("3" "bar") ("4" ""))
-    (setq forms-skip-predicate
+    (setq forms-narrow-predicate
           (lambda () (not (equal "" (nth 2 forms-fields)))))
-    (forms-first-record) 
-    (forms-skip-forward 1)
-    (should (= forms--current-record 3)) 
-    (should-error (forms-skip-forward 1))
+    (forms-first-record)
+    (forms-narrow-next-record 1) 
     (should (= forms--current-record 3))
-    (should-error (forms-skip-backward 5))
+    (should-error (forms-narrow-next-record 1))
+    (should (= forms--current-record 3))
+    (should-error (forms-narrow-prev-record 5))
     (should (= forms--current-record 1))))
 
-(ert-deftest forms-skip-test-nil-predicate ()
-  "Test `forms-skip' functions with `forms-skip-predicate' nil."
+(ert-deftest forms-narrow-test-nil-predicate ()
+  "Test `forms-narrow' functions with `forms-narrow-predicate' nil."
   (proctor-forms-with-db nil
       (("1" "foo") ("2" ""))
-    (should (null forms-skip-predicate))
+    (should (null forms-narrow-predicate))
     (forms-first-record)
-    (forms-skip-forward 1)
+    (forms-narrow-next-record 1)
     (should (= forms--current-record 2))))
 
-(provide 'forms-skip-test)
-;;; forms-skip-test.el ends here
+(provide 'forms-narrow-test)
+;;; forms-narrow-test.el ends here
