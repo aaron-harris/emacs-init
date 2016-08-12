@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "aph-electric" "aph-electric.el" (22435 44885
-;;;;;;  133559 700000))
+;;;### (autoloads nil "aph-electric" "aph-electric.el" (22435 46131
+;;;;;;  236969 800000))
 ;;; Generated autoloads from aph-electric.el
 
 (autoload 'aph/electric-indent-local-mode:off "aph-electric" "\
@@ -591,6 +591,39 @@ If `forms-aux-field' is nil, do nothing.
 
 ;;;***
 
+;;;### (autoloads nil "forms-narrow" "forms-narrow.el" (22446 6965
+;;;;;;  268664 400000))
+;;; Generated autoloads from forms-narrow.el
+
+(autoload 'forms-narrow-shadow "forms-narrow" "\
+Bind `forms-narrow-map' to `C-x n' in this buffer.
+
+This binding will shadow entirely other, lower-precedence
+keymaps (rather than merging their bindings).
+
+If you want this to be the default in `forms-mode', add this
+function to `forms-mode-hook'.
+
+\(fn)" nil nil)
+
+(autoload 'forms-narrow "forms-narrow" "\
+Narrow the database to show only records satisfying PRED.
+For use in `forms-mode'.
+
+\(fn PRED)" nil nil)
+
+(autoload 'forms-narrow-again "forms-narrow" "\
+Narrow current database using last narrowing critera.
+
+\(fn &optional VERBOSE)" t nil)
+
+(autoload 'forms-narrow-regexp "forms-narrow" "\
+Narrow to records matching REGEXP in any field.
+
+\(fn REGEXP)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "forms-random" "forms-random.el" (22334 14569
 ;;;;;;  877195 600000))
 ;;; Generated autoloads from forms-random.el
@@ -632,8 +665,8 @@ If HASH is not supplied, it defaults to `hash-default'.
 
 ;;;***
 
-;;;### (autoloads nil "helm-forms" "helm-forms.el" (22334 17550 859516
-;;;;;;  200000))
+;;;### (autoloads nil "helm-forms" "helm-forms.el" (22439 58446 0
+;;;;;;  0))
 ;;; Generated autoloads from helm-forms.el
 
 (autoload 'helm-forms-records "helm-forms" "\
@@ -1008,9 +1041,10 @@ Unlike `which-function-mode', this mode is buffer-local.
 ;;;;;;  "init-org.el" "jerk.el" "lexy.el" "liberate-key.el" "morgue.el"
 ;;;;;;  "org-agenda-skip.el" "org-agenda-sticky.el" "org-barb.el"
 ;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
-;;;;;;  "org-multitheme.el" "proctor-helm.el" "proctor-org.el" "proctor.el"
-;;;;;;  "shr-link-img.el" "symbol.el" "trinket.el" "vizier-helm.el"
-;;;;;;  "vizier.el") (22435 44892 381793 400000))
+;;;;;;  "org-multitheme.el" "proctor-forms.el" "proctor-helm.el"
+;;;;;;  "proctor-org.el" "proctor.el" "shr-link-img.el" "symbol.el"
+;;;;;;  "trinket.el" "vizier-helm.el" "vizier.el") (22446 7018 312481
+;;;;;;  800000))
 
 ;;;***
 
