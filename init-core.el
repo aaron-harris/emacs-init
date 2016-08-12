@@ -1076,7 +1076,8 @@
                ("C-M-." . forms-random-record-weighted)))
 
 (use-package forms-narrow
-  :after forms)
+  :init
+  (add-hook 'forms-mode-hook #'forms-narrow-shadow))
 
 (use-package helm-forms
   :bind (:umbra forms-mode

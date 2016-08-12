@@ -20,7 +20,7 @@
 ;;; Code:
 
 (require 'forms-narrow)
-(require 'proctor)
+(require 'proctor-forms)
 
 
 ;;;; Navigation Commands
@@ -28,11 +28,11 @@
 (ert-deftest forms-narrow-test-next/prev-record ()
   "Test `forms-narrow-next-record', `forms-narrow-prev-record'."
   (proctor-forms-with-db nil
-      (("1" "foo") ("2" "") ("3" "bar") ("4" ""))
-    (setq forms-narrow-predicate
-          (lambda () (not (equal "" (nth 2 forms-fields)))))
+      (("1" "foo") ("2" "") ("3" "bar") ("4" "")) 
+    (forms-narrow
+     (lambda () (not (equal "" (nth 2 forms-fields)))))
     (forms-first-record)
-    (forms-narrow-next-record 1) 
+    (forms-narrow-next-record 1)
     (should (= forms--current-record 3))
     (should-error (forms-narrow-next-record 1))
     (should (= forms--current-record 3))
@@ -40,13 +40,49 @@
     (should (= forms--current-record 1))))
 
 (ert-deftest forms-narrow-test-nil-predicate ()
-  "Test `forms-narrow' functions with `forms-narrow-predicate' nil."
+  "Test `forms-narrow' functions with `forms-narrow--predicate' nil."
   (proctor-forms-with-db nil
       (("1" "foo") ("2" ""))
-    (should (null forms-narrow-predicate))
+    (should-not forms-narrow-mode)
+    (should (null forms-narrow--predicate))
     (forms-first-record)
     (forms-narrow-next-record 1)
     (should (= forms--current-record 2))))
+
+
+;;;; Entry and Exit Points
+;;========================
+(ert-deftest forms-narrow-test-narrowing ()
+  "Test narrowing functions for `forms-narrow-mode'.
+The commands tested are `forms-narrow', `forms-narrow-widen',
+`forms-narrow-again'."
+  (proctor-forms-with-db nil
+      (("1" "foo") ("2" ""))
+    (should-error forms-narrow-again)
+    (should-not forms-narrow-mode)
+    (let ((pred (lambda () (not (equal "" (nth 2 forms-fields))))))
+      (forms-narrow pred)
+      (should forms-narrow-mode)
+      (should (equal forms-narrow--predicate pred))
+      (forms-narrow-widen)
+      (should-not forms-narrow-mode)
+      (forms-narrow-again)
+      (should forms-narrow-mode)
+      (should (equal forms-narrow--predicate pred)))))
+
+
+;;;; Narrowing Commands
+;;=====================
+(ert-deftest forms-narrow-test-regexp ()
+  "Test `forms-narrow-regexp'."
+  (proctor-forms-with-db nil
+      (("1" "foo") ("2" "bar") ("foobar" "3"))
+    (forms-narrow-regexp "foo")
+    (forms-first-record)
+    (forms-narrow-next-record 1)
+    (should (= forms--current-record 3))
+    (forms-narrow-prev-record 1)
+    (should (= forms--current-record 1))))
 
 (provide 'forms-narrow-test)
 ;;; forms-narrow-test.el ends here
