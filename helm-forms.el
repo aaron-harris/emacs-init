@@ -30,12 +30,18 @@
 ;; variable `helm-forms-name-field'; the default is the first field.
 ;; To use a string which is not stored in any single field, set
 ;; `helm-forms-name-function' to any custom function.
+;;
+;; If the database is narrowed with `forms-narrow', then the records
+;; displayed reflect the current narrowing criterion.
 
 ;;; Code:
 
 (require 'formation)
 (require 'helm)
 
+
+;;;; Database Variables
+;;=====================
 (defvar-local helm-forms-name-function
   #'helm-forms-get-name-from-field
   "Function used to get the name of the current record.
@@ -57,6 +63,9 @@ If there is no single field containing the desired name, you
 should change `helm-forms-name-function' instead of this
 variable.")
 
+
+;;;; Name Lookup
+;;==============
 (defun helm-forms-get-name-from-field ()
   "Return the string in field number `helm-forms-name-field'.
 
@@ -65,13 +74,24 @@ and is used by `helm-forms-records' to generate record names."
   (nth helm-forms-name-field forms-fields))
 
 (defun helm-forms-record-candidates ()
-  "Compile a list of records in current database for Helm."
+  "Compile a list of records in current database for Helm.
+
+The names shown are constructed according to the variables
+`helm-forms-name-function' and `helm-forms-name-field'.
+
+If the database is narrowed with `forms-narrow', only records
+satisfying the current narrowing criterion are shown."
   (with-helm-current-buffer
     (formation-map
      (lambda ()
        `(,(funcall helm-forms-name-function)
-         . ,forms--current-record)))))
+         . ,forms--current-record))
+     (when (bound-and-true-p forms-narrow-mode)
+       forms-narrow--predicate))))
 
+
+;;;; Commands
+;;===========
 (defvar helm-source-forms-records
   (helm-build-sync-source "Records"
     :candidates #'helm-forms-record-candidates
@@ -79,7 +99,10 @@ and is used by `helm-forms-records' to generate record names."
 
 ;;;###autoload
 (defun helm-forms-records ()
-  "A `helm' command for browsing records in `forms-mode'."
+  "A `helm' command for browsing records in `forms-mode'.
+
+If the database is narrowed with `forms-narrow', only records
+satisfying the current narrowing criterion are shown."
   (interactive)
   (helm :sources '(helm-source-forms-records)))
 
