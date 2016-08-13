@@ -64,7 +64,7 @@ event of an error or nonlocal exit."
           (setq acc (funcall fun acc)))
       (forms-jump-record rec))))
 
-(defun formation-map (fun)
+(defun formation-map (fun &optional filter)
   "Call FUN once for each record, and accumulate the results.
 
 Visit each record in the current `forms-mode' database in turn,
@@ -76,6 +76,9 @@ Since FUN is not called with arguments, it is expected to access
 the data in the current record via dynamic variables such as
 `forms-fields'.
 
+With optional argument FILTER (another function of no arguments),
+only include records for which FILTER returns non-nil.
+
 Do not change current record (or, more accurately, save current
 record and restore it after completion).
 
@@ -83,9 +86,12 @@ Run `forms-barb-change-record-hook' only once, when restoring the
 initial record.  Since this is frequently necessary to refresh
 some aspect of the buffer's appearance, it is run even in the
 event of an error or nonlocal exit."
+  (setq filter (or filter (lambda () t)))
   (reverse (formation-reduce
             (lambda (acc)
-              (cons (funcall fun) acc)))))
+              (if (funcall filter)
+                  (cons (funcall fun) acc)
+                acc)))))
 
 (provide 'formation)
 ;;; formation.el ends here
