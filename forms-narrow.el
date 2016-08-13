@@ -60,15 +60,17 @@
 ;; not need to enable this mode directly, as the narrowing and
 ;; widening commands will turn it on and off as necessary.
 ;;
-;; Note that the set of navigation commands that support narrowing is
-;; still incomplete.  Commands that are currently supported are as
-;; follows (with their narrowing-aware counterparts):
+;; While narrowed, the following commands are replaced with their
+;; given narrowing-aware counterparts:
 ;;
-;;   `forms-next-record' => `forms-narrow-next-record'
-;;   `forms-prev-record' => `forms-narrow-prev-record'
+;;   `forms-next-record'  => `forms-narrow-next-record'
+;;   `forms-prev-record'  => `forms-narrow-prev-record'
+;;   `forms-first-record' => `forms-narrow-first-record'
+;;   `forms-last-record'  => `forms-narrow-last-record'
 ;;
-;; Using navigation commands other than those listed here will ignore
-;; the narrowing effect.
+;; Other commands (e.g., `forms-jump-record' or
+;; `forms-search-forward') can land on a record not satisfying the
+;; current narrowing criteria, but will not cancel the narrowing.
 
 ;;; Code:
 
@@ -114,14 +116,30 @@ record."
   (interactive "p")
   (forms-narrow-next-record (- arg)))
 
+(defun forms-narrow-first-record ()
+  "As `forms-first-record', but obey `forms-narrow--predicate'."
+  (interactive)
+  (forms-first-record)
+  (unless (funcall forms-narrow--predicate)
+    (forms-narrow-next-record 1)))
+
+(defun forms-narrow-last-record ()
+  "As `forms-last-record', but obey `forms-narrow--predicate'."
+  (interactive)
+  (forms-last-record)
+  (unless (funcall forms-narrow--predicate)
+    (forms-narrow-prev-record 1)))
+
 
 ;;;; Minor Mode and Keymap Setup
 ;;==============================
 (defvar forms-narrow-mode-map
   (let ((keymap (make-sparse-keymap)))
     (dolist (pair
-             '((forms-next-record . forms-narrow-next-record)
-               (forms-prev-record . forms-narrow-prev-record)))
+             '((forms-next-record  . forms-narrow-next-record)
+               (forms-prev-record  . forms-narrow-prev-record)
+               (forms-first-record . forms-narrow-first-record)
+               (forms-last-record  . forms-narrow-last-record)))
       (define-key keymap `[remap ,(car pair)] (cdr pair))) 
     keymap)
   "Keymap for `forms-narrow-mode'.")

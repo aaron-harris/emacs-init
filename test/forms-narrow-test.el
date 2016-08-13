@@ -39,6 +39,23 @@
     (should-error (forms-narrow-prev-record 5))
     (should (= forms--current-record 1))))
 
+(ert-deftest forms-narrow-test-first/last-record ()
+  "Test `forms-narrow-first-record', `forms-narrow-last-record'."
+  (proctor-forms-with-db nil
+      (("1" "") ("2" "foo") ("3" "bar") ("4" ""))
+    (forms-narrow
+     (lambda () (not (equal "" (nth 2 forms-fields)))))
+    (forms-narrow-first-record)
+    (should (= forms--current-record 2))
+    (forms-narrow-last-record)
+    (should (= forms--current-record 3))
+    (forms-narrow
+     (lambda () (equal "" (nth 2 forms-fields))))
+    (forms-narrow-first-record)
+    (should (= forms--current-record 1))
+    (forms-narrow-last-record)
+    (should (= forms--current-record 4))))
+
 (ert-deftest forms-narrow-test-nil-predicate ()
   "Test `forms-narrow' functions with `forms-narrow--predicate' nil."
   (proctor-forms-with-db nil
