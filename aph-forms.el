@@ -24,6 +24,24 @@
 
 ;;; Code:
 
+
+;;;; Mode Line
+;;============
+(defun aph/forms-show-minor-modes ()
+  "Show minor modes in `forms-mode' mode line.
+
+Since `forms-mode' hijacks `minor-mode-alist' for its own
+purposes, minor modes don't appear in the mode line in
+`forms-mode'.  This function fixes that, and is designed for use
+in `forms-mode-hook'."
+  (kill-local-variable 'minor-mode-alist)
+  (setq-local minor-mode-alist
+              (cons '(forms-read-only " View")
+                    minor-mode-alist)))
+
+
+;;;; Templates
+;;============
 ;;;###autoload
 (defun aph/forms-create-from-template (template dir name)
   "Make a new `forms-mode' database based on TEMPLATE.

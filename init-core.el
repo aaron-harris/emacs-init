@@ -1060,6 +1060,8 @@
 ;;;; Forms Mode
 ;;=============
 (use-package forms
+  :bind (:map umbra-mode-map
+              ("C-c f f" . forms-find-file))
   :bind (:umbra forms-mode
                 ("C-M-p"      . forms-prev-record)
                 ("C-M-n"      . forms-next-record)
@@ -1070,6 +1072,11 @@
                 ("C-<return>" . forms-insert-record))
   :config
   (validate-setq forms-insert-after t))
+
+(use-package aph-forms
+  :after forms
+  :config
+  (add-hook 'forms-mode-hook #'aph/forms-show-minor-modes))
 
 (use-package forms-random
  :bind (:umbra forms-mode
