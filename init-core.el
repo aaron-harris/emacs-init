@@ -442,11 +442,6 @@
   (validate-setq save-interprogram-paste-before-kill t
                  shift-select-mode                   nil)
   ;; Tweaking `eval-expression'
-  (defun mode-family-run-hook:lisp ()
-    "Run the hook for the `lisp' mode family."
-    (run-hooks 'lisp-family-hook))
-  (add-hook 'eval-expression-minibuffer-setup-hook
-            #'mode-family-run-hook:lisp)
   (validate-setq eval-expression-print-length nil
                  eval-expression-print-level  nil))
 
@@ -527,6 +522,7 @@
   (require 'smartparens-config)
   (smartparens-global-mode)
   (add-hook 'lisp-family-hook #'smartparens-strict-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'smartparens-strict-mode)
   :config
   ;; String handling
   (add-to-list 'sp-navigate-consider-stringlike-sexp 'org-mode)
@@ -597,7 +593,7 @@
                  uniquify-after-kill-buffer-p t
                  uniquify-ignore-buffers-re   "^\\*"))
 
-(use-package aph-vc 
+(use-package aph-vc
   :bind (:map umbra-mode-map
               ("C-x v <delete>" . aph/vc-delete-file))
   :bind (:umbra vc-dir-mode
@@ -683,7 +679,8 @@
   :defer t
   :diminish eldoc-mode
   :init
-  (add-hook 'lisp-family-hook #'eldoc-mode))
+  (add-hook 'lisp-family-hook #'eldoc-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode))
 
 (use-package ert
   :bind (:umbra emacs-lisp-mode
@@ -832,7 +829,7 @@
 (use-package helm-descbinds
   :ensure t
   :after helm
-  :config (helm-descbinds-mode)) 
+  :config (helm-descbinds-mode))
 
 
 ;;;; Help and Info
@@ -1261,7 +1258,7 @@
                 ;; The `align-regexp' binding duplicates the one for
                 ;; `prog-mode' because `umbra-mode' cannot currently
                 ;; resolve the `haskell-parent-mode' -> `prog-mode'
-                ;; alias. 
+                ;; alias.
                 ("C-c C-z" . haskell-interactive-switch))
   :bind (:umbra haskell-parent-mode
                 ;; These bindings duplicate those for `prog-mode'
@@ -1273,7 +1270,7 @@
   :config
   ;; REPL setup
   (validate-setq haskell-process-show-debug-tips nil
-                 haskell-process-log             t) 
+                 haskell-process-log             t)
   ;; Auxiliary features
   (add-hook 'haskell-mode-hook #'eldoc-mode)
   (add-hook 'haskell-mode-hook #'haskell-decl-scan-mode))
