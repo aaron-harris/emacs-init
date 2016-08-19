@@ -83,6 +83,8 @@
 ;;=============================
 (use-package chimera)
 
+(use-package fix)
+
 (use-package hydra
   :ensure t
   :defer t
@@ -592,6 +594,11 @@
                  uniquify-separator           "/"
                  uniquify-after-kill-buffer-p t
                  uniquify-ignore-buffers-re   "^\\*"))
+
+(use-package vc
+  :config
+  (add-hook 'vc-dir-mode-hook
+            (fix-args #'vc-dir-hide-state "ignored" 'ignored)))
 
 (use-package aph-vc
   :bind (:map umbra-mode-map
