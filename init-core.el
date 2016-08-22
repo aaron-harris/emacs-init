@@ -597,8 +597,8 @@
 
 (use-package vc
   :config
-  (add-hook 'vc-dir-mode-hook
-            (fix-args #'vc-dir-hide-state "ignored" 'ignored)))
+  (add-to-list 'vc-directory-exclusion-list ".stack-work")
+  (validate-variable 'vc-directory-exclusion-list))
 
 (use-package aph-vc
   :bind (:map umbra-mode-map
