@@ -37,6 +37,18 @@
     ((1 2) . ,(* 1 3))))
 
 
+;;;; Random Testing
+;;=================
+(ert-deftest proctor-test-random ()
+  "Test `proctor-random'." 
+  (proctor-random 10000 100
+      ((0 . 2500) (1 . 2500) (2 . 2500) (3 . 2500))
+    (random 4))
+  (should-error (proctor-random 10000 0
+      ((0 . 2500) (1 . 2500) (2 . 2500) (3 . 2500))
+    (random 4))))
+
+
 ;;;; Macro Testing
 ;;================
 (ert-deftest proctor-test-macro-executes-body ()

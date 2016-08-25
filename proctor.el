@@ -77,11 +77,62 @@ Example usage:
         ((1)   . ,(- 2 1))
         ((1 2) . 3))"
   (declare (debug (function-form function-form &rest sexp))
-           (indent 2)) 
+           (indent 2))
   `(dolist (pair (backquote ,pairs))
      (should (funcall ,test
                       (apply ,function (car pair))
                       (cdr pair)))))
+
+
+;;;; Random Testing
+;;=================
+(defun proctor--collect-distribution (n thunk)
+  "Run THUNK N times and return the results as an alist.
+
+The alist returned has elements of the form (VALUE . K), where K
+is the number of runs in which THUNK returned VALUE."
+  (let (distribution)
+    (dotimes (i n distribution)
+      (let* ((value (eval thunk))
+             (k     (or (cdr (assoc value distribution)) 0)))
+        (alist-put distribution value (1+ k) #'equal)))))
+
+(defun proctor--compare-distributions (dist1 dist2 epsilon)
+  "Return non-nil if DIST1 and DIST2 are close to one another.
+
+Here DIST1 and DIST2 are alists of the form returned by
+`proctor--collect-distribution' and EPSILON is a non-negative
+integer.  DIST1 and DIST2 are considered close when the value
+associated with each key in DIST1 is within EPSILON of the
+corresponding value in DIST2.  Keys are compared with `equal'." 
+  (alist-equal dist1 dist2
+               #'equal
+               (lambda (x y) (<= (abs (- x y)) epsilon))
+               0))
+
+(defmacro proctor-random (n epsilon dist &rest body)
+  "Execute BODY N times; test that results are close to DIST.
+
+Here DIST is the expected random distribution.  It should be an
+alist with keys the values that could be returned by BODY and
+values the expected number of occurrences (taking N into
+account).
+
+EPSILON is the allowed error (a non-negative integer).  If the
+result distribution differs at any value by more than EPSILON,
+then signal an error with `should'; otherwise, return t.
+
+Example usage:
+
+    (proctor-random 10000 10
+        ((0 . 2500) (1 . 2500) (2 . 2500) (3 . 2500))
+      (random 4))"
+  (declare (debug (form form sexp body))
+           (indent 3))
+  ;; TODO Write a custom indent function for this.
+  `(should (proctor--compare-distributions
+            (proctor--collect-distribution ,n '(progn ,@body))
+            ',dist ,epsilon)))
 
 
 ;;;; Macro Testing
@@ -121,7 +172,7 @@ either `boundp' or `fboundp', so long as it is not interned."
                 (should-not (and (intern-soft ,var-x)
                                  (or (boundp ,var-x) (fboundp ,var-x)))))))))
     (eval (funcall subtest 'progn         '(ignore)))
-    (eval (funcall subtest 'ignore-errors '(error "Triggered error"))) 
+    (eval (funcall subtest 'ignore-errors '(error "Triggered error")))
     t))
 
 
@@ -207,7 +258,7 @@ in a buffer inside BODY, that buffer will be killed on exit,
 bypassing all of the usual warnings (e.g., if the buffer is
 modified)."
   (declare (indent 2)
-           (debug t)) 
+           (debug t))
   (let ((abs-file  (make-symbol "abs-file"))
         (file-dir  (make-symbol "file-dir")))
     `(let* ((,abs-file  (expand-file-name ,file proctor-directory))
@@ -250,7 +301,7 @@ More specifically:
         (keymap      (symbol-concat name "-map")))
     `(let* ((,name        (cl-gensym "mode"))
             (,hook        (symbol-concat ,name "-hook"))
-            (,keymap-var  (symbol-concat ,name "-map")) 
+            (,keymap-var  (symbol-concat ,name "-map"))
             ,keymap)
        (unwind-protect
            (progn (funcall ,maker ,name)
