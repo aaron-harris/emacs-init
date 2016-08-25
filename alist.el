@@ -60,7 +60,7 @@ alist."
   (declare (debug (gv-place form &optional function-form)))
   (let ((test (or test '#'eql)))
     `(setf ,alist
-           (cl-delete ,key ,alist :test ,test :key #'car))))
+           (cl-remove ,key ,alist :test ,test :key #'car))))
 
 (defun alist--put (alist key value &optional test)
   "Subroutine used by `alist-put'.
