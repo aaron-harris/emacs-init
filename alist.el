@@ -46,6 +46,9 @@
 
 (require 'cl-lib)
 
+
+;;;; Updating
+;;===========
 (defmacro alist-delete (alist key &optional test)
   "Delete association in ALIST for KEY.  Return ALIST.
 
@@ -55,9 +58,9 @@ of `eql' to compare elements.
 Here, ALIST may be any generalized variable containing an
 alist."
   (declare (debug (gv-place form &optional function-form)))
-  (let ((test (or test #'eql))))
-  `(setf ,alist
-         (cl-delete ,key ,alist :test ',test :key #'car)))
+  (let ((test (or test '#'eql)))
+    `(setf ,alist
+           (cl-delete ,key ,alist :test ,test :key #'car))))
 
 (defun alist--put (alist key value &optional test)
   "Subroutine used by `alist-put'.
@@ -82,6 +85,39 @@ of `eql' to compare elements.
 Here, ALIST may be any generalized variable containing an alist."
   (declare (debug (gv-place form form &optional function-form)))
   `(setf ,alist (alist--put ,alist ,key ,value ,test)))
+
+
+;;;; Equality Testing
+;;===================
+(defun alist-equal (alist1 alist2 &optional key-test value-test default)
+  "Return non-nil if ALIST1 and ALIST2 are equal as alists.
+
+Two alists are considered equal if the values for corresponding
+keys (where equality is determined by KEY-TEST) are equal
+according to VALUE-TEST.  Most notably, keys may appear in any
+order.
+
+If KEY-TEST is omitted, it defaults to `eq', while if VALUE-TEST
+is omitted, it defaults to `equal'.  This is consistent with the
+most common use of alists, in which keys are symbols but values
+may be a wide range of types.
+
+If a key appears in one list but not the other, then DEFAULT will
+be used for its value in the list where it does not appear."
+  (setq key-test   (or key-test   #'eq)
+        value-test (or value-test #'equal))
+  (catch 'fail
+    (while (not (null alist1))
+      (let* ((elt  (pop alist1))
+             (k1   (car elt))
+             (v1   (cdr elt))
+             (v2   (or (cdr (cl-assoc k1 alist2 :test key-test))
+                       default)))
+        (if (funcall value-test v1 v2)
+            (alist-delete alist2 k1 key-test)
+          (throw 'fail nil))))
+    (if (null alist2) t
+      (alist-equal alist2 alist1 key-test value-test default))))
 
 (provide 'alist)
 ;;; alist.el ends here
