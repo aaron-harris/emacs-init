@@ -36,6 +36,7 @@
 
 (require 'alist)
 (require 'bfw)
+(require 'dent)
 (require 'symbol)
 
 (eval-when-compile (require 'subr-x))
@@ -104,7 +105,7 @@ Here DIST1 and DIST2 are alists of the form returned by
 `proctor--collect-distribution' and EPSILON is a non-negative
 integer.  DIST1 and DIST2 are considered close when the value
 associated with each key in DIST1 is within EPSILON of the
-corresponding value in DIST2.  Keys are compared with `equal'." 
+corresponding value in DIST2.  Keys are compared with `equal'."
   (alist-equal dist1 dist2
                #'equal
                (lambda (x y) (<= (abs (- x y)) epsilon))
@@ -128,11 +129,12 @@ Example usage:
         ((0 . 2500) (1 . 2500) (2 . 2500) (3 . 2500))
       (random 4))"
   (declare (debug (form form sexp body))
-           (indent 3))
-  ;; TODO Write a custom indent function for this.
+           (indent dent-indent-specform))
   `(should (proctor--compare-distributions
             (proctor--collect-distribution ,n '(progn ,@body))
             ',dist ,epsilon)))
+
+(put 'proctor-random 'dent-indent-function-spec 3)
 
 
 ;;;; Macro Testing
