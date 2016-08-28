@@ -86,12 +86,14 @@ Example usage:
     `(let (,db-buffer)
        (proctor-with-file "test.ctrl"
            ,(format "(setq forms-file \"test.db\")\n%S" init-form)
-         (proctor-with-file "test.db"
-             ,(apply #'proctor-forms--encode-db records)
-           (forms-find-file (expand-file-name "test.ctrl" proctor-directory))
-           (setq ,db-buffer (current-buffer))
-           (unwind-protect (progn ,@body)
-             (bfw-kill-buffer-nowarn ,db-buffer)))))))
+         (let ((warning-suppress-log-types
+                (cons '(undo discard-info) warning-suppress-log-types)))
+           (proctor-with-file "test.db"
+               ,(apply #'proctor-forms--encode-db records)
+             (forms-find-file (expand-file-name "test.ctrl" proctor-directory))
+             (setq ,db-buffer (current-buffer))
+             (unwind-protect (progn ,@body)
+               (bfw-kill-buffer-nowarn ,db-buffer))))))))
 
 (provide 'proctor-forms)
 ;;; proctor-forms.el ends here
