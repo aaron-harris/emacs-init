@@ -34,6 +34,9 @@
 ;; wish to interpret as a weighting factor, and set the variable
 ;; `forms-random-weight-transform' to be a function that will convert
 ;; the value in that field into a non-negative integer.
+;;
+;; Both commands support narrowing, if you are using the
+;; `forms-narrow' module.
 
 ;;; Code:
 
@@ -44,9 +47,17 @@
 ;;===================
 ;;;###autoload
 (defun forms-random-record ()
-  "Go to a randomly selected record in current database."
+  "Go to a randomly selected record in current database.
+If the database is narrowed, respect the current narrowing
+predicate."
   (interactive)
-  (forms-jump-record (1+ (random forms--total-records))))
+  ;; If the database is narrowed, then we have to look at each record
+  ;; to see if it's visible.  The logic for this is already in
+  ;; `forms-random-record-weighted', so hide the weights and delegate.
+  (if (bound-and-true-p forms-narrow-mode)
+      (let ((forms-random-weight-field nil))
+        (forms-random-record-weighted))
+    (forms-jump-record (1+ (random forms--total-records)))))
 
 
 ;;;; Weighted Randomness
@@ -71,6 +82,13 @@ The value (a function) is used to prepare the weights for use in
 argument (the value of `forms-random-weight-field' for the
 current record) and return a non-negative integer.")
 
+(defun forms-random-record--get-weight ()
+  "Get weight of this record for `forms-random-record-weighted'."
+  (if forms-random-weight-field
+      (funcall forms-random-weight-transform
+               (nth forms-random-weight-field forms-fields))
+    1))
+
 ;;;###autoload
 (defun forms-random-record-weighted ()
   "As `forms-random-record', but die is weighted.
@@ -87,13 +105,14 @@ The chance of selecting any particular record R is then n/N,
 where n is the value R has for the weighting field and N is the
 total of this field across all records in the database."
   (interactive)
-  (if (not forms-random-weight-field)
+  ;; If there are no weights and the database is not narrowed, then
+  ;; `forms-random-record' is more efficient, so delegate.
+  (if (and (not forms-random-weight-field)
+           (not (bound-and-true-p forms-narrow-mode)))
       (forms-random-record)
     (let* ((counter
             (lambda (acc)
-              (+ (funcall forms-random-weight-transform
-                          (nth forms-random-weight-field forms-fields))
-                 acc)))
+              (+ acc (forms-random-record--get-weight))))
            (total  (formation-reduce counter 0))
            (roll   (random total)))
       (forms-jump-record
