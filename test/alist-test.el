@@ -36,6 +36,34 @@
                (equal expected result)))
       ((foo) . ((bar . 2) (1 . 3) (1.0 . 4))))))
 
+(ert-deftest alist-test-insert ()
+  "Test `alist-insert'."
+  (let ((alist  nil))
+    (proctor-test-all
+        (lambda (key value)
+          (alist-insert alist key value))
+        (lambda (expected result)
+          (and (equal expected alist)
+               (equal expected result)))
+      ((2 2) . ((2 . 2)))
+      ((3 3) . ((2 . 2) (3 . 3)))
+      ((2 0) . ((2 . 0) (3 . 3)))
+      ((1 1) . ((1 . 1) (2 . 0) (3 . 3))))))
+
+(ert-deftest alist-test-insert:down ()
+  "Test `alist-insert' with reverse ordering."
+  (let ((alist  nil))
+    (proctor-test-all
+        (lambda (key value)
+          (alist-insert alist key value :down))
+        (lambda (expected result)
+          (and (equal expected alist)
+               (equal expected result)))
+      ((2 2) . ((2 . 2)))
+      ((3 3) . ((3 . 3) (2 . 2)))
+      ((2 0) . ((3 . 3) (2 . 0)))
+      ((1 1) . ((3 . 3) (2 . 0) (1 . 1))))))
+
 
 ;;;; Equality Testing
 ;;===================
