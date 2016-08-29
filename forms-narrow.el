@@ -52,7 +52,8 @@
 ;; Custom narrowing commands are also supported.  Just pass a function
 ;; of no arguments to the function `forms-narrow'.  A record will only
 ;; be shown if your function returns non-nil when that record is
-;; current.
+;; current.  Alternatively, you can pass a list of record numbers to
+;; `forms-narrow-list' for the same effect.
 ;;
 ;; Replacement of the basic `forms-mode' navigation commands (e.g.,
 ;; `forms-next-record') with narrowing-aware versions is implemented
@@ -204,8 +205,8 @@ For use in `forms-mode'."
     (forms-narrow-mode 1)))
 
 
-;;;; Narrowing Commands
-;;=====================
+;;;; Narrowing Commands and Subroutines
+;;=====================================
 ;;;###autoload
 (defun forms-narrow-regexp (regexp)
   "Narrow to records matching REGEXP in any field."
@@ -214,6 +215,12 @@ For use in `forms-mode'."
    (lambda ()
      (seq-some (apply-partially #'string-match-p regexp)
                (cdr forms-fields)))))
+
+(defun forms-narrow-list (list)
+  "Narrow to records with record numbers in LIST."
+  (forms-narrow
+   (lambda ()
+     (member forms--current-record list))))
 
 (provide 'forms-narrow)
 ;;; forms-narrow.el ends here

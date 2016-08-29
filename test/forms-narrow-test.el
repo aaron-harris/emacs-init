@@ -88,8 +88,8 @@ The commands tested are `forms-narrow', `forms-narrow-widen',
       (should (equal forms-narrow--predicate pred)))))
 
 
-;;;; Narrowing Commands
-;;=====================
+;;;; Narrowing Commands and Subroutines
+;;=====================================
 (ert-deftest forms-narrow-test-regexp ()
   "Test `forms-narrow-regexp'."
   (proctor-forms-with-db nil
@@ -100,6 +100,16 @@ The commands tested are `forms-narrow', `forms-narrow-widen',
     (should (= forms--current-record 3))
     (forms-narrow-prev-record 1)
     (should (= forms--current-record 1))))
+
+(ert-deftest forms-narrow-test-list ()
+  (proctor-forms-with-db nil
+      (("1") ("2") ("3") ("4"))
+    (forms-narrow-list '(2 4))
+    (forms-narrow-first-record)
+    (should (= forms--current-record 2))
+    (forms-narrow-next-record 1)
+    (should (= forms--current-record 4))
+    (should-error (forms-narrow-next-record 1))))
 
 (provide 'forms-narrow-test)
 ;;; forms-narrow-test.el ends here
