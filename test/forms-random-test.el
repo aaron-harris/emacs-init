@@ -45,6 +45,10 @@
       (forms-random-record)
       forms--current-record)))
 
+
+;;;; Weighted Randomness
+;;======================
+
 (ert-deftest forms-random-test-weighted ()
   "Test `forms-random-record-weighted'."
   (proctor-forms-with-db
@@ -66,6 +70,20 @@
         ((1 . 250) (3 . 500) (4 . 250))
       (forms-random-record-weighted)
       forms--current-record)))
+
+
+;;;; Random Narrowing
+;;===================
+
+(ert-deftest forms-random-test-narrow ()
+  "Test `forms-random-narrow'."
+  (proctor-forms-with-db
+      (setq forms-random-weight-field 2)
+      (("1" "1") ("2" "1") ("3" "2"))
+    (proctor-random 1200 50
+        (((1 2) . 200) ((1 3) . 500) ((2 3) . 500))
+      (forms-random-narrow 2)
+      (formation-map (lambda () forms--current-record)))))
 
 (provide 'forms-random-test)
 ;;; forms-random-test.el ends here

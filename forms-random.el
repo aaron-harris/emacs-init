@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: data forms
 
-;; Dependencies: `formation'
+;; Dependencies: `formation', `forms-narrow', `seq'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -35,12 +35,27 @@
 ;; `forms-random-weight-transform' to be a function that will convert
 ;; the value in that field into a non-negative integer.
 ;;
-;; Both commands support narrowing, if you are using the
-;; `forms-narrow' module.
+;; Both of these commands support narrowing with the `forms-narrow'
+;; module (in the sense that neither will select a record unless it is
+;; currently visible).  In addition, there is a command
+;; `forms-random-narrow', which narrows the current database to a
+;; certain number of randomly-selected records, using the same
+;; weighting options as `forms-random-record-weighted'.  It is
+;; available on the key `C-r' under the prefix map `forms-narrow-map'.
 
 ;;; Code:
 
 (require 'formation)
+(require 'forms-narrow)
+(require 'seq)
+
+
+;;;; User Options
+;;===============
+(defcustom forms-random-narrow-size 10
+  "Number of records that `forms-random-narrow' should select by default."
+  :group 'forms
+  :type  'integer)
 
 
 ;;;; Basic Randomness
@@ -124,6 +139,33 @@ total of this field across all records in the database."
                 (throw 'found forms--current-record)
               acc))
           0))))))
+
+
+;;;; Random Narrowing
+;;===================
+(defun forms-random-narrow (n &optional verbose)
+  "Narrow the current db to show N randomly-selected records.
+
+Use `forms-random-weight-field' and
+`forms-random-weight-transform', if those are defined.
+
+The number N of records to select can be supplied via prefix
+argument.  If it is omitted, it defaults to the value of the
+option `forms-random-narrow-size'."
+  (interactive "P")
+  (setq n (or n forms-random-narrow-size))
+  (when verbose (message "Narrowing to %d random records." n))
+  (forms-narrow-widen)
+  (let ((record-alist
+         (formation-reduce
+          (lambda (acc)
+            (alist-insert acc
+                          (random (* 10000 (forms-random-record--get-weight)))
+                          forms--current-record
+                          :down)))))
+    (forms-narrow-list (mapcar #'cdr (seq-take record-alist n)))))
+
+(define-key forms-narrow-map (kbd "C-r") #'forms-random-narrow)
 
 
 ;;;; Additional Transforms
