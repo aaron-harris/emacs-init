@@ -42,6 +42,11 @@
 ;; `forms-narrow-again', which applies whatever narrowing was last
 ;; used this session.
 ;;
+;; When the database is narrowed, by default the current record is
+;; changed to the first visible record in the database.  To change
+;; this behavior, set the option `forms-narrow-rebase-mode'.  See its
+;; docstrings for all the options.
+;;
 ;; None of these commands have default keybindings, but they are
 ;; collected in the map `forms-narrow-map' (not
 ;; `forms-narrow-mode-map'; see below) for use as a prefix map.
@@ -80,6 +85,48 @@
 (require 'seq)
 
 
+;;;; User Options
+;;===============
+(defcustom forms-narrow-rebase-mode :first
+  "Determines when current record should change when narrowing.
+
+When a `forms-mode' database is narrowed with `forms-narrow', it
+may also change what record is current, according to the value of
+this option.  Possible values are as follows:
+
+:first
+
+    Always go to the first record that satisfies the new
+    predicate.  This is the default behavior.
+
+:next
+
+    Stay on the current record if it satisfies the new predicate;
+    otherwise, go to the next record that does satisfy the
+    predicate.  If all following records do not satisfy the
+    predicate, wrap and go the first.
+
+Any other value
+
+    Do not change the current record, even if the current record does
+    not satisfy the new predicate."
+  :group 'forms
+  :type '(choice (const :tag "First record" :first)
+                 (const :tag "Next record"  :next)
+                 (other :tag "Don't move"   nil)))
+
+(defcustom forms-narrow-rebase-widen nil
+  "Whether to use `forms-narrow-rebase-mode' when widening.
+
+By default the option `forms-narrow-rebase-mode' only applies
+when narrowing a `forms-mode' database.  If this option is
+non-nil, it also applies when widening.
+
+Note that this only matters if `forms-narrow-rebase-mode' is set
+to :first, since the current record will always satisfy the
+predicate after widening.")
+
+
 ;;;; State Variables
 ;;==================
 (defvar-local forms-narrow--predicate nil
@@ -91,44 +138,60 @@ is displayed.  If it returns nil, that record is skipped.
 If this variable is nil, all records are visible.")
 
 
+;;;; Basic Subroutines
+;;====================
+(defun forms-narrow-visible-p ()
+  "Non-nil if current record satisfies current narrowing."
+  (or (not forms-narrow-mode)
+      (funcall forms-narrow--predicate)))
+
+
 ;;;; Navigation Commands
 ;;======================
 (defun forms-narrow-next-record (arg)
-  "As `forms-next-record', but obey `forms-narrow--predicate'.
+  "As `forms-next-record', but skip hidden records.
 
-If all records after the current one satisfy
-`forms-narrow--predicate', then signal an error and stay on this
-record."
+If all records after the current one are not visible, then signal
+an error and stay on this record."
   (interactive "p")
-  (if (null forms-narrow--predicate)
+  (if (not (forms-narrow-visible-p))
       (forms-next-record arg)
     (let ((stepper    (if (< arg 0) #'forms-prev-record #'forms-next-record))
           (saved-rec  forms--current-record))
       (condition-case err
           (dotimes (i (abs arg))
             (while (progn (funcall stepper 1)
-                          (not (funcall forms-narrow--predicate))))
+                          (not (forms-narrow-visible-p))))
             (setq saved-rec forms--current-record))
         (error (forms-jump-record saved-rec)
                (signal (car err) (cdr err)))))))
 
 (defun forms-narrow-prev-record (arg)
-  "As `forms-prev-record', but obey `forms-narrow--predicate'."
+  "As `forms-prev-record', but skip hidden records.
+
+If all records before the current one are not visible, then
+signal an error and stay on this record."
   (interactive "p")
   (forms-narrow-next-record (- arg)))
 
 (defun forms-narrow-first-record ()
-  "As `forms-first-record', but obey `forms-narrow--predicate'."
+  "As `forms-first-record', but skip hidden records.
+
+If all records are hidden, then signal an error and stay on this
+record."
   (interactive)
   (forms-first-record)
-  (unless (funcall forms-narrow--predicate)
+  (unless (forms-narrow-visible-p)
     (forms-narrow-next-record 1)))
 
 (defun forms-narrow-last-record ()
-  "As `forms-last-record', but obey `forms-narrow--predicate'."
+  "As `forms-last-record', but skip hidden records.
+
+If all records are hidden, then signal an error and stay on this
+record."
   (interactive)
   (forms-last-record)
-  (unless (funcall forms-narrow--predicate)
+  (unless (forms-narrow-visible-p)
     (forms-narrow-prev-record 1)))
 
 
@@ -141,16 +204,31 @@ record."
                (forms-prev-record  . forms-narrow-prev-record)
                (forms-first-record . forms-narrow-first-record)
                (forms-last-record  . forms-narrow-last-record)))
-      (define-key keymap `[remap ,(car pair)] (cdr pair))) 
+      (define-key keymap `[remap ,(car pair)] (cdr pair)))
     keymap)
   "Keymap for `forms-narrow-mode'.")
+
+(defun forms-narrow--rebase ()
+  "Select an appropriate record after entering `forms-narrow-mode'.
+Obey the user option `forms-narrow-rebase-mode'."
+  (cond
+   ((eq forms-narrow-rebase-mode :first)
+    (forms-narrow-first-record))
+
+   ((eq forms-narrow-rebase-mode :next)
+    (unless (forms-narrow-visible-p)
+      (ignore-errors (forms-narrow-next-record 1))
+      (unless (forms-narrow-visible-p)
+        (forms-narrow-first-record))))))
 
 (define-minor-mode forms-narrow-mode
   "Minor mode for narrowed `forms-mode' databases."
   :group forms
   :lighter " Narrow"
   :keymap  'forms-narrow-mode-map
-  :require 'forms-narrow)
+  :require 'forms-narrow
+  (when (or forms-narrow-mode forms-narrow-rebase-widen)
+    (forms-narrow--rebase)))
 
 (defvar forms-narrow-map
   (let ((keymap (make-sparse-keymap)))
@@ -158,7 +236,7 @@ record."
              '(("w" . forms-narrow-widen)
                ("r" . forms-narrow-regexp)
                ("a" . forms-narrow-again)))
-      (define-key keymap (kbd (car pair)) (cdr pair))) 
+      (define-key keymap (kbd (car pair)) (cdr pair)))
     keymap)
   "Prefix map for narrowing commands in `forms-mode'.
 
@@ -186,8 +264,8 @@ function to `forms-mode-hook'."
 (defun forms-narrow (pred)
   "Narrow the database to show only records satisfying PRED.
 For use in `forms-mode'."
-  (forms-narrow-mode 1)
-  (setq forms-narrow--predicate pred))
+  (setq forms-narrow--predicate pred)
+  (forms-narrow-mode 1))
 
 (defun forms-narrow-widen (&optional verbose)
   "Remove narrowing for current database."
