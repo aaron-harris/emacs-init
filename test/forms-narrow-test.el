@@ -87,6 +87,35 @@ The commands tested are `forms-narrow', `forms-narrow-widen',
       (should forms-narrow-mode)
       (should (equal forms-narrow--predicate pred)))))
 
+(ert-deftest forms-narrow-test-rebase ()
+  "Test `forms-narrow--rebase'."
+  (proctor-forms-with-db nil
+      (("1") ("2") ("3") ("4") ("5"))
+    (proctor-test-all
+        (lambda (rec mode)
+          (forms-narrow-widen)
+          (forms-jump-record rec)
+          (let ((forms-narrow-rebase-mode mode))
+            (forms-narrow-list '(2 4))
+            forms--current-record))
+        #'=
+      ((3 :first) . 2) 
+      ((3 :next)  . 4)
+      ((2 :next)  . 2)
+      ((5 :next)  . 2)
+      ((3 nil)    . 3))))
+
+(ert-deftest forms-narrow-test-rebase:widen ()
+  "Test `forms-narrow--rebase' with `forms-narrow-rebase-widen'."
+  (proctor-forms-with-db nil
+      (("1") ("2") ("3"))
+    (let ((forms-narrow-rebase-widen t)
+          (forms-narrow-rebase-mode  :first)) 
+      (forms-narrow-list '(2))
+      (should (= 2 forms--current-record))
+      (forms-narrow-widen)
+      (should (= 1 forms--current-record)))))
+
 
 ;;;; Narrowing Commands and Subroutines
 ;;=====================================
