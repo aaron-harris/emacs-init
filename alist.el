@@ -66,11 +66,11 @@ alist."
   "Subroutine used by `alist-put'.
 
 As `alist-put', except back-assignment may be necessary, as with
-`delete'." 
+`delete'."
   (let* ((test  (or test #'eql))
          (elt   (cl-assoc key alist :test test)))
     (if elt (setf (cdr elt) value)
-      (setq alist (push `(,key . ,value) alist)))
+      (setq alist (push (cons key value) alist)))
     alist))
 
 (defmacro alist-put (alist key value &optional test)
@@ -85,6 +85,88 @@ of `eql' to compare elements.
 Here, ALIST may be any generalized variable containing an alist."
   (declare (debug (gv-place form form &optional function-form)))
   `(setf ,alist (alist--put ,alist ,key ,value ,test)))
+
+(defun alist-insert--compare (k1 k2)
+  "Default comparator for `alist-insert'.
+
+Return t if K1 is equal to K2; a negative integer if K1 is less
+than K2; and a positive integer if K1 is greater than K2.
+
+For numbers, comparison is by `=' and `<'.  For strings and
+symbols, comparison is by `compare-strings' and does not ignore
+case.
+
+If K1 and K2 are of different types (or a type other than
+numbers, strings, or symbols), signal an error."
+  (cond
+   ((and (numberp k1) (numberp k2))
+    (cond ((= k1 k2) t) ((< k1 k2) -1) ((> k1 k2) 1)))
+
+   ((and (stringp k1) (stringp k2))
+    (compare-strings k1 nil nil k2 nil nil))
+
+   ((and (symbolp k1) (symbolp k2))
+    (alist-insert--compare (symbol-name k1) (symbol-name k2)))
+
+   (:else
+    (error "`alist-insert--compare' cannot compare keys %s, %s" k1 k2))))
+
+(defun alist-insert--compare-down (k1 k2)
+  "Reverse of `alist-insert--compare'."
+  (let ((result (alist-insert--compare k1 k2)))
+    (if (eq result t) t (- result))))
+
+(defun alist--insert (alist key value &optional compare)
+  "Subroutine used by `alist-insert'.
+
+As `alist-insert', except back-assignment may be necessary, as
+with `delete'."
+  (let* ((compare (cond
+                   ((eq compare :down)  #'alist-insert--compare-down)
+                   ((null compare)      #'alist-insert--compare)
+                   (:else               compare)))
+         (cursor  alist) 
+         comparison last-cursor)
+    (if (null alist) (list (cons key value))
+      (while (and (not (null cursor))
+                  (setq comparison (funcall compare (caar cursor) key))
+                  (numberp comparison)
+                  (< comparison 0)) 
+        (setq last-cursor cursor
+              cursor      (cdr cursor)))
+      (cond
+       ((eq comparison t)   (setf (cdar cursor) value))
+       ((null last-cursor)  (push (cons key value) alist))
+       (:else               (push (cons key value) (cdr last-cursor)))) 
+      alist)))
+
+(defmacro alist-insert (alist key value &optional compare)
+  "As ALIST-PUT for an ALIST which is sorted by its keys.
+
+If ALIST contains an association for KEY, it is updated to VALUE.
+Otherwise, an association is added in such a way that ALIST
+remains sorted.
+
+If the optional parameter COMPARE is supplied, it should be a
+comparator taking two keys and returning either t or an integer.
+The value t means that the two keys should be considered equal; a
+positive number indicates the first key is larger than the
+second; and a negative number indicates the first key is smaller
+than the second.
+
+If COMPARE is omitted, keys are sorted according to their type:
+numbers are sorted with `<', and strings and symbols are sorted
+with `compare-strings'.  Keys of different types are not
+supported.
+
+Instead of passing a function to COMPARE, you can also pass the
+keyword :down.  This just means to use the default comparator in
+reverse order.
+
+If ALIST is not initially sorted according to COMPARE, behavior
+is undefined."
+  (declare (debug (gv-place form form &optional &or function-form ":down")))
+  `(setf ,alist (alist--insert ,alist ,key ,value ,compare)))
 
 
 ;;;; Equality Testing
