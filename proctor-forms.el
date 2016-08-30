@@ -84,6 +84,7 @@ Example usage:
            (indent 2))
   (let ((db-buffer  (make-symbol "db-buffer")))
     `(let (,db-buffer)
+       (require 'warnings)
        (proctor-with-file "test.ctrl"
            ,(format "(setq forms-file \"test.db\")\n%S" init-form)
          (let ((warning-suppress-log-types
