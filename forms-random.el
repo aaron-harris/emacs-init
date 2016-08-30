@@ -45,8 +45,10 @@
 
 ;;; Code:
 
+(require 'alist)
 (require 'formation)
 (require 'forms-narrow)
+(require 'random)
 (require 'seq)
 
 
@@ -97,12 +99,18 @@ The value (a function) is used to prepare the weights for use in
 argument (the value of `forms-random-weight-field' for the
 current record) and return a non-negative integer.")
 
-(defun forms-random-record--get-weight ()
+(defun forms-random--get-weight ()
   "Get weight of this record for `forms-random-record-weighted'."
   (if forms-random-weight-field
       (funcall forms-random-weight-transform
                (nth forms-random-weight-field forms-fields))
     1))
+
+(defun forms-random--get-weights ()
+  "Return an alist associating weights to record numbers."
+  (formation-map
+   (lambda () (cons (forms-random--get-weight)
+                    forms--current-record))))
 
 ;;;###autoload
 (defun forms-random-record-weighted ()
@@ -125,20 +133,7 @@ total of this field across all records in the database."
   (if (and (not forms-random-weight-field)
            (not (bound-and-true-p forms-narrow-mode)))
       (forms-random-record)
-    (let* ((counter
-            (lambda (acc)
-              (+ acc (forms-random-record--get-weight))))
-           (total  (formation-reduce counter 0))
-           (roll   (random total)))
-      (forms-jump-record
-       (catch 'found
-         (formation-reduce
-          (lambda (acc)
-            (setq acc (funcall counter acc))
-            (if (< roll acc)
-                (throw 'found forms--current-record)
-              acc))
-          0))))))
+    (forms-jump-record (random-dispatch* (forms-random--get-weights)))))
 
 
 ;;;; Random Narrowing
@@ -159,10 +154,11 @@ option `forms-random-narrow-size'."
   (let ((record-alist
          (formation-reduce
           (lambda (acc)
-            (alist-insert acc
-                          (random (* 10000 (forms-random-record--get-weight)))
-                          forms--current-record
-                          :down)))))
+            (alist-insert
+             acc
+             (random (* 10000 (forms-random--get-weight)))
+             forms--current-record
+             :down)))))
     (forms-narrow-list (mapcar #'cdr (seq-take record-alist n)))))
 
 (define-key forms-narrow-map (kbd "C-r") #'forms-random-narrow)
