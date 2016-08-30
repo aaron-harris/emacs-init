@@ -1294,6 +1294,13 @@
   (validate-setq haskell-compile-cabal-build-command "stack build")
   (add-to-list 'process-coding-system-alist '("stack" . utf-8-dos)))
 
+(use-package haskell-doc
+  :after haskell-mode
+  :config
+  ;; Disable use of unicode symbols in Haskell eldoc until I sort out
+  ;; my font issues.
+  (validate-setq haskell-doc-prettify-types nil))
+
 (use-package haskell-interactive-mode
   :bind (:umbra haskell-interactive-mode
                 ("C-c M-o" . haskell-interactive-mode-clear)))
