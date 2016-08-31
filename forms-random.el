@@ -147,18 +147,19 @@ Use `forms-random-weight-field' and
 The number N of records to select can be supplied via prefix
 argument.  If it is omitted, it defaults to the value of the
 option `forms-random-narrow-size'."
-  (interactive "P")
+  (interactive "P\np")
   (setq n (or n forms-random-narrow-size))
   (when verbose (message "Narrowing to %d random records." n))
   (forms-narrow-widen)
   (let ((record-alist
-         (formation-reduce
+         (formation-reduce 
           (lambda (acc)
-            (alist-insert
-             acc
-             (random (* 10000 (forms-random--get-weight)))
-             forms--current-record
-             :down)))))
+            (seq-take (alist-insert
+                       acc
+                       (random (* 10000 (forms-random--get-weight)))
+                       forms--current-record
+                       :down)
+                      n)))))
     (forms-narrow (mapcar #'cdr (seq-take record-alist n)))))
 
 (define-key forms-narrow-map (kbd "C-r") #'forms-random-narrow)
