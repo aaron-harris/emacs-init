@@ -154,7 +154,7 @@ If this variable is nil, all records are visible.")
 If all records after the current one are not visible, then signal
 an error and stay on this record."
   (interactive "p")
-  (if (not (forms-narrow-visible-p))
+  (if (not forms-narrow-mode)
       (forms-next-record arg)
     (let ((stepper    (if (< arg 0) #'forms-prev-record #'forms-next-record))
           (saved-rec  forms--current-record))
