@@ -73,7 +73,7 @@ A a special case, a nil argument is considered to stand in for
 the function that always returns t."
   (setq filter (or filter (lambda () t)))
   (if (bound-and-true-p forms-narrow-mode)
-      (lambda () (and (funcall filter) (funcall forms-narrow--predicate)))
+      (lambda () (and (funcall filter) (forms-narrow-visible-p)))
     filter))
 
 (defun formation-reduce (fun &optional acc filter)
