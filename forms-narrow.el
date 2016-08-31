@@ -131,10 +131,19 @@ predicate after widening.")
 (defvar-local forms-narrow--predicate nil
   "Predicate determining which records to show.
 
-This predicate is called with no arguments whenever a new record
-is displayed.  If it returns nil, that record is skipped.
+This variable may contain either a function or a list of
+integers, which must be sorted in increasing order.
 
-If this variable is nil, all records are visible.")
+A function is called with no arguments whenever a new record is
+displayed.  If it returns nil, that record is skipped.
+
+A list of integers is interpreted as an implicit predicate.  Only
+records whose record numbers appear in the list will be
+displayed.  Representing the predicate in this form allows for
+more efficient navigation.
+
+This variable is not consulted unless `forms-narrow-mode' is
+active.")
 
 
 ;;;; Basic Subroutines
@@ -142,11 +151,39 @@ If this variable is nil, all records are visible.")
 (defun forms-narrow-visible-p ()
   "Non-nil if current record satisfies current narrowing."
   (or (not forms-narrow-mode)
-      (funcall forms-narrow--predicate)))
+      (cond
+       ((functionp forms-narrow--predicate)
+        (funcall forms-narrow--predicate))
+
+       ((listp forms-narrow--predicate)
+        (member forms--current-record forms-narrow--predicate)))))
 
 
 ;;;; Navigation Commands
 ;;======================
+(defun forms-narrow-next-record--list (arg)
+  "Subroutine of `forms-narrow-next-record' for list narrowing."
+  (let ((next-rec
+         (->> forms-narrow--predicate
+              (seq-drop-while (apply-partially #'>= forms--current-record))
+              (nth (1- arg)))))
+    (if next-rec
+        (forms-jump-record next-rec)
+      (error "Last visible record"))))
+
+(defun forms-narrow-next-record--function (arg)
+  "Subroutine of `forms-narrow-next-record' for function narrowing."
+  (let ((stepper    (if (< arg 0) #'forms-prev-record #'forms-next-record))
+        (saved-rec  forms--current-record))
+    (forms-barb-with-single-record-change
+     (condition-case err 
+         (dotimes (i (abs arg))
+           (while (progn (funcall stepper 1)
+                         (not (forms-narrow-visible-p))))
+           (setq saved-rec forms--current-record))
+       (error (forms-jump-record saved-rec)
+              (signal (car err) (cdr err)))))))
+
 (defun forms-narrow-next-record (arg)
   "As `forms-next-record', but skip hidden records.
 
@@ -156,18 +193,14 @@ an error and stay on this record.
 Run `forms-barb-change-record-hook' only once, on the final
 record."
   (interactive "p")
-  (if (not forms-narrow-mode)
-      (forms-next-record arg)
-    (let ((stepper    (if (< arg 0) #'forms-prev-record #'forms-next-record))
-          (saved-rec  forms--current-record))
-      (forms-barb-with-single-record-change
-       (condition-case err 
-           (dotimes (i (abs arg))
-             (while (progn (funcall stepper 1)
-                           (not (forms-narrow-visible-p))))
-             (setq saved-rec forms--current-record))
-         (error (forms-jump-record saved-rec)
-                (signal (car err) (cdr err))))))))
+  (funcall
+   (cond ((not forms-narrow-mode)
+          #'forms-next-record)
+         ((functionp forms-narrow--predicate)
+          #'forms-narrow-next-record--function)
+         ((listp forms-narrow--predicate)
+          #'forms-narrow-next-record--list))
+   arg))
 
 (defun forms-narrow-prev-record (arg)
   "As `forms-prev-record', but skip hidden records.
@@ -265,10 +298,15 @@ function to `forms-mode-hook'."
 
 ;;;; Entry and Exit Points
 ;;========================
-;;;###autoload
 (defun forms-narrow (pred)
   "Narrow the database to show only records satisfying PRED.
-For use in `forms-mode'."
+For use in `forms-mode'.
+
+PRED is passed to `forms-narrow--predicate' directly, so it may
+be either a function or a list.  List arguments will be
+sorted."
+  (unless (functionp pred)
+    (setq pred (seq-sort #'<= pred)))
   (setq forms-narrow--predicate pred)
   (forms-narrow-mode 1))
 
@@ -298,12 +336,6 @@ For use in `forms-mode'."
    (lambda ()
      (seq-some (apply-partially #'string-match-p regexp)
                (cdr forms-fields)))))
-
-(defun forms-narrow-list (list)
-  "Narrow to records with record numbers in LIST."
-  (forms-narrow
-   (lambda ()
-     (member forms--current-record list))))
 
 (provide 'forms-narrow)
 ;;; forms-narrow.el ends here

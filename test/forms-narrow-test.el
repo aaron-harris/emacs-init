@@ -108,6 +108,17 @@ The commands tested are `forms-narrow', `forms-narrow-widen',
       (should forms-narrow-mode)
       (should (equal forms-narrow--predicate pred)))))
 
+(ert-deftest forms-narrow-test-list ()
+  "Test `forms-narrow' with list predicates."
+  (proctor-forms-with-db nil
+      (("1") ("2") ("3") ("4"))
+    (forms-narrow '(2 4))
+    (forms-narrow-first-record)
+    (should (= forms--current-record 2))
+    (forms-narrow-next-record 1)
+    (should (= forms--current-record 4))
+    (should-error (forms-narrow-next-record 1))))
+
 (ert-deftest forms-narrow-test-rebase ()
   "Test `forms-narrow--rebase'."
   (proctor-forms-with-db nil
@@ -117,7 +128,7 @@ The commands tested are `forms-narrow', `forms-narrow-widen',
           (forms-narrow-widen)
           (forms-jump-record rec)
           (let ((forms-narrow-rebase-mode mode))
-            (forms-narrow-list '(2 4))
+            (forms-narrow '(2 4))
             forms--current-record))
         #'=
       ((3 :first) . 2) 
@@ -132,7 +143,7 @@ The commands tested are `forms-narrow', `forms-narrow-widen',
       (("1") ("2") ("3"))
     (let ((forms-narrow-rebase-widen t)
           (forms-narrow-rebase-mode  :first)) 
-      (forms-narrow-list '(2))
+      (forms-narrow '(2))
       (should (= 2 forms--current-record))
       (forms-narrow-widen)
       (should (= 1 forms--current-record)))))
@@ -150,16 +161,6 @@ The commands tested are `forms-narrow', `forms-narrow-widen',
     (should (= forms--current-record 3))
     (forms-narrow-prev-record 1)
     (should (= forms--current-record 1))))
-
-(ert-deftest forms-narrow-test-list ()
-  (proctor-forms-with-db nil
-      (("1") ("2") ("3") ("4"))
-    (forms-narrow-list '(2 4))
-    (forms-narrow-first-record)
-    (should (= forms--current-record 2))
-    (forms-narrow-next-record 1)
-    (should (= forms--current-record 4))
-    (should-error (forms-narrow-next-record 1))))
 
 (provide 'forms-narrow-test)
 ;;; forms-narrow-test.el ends here

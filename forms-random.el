@@ -159,7 +159,7 @@ option `forms-random-narrow-size'."
              (random (* 10000 (forms-random--get-weight)))
              forms--current-record
              :down)))))
-    (forms-narrow-list (mapcar #'cdr (seq-take record-alist n)))))
+    (forms-narrow (mapcar #'cdr (seq-take record-alist n)))))
 
 (define-key forms-narrow-map (kbd "C-r") #'forms-random-narrow)
 
