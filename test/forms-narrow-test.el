@@ -56,6 +56,27 @@
     (forms-narrow-last-record)
     (should (= forms--current-record 4))))
 
+(ert-deftest forms-narrow-test-hooks ()
+  "Test that `forms-narrow-mode' functions run hooks correctly.
+
+More specifically, `forms-narrow-next-record' should run
+`forms-barb-change-record-hook' only once, after it finds a
+visible record.  The other functions should behave similarly."
+  (proctor-forms-with-db nil
+      (("1" "") ("2" "foo") ("3" "") ("4" "foo") ("5" ""))
+    (forms-narrow
+     (lambda () (not (equal "" (nth 2 forms-fields)))))
+    (forms-first-record)
+    (let* ((counter 0)
+           (canary  (lambda () (setq counter (1+ counter))))
+           (forms-barb-change-record-hook (list canary)))
+      (forms-narrow-next-record 1) 
+      (should (= counter 1))
+      (forms-narrow-first-record)
+      (should (= counter 2))
+      (forms-narrow-last-record)
+      (should (= counter 3)))))
+
 (ert-deftest forms-narrow-test-nil-predicate ()
   "Test `forms-narrow' functions with `forms-narrow--predicate' nil."
   (proctor-forms-with-db nil

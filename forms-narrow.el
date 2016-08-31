@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: data, forms
 
-;; Dependencies `forms', `seq'
+;; Dependencies `forms-barb', `seq'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -80,8 +80,7 @@
 
 ;;; Code:
 
-(require 'forms)
-
+(require 'forms-barb) 
 (require 'seq)
 
 
@@ -152,19 +151,23 @@ If this variable is nil, all records are visible.")
   "As `forms-next-record', but skip hidden records.
 
 If all records after the current one are not visible, then signal
-an error and stay on this record."
+an error and stay on this record.
+
+Run `forms-barb-change-record-hook' only once, on the final
+record."
   (interactive "p")
   (if (not forms-narrow-mode)
       (forms-next-record arg)
     (let ((stepper    (if (< arg 0) #'forms-prev-record #'forms-next-record))
           (saved-rec  forms--current-record))
-      (condition-case err
-          (dotimes (i (abs arg))
-            (while (progn (funcall stepper 1)
-                          (not (forms-narrow-visible-p))))
-            (setq saved-rec forms--current-record))
-        (error (forms-jump-record saved-rec)
-               (signal (car err) (cdr err)))))))
+      (forms-barb-with-single-record-change
+       (condition-case err 
+           (dotimes (i (abs arg))
+             (while (progn (funcall stepper 1)
+                           (not (forms-narrow-visible-p))))
+             (setq saved-rec forms--current-record))
+         (error (forms-jump-record saved-rec)
+                (signal (car err) (cdr err))))))))
 
 (defun forms-narrow-prev-record (arg)
   "As `forms-prev-record', but skip hidden records.
@@ -180,9 +183,10 @@ signal an error and stay on this record."
 If all records are hidden, then signal an error and stay on this
 record."
   (interactive)
-  (forms-first-record)
-  (unless (forms-narrow-visible-p)
-    (forms-narrow-next-record 1)))
+  (forms-barb-with-single-record-change
+   (forms-first-record)
+   (unless (forms-narrow-visible-p)
+     (forms-narrow-next-record 1))))
 
 (defun forms-narrow-last-record ()
   "As `forms-last-record', but skip hidden records.
@@ -190,9 +194,10 @@ record."
 If all records are hidden, then signal an error and stay on this
 record."
   (interactive)
-  (forms-last-record)
-  (unless (forms-narrow-visible-p)
-    (forms-narrow-prev-record 1)))
+  (forms-barb-with-single-record-change
+   (forms-last-record)
+   (unless (forms-narrow-visible-p)
+     (forms-narrow-prev-record 1))))
 
 
 ;;;; Minor Mode and Keymap Setup

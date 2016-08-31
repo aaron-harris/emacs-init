@@ -49,6 +49,20 @@
   :type 'hook)
 
 
+;;;; Wrapper Macros
+;;=================
+(defmacro forms-barb-with-single-record-change (&rest body)
+  "Eval BODY; run `forms-barb-change-record-hook' only once.
+
+Suppress `forms-barb-change-record-hook' within BODY, and run the
+hook once after BODY exits.  The hook is run even in the event of
+an error or nonlocal exit."
+  `(unwind-protect
+       (let ((forms-barb-change-record-hook nil))
+         ,@body)
+     (run-hooks 'forms-barb-change-record-hook)))
+
+
 ;;;; Hook Insertion
 ;;;;===============
 (defun forms-barb--change-record-hook-advice (&rest args)
