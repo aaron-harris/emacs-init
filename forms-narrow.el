@@ -163,10 +163,13 @@ active.")
 ;;======================
 (defun forms-narrow-next-record--list (arg)
   "Subroutine of `forms-narrow-next-record' for list narrowing."
-  (let ((next-rec
-         (->> forms-narrow--predicate
-              (seq-drop-while (apply-partially #'>= forms--current-record))
-              (nth (1- arg)))))
+  (let* ((adapter (if (< arg 0) #'reverse #'identity))
+         (filter  (apply-partially (if (< arg 0) #'<= #'>=) forms--current-record))
+         (next-rec
+          (->> forms-narrow--predicate
+               (funcall adapter) 
+               (seq-drop-while filter)
+               (nth (1- (abs arg))))))
     (if next-rec
         (forms-jump-record next-rec)
       (error "Last visible record"))))
