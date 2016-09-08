@@ -87,7 +87,7 @@ satisfying the current narrowing criterion are shown."
        `(,(funcall helm-forms-name-function)
          . ,forms--current-record))
      (when (bound-and-true-p forms-narrow-mode)
-       forms-narrow--predicate))))
+       #'forms-narrow-visible-p))))
 
 
 ;;;; Commands
