@@ -1303,21 +1303,7 @@
 
 (use-package haskell-interactive-mode
   :bind (:umbra haskell-interactive-mode
-                ("C-c M-o" . haskell-interactive-mode-clear)))
-
-(use-package shm
-  :ensure t
-  :bind (:umbra structured-haskell-mode
-                ("C-M-p" . shm/backward-paragraph)
-                ("C-M-n" . shm/forward-paragraph)
-                ("C-M-h" . mark-paragraph))
-  :init
-  (add-hook 'haskell-mode-hook #'structured-haskell-mode)
-  :config
-  (add-hook 'structured-haskell-mode-hook
-            #'aph/haskell-indentation-mode:off)
-  (add-hook 'structured-haskell-mode-hook #'turn-off-smartparens-mode)
-  (add-hook 'structured-haskell-mode-hook #'aph/electric-indent-local-mode:off))
+                ("C-c M-o" . haskell-interactive-mode-clear))) 
 
 
 ;;;; Themes
