@@ -109,8 +109,7 @@ value.
 
 The actual return value is a proxy string incorporating the BLOCK
 parameter.  This string is replaced with the actual value during
-agenda construction."
-  (message "Count called for %s" block)
+agenda construction." 
   ;; Set up replacement process
   (setq org-agenda-count--block (or block ""))
   (alist-put org-agenda-count--alist
@@ -128,8 +127,7 @@ agenda construction."
   "Count the number of entries in this block for `org-agenda-count'.
 
 Intended as (temporary) :before advice for the function
-`org-agenda-finalize-hook'."
-  (message "Counting %s" org-agenda-count--block)
+`org-agenda-finalize-hook'." 
   (alist-put org-agenda-count--alist
              org-agenda-count--block
              (length list)
