@@ -5,6 +5,7 @@
 
 ;;; Code:
 
+(require 'org-agenda-count)
 (require 'org-agenda-skip)
 (require 'org-compare)
 (require 'org-habit-everywhere)
@@ -64,7 +65,8 @@ If LIMIT is supplied, it should be an integer, and only that many
 tasks will be displayed."
   `(tags-todo
     ,match
-    ((org-agenda-overriding-header  ,header)
+    ((org-agenda-overriding-header
+      (format "%s [%s]" ,header (org-agenda-count ,match)))
      (org-agenda-cmp-user-defined   ',(org-compare-randomly))
      (org-compare-random-refresh    t)
      (org-agenda-sorting-strategy   '(user-defined-up))
