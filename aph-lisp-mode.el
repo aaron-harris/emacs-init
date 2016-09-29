@@ -30,6 +30,20 @@
 (require 'lisp-mode)
 
 
+;;;; Font Lock
+;;============
+(defun aph/emacs-lisp-add-font-lock-keywords ()
+  "Add extra font lock keywords for Emacs lisp.
+For use in `emacs-lisp-mode-hook', so it will apply to derived
+modes, including `lisp-interaction-mode'."
+  (font-lock-add-keywords
+   nil
+   '(;; Words inside `'; this overrides the default regexp, which does
+     ;; not highlight single-character symbols such as `s'.
+     ("`\\(\\(?:\\sw\\|\\s_\\)+\\)'"
+      1 font-lock-constant-face t))))
+
+
 ;;;; Evaluation Commands
 ;;======================
 (defun aph/eval-region-or-buffer ()
