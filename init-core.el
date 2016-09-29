@@ -715,7 +715,7 @@
   ;; Mode tags
   (mode-family-add 'lisp-mode             'lisp)
   (mode-family-add 'emacs-lisp-mode       'lisp)
-  (mode-family-add 'lisp-interaction-mode 'lisp)
+  (mode-family-add 'lisp-interaction-mode 'lisp) 
   ;; Add `use-package' blocks to Imenu
   (add-to-list 'lisp-imenu-generic-expression
                '("Package"
@@ -734,8 +734,11 @@
   (validate-variable 'lisp-imenu-generic-expression))
 
 (use-package aph-lisp-mode
+  :after lisp-mode
   :bind (:umbra emacs-lisp-mode
-                ("C-c C-l" . aph/eval-region-or-buffer)))
+                ("C-c C-l" . aph/eval-region-or-buffer))
+  :config 
+  (add-hook 'emacs-lisp-mode-hook #'aph/emacs-lisp-add-font-lock-keywords))
 
 (use-package pp
   :bind (:umbra emacs-lisp-mode
