@@ -14,8 +14,8 @@ Turn off `electric-indent-mode' only in this buffer.
 
 ;;;***
 
-;;;### (autoloads nil "aph-forms" "aph-forms.el" (22385 39771 564420
-;;;;;;  0))
+;;;### (autoloads nil "aph-forms" "aph-forms.el" (22450 12438 935268
+;;;;;;  100000))
 ;;; Generated autoloads from aph-forms.el
 
 (autoload 'aph/forms-create-from-template "aph-forms" "\
@@ -591,8 +591,8 @@ If `forms-aux-field' is nil, do nothing.
 
 ;;;***
 
-;;;### (autoloads nil "forms-narrow" "forms-narrow.el" (22446 6965
-;;;;;;  268664 400000))
+;;;### (autoloads nil "forms-narrow" "forms-narrow.el" (22471 37881
+;;;;;;  0 0))
 ;;; Generated autoloads from forms-narrow.el
 
 (autoload 'forms-narrow-shadow "forms-narrow" "\
@@ -606,12 +606,6 @@ function to `forms-mode-hook'.
 
 \(fn)" nil nil)
 
-(autoload 'forms-narrow "forms-narrow" "\
-Narrow the database to show only records satisfying PRED.
-For use in `forms-mode'.
-
-\(fn PRED)" nil nil)
-
 (autoload 'forms-narrow-again "forms-narrow" "\
 Narrow current database using last narrowing critera.
 
@@ -624,12 +618,14 @@ Narrow to records matching REGEXP in any field.
 
 ;;;***
 
-;;;### (autoloads nil "forms-random" "forms-random.el" (22334 14569
-;;;;;;  877195 600000))
+;;;### (autoloads nil "forms-random" "forms-random.el" (22471 19646
+;;;;;;  752274 200000))
 ;;; Generated autoloads from forms-random.el
 
 (autoload 'forms-random-record "forms-random" "\
 Go to a randomly selected record in current database.
+If the database is narrowed, respect the current narrowing
+predicate.
 
 \(fn)" t nil)
 
@@ -665,12 +661,15 @@ If HASH is not supplied, it defaults to `hash-default'.
 
 ;;;***
 
-;;;### (autoloads nil "helm-forms" "helm-forms.el" (22439 58446 0
+;;;### (autoloads nil "helm-forms" "helm-forms.el" (22471 37113 0
 ;;;;;;  0))
 ;;; Generated autoloads from helm-forms.el
 
 (autoload 'helm-forms-records "helm-forms" "\
 A `helm' command for browsing records in `forms-mode'.
+
+If the database is narrowed with `forms-narrow', only records
+satisfying the current narrowing criterion are shown.
 
 \(fn)" t nil)
 
@@ -1034,17 +1033,18 @@ Unlike `which-function-mode', this mode is buffer-local.
 
 ;;;### (autoloads nil nil ("alist.el" "aph-align.el" "aph-files.el"
 ;;;;;;  "aph-haskell.el" "aph-help.el" "aph-lisp-mode.el" "aph-org-agenda.el"
-;;;;;;  "aph-outline.el" "aph-page.el" "aph-seq.el" "aph-which-func.el"
-;;;;;;  "aph-window.el" "bfw.el" "chimera.el" "cygwinize.el" "eimp-ephemeral.el"
-;;;;;;  "elfeed-barb.el" "elfeed-link.el" "formation.el" "forms-barb.el"
+;;;;;;  "aph-outline.el" "aph-page.el" "aph-projectile.el" "aph-seq.el"
+;;;;;;  "aph-which-func.el" "aph-window.el" "atlas.el" "bfw.el" "chimera.el"
+;;;;;;  "cygwinize.el" "dent.el" "eimp-ephemeral.el" "elfeed-barb.el"
+;;;;;;  "elfeed-link.el" "fix.el" "formation.el" "forms-barb.el"
 ;;;;;;  "init-core.el" "init-draft.el" "init-org-agenda.el" "init-org-capture.el"
 ;;;;;;  "init-org.el" "jerk.el" "lexy.el" "liberate-key.el" "morgue.el"
-;;;;;;  "org-agenda-skip.el" "org-agenda-sticky.el" "org-barb.el"
-;;;;;;  "org-compare.el" "org-eww.el" "org-habit-everywhere.el" "org-match.el"
-;;;;;;  "org-multitheme.el" "proctor-forms.el" "proctor-helm.el"
-;;;;;;  "proctor-org.el" "proctor.el" "shr-link-img.el" "symbol.el"
-;;;;;;  "trinket.el" "vizier-helm.el" "vizier.el") (22446 7018 312481
-;;;;;;  800000))
+;;;;;;  "org-agenda-count.el" "org-agenda-skip.el" "org-agenda-sticky.el"
+;;;;;;  "org-barb.el" "org-compare.el" "org-eww.el" "org-habit-everywhere.el"
+;;;;;;  "org-match.el" "org-multitheme.el" "proctor-forms.el" "proctor-helm.el"
+;;;;;;  "proctor-org.el" "proctor.el" "random.el" "shr-link-img.el"
+;;;;;;  "symbol.el" "trinket.el" "vizier-helm.el" "vizier.el") (22509
+;;;;;;  25923 461507 300000))
 
 ;;;***
 

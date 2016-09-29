@@ -814,13 +814,33 @@
   :after helm
   :ensure t
   :bind (:map umbra-mode-map
-              ("C-x M-p" . projectile-switch-project))
-  :config
+              ("C-x M-p" . projectile-switch-project)) 
+  :config 
   (projectile-global-mode)
   (validate-setq projectile-completion-system     'helm
                  projectile-switch-project-action #'helm-projectile
                  projectile-enable-caching        t)
   (helm-projectile-on))
+
+(use-package aph-projectile
+  :after projectile 
+  :config
+  (bind-keys
+   :penumbra prog-mode
+   ("C-c C-t" .
+    (chimera "chimera/projectile-test-project"
+      (when (aph/projectile-call-with-project #'projectile-test-command))
+      #'projectile-test-project))
+   ("C-c f t" .
+    (chimera "chimera/projectile-find-implementation-or-test-other-window"
+      (when (projectile-project-p)
+        #'projectile-find-implementation-or-test-other-window))))
+  (validate-setq projectile-test-prefix-function #'aph/projectile-test-prefix
+                 projectile-test-suffix-function #'aph/projectile-test-suffix)
+  ;; Register a project type for this project
+  (projectile-register-project-type
+   'emacs-init '("init-core.el") nil (lambda () (ert t)))
+  (push '(emacs-init . (nil . "-test")) aph/projectile-test-alist))
 
 (use-package helm-projectile
   :ensure t
@@ -1412,6 +1432,28 @@ Intended as :around advice for `org-agenda-quit'."
     (funcall orig-fn)))
 
 (advice-add 'org-agenda-quit :around #'aph/org-agenda-quit-fix)
+
+(defun aph/projectile-find-matching-fix (orig-fn file)
+  "Bug-fixing advice for `projectile-find-matching-*'.
+
+The functions `projectile-find-matching-test' and
+`projectile-find-matching-file' do not respect the variables
+`projectile-test-prefix-function' and
+`projectile-test-suffix-function'.  This advice corrects this
+deficit, and is intended as :around advice."
+  (require 'vizier)
+  (vizier-with-advice
+      ((:once projectile-test-prefix :override
+              (lambda (project-type)
+                (funcall projectile-test-prefix-function project-type)))
+       (:once projectile-test-suffix :override
+              (lambda (project-type)
+                (funcall projectile-test-suffix-function project-type))))
+    (funcall orig-fn file)))
+
+(dolist (sym '(projectile-find-matching-test
+               projectile-find-matching-file))
+  (advice-add sym :around #'aph/projectile-find-matching-fix))
 
 (provide 'init-core)
 (provide 'init)
