@@ -1289,10 +1289,7 @@
 (use-package haskell-mode
   :ensure t
   :bind (:umbra haskell-mode
-                ;; The `align-regexp' binding duplicates the one for
-                ;; `prog-mode' because `umbra-mode' cannot currently
-                ;; resolve the `haskell-parent-mode' -> `prog-mode'
-                ;; alias.
+                ("C-c C-l" . haskell-process-load-file)
                 ("C-c C-z" . haskell-interactive-switch))
   :bind (:umbra haskell-parent-mode
                 ;; These bindings duplicate those for `prog-mode'
@@ -1307,12 +1304,11 @@
                  haskell-process-log             t)
   ;; Auxiliary features
   (add-hook 'haskell-mode-hook #'eldoc-mode)
-  (add-hook 'haskell-mode-hook #'haskell-decl-scan-mode))
-
-(use-package aph-haskell
-  :after haskell-mode
-  :bind (:umbra haskell-mode
-                ("C-c C-l" . aph/haskell-process-load-file-cygwin)))
+  (add-hook 'haskell-mode-hook #'haskell-decl-scan-mode)
+  ;; Cygwinization
+  (when (eq system-type 'cygwin)
+    (require 'cygwinize)
+    (cygwinize #'haskell-process-load-file))) 
 
 (use-package haskell-compile
   :bind (:umbra haskell-mode
