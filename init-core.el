@@ -265,6 +265,10 @@
               ("C-\\"  . deck-push-buffer-forward)
               ("M-\\"  . deck-pull-buffer-backward)))
 
+(use-package delsel
+  :config
+  (delete-selection-mode))
+
 (use-package doc-view
   :defer t
   :config
