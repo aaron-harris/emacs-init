@@ -783,6 +783,15 @@
               ("C-z"      . undefined)
               ("s-<apps>" . helm-select-action)))
 
+(use-package helm-buffers
+  :config
+  (setq helm-mini-default-sources
+        '(helm-source-buffers-list
+          helm-source-recentf
+          helm-source-files-in-current-dir
+          helm-source-bookmarks
+          helm-source-buffer-not-found)))
+
 (use-package helm-config
   :after helm
   :diminish helm-mode
@@ -1326,8 +1335,8 @@
 (use-package aph-haskell
   :after haskell-mode
   :config
-  ;; Projectile configuration 
-  (with-eval-after-load 'projectile 
+  ;; Projectile configuration
+  (with-eval-after-load 'projectile
     (projectile-register-project-type
      'haskell-stack
      '("stack.yaml")
