@@ -719,7 +719,7 @@
   ;; Mode tags
   (mode-family-add 'lisp-mode             'lisp)
   (mode-family-add 'emacs-lisp-mode       'lisp)
-  (mode-family-add 'lisp-interaction-mode 'lisp) 
+  (mode-family-add 'lisp-interaction-mode 'lisp)
   ;; Add `use-package' blocks to Imenu
   (add-to-list 'lisp-imenu-generic-expression
                '("Package"
@@ -741,7 +741,7 @@
   :after lisp-mode
   :bind (:umbra emacs-lisp-mode
                 ("C-c C-l" . aph/eval-region-or-buffer))
-  :config 
+  :config
   (add-hook 'emacs-lisp-mode-hook #'aph/emacs-lisp-add-font-lock-keywords))
 
 (use-package pp
@@ -821,8 +821,8 @@
   :after helm
   :ensure t
   :bind (:map umbra-mode-map
-              ("C-x M-p" . projectile-switch-project)) 
-  :config 
+              ("C-x M-p" . projectile-switch-project))
+  :config
   (projectile-global-mode)
   (validate-setq projectile-completion-system     'helm
                  projectile-switch-project-action #'helm-projectile
@@ -830,7 +830,7 @@
   (helm-projectile-on))
 
 (use-package aph-projectile
-  :after projectile 
+  :after projectile
   :config
   (bind-keys
    :penumbra prog-mode
@@ -1299,6 +1299,13 @@
                 ("M-p"   . backward-paragraph)
                 ("M-n"   . forward-paragraph))
   :config
+  (bind-keys
+   :umbra haskell-parent-mode
+   ("C-c C-t" .
+    (chimera "chimera/projectile-test-project"
+      (when (aph/projectile-call-with-project #'projectile-test-command))
+      #'projectile-test-project)))
+
   ;; REPL setup
   (validate-setq haskell-process-show-debug-tips nil
                  haskell-process-log             t)
@@ -1308,7 +1315,18 @@
   ;; Cygwinization
   (when (eq system-type 'cygwin)
     (require 'cygwinize)
-    (cygwinize #'haskell-process-load-file))) 
+    (cygwinize #'haskell-process-load-file)))
+
+(use-package aph-haskell
+  :after haskell-mode
+  :config
+  ;; Projectile configuration 
+  (with-eval-after-load 'projectile 
+    (projectile-register-project-type
+     'haskell-stack
+     '("stack.yaml")
+     #'haskell-compile
+     #'aph/haskell-test)))
 
 (use-package haskell-compile
   :bind (:umbra haskell-mode
@@ -1326,7 +1344,7 @@
 
 (use-package haskell-interactive-mode
   :bind (:umbra haskell-interactive-mode
-                ("C-c M-o" . haskell-interactive-mode-clear))) 
+                ("C-c M-o" . haskell-interactive-mode-clear)))
 
 
 ;;;; Themes
