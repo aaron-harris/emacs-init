@@ -701,16 +701,19 @@
                                                     "/emacs/init/test")))
   (validate-variable 'load-path))
 
-(use-package ielm
-  :bind (:map umbra-mode-map
-              ("C-z C-r" . ielm))
+(use-package ielm 
   :config
   (mode-family-add 'ielm-mode 'lisp))
-
 
 (use-package aph-ielm
   :bind (:umbra inferior-emacs-lisp-mode
                 ("C-c C-w" . aph/ielm-copy-last-output)))
+
+(use-package ielm-repl
+  :bind (:umbra emacs-lisp-mode
+                ("C-c C-z" . ielm-repl))
+  :bind (:umbra inferior-emacs-lisp-mode
+                ("C-c C-z" . ielm-repl-switch-back)))
 
 (use-package lisp-mode
   :bind (:umbra emacs-lisp-mode
