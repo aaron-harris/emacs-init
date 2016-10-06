@@ -1307,6 +1307,12 @@
       #'projectile-test-project)))
 
   ;; REPL setup
+  ;;
+  ;; This next option is necessary in projects with multiple build
+  ;; targets, because GHCI wants to know which target to use (even
+  ;; though we don't care), and something about the timing gets
+  ;; screwed up.
+  (add-to-list 'haskell-process-args-stack-ghci "--no-load")
   (validate-setq haskell-process-show-debug-tips nil
                  haskell-process-log             t)
   ;; Auxiliary features
