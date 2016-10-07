@@ -258,6 +258,36 @@
              ("<tab>" . company-complete-common-or-cycle))
   (validate-setq company-idle-delay nil))
 
+(use-package crux
+  :ensure t
+  :bind
+  (:map umbra-mode-map
+        ;; Local editing
+        ("M-O"           . crux-smart-open-line-above)
+        ("C-c d"         . crux-duplicate-current-line-or-region)
+        ("C-c M-d"       . crux-duplicate-and-comment-current-line-or-region)
+        ("C-c ."         . crux-insert-date)
+        ;; Global editing
+        ("s-<apps> w"    . crux-cleanup-buffer-or-region)
+        ;; Kill and yank
+        ("C-<backspace>" . crux-kill-line-backwards)
+        ("C-S-k"         . crux-kill-whole-line)
+        ("M-W"           . crux-indent-rigidly-and-copy-to-clipboard)
+        ;; Buffer and file management
+        ("C-x <delete>"  . crux-delete-file-and-buffer)
+        ("C-x M-s"       . crux-rename-file-and-buffer)
+        ("C-;"           . crux-switch-to-previous-buffer)
+        ;; File and buffer hotkeys
+        ("C-x C-i"       . crux-find-user-init-file)
+        ("C-x C-I"       . crux-find-shell-init-file))
+  :bind (:umbra emacs-lisp-mode
+                ("C-c C-w"   . crux-eval-and-replace)
+                ("C-c C-S-z" . crux-create-scratch-buffer))
+  :config
+  ;; There is a bug in `crux-eval-and-replace'; it uses a nonexistent
+  ;; function `elisp--preceding-sexp' rather than `preceding-sexp'.
+  (defalias 'elisp--preceding-sexp #'preceding-sexp))
+
 (use-package deck
   :bind (:map umbra-mode-map
               ("M-["   . deck-surf-swap-buffer-backward)
@@ -299,8 +329,7 @@
   :after files
   :bind (:map umbra-mode-map
               ("C-x k"        . aph/kill-active-buffer)
-              ("C-x C-c"      . aph/delete-frame-or-exit)
-              ("C-x <delete>" . aph/kill-active-buffer-delete-file)))
+              ("C-x C-c"      . aph/delete-frame-or-exit)))
 
 (use-package hippie-exp
   :bind (:map umbra-mode-map
@@ -431,7 +460,6 @@
   :demand t
   :bind (:map umbra-mode-map
               ("C-M-/"      . undo-only)
-              ("C-S-k"      . kill-whole-line)
               ("C-`"        . next-error)
               ("C-x M-k"    . append-next-kill)
               ("M-= l"      . what-line)
@@ -652,10 +680,6 @@
   :config
   (add-to-list 'which-func-functions #'aph/which-function-org))
 
-(use-package whitespace
-  :bind (:map umbra-mode-map
-              ("s-<apps> w" . whitespace-cleanup)))
-
 (use-package window
   :bind (:map umbra-mode-map
               ("C-S-l" . move-to-window-line-top-bottom)))
@@ -701,7 +725,7 @@
                                                     "/emacs/init/test")))
   (validate-variable 'load-path))
 
-(use-package ielm 
+(use-package ielm
   :config
   (mode-family-add 'ielm-mode 'lisp))
 
