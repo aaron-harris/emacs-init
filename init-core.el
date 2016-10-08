@@ -278,6 +278,7 @@
         ("C-x M-s"       . crux-rename-file-and-buffer)
         ("C-;"           . crux-switch-to-previous-buffer)
         ;; File and buffer hotkeys
+        ("C-x <tab>"     . indent-rigidly)
         ("C-x C-i"       . crux-find-user-init-file)
         ("C-x C-I"       . crux-find-shell-init-file))
   :bind (:umbra emacs-lisp-mode
