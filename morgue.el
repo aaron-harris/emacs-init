@@ -89,14 +89,15 @@ splits it on OLD-SEPS (a regexp), applies TRANSFORM to each
 substring, then joins these together with NEW-SEP as a separator,
 returning the result.
 
-If OLD-SEPS or NEW-SEP is nil or omitted, both default to \"\n\",
-so that TRANSFORM is applied to individual lines."
+If either OLD-SEPS or NEW-SEP is nil or omitted, that paramater
+defaults to \"\\n\", so that TRANSFORM is applied to individual
+lines."
   (let ((old-seps  (or old-seps "\n"))
         (new-sep   (or new-sep  "\n")))
     (lambda (s)
       (mapconcat transform
                  (split-string s old-seps)
-                 new-sep))))
+                 new-sep)))) 
 
 (defun morgue-zap (sep)
   "Return function that ignores prefix of string delimited by SEP.
