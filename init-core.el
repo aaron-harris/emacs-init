@@ -1454,24 +1454,28 @@
 
 ;;;; Bug fixes
 ;;============
-(defun aph/rectangle-repetition-fix (fn cmd n &optional other-cmd)
-  "Advice to fix bug in `rectangle-mark-mode' motion commands.
+(defun aph/lisp-completion-at-point-fix (orig-fn &rest args)
+  "Advice so completion of Lisp symbols works inside `'.
 
-The basic cursor motion commands in `rectangle-mark-mode' that
-were introduced in Emacs 25 do not currently handle their prefix
-arguments correctly (as of Emacs 25.0.50.1).  These
-commands (principally `rectangle-forward-char' and
-`rectangle-backward-char') delegate to `rectangle--*-char'.  This
-function fixes the problem when used as advice :around
-`rectangle--*-char'."
-  (cond
-   ((< n 0)  (aph/rectangle-repetition-fix fn other-cmd (- n)))
-   ((= n 0)  (funcall fn cmd 0 other-cmd))
-   ((> n 0)  (dotimes (i (1- n) (funcall fn cmd 1 other-cmd))
-               (funcall fn cmd 1 other-cmd)))))
+The function `lisp-completion-at-point' has a bug that prevents
+completion from working properly when attempting to complete a
+symbol inside `' quotes.  This advice fixes that bug.
 
-(when (>= emacs-major-version 25)
-  (advice-add #'rectangle--*-char :around #'aph/rectangle-repetition-fix))
+Intended as :around advice for `lisp-completion-at-point'."
+  ;; The bug is just that the local `end' variable is calculated
+  ;; incorrectly, including the terminating ' character.  Our rather
+  ;; heavy-handed solution affects all calls to `forward-sexp', but
+  ;; seems to work okay.
+  (require 'vizier)
+  (vizier-with-advice
+      ((forward-sexp
+        :after (lambda (&rest _args)
+                 (when (eq (char-before (point)) ?')
+                   (backward-char 1)))))
+    (apply orig-fn args)))
+
+(advice-add 'lisp-completion-at-point :around
+            #'aph/lisp-completion-at-point-fix) 
 
 (defun aph/org-agenda-quit-fix (orig-fn)
   "Advice so `org-agenda-quit' buries sticky agendas properly.
@@ -1518,6 +1522,25 @@ deficit, and is intended as :around advice."
 (dolist (sym '(projectile-find-matching-test
                projectile-find-matching-file))
   (advice-add sym :around #'aph/projectile-find-matching-fix))
+
+(defun aph/rectangle-repetition-fix (fn cmd n &optional other-cmd)
+  "Advice to fix bug in `rectangle-mark-mode' motion commands.
+
+The basic cursor motion commands in `rectangle-mark-mode' that
+were introduced in Emacs 25 do not currently handle their prefix
+arguments correctly (as of Emacs 25.0.50.1).  These
+commands (principally `rectangle-forward-char' and
+`rectangle-backward-char') delegate to `rectangle--*-char'.  This
+function fixes the problem when used as advice :around
+`rectangle--*-char'."
+  (cond
+   ((< n 0)  (aph/rectangle-repetition-fix fn other-cmd (- n)))
+   ((= n 0)  (funcall fn cmd 0 other-cmd))
+   ((> n 0)  (dotimes (i (1- n) (funcall fn cmd 1 other-cmd))
+               (funcall fn cmd 1 other-cmd)))))
+
+(when (>= emacs-major-version 25)
+  (advice-add #'rectangle--*-char :around #'aph/rectangle-repetition-fix))
 
 (provide 'init-core)
 (provide 'init)
