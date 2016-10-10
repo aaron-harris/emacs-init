@@ -873,8 +873,8 @@
    :penumbra prog-mode
    ("C-c C-t" .
     (chimera "chimera/projectile-test-project"
-      (when (aph/projectile-call-with-project #'projectile-test-command))
-      #'projectile-test-project))
+      (when (aph/projectile-call-with-project #'projectile-test-command)
+        #'projectile-test-project)))
    ("C-c f t" .
     (chimera "chimera/projectile-find-implementation-or-test-other-window"
       (when (projectile-project-p)
