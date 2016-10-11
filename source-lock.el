@@ -120,7 +120,12 @@ unless `source-lock-mode' is enabled."
   (dolist (dir source-lock-directories)
     (dir-locals-set-directory-class dir 'source-lock))
   (when source-lock-protect-packages-p
-    (dir-locals-set-directory-class package-user-dir 'source-lock)))
+    ;; If `package-user-dir' is symlinked, we need to protect both the
+    ;; raw directory and its true location, because different commands
+    ;; may use different paths.
+    (dolist (dir `(,package-user-dir
+                   ,(file-truename package-user-dir)))
+      (dir-locals-set-directory-class dir 'source-lock))))
 
 (defun source-lock--strip ()
   "Remove `source-lock-mode' protection from all directories."
@@ -156,7 +161,7 @@ you should probably use that mode directly."
 (defun source-lock-bypass (fn &rest args)
   "Call FN with ARGS, bypassing `source-lock-mode' protection."
   (if (not source-lock-mode)
-      (apply fn args) 
+      (apply fn args)
     (source-lock--protect nil)
     (unwind-protect (apply fn args)
       (source-lock--protect t))))
@@ -197,7 +202,7 @@ Specifically,
  * Delete the `source-lock' directory class entirely.
 
  * Remove advice supporting `source-lock-mode' from the function
-   `package-install'." 
+   `package-install'."
   (source-lock-mode nil)                ; Advice removed here.
   (source-lock--strip)
   (setq dir-locals-class-alist
