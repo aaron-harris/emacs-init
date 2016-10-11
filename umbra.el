@@ -299,7 +299,20 @@ keymaps are named like 'umbra-overriding-mode-map:MODE."
 
 
 ;;;; Mode Definition
-;;================== 
+;;==================
+(defun umbra--get-mode-parent (mode)
+  "Return parent of MODE as a derived major mode.
+
+Resolve aliases: If `alias-mode' is an alias for `foo-mode' and
+`bar-mode' derives from `alias-mode', this function should return
+`foo-mode' and not `alias-mode'."
+  (let* ((parent  (get mode 'derived-mode-parent))
+         (deref   (symbol-function parent)))
+    (while (and (symbolp deref) deref)
+      (setq parent (symbol-function parent)
+            deref  (symbol-function parent)))
+    parent))
+
 (defun umbra--set-major-mode-parentage (mode &optional penumbra)
   "Set parentage of umbra keymap for MODE.
 
@@ -326,7 +339,7 @@ of the keymaps in the chain are penumbra maps.
 Do not pass minor modes to this function, as it will likely
 disrupt precedence of `umbra-mode' keymaps."
   (let ((keymap  (umbra-keymap mode penumbra))
-        (parent  (get mode 'derived-mode-parent)))
+        (parent  (umbra--get-mode-parent mode)))
     (set-keymap-parent
      keymap
      (cond
@@ -395,7 +408,7 @@ return a list containing that value as its sole element."
   (let ((val (plist-get plist prop)))
     (if (listp val)
         val
-      (list val)))) 
+      (list val))))
 
 (defun umbra--bind-keys-advice (orig &rest args)
   "Advice to add :umbra, :penumbra keywords to `bind-keys'.
@@ -461,7 +474,7 @@ This function serves as the back end for the commands
   ;; called via its usual binding, as doing otherwise can confuse some
   ;; commands.
   (let* ((key                 (seq-find #'umbra-default-binding keys))
-	 (last-command-event  (if (stringp key) (string-to-char key) key)))
+         (last-command-event  (if (stringp key) (string-to-char key) key)))
     (call-interactively
      (if key (umbra-default-binding key) #'undefined)
      (not :record-flag)
@@ -484,7 +497,7 @@ If you intend to bind C-m separately from <return> in
 <return> in `umbra-mode-map'."
   (interactive)
   (umbra-default-command (kbd "<return>")
-			 (kbd "RET")))
+                         (kbd "RET")))
 
 (defun umbra-default-kp-enter-command ()
   "Execute the command bound to <kp-enter> without `umbra-mode'.
@@ -494,8 +507,8 @@ but will preserve any command specifically bound to <kp-enter>
 rather than to RET or <return>."
   (interactive)
   (umbra-default-command (kbd "<kp-enter>")
-			 (kbd "<return>")
-			 (kbd "RET")))
+                         (kbd "<return>")
+                         (kbd "RET")))
 
 (defun umbra-default-tab-command ()
   "Execute the command bound to TAB without `umbra-mode'.
@@ -522,7 +535,7 @@ Changes reversed are as follows:
 - Addition of `umbra--update-major-mode' to `after-change-major-mode-hook'
 - Keymaps added to `emulation-mode-map-alists'
 - Advice for `bind-keys' adding support for :umbra and :penumbra
-- All umbra and penumbra keymaps" 
+- All umbra and penumbra keymaps"
   (remove-hook 'after-change-major-mode-hook #'umbra--update-major-mode)
   (dolist (elt '(umbra-overriding-map-alist
                  umbra-minor-mode-map-alist
