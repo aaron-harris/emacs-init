@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `umbra', `dash', `proctor', `symbol'
+;; Dependencies: `umbra', `alist', `dash', `proctor', `symbol'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,8 +22,10 @@
 ;;; Code:
 
 (require 'umbra)
-(require 'symbol)
 (require 'proctor)
+
+(require 'alist)
+(require 'symbol)
 
 
 ;;; Testing Apparatus
@@ -86,9 +88,9 @@ and 'penumbra' is either the keyword :penumbra or nil."
 (ert-deftest umbra-test-with-mode--body ()
   "Test that `umbra-with-mode' evaluates its body."
   (umbra-test-with-mode--all-params
-   (should (proctor-macro-executes-body
-            'umbra-with-mode
-            `(mode ,parent ,penumbra)))))
+    (should (proctor-macro-executes-body
+             'umbra-with-mode
+             `(mode ,parent ,penumbra)))))
 
 (ert-deftest umbra-test-with-mode--bindings ()
   "Test bindings of `umbra-with-mode'."
@@ -108,7 +110,7 @@ and 'penumbra' is either the keyword :penumbra or nil."
     (should (proctor-macro-does-not-leak
              'umbra-with-mode
              ''mode-umbra-map
-             `(mode ,parent ,penumbra))) 
+             `(mode ,parent ,penumbra)))
     (let (mode-x)
       (umbra-with-mode mode parent penumbra
         (setq mode-x mode)
@@ -182,7 +184,7 @@ and 'penumbra' is either the keyword :penumbra or nil."
           (define-key test-minor-mode-map (kbd "a") #'foo-minor)
           (define-key test-major-mode-umbra-map (kbd "a") #'umbra-major)
           (define-key test-minor-mode-umbra-map (kbd "a") #'umbra-minor)
-          ;; Test keybindings (in Gray code order) 
+          ;; Test keybindings (in Gray code order)
           (should (eq (key-binding (kbd "a")) #'self-insert-command))
           (umbra-mode 1)                ; 000 -> 001
           (funcall test-minor-mode 1)   ; 001 -> 011
@@ -236,6 +238,25 @@ and 'penumbra' is either the keyword :penumbra or nil."
           (setq umbra-map-alist
                 (assq-delete-all mode2-name umbra-map-alist)))))))
 
+(ert-deftest umbra-test-mode-parentage--alias ()
+  "Test that mode parentage handles aliases correctly."
+  (umbra-with-mode mode1 'fundamental-mode nil
+    (defalias 'umbra:test-mode-alias mode1)
+    (proctor-with-major-mode mode2 'umbra:test-mode-alias
+      (let ((umbra-mode t)
+            (mode2-name mode2))
+        (unwind-protect
+            (with-temp-buffer
+              (define-key mode1-umbra-map (kbd "a") #'foo)
+              (funcall mode2)
+              (should (eq (key-binding (kbd "a")) #'foo)))
+          (unintern 'umbra:test-mode-alias)
+          (dolist (override '(t nil))
+            (unintern (umbra-keymap-name 'umbra:test-mode-alias override))
+            (unintern (umbra-keymap-name mode2-name             override)))
+          (alist-delete umbra-map-alist mode2-name)
+          (alist-delete umbra-map-alist 'umbra:test-mode-alias))))))
+
 
 ;;; `bind-keys' Support Machinery Tests
 ;;;====================================
@@ -252,7 +273,7 @@ and 'penumbra' is either the keyword :penumbra or nil."
         (personal-keybindings nil))
     (dolist (penumbra '(t nil))
       ;; With mode already augmented
-      (dolist (param '('fundamental-mode :minor)) 
+      (dolist (param '('fundamental-mode :minor))
         (umbra-with-mode foo-mode param penumbra
           (funcall test foo-mode penumbra)))
       ;; With mode not previously augmented
