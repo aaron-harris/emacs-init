@@ -639,6 +639,11 @@
   :bind (:umbra vc-dir-mode
                 ("<delete>" . aph/vc-dir-delete-file)))
 
+(use-package view
+  :bind (:map umbra-mode-map
+              ("C-v" . View-scroll-half-page-forward)
+              ("M-v" . View-scroll-half-page-backward)))
+
 (use-package visible-mark
   :ensure t
   :init
