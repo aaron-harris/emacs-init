@@ -265,8 +265,7 @@
         ;; Local editing
         ("M-O"           . crux-smart-open-line-above)
         ("C-c d"         . crux-duplicate-current-line-or-region)
-        ("C-c M-d"       . crux-duplicate-and-comment-current-line-or-region)
-        ("C-c ."         . crux-insert-date)
+        ("C-c M-d"       . crux-duplicate-and-comment-current-line-or-region) 
         ;; Global editing
         ("s-<apps> w"    . crux-cleanup-buffer-or-region)
         ;; Kill and yank
