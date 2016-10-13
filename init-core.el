@@ -16,6 +16,12 @@
   "A symbol denoting the specific PC being used.")
 
 
+;;;; Disable Customization
+;;========================
+;; Save customized settings to a file which is never loaded.
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+
+
 ;;;; Display Settings
 ;;===================
 ;; Placing this close to the beginning of initialization should
