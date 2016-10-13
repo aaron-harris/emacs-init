@@ -279,7 +279,7 @@
         ;; File and buffer hotkeys
         ("C-x <tab>"     . indent-rigidly)
         ("C-x C-i"       . crux-find-user-init-file)
-        ("C-x C-I"       . crux-find-shell-init-file))
+        ("C-x C-S-i"     . crux-find-shell-init-file))
   :bind (:umbra emacs-lisp-mode
                 ("C-c C-w"   . crux-eval-and-replace)
                 ("C-c C-S-z" . crux-create-scratch-buffer))
