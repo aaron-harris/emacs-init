@@ -282,11 +282,7 @@
         ("C-x C-S-i"     . crux-find-shell-init-file))
   :bind (:umbra emacs-lisp-mode
                 ("C-c C-w"   . crux-eval-and-replace)
-                ("C-c C-S-z" . crux-create-scratch-buffer))
-  :config
-  ;; There is a bug in `crux-eval-and-replace'; it uses a nonexistent
-  ;; function `elisp--preceding-sexp' rather than `preceding-sexp'.
-  (defalias 'elisp--preceding-sexp #'preceding-sexp))
+                ("C-c C-S-z" . crux-create-scratch-buffer)))
 
 (use-package deck
   :bind (:map umbra-mode-map
