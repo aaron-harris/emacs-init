@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: extensions
 
-;; Required features: `alist', `dash', `validate' (optional)
+;; Required features: `dash', `map', `validate' (optional)
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -75,8 +75,8 @@
 
 ;;; Code:
 
-(require 'alist)
 (require 'dash)
+(require 'map)
 
 
 ;;;; Internal Variables
@@ -218,14 +218,14 @@ See the documentation for `mode-family-create' for more information."
   (unless (mode-family-p family) (mode-family-create family))
   (unless (mode-family-member-p mode family)
     (let ((families (assoc-default mode mode-family--alist)))
-      (alist-put mode-family--alist mode (push family families)))))
+      (map-put mode-family--alist mode (push family families)))))
 
 (defun mode-family-remove (mode family)
   "If MODE is a member of FAMILY, remove it.
 Otherwise, do nothing.
 
 See the documentation for `mode-family-create' for more information."
-  (alist-put mode-family--alist
+  (map-put mode-family--alist
              mode
              (remove family (mode-family-list-families mode))))
 

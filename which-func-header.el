@@ -5,6 +5,8 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: tools, mode-line, imenu
 
+;; Dependencies: `map'
+
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
@@ -33,7 +35,7 @@
 ;;; Code:
 
 (require 'which-func)
-(require 'alist)
+(require 'map)
 
 (defcustom which-func-header-format
   '(which-function-mode (which-func-header-mode ("" which-func-format)))
@@ -55,12 +57,12 @@ shown in either the header line or the mode line.
 Unlike `which-function-mode', this mode is buffer-local."
   :group       'which-func
   :init-value  nil
-  :require     'which-func-header 
-  (if (and which-function-mode which-func-header-mode) 
+  :require     'which-func-header
+  (if (and which-function-mode which-func-header-mode)
       (let ((construct (assq 'which-func-mode mode-line-misc-info)))
         (when construct
-          (alist-delete mode-line-misc-info 'which-func-mode)
-          (alist-delete mode-line-misc-info 'which-func-header-mode)
+          (map-delete mode-line-misc-info 'which-func-mode)
+          (map-delete mode-line-misc-info 'which-func-header-mode)
           (push `(which-func-header-mode "" ,construct) mode-line-misc-info))
         (setq header-line-format which-func-header-format))
     (kill-local-variable 'header-line-format))
@@ -98,7 +100,7 @@ re-asserts the current value of `which-func-header-mode' in
   ;; Restore changes to `mode-line-misc-info'.
   (let ((construct (nth 2 (assq 'which-func-header-mode mode-line-misc-info))))
     (when construct
-      (alist-delete mode-line-misc-info 'which-func-header-mode)
+      (map-delete mode-line-misc-info 'which-func-header-mode)
       (push construct mode-line-misc-info)))
   ;; Let normal unloading proceed
   nil)
