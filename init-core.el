@@ -75,12 +75,6 @@
   :ensure t
   :defer t)
 
-(use-package seq
-  :ensure t
-  :defer t
-  :config
-  (require 'seq-24))
-
 (use-package validate
   :ensure t)
 
@@ -271,7 +265,7 @@
         ;; Local editing
         ("M-O"           . crux-smart-open-line-above)
         ("C-c d"         . crux-duplicate-current-line-or-region)
-        ("C-c M-d"       . crux-duplicate-and-comment-current-line-or-region) 
+        ("C-c M-d"       . crux-duplicate-and-comment-current-line-or-region)
         ;; Global editing
         ("s-<apps> w"    . crux-cleanup-buffer-or-region)
         ;; Kill and yank
@@ -1333,8 +1327,8 @@
   :ensure t
   :bind (:umbra haskell-mode
                 ("C-c C-l" . haskell-process-load-file)
-                ("C-c C-z" . haskell-interactive-switch)) 
-  :config 
+                ("C-c C-z" . haskell-interactive-switch))
+  :config
   ;; REPL setup
   ;;
   ;; This next option is necessary in projects with multiple build
@@ -1467,7 +1461,7 @@ Intended as :around advice for `lisp-completion-at-point'."
     (apply orig-fn args)))
 
 (advice-add 'lisp-completion-at-point :around
-            #'aph/lisp-completion-at-point-fix) 
+            #'aph/lisp-completion-at-point-fix)
 
 (defun aph/org-agenda-quit-fix (orig-fn)
   "Advice so `org-agenda-quit' buries sticky agendas properly.
