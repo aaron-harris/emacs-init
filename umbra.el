@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience keybinding
 
-;; Dependencies: `alist', `symbol', `aph-plist' (only with `bind-key')
+;; Dependencies: `map', `symbol'
 ;; Advised functions from other packages:
 ;;   bind-key: `bind-keys'
 
@@ -93,7 +93,7 @@
 
 ;;; Code:
 
-(require 'alist)
+(require 'map)
 (require 'symbol)
 (eval-when-compile (require 'cl-lib))
 
@@ -540,7 +540,7 @@ Changes reversed are as follows:
   (dolist (elt '(umbra-overriding-map-alist
                  umbra-minor-mode-map-alist
                  umbra-local-map-alist))
-    (alist-delete emulation-mode-map-alists elt))
+    (map-delete emulation-mode-map-alists elt))
   (advice-remove 'bind-keys #'umbra--bind-keys-advice)
   (mapatoms (lambda (sym)
               (dolist (prefix '("umbra-mode-map:"

@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: extensions
 
-;; Dependencies: `mode-family', `alist'
+;; Dependencies: `map', `mode-family'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@
 ;;; Code:
 
 (require 'mode-family)
-(require 'alist)
+(require 'map)
 
 
 ;;;; State Variables
@@ -76,7 +76,7 @@ instead.")
 	    setters))
     `(let ((,plist (assoc-default ',family family-local--alist #'eq)))
        ,@(reverse setters)
-       (alist-put family-local--alist ',family ,plist))))
+       (map-put family-local--alist ',family ,plist))))
 
 
 ;;;; Implementation

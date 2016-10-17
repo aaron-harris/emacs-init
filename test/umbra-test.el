@@ -81,8 +81,8 @@ Execute BODY in an environment where the variables 'parent' and
 is either the quoted symbol 'fundamental-mode or the keyword :minor
 and 'penumbra' is either the keyword :penumbra or nil."
   (declare (indent 0) (debug body))
-  `(dolist (parent '('fundamental-mode :minor))
-     (dolist (penumbra'(:penumbra nil))
+  `(dolist (parent '(fundamental-mode :minor))
+     (dolist (penumbra '(:penumbra nil))
        ,@body)))
 
 (ert-deftest umbra-test-with-mode--body ()
@@ -90,14 +90,14 @@ and 'penumbra' is either the keyword :penumbra or nil."
   (umbra-test-with-mode--all-params
     (should (proctor-macro-executes-body
              'umbra-with-mode
-             `(mode ,parent ,penumbra)))))
+             `(mode ',parent ,penumbra)))))
 
 (ert-deftest umbra-test-with-mode--bindings ()
   "Test bindings of `umbra-with-mode'."
   (umbra-test-with-mode--all-params
     (should (proctor-test-mode-wrapper-bindings
              'umbra-with-mode
-             `(,parent ,penumbra)))
+             `(',parent ,penumbra)))
     (umbra-with-mode mode parent penumbra
       (should (umbra-has-keymap-p mode penumbra)))))
 
@@ -106,11 +106,11 @@ and 'penumbra' is either the keyword :penumbra or nil."
   (umbra-test-with-mode--all-params
     (should (proctor-test-mode-wrapper-cleanup
              'umbra-with-mode
-             `(,parent ,penumbra)))
+             `(',parent ,penumbra)))
     (should (proctor-macro-does-not-leak
              'umbra-with-mode
              ''mode-umbra-map
-             `(mode ,parent ,penumbra)))
+             `(mode ',parent ,penumbra)))
     (let (mode-x)
       (umbra-with-mode mode parent penumbra
         (setq mode-x mode)
@@ -254,8 +254,8 @@ and 'penumbra' is either the keyword :penumbra or nil."
           (dolist (override '(t nil))
             (unintern (umbra-keymap-name 'umbra:test-mode-alias override))
             (unintern (umbra-keymap-name mode2-name             override)))
-          (alist-delete umbra-map-alist mode2-name)
-          (alist-delete umbra-map-alist 'umbra:test-mode-alias))))))
+          (map-delete umbra-map-alist mode2-name)
+          (map-delete umbra-map-alist 'umbra:test-mode-alias))))))
 
 
 ;;; `bind-keys' Support Machinery Tests
@@ -273,7 +273,7 @@ and 'penumbra' is either the keyword :penumbra or nil."
         (personal-keybindings nil))
     (dolist (penumbra '(t nil))
       ;; With mode already augmented
-      (dolist (param '('fundamental-mode :minor))
+      (dolist (param '(fundamental-mode :minor))
         (umbra-with-mode foo-mode param penumbra
           (funcall test foo-mode penumbra)))
       ;; With mode not previously augmented
