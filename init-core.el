@@ -1376,6 +1376,18 @@
                 ("C-c M-o" . haskell-interactive-mode-clear)))
 
 
+;;;; Idris
+;;========
+(use-package idris-mode
+  :ensure t
+  :defer t
+  :config
+  ;; Cygwinization
+  (when (eq system-type 'cygwin)
+    (require 'cygwinize)
+    (cygwinize #'idris-filename-to-load)))
+
+
 ;;;; Themes
 ;;=========
 (use-package aph-theme
