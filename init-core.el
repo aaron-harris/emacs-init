@@ -1015,7 +1015,7 @@
   :bind (:umbra org-mode
                 ("<tab>" . aph/org-cycle-with-smart-tab)
                 ("C-k"   . aph/org-kill-line))
-    :bind (:umbra org-agenda-mode
+  :bind (:umbra org-agenda-mode
                 ("g" . aph/org-agenda-redo))
   :config
   (bind-keys
@@ -1147,8 +1147,8 @@
   (add-hook 'forms-mode-hook #'aph/forms-show-minor-modes))
 
 (use-package forms-random
- :bind (:umbra forms-mode
-               ("C-M-." . forms-random-record-weighted)))
+  :bind (:umbra forms-mode
+                ("C-M-." . forms-random-record-weighted)))
 
 (use-package forms-narrow
   :init
@@ -1380,7 +1380,8 @@
 ;;========
 (use-package idris-mode
   :ensure t
-  :defer t
+  :bind (:umbra idris-mode
+                ("C-c C-c" . idris-ipkg-build))
   :config
   ;; Cygwinization
   (when (eq system-type 'cygwin)
