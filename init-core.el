@@ -1183,6 +1183,12 @@
                 ("M-p"     . backward-paragraph)
                 ("M-n"     . forward-paragraph)))
 
+(use-package shr
+  :defer t
+  :config
+  ;; Disable use of proportional fonts in `eww' and other `shr' modes
+  (validate-setq shr-use-fonts nil))
+
 (use-package shr-link-img
   :after shr)
 
