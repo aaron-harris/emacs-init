@@ -296,7 +296,9 @@
   (delete-selection-mode))
 
 (use-package doc-view
-  :defer t
+  :bind (:umbra doc-view-mode
+               ("C-v" . doc-view-scroll-up-or-next-page)
+               ("M-v" . doc-view-scroll-down-or-previous-page))
   :config
   (setq doc-view-resolution 200)
   ;; On mpc, Ghostview has a different name.
@@ -636,8 +638,8 @@
 
 (use-package view
   :bind (:map umbra-mode-map
-              ("C-v" . View-scroll-half-page-forward)
-              ("M-v" . View-scroll-half-page-backward)))
+              ([remap scroll-up-command]   . View-scroll-half-page-forward)
+              ([remap scroll-down-command] . View-scroll-half-page-backward)))
 
 (use-package visible-mark
   :ensure t
