@@ -46,8 +46,6 @@
 
 (require 'ielm)
 
-(eval-when-compile (require 'cl-lib))
-
 
 ;;;; State Variables
 ;;==================
@@ -63,8 +61,12 @@ Used by `ielm-repl-switch-back'.")
   "As `ielm', but show ielm buffer in other window."
   (interactive)
   (setq ielm-repl--previous-buffer (current-buffer))
-  (cl-letf (((symbol-function 'switch-to-buffer)
-             #'switch-to-buffer-other-window))
+  (let ((display-buffer-alist
+         (cons `(,(regexp-quote "*ielm*")
+                 . (display-buffer-pop-up-window
+                    . ((inhibit-same-window  . t)
+                       (inhibit-switch-frame . t))))
+               display-buffer-alist)))
     (ielm)))
 
 (defun ielm-repl-switch-back ()
