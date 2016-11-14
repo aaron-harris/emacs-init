@@ -63,7 +63,7 @@ If POS is non-nil, it is used in place of point."
       (match-string 0))))
 
 (defun aph/org-find-timestamp (&optional pos type date)
-  "Move point to timestamp in entry at POS, and return point. 
+  "Move point to timestamp in entry at POS, and return point.
 If no timestamp is found, return nil and do not move point.
 
 POS defaults to point if omitted.
@@ -73,14 +73,14 @@ and restricts which timestamps are considered.  The
 first (earliest appearing) allowable timestamp is used.
 
 If DATE is supplied (as a timestamp), only timestamps for that
-date are considered." 
+date are considered."
   (let ((target
          (save-excursion
            (save-restriction
              (widen)
              (goto-char (or pos (point)))
              (org-back-to-heading)
-             (aph/org-narrow-to-entry) 
+             (aph/org-narrow-to-entry)
              (let ((regexp (org-re-timestamp type)))
                (catch 'found
                  (while (re-search-forward regexp nil :noerror)
@@ -120,12 +120,12 @@ falls back to the global binding for TAB, subject to the option
 `org-cycle', except it falls back to `smart-tab' instead if
 `smart-tab-mode' is enabled."
   (interactive "P")
-  (vizier-with-advice-if (bound-and-true-p smart-tab-mode) 
+  (vizier-with-advice-if (bound-and-true-p smart-tab-mode)
       ;; Make `org-cycle' use `smart-tab' as fallback action.
       ((global-key-binding
-	:before-until
-	(lambda (keys &optional accept-default)
-	  (when (equal keys "\t") #'smart-tab)))
+        :before-until
+        (lambda (keys &optional accept-default)
+          (when (equal keys "\t") #'smart-tab)))
        ;; Prevent `smart-tab' from using `org-cycle' as its fallback.
        (smart-tab-default :override #'indent-for-tab-command))
     (org-cycle arg)))
@@ -226,6 +226,13 @@ to `org-agenda-refile'.  It is intended for use globally, where a
 keybinding for that function is not appropriate."
   (interactive)
   (org-agenda-refile '(16)))
+
+
+;;;; Column View
+;;==============
+(defun aph/org-column-view-p ()
+  "Return non-nil if current buffer is in column view."
+  (bound-and-true-p org-columns-overlays))
 
 (provide 'aph-org)
 ;;; aph-org.el ends here

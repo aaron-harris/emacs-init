@@ -297,8 +297,8 @@
 
 (use-package doc-view
   :bind (:umbra doc-view-mode
-               ("C-v" . doc-view-scroll-up-or-next-page)
-               ("M-v" . doc-view-scroll-down-or-previous-page))
+                ("C-v" . doc-view-scroll-up-or-next-page)
+                ("M-v" . doc-view-scroll-down-or-previous-page))
   :config
   (setq doc-view-resolution 200)
   ;; On mpc, Ghostview has a different name.
@@ -1024,9 +1024,10 @@
    :umbra org-mode
    ("C-k" .
     (chimera "chimera/org-clear-or-kill-line"
-      (cond
-       ((org-table-p)               #'aph/org-table-clear-row-forward)
-       ((eq major-mode 'org-mode)   #'org-kill-line)))))
+      (when (org-table-p) #'aph/org-table-clear-row-forward)))
+   ("<return>" .
+    (chimera "chimera/org-return"
+      (when (aph/org-column-view-p) #'next-line))))
   (fixed-scale-mode t)
   (add-to-list 'fixed-scale-command-list #'aph/org-agenda-redo))
 
@@ -1279,6 +1280,11 @@
   :ensure auctex
   :defer t
   :config
+  ;; Path setup
+  (let ((texpath "/usr/local/texlive/2015/bin/x86_64-cygwin"))
+    (setenv "PATH" (concat texpath ":" (getenv "PATH")))
+    (add-to-list 'exec-path texpath))
+  ;; Master file settings
   (setq-default TeX-master nil)
   ;; Caching settings
   (validate-setq TeX-auto-save  t
@@ -1452,11 +1458,11 @@
    "19352d62ea0395879be564fc36bc0b4780d9768a964d26dfae8aad218062858d")
   :config
   (zenburn-with-color-variables
-    (custom-theme-set-faces
-     'zenburn
-     ;; The `volatile-highlights' face should be easier to see.
-     `(vhl/default-face
-       ((t (:background ,zenburn-bg-1)))))))
+   (custom-theme-set-faces
+    'zenburn
+    ;; The `volatile-highlights' face should be easier to see.
+    `(vhl/default-face
+      ((t (:background ,zenburn-bg-1)))))))
 
 
 ;;;; Bug fixes
