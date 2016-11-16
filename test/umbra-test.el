@@ -4,7 +4,7 @@
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
-;; Dependencies: `umbra', `alist', `dash', `proctor', `symbol'
+;; Dependencies: `umbra', `dash', `proctor', `symbol'
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 (require 'umbra)
 (require 'proctor)
 
-(require 'alist)
 (require 'symbol)
 
 
@@ -289,20 +288,19 @@ and 'penumbra' is either the keyword :penumbra or nil."
     (umbra-with-mode foo-mode :minor nil
       (umbra-with-mode bar-mode :minor :penumbra
         (proctor-with-minor-mode baz-mode
-          (proctor-with-minor-mode quux-mode
-            (let ((personal-keybindings nil)
-                  (baz-mode-map-var    (symbol-concat baz-mode "-map"))
-                  (quux-mode-map-var   (symbol-concat quux-mode "-map")))
-              (eval `(bind-keys :umbra ,foo-mode
-                                :penumbra ,bar-mode
-                                :map (,baz-mode-map-var ,quux-mode-map-var)
-                                ("a" . foo)))
-              (dolist (keymap (list foo-mode-umbra-map
-                                    bar-mode-umbra-map
-                                    baz-mode-map
-                                    quux-mode-map))
-                (should (eq (lookup-key keymap (kbd "a"))
-                            'foo)))))))))
+          (let ((personal-keybindings nil)
+                (baz-mode-map-var    (symbol-concat baz-mode "-map")))
+            (eval `(bind-keys :umbra ,foo-mode
+                              ("a" . foo)
+                              :penumbra ,bar-mode
+                              ("b" . foo)
+                              :map ,baz-mode-map-var
+                              ("c" . foo)))
+            (dolist (pair `((,foo-mode-umbra-map . "a")
+                            (,bar-mode-umbra-map . "b")
+                            (,baz-mode-map       . "c")))
+              (should (eq (lookup-key (car pair) (kbd (cdr pair)))
+                          'foo))))))))
 
 
 (provide 'umbra-test)

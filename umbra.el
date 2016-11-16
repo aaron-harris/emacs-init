@@ -5,7 +5,7 @@
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience keybinding
 
-;; Dependencies: `map', `symbol'
+;; Dependencies: `map'
 ;; Advised functions from other packages:
 ;;   bind-key: `bind-keys'
 
@@ -93,9 +93,7 @@
 
 ;;; Code:
 
-(require 'map)
-(require 'symbol)
-(eval-when-compile (require 'cl-lib))
+(require 'map) 
 
 
 ;;;; User Options
@@ -214,10 +212,19 @@ maintained by the function `umbra--update-major-mode'.")
 
 ;;;; Augmented keymaps
 ;;====================
+(defun umbra--penumbra-p (arg)
+  "Return non-nil if ARG is not nil or `:umbra'.
+
+This simple function is used by `umbra-keymap-name' and related
+functions to examine optional arguments that specify whether to
+consider penumbra maps."
+  (and arg (not (eq arg :umbra))))
+
 (defmacro define-umbra-keymap (name mode &optional penumbra)
   "Define umbra keymap variable with NAME for MODE.
 
-If PENUMBRA is non-nil, define the penumbra keymap instead.
+If PENUMBRA is nil or the keyword `:umbra', define the ordinary
+\"umbra\" map; otherwise, define the penumbra keymap.
 
 Note that NAME can be easily constructed from MODE using
 `umbra-keymap-name', but this is left to the caller so that this
@@ -225,11 +232,12 @@ macro can meet the coding conventions detailed in the info
 node `(elisp) Coding Conventions'.
 
 Used by `umbra-keymap'.  See that function for more details."
-  (declare (debug (symbolp symbolp form)))
+  (declare (debug (symbolp symbolp form))) 
   `(defvar ,name (make-sparse-keymap)
      ,(format (concat "%s keymap for `%s'.\n"
                       "See `umbra-keymap' for more details.")
-              (if penumbra "Overriding augmented" "Augmented")
+              (if (umbra--penumbra-p penumbra)
+                  "Overriding augmented" "Augmented")
               mode)))
 
 (defun umbra-keymap--register (mode)
@@ -243,29 +251,32 @@ Used by `umbra-keymap'.  See that function for more details."
   "Return the name of the umbra keymap for MODE.
 Do not create such a keymap if it does not already exist.
 
-If PENUMBRA is non-nil, return the name of the penumbra map
-instead.
+If PENUMBRA is nil or the keyword `:umbra', return the name of
+the ordinary \"umbra\" map.  If it is any other non-nil value,
+return the name of the penumbra map instead.
 
 The returned symbol is the name of the variable that would
 contain the umbra keymap for MODE, if one exists.  See
-`umbra-keymap' for more information."
+`umbra-keymap' for more information." 
   (intern (format "umbra-%s-mode-map:%s"
-                  (if penumbra "-overriding" "")
+                  (if (umbra--penumbra-p penumbra) "-overriding" "")
                   mode)))
 
 (defun umbra-has-keymap-p (mode &optional penumbra)
   "Return non-nil if MODE has an umbra keymap.
-If PENUMBRA is non-nil, consider the penumbra map instead.
+
+If PENUMBRA is nil or the keyword `:umbra', consider the ordinary
+\"umbra\" map; otherwise, consider the penumbra map.
 
 See `umbra-keymap' for more information."
   (boundp (umbra-keymap-name mode penumbra)))
 
 (defun umbra-keymap-var (mode &optional penumbra)
-  "As `umbra-keymap-name', but create keymap if necessary."
+  "As `umbra-keymap-name', but create keymap if necessary." 
   (unless (umbra-has-keymap-p mode penumbra)
     (eval `(define-umbra-keymap ,(umbra-keymap-name mode penumbra)
              ,mode ,penumbra))
-    (unless penumbra (umbra-keymap--register mode)))
+    (unless (umbra--penumbra-p penumbra) (umbra-keymap--register mode)))
   (umbra-keymap-name mode penumbra))
 
 ;;;###autoload
@@ -332,14 +343,16 @@ bar-mode, and bar-mode in turn derives from `text-mode'.  Then:
 * The parent for (umbra-keymap text-mode) is `umbra-mode-map'.
 * Finally, (umbra-keymap foo-mode) is returned.
 
-If the PENUMBRA parameter is non-nil, the keymap acted upon is
-the penumbra keymap for MODE.  Its parentage is similar, but all
-of the keymaps in the chain are penumbra maps.
+If the PENUMBRA parameter is any non-nil value other than the
+keyword `:umbra', the keymap acted upon is the penumbra keymap
+for MODE.  Its parentage is similar, but all of the keymaps in
+the chain are penumbra maps.
 
 Do not pass minor modes to this function, as it will likely
 disrupt precedence of `umbra-mode' keymaps."
-  (let ((keymap  (umbra-keymap mode penumbra))
-        (parent  (umbra--get-mode-parent mode)))
+  (let* ((penumbra  (umbra--penumbra-p penumbra))
+         (keymap    (umbra-keymap mode penumbra))
+         (parent    (umbra--get-mode-parent mode)))
     (set-keymap-parent
      keymap
      (cond
@@ -420,34 +433,40 @@ information.
 
 The :penumbra keyword behaves similarly, but uses the penumbra keymap.
 
-Both keywords accept lists, just like :map, and are compatible
-with :map; for example,
+Multiple keywords can be used in the same `bind-keys' form and
+are handled in the same way as multiple instances of the `:map'
+keyword are.  For example,
 
     (bind-keys :umbra foo-mode
-               :map (bar-mode-map
-                     baz-mode-map) ...)
+               (\"a\" . frobnicate)
+               :penumbra bar-mode
+               (\"b\" . frobnicate)
+               :map baz-mode-map
+               (\"c\" . cofrobnicate))
 
-is more or less equivalent to
+is more or less equivalent to this:
 
-    (bind-keys :map (umbra-mode-map:foo-mode
-                     bar-mode-map
-                     baz-mode-map) ...).
+    (bind-keys :map (umbra-keymap 'foo-mode)
+               (\"a\" . frobnicate)
+               :map (umbra-keymap 'bar-mode :penumbra)
+               (\"b\" . frobnicate)
+               :map baz-mode-map
+               (\"c\" . cofrobnicate))
 
 Intended as :around advice for `bind-keys'."
-  (let* ((umbra     (umbra--plist-get-as-list args :umbra))
-         (penumbra  (umbra--plist-get-as-list args :penumbra))
-         (maps      (umbra--plist-get-as-list args :map)))
-    ;; Note that we don't remove our keys.  Instead we're relying on
-    ;; undocumented behavior of `bind-keys', specifically that it
-    ;; simply ignores keyword arguments it does not recognize (as well
-    ;; as any instances of a particular keyword after the first).
-    `(progn ,@(cl-loop for mode in umbra
-                       do (push (umbra-keymap-name mode) maps)
-                       collect `(umbra-keymap ',mode))
-            ,@(cl-loop for mode in penumbra
-                       do (push (umbra-keymap-name mode :penumbra) maps)
-                       collect `(umbra-keymap ',mode :penumbra))
-            ,(apply orig `(:map ,maps ,@args)))))
+  (let (new-args umbra-alist arg mode)
+    (while args
+      (setq arg (pop args))
+      (if (not (member arg '(:umbra :penumbra)))
+          (push arg new-args)
+        (push :map new-args)
+        (setq mode (pop args))
+        (push `(,mode . ,arg) umbra-alist)
+        (push (umbra-keymap-name mode arg) new-args)))
+    `(progn
+       (dolist (pair ',umbra-alist)
+         (umbra-keymap (car pair) (cdr pair)))
+       ,(apply orig (reverse new-args)))))
 
 (advice-add #'bind-keys :around #'umbra--bind-keys-advice)
 
