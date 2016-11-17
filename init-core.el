@@ -778,6 +778,7 @@
   :bind (:umbra emacs-lisp-mode
                 ("C-c C-l" . aph/eval-region-or-buffer))
   :config
+  (validate-setq lisp-indent-function #'aph/lisp-indent-function)
   (add-hook 'emacs-lisp-mode-hook #'aph/emacs-lisp-add-font-lock-keywords))
 
 (use-package pp
