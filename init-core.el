@@ -141,9 +141,7 @@
 (bind-keys :map umbra-mode-map
            ("<up>"           . scroll-down-line)
            ("<down>"         . scroll-up-line)
-           ("C-]"            . other-window)
-           ("C-'"            . query-replace)
-           ("M-'"            . query-replace-regexp)
+           ("C-]"            . other-window) 
            ("M-i"            . indent-relative)
            ("C-M-g"          . abort-recursive-edit)
            ("C-M-\\"         . toggle-input-method)
@@ -661,6 +659,14 @@
   (validate-setq visible-mark-max   2
                  visible-mark-faces '(aph/visible-mark-top
                                       aph/visible-mark-other)))
+
+(use-package visual-regexp
+  :ensure t
+  :bind (:map umbra-mode-map
+              ("C-'"   . vr/query-replace)
+              ("M-'" . vr/replace))
+  :config
+  (validate-setq vr/auto-show-help nil))
 
 (use-package volatile-highlights
   :ensure t
