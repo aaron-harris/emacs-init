@@ -1219,7 +1219,8 @@
   (mode-family-add 'elfeed-show-mode   'elfeed)
 
   ;; UI config
-  (validate-setq elfeed-sort-order 'ascending)
+  (validate-setq elfeed-sort-order    'ascending
+                 elfeed-search-filter "@6-months-ago +unread -stackexchange")
 
   ;; Browser config
   (setq-family-local elfeed
@@ -1244,7 +1245,9 @@
   :bind (:umbra elfeed-search-mode
                 ("'" . elfeed-lens-cycle))
   :config
-  (validate-setq elfeed-lens-list '("@6-months-ago +unread" "+todo")))
+  (validate-setq elfeed-lens-list '("@6-months-ago +unread -stackexchange"
+                                    "@6-months-ago +unread"
+                                    "+todo")))
 
 (use-package elfeed-link
   :after elfeed
