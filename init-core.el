@@ -1526,6 +1526,24 @@ Intended as :around advice for `org-agenda-quit'."
 
 (advice-add 'org-agenda-quit :around #'aph/org-agenda-quit-fix)
 
+(defun aph/org-agenda-skip-if-fix (oldfun subtree conditions)
+  "Advice patching the \"bad negation\" bug in `org-agenda-skip-if'.
+
+The function `org-agenda-skip-if' does not behave correctly when
+given multiple conditions, at least one of which is a
+negative (e.g., `notscheduled' or `nottodo').  This function
+corrects the problem when applied as :around advice."
+  (let ((use-excursion t))
+    (noflet ((re-search-forward (&rest args)
+				(if use-excursion
+				    (save-excursion (apply this-fn args))
+				  (apply this-fn args)))
+	     (outline-next-heading (&rest args)
+				   (let ((use-excursion nil)) (apply this-fn args))))
+      (funcall oldfun subtree conditions))))
+
+(advice-add 'org-agenda-skip-if :around #'patch/org-agenda-skip-if)
+
 (defun aph/projectile-find-matching-fix (orig-fn file)
   "Bug-fixing advice for `projectile-find-matching-*'.
 
