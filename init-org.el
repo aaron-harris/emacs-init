@@ -9,7 +9,7 @@
 ;;;; Basic setup
 ;;==============
 (validate-setq org-modules      '(org-docview org-habit org-info)
-	       org-directory    "~/sync/org"
+	       org-directory    (concat aph/sync-directory "/org")
 	       org-agenda-files (list org-directory))
 
 

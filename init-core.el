@@ -1232,7 +1232,7 @@
                  url-queue-timeout            30)
 
   ;; Filesystem config
-  (validate-setq elfeed-db-directory "~/sync/elfeed")
+  (validate-setq elfeed-db-directory (concat aph/sync-directory "/elfeed"))
 
   ;; Load the feed list
   (load (expand-file-name (concat elfeed-db-directory "/feeds.el")))
@@ -1533,6 +1533,7 @@ The function `org-agenda-skip-if' does not behave correctly when
 given multiple conditions, at least one of which is a
 negative (e.g., `notscheduled' or `nottodo').  This function
 corrects the problem when applied as :around advice."
+  (require 'noflet)
   (let ((use-excursion t))
     (noflet ((re-search-forward (&rest args)
 				(if use-excursion
@@ -1542,7 +1543,7 @@ corrects the problem when applied as :around advice."
 				   (let ((use-excursion nil)) (apply this-fn args))))
       (funcall oldfun subtree conditions))))
 
-(advice-add 'org-agenda-skip-if :around #'patch/org-agenda-skip-if)
+(advice-add 'org-agenda-skip-if :around #'aph/org-agenda-skip-if-fix)
 
 (defun aph/projectile-find-matching-fix (orig-fn file)
   "Bug-fixing advice for `projectile-find-matching-*'.
