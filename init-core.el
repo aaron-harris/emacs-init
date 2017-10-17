@@ -1,6 +1,6 @@
 ;;; init-core.el --- Personal Emacs configuration    -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015-2016  Aaron Harris
+;; Copyright (C) 2015-2017  Aaron Harris
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 
 ;;; Code:
@@ -695,8 +695,9 @@
 
 (use-package aph-window
   :bind (:map umbra-mode-map
-              ("<C-[>" . aph/other-window-backward)
-              ("C-M-v" . aph/hydra-scroll-other/body)))
+              ("C-x \\" . aph/toggle-dedicated-window)
+              ("<C-[>"  . aph/other-window-backward)
+              ("C-M-v"  . aph/hydra-scroll-other/body)))
 
 (use-package winner
   :config

@@ -1,6 +1,6 @@
 ;;; aph-window.el --- Extensions for `window' module -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Aaron Harris
+;; Copyright (C) 2016-2017  Aaron Harris
 
 ;; Author: Aaron Harris <meerwolf@gmail.com>
 ;; Keywords: convenience
@@ -35,6 +35,17 @@
   "As `other-window' but reversed."
   (interactive "p")
   (other-window (- count) all-frames))
+
+
+;;; Extensions to `set-window-dedicated-p'
+;;;=======================================
+(defun aph/toggle-dedicated-window ()
+  "Toggle whether the current window is dedicated to its buffer."
+  (interactive)
+  (let ((new-state (not (window-dedicated-p))))
+    (set-window-dedicated-p nil new-state)
+    (message (if new-state "Current window dedicated to buffer"
+               "Current window no longer dedicated to buffer"))))
 
 
 ;;; Scrolling Commands
